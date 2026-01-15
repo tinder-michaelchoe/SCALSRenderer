@@ -77,7 +77,7 @@ Displays static or dynamic text content.
 ### IR Mapping
 
 ```swift
-// AST (Document namespace)
+// Document Model (decoded from JSON)
 Document.Component(type: .label, label: "Hello", styleId: "titleStyle")
 
 // IR (RenderNode)
@@ -170,7 +170,7 @@ Buttons support additional style properties:
 ### IR Mapping
 
 ```swift
-// AST (Document namespace)
+// Document Model (decoded from JSON)
 Document.Component(type: .button, label: "Submit", styleId: "primaryButton", ...)
 
 // IR (RenderNode)
@@ -248,7 +248,7 @@ When `bind` is specified, the text field:
 ### IR Mapping
 
 ```swift
-// AST (Document namespace)
+// Document Model (decoded from JSON)
 Document.Component(type: .textfield, placeholder: "Enter username", bind: "username", ...)
 
 // IR (RenderNode)
@@ -338,7 +338,7 @@ The `data.value` string supports three prefixes:
 ### IR Mapping
 
 ```swift
-// AST (Document namespace)
+// Document Model (decoded from JSON)
 Document.Component(type: .image, data: Document.DataSource(...), ...)
 
 // IR (RenderNode)
@@ -462,7 +462,7 @@ Examples:
 ### IR Mapping
 
 ```swift
-// AST (Document namespace)
+// Document Model (decoded from JSON)
 Document.Component(type: .gradient, gradientColors: [...], ...)
 
 // IR (RenderNode)

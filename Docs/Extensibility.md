@@ -180,7 +180,7 @@ When you need components or actions that are reusable across your entire app, im
 CLADS uses an LLVM-inspired pipeline:
 
 ```
-Document (JSON/AST) → Resolver → RenderTree (IR) → Renderer → View
+JSON → Document (Model) → Resolver → RenderTree (IR) → Renderer → View
 ```
 
 Adding a new core component requires implementing pieces at each stage:
@@ -910,7 +910,41 @@ struct MyView: View {
 }
 ```
 
-### 6.3 Root Lifecycle Actions
+#### CladsRendererBindingConfiguration Callbacks
+
+| Callback | Signature | Use Case |
+|----------|-----------|----------|
+| `onStateChange` | `(path: String, oldValue: Any?, newValue: Any?) -> Void` | Analytics, persistence, debugging |
+| `onAction` | `(actionId: String, parameters: [String: Any]) -> Void` | Action tracking, analytics |
+
+### 6.3 ActionContext Delegate Callbacks
+
+The `ActionContext` provides several injectable handlers for customizing behavior:
+
+```swift
+let context = ActionContext(
+    stateStore: stateStore,
+    actionDefinitions: actions,
+    registry: actionRegistry,
+    actionDelegate: myDelegate,           // CladsActionDelegate for action interception
+    alertPresenter: CustomAlertPresenter() // AlertPresenting for custom alerts
+)
+
+// Additional handlers set after creation
+context.dismissHandler = { /* custom dismiss logic */ }
+context.alertHandler = { config in /* legacy alert handling */ }
+context.navigationHandler = { destination, presentation in /* custom navigation */ }
+```
+
+| Handler | Type | Purpose |
+|---------|------|---------|
+| `actionDelegate` | `CladsActionDelegate?` | Intercept actions before registry lookup |
+| `alertPresenter` | `AlertPresenting` | Custom alert presentation (injectable at init) |
+| `dismissHandler` | `(() -> Void)?` | Custom dismiss behavior |
+| `alertHandler` | `((AlertConfiguration) -> Void)?` | Legacy alert callback |
+| `navigationHandler` | `((String, NavigationPresentation?) -> Void)?` | Custom navigation |
+
+### 6.4 Root Lifecycle Actions
 
 Execute actions on view lifecycle events:
 

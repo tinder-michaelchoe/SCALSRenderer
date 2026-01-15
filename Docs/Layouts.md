@@ -550,7 +550,7 @@ Specific values override general values:
 ### Layout → ContainerNode
 
 ```swift
-// AST (Document namespace)
+// Document Model (decoded from JSON)
 Document.Layout(type: .vstack, alignment: .center, spacing: 8, children: [...])
 
 // IR (RenderNode)
@@ -566,7 +566,7 @@ ContainerNode(
 ### SectionLayout → SectionLayoutNode
 
 ```swift
-// AST (Document namespace)
+// Document Model (decoded from JSON)
 Document.SectionLayout(sectionSpacing: 24, sections: [Document.SectionDefinition(...)])
 
 // IR (RenderNode)

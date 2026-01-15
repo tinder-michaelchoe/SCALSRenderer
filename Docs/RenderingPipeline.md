@@ -7,7 +7,7 @@ CladsRenderer uses an LLVM-inspired multi-stage pipeline to transform JSON into 
 ```
 ┌─────────────┐     ┌──────────────┐     ┌─────────────┐     ┌──────────────┐
 │    JSON     │ ──▶ │   Document   │ ──▶ │ RenderTree  │ ──▶ │   Renderer   │
-│   (Input)   │     │    (AST)     │     │    (IR)     │     │   (Output)   │
+│   (Input)   │     │   (Model)    │     │    (IR)     │     │   (Output)   │
 └─────────────┘     └──────────────┘     └─────────────┘     └──────────────┘
                           │                     │                    │
                       Parsing              Resolution            Rendering
@@ -35,13 +35,13 @@ The pipeline begins with a JSON document that describes the UI declaratively. Th
 }
 ```
 
-## Stage 2: Document (AST)
+## Stage 2: Document (Model)
 
-The JSON is parsed into a **Document.Definition** - the Abstract Syntax Tree representation. This stage:
+The JSON is decoded into a **Document.Definition** using `JSONDecoder`. This stage:
 
-- Validates JSON structure
-- Decodes into strongly-typed Swift structures under the `Document.*` namespace
-- Preserves all references (style IDs, data source IDs, action IDs) as strings
+- Validates JSON structure via Codable conformance
+- Decodes into strongly-typed Swift structs under the `Document.*` namespace
+- Preserves all references (style IDs, data source IDs, action IDs) as strings for later resolution
 
 ### Key Types
 
@@ -73,7 +73,7 @@ CladsRendererFramework/Document/
 
 ## Stage 3: Resolver
 
-The **Resolver** transforms the Document (AST) into a **RenderTree** (IR). This is where all references are resolved:
+The **Resolver** transforms the Document model into a **RenderTree** (IR). This is where all references are resolved:
 
 ### Resolution Process
 
@@ -84,7 +84,7 @@ The **Resolver** transforms the Document (AST) into a **RenderTree** (IR). This 
 
 ### Key Transformations
 
-| AST (Input) | IR (Output) |
+| Document (Input) | IR (Output) |
 |-------------|-------------|
 | `Document.Layout` | `ContainerNode` |
 | `Document.SectionLayout` | `SectionLayoutNode` |
@@ -265,7 +265,7 @@ Root:
 
 ### Document Debug Description
 
-Inspect the parsed AST:
+Inspect the parsed Document model:
 
 ```swift
 print(document.debugDescription)
