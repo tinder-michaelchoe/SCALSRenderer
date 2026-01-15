@@ -58,6 +58,7 @@ public struct TextFieldComponentResolver: ComponentResolving {
         let renderNode = RenderNode.textField(TextFieldNode(
             id: component.id,
             placeholder: component.placeholder ?? "",
+            styleId: component.styleId,
             style: style,
             bindingPath: component.bind
         ))

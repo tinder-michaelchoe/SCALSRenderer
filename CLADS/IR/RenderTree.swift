@@ -242,6 +242,7 @@ extension NSDirectionalEdgeInsets {
 public struct TextNode {
     public let id: String?
     public let content: String
+    public let styleId: String?
     public let style: IR.Style
     public let padding: NSDirectionalEdgeInsets
     /// If set, the content should be read dynamically from StateStore at this path
@@ -257,6 +258,7 @@ public struct TextNode {
     public init(
         id: String? = nil,
         content: String,
+        styleId: String? = nil,
         style: IR.Style = IR.Style(),
         padding: NSDirectionalEdgeInsets = .zero,
         bindingPath: String? = nil,
@@ -264,6 +266,7 @@ public struct TextNode {
     ) {
         self.id = id
         self.content = content
+        self.styleId = styleId
         self.style = style
         self.padding = padding
         self.bindingPath = bindingPath
@@ -305,6 +308,7 @@ public struct ButtonStyles {
 public struct ButtonNode {
     public let id: String?
     public let label: String
+    public let styleId: String?
     public let styles: ButtonStyles
     public let isSelectedBinding: String?
     public let fillWidth: Bool
@@ -316,6 +320,7 @@ public struct ButtonNode {
     public init(
         id: String? = nil,
         label: String,
+        styleId: String? = nil,
         styles: ButtonStyles = ButtonStyles(),
         isSelectedBinding: String? = nil,
         fillWidth: Bool = false,
@@ -323,6 +328,7 @@ public struct ButtonNode {
     ) {
         self.id = id
         self.label = label
+        self.styleId = styleId
         self.styles = styles
         self.isSelectedBinding = isSelectedBinding
         self.fillWidth = fillWidth
@@ -336,17 +342,20 @@ public struct ButtonNode {
 public struct TextFieldNode {
     public let id: String?
     public let placeholder: String
+    public let styleId: String?
     public let style: IR.Style
     public let bindingPath: String?  // State path to bind to
 
     public init(
         id: String? = nil,
         placeholder: String = "",
+        styleId: String? = nil,
         style: IR.Style = IR.Style(),
         bindingPath: String? = nil
     ) {
         self.id = id
         self.placeholder = placeholder
+        self.styleId = styleId
         self.style = style
         self.bindingPath = bindingPath
     }
@@ -357,15 +366,18 @@ public struct TextFieldNode {
 /// A toggle/switch component
 public struct ToggleNode {
     public let id: String?
+    public let styleId: String?
     public let bindingPath: String?  // State path to bind to
     public let style: IR.Style
 
     public init(
         id: String? = nil,
+        styleId: String? = nil,
         bindingPath: String? = nil,
         style: IR.Style = IR.Style()
     ) {
         self.id = id
+        self.styleId = styleId
         self.bindingPath = bindingPath
         self.style = style
     }
@@ -376,6 +388,7 @@ public struct ToggleNode {
 /// A slider component
 public struct SliderNode {
     public let id: String?
+    public let styleId: String?
     public let bindingPath: String?  // State path to bind to (Double value 0.0-1.0)
     public let minValue: Double
     public let maxValue: Double
@@ -383,12 +396,14 @@ public struct SliderNode {
 
     public init(
         id: String? = nil,
+        styleId: String? = nil,
         bindingPath: String? = nil,
         minValue: Double = 0.0,
         maxValue: Double = 1.0,
         style: IR.Style = IR.Style()
     ) {
         self.id = id
+        self.styleId = styleId
         self.bindingPath = bindingPath
         self.minValue = minValue
         self.maxValue = maxValue
@@ -402,7 +417,7 @@ public struct SliderNode {
 public struct ImageNode {
     /// Image source type
     public enum Source {
-        case system(name: String)
+        case sfsymbol(name: String)
         case asset(name: String)
         case url(URL)
         /// Dynamic URL from state - supports templates like "${artwork.primaryImage}"
@@ -411,10 +426,11 @@ public struct ImageNode {
 
     public let id: String?
     public let source: Source
-    /// Placeholder image shown when URL is empty/invalid or on error (default: .system(name: "photo"))
+    /// Placeholder image shown when URL is empty/invalid or on error (default: .sfsymbol(name: "photo"))
     public let placeholder: Source?
     /// Loading indicator shown while image is being fetched (default: ProgressView spinner)
     public let loading: Source?
+    public let styleId: String?
     public let style: IR.Style
     public let onTap: Document.Component.ActionBinding?
 
@@ -423,6 +439,7 @@ public struct ImageNode {
         source: Source,
         placeholder: Source? = nil,
         loading: Source? = nil,
+        styleId: String? = nil,
         style: IR.Style = IR.Style(),
         onTap: Document.Component.ActionBinding? = nil
     ) {
@@ -430,6 +447,7 @@ public struct ImageNode {
         self.source = source
         self.placeholder = placeholder
         self.loading = loading
+        self.styleId = styleId
         self.style = style
         self.onTap = onTap
     }

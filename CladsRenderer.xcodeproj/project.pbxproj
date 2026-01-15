@@ -155,9 +155,22 @@
 		80624A192F0493EB0055EA41 /* CoreContracts.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CoreContracts.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		6C303CB42F18C91F0054FB15 /* Exceptions for "CladsRenderer" folder in "CladsRenderer" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 800AE78C2EFE26C900F18C75 /* CladsRenderer */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		800AE78F2EFE26C900F18C75 /* CladsRenderer */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				6C303CB42F18C91F0054FB15 /* Exceptions for "CladsRenderer" folder in "CladsRenderer" target */,
+			);
 			path = CladsRenderer;
 			sourceTree = "<group>";
 		};
@@ -912,6 +925,7 @@
 				DEVELOPMENT_TEAM = DL9J8BRCF3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CladsRenderer/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -945,6 +959,7 @@
 				DEVELOPMENT_TEAM = DL9J8BRCF3;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = CladsRenderer/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

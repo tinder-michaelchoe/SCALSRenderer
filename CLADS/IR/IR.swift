@@ -97,10 +97,19 @@ extension IR {
             }
         }
 
-        /// Get the font with size and weight applied
+        /// Get the font with size, weight, and family applied
         public var font: Font? {
-            guard fontSize != nil || fontWeight != nil else { return nil }
-            var font = Font.system(size: fontSize ?? 17)
+            guard fontSize != nil || fontWeight != nil || fontFamily != nil else { return nil }
+            let size = fontSize ?? 17
+            
+            // If custom font family is specified, use it
+            if let family = fontFamily {
+                print("🔤 IR.Style.font: Using custom font '\(family)' at size \(size)")
+                return Font.custom(family, size: size)
+            }
+            
+            // Otherwise use system font with weight
+            var font = Font.system(size: size)
             if let weight = fontWeight {
                 font = font.weight(weight)
             }
@@ -265,10 +274,17 @@ extension IR {
 // MARK: - UIKit Extensions for IR.Style
 
 extension IR.Style {
-    /// Get the UIFont with size and weight applied
+    /// Get the UIFont with size, weight, and family applied
     public var uiFont: UIFont? {
-        guard fontSize != nil || fontWeight != nil else { return nil }
+        guard fontSize != nil || fontWeight != nil || fontFamily != nil else { return nil }
         let size = fontSize ?? 17
+        
+        // If custom font family is specified, use it
+        if let family = fontFamily, let customFont = UIFont(name: family, size: size) {
+            return customFont
+        }
+        
+        // Otherwise use system font with weight
         if let weight = fontWeight {
             return UIFont.systemFont(ofSize: size, weight: weight.toUIKit())
         }

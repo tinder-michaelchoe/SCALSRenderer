@@ -108,6 +108,8 @@ struct ContentView: View {
                         PhotoTouchUpExampleView()
                     case .feedbackSurvey:
                         FeedbackSurveyExampleView()
+                    case .designSystem:
+                        DesignSystemExampleView()
                     default:
                         ExampleSheetView(example: example)
                     }
@@ -308,6 +310,7 @@ enum Example: String, CaseIterable, Identifiable {
     case basicStyles
     case styleInheritance
     case conditionalStyles
+    case designSystem
 
     // Complex Examples
     case dadJokes
@@ -359,6 +362,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .basicStyles: return "Basic Styles"
         case .styleInheritance: return "Style Inheritance"
         case .conditionalStyles: return "Conditional Styles"
+        case .designSystem: return "Design System"
         // Complex
         case .dadJokes: return "Dad Jokes"
         case .taskManager: return "Task Manager"
@@ -408,6 +412,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .basicStyles: return "Font, color, spacing"
         case .styleInheritance: return "Extending base styles"
         case .conditionalStyles: return "State-based styling"
+        case .designSystem: return "Lightspeed design system"
         // Complex
         case .dadJokes: return "Custom actions with REST API"
         case .taskManager: return "Dynamic task list with state"
@@ -457,6 +462,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .basicStyles: return "paintpalette"
         case .styleInheritance: return "arrow.up.right.circle"
         case .conditionalStyles: return "questionmark.diamond"
+        case .designSystem: return "sparkles"
         // Complex
         case .dadJokes: return "face.smiling"
         case .taskManager: return "checklist"
@@ -484,7 +490,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .staticData, .bindingData, .expressionData, .stateInterpolation:
             return .green
         // Styles - Pink shades
-        case .basicStyles, .styleInheritance, .conditionalStyles:
+        case .basicStyles, .styleInheritance, .conditionalStyles, .designSystem:
             return .pink
         // Complex - Various
         case .dadJokes: return .yellow
@@ -535,6 +541,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .basicStyles: return basicStylesJSON
         case .styleInheritance: return styleInheritanceJSON
         case .conditionalStyles: return conditionalStylesJSON
+        case .designSystem: return designSystemExampleJSON
         // Complex
         case .dadJokes: return dadJokesJSON
         case .taskManager: return taskManagerJSON
@@ -572,6 +579,8 @@ enum Example: String, CaseIterable, Identifiable {
             return .detent(.medium)
         case .basicStyles, .styleInheritance, .conditionalStyles:
             return .detent(.medium)
+        case .designSystem:
+            return .fullSize
         // Complex examples - full size sheets
         case .dadJokes: return .detent(.medium)
         case .taskManager: return .fullSize
@@ -603,7 +612,7 @@ enum Example: String, CaseIterable, Identifiable {
     }
 
     static var styleExamples: [Example] {
-        [.basicStyles, .styleInheritance, .conditionalStyles]
+        [.basicStyles, .styleInheritance, .conditionalStyles, .designSystem]
     }
 
     static var complexExamples: [Example] {
@@ -620,28 +629,63 @@ enum Example: String, CaseIterable, Identifiable {
 public struct ExampleSheetView: View {
     let example: Example
     @Environment(\.dismiss) private var dismiss
+    @State private var parseError: String?
 
     public var body: some View {
         Group {
-            if let json = example.json,
-               let view = CladsRendererView(jsonString: json, debugMode: true) {
-                view
+            if let json = example.json {
+                if let view = CladsRendererView(jsonString: json, debugMode: true) {
+                    view
+                } else {
+                    // Try to get detailed error
+                    errorView(for: json)
+                }
             } else {
-                errorView
+                errorView(for: nil)
             }
         }
     }
-
-    private var errorView: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "exclamationmark.triangle")
-                .font(.largeTitle)
-                .foregroundStyle(.red)
-            Text("Failed to parse JSON")
-                .foregroundStyle(.secondary)
-            Button("Dismiss") {
-                dismiss()
+    
+    private func errorView(for json: String?) -> some View {
+        ScrollView {
+            VStack(spacing: 16) {
+                Image(systemName: "exclamationmark.triangle")
+                    .font(.largeTitle)
+                    .foregroundStyle(.red)
+                Text("Failed to parse JSON")
+                    .font(.headline)
+                
+                if let json = json {
+                    // Try to parse and get detailed error
+                    let errorMessage = getParseError(json: json)
+                    
+                    Text("Error Details:")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                    
+                    Text(errorMessage)
+                        .font(.system(.caption, design: .monospaced))
+                        .foregroundStyle(.red)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(8)
+                        .textSelection(.enabled)
+                }
+                
+                Button("Dismiss") {
+                    dismiss()
+                }
             }
+            .padding()
+        }
+    }
+    
+    private func getParseError(json: String) -> String {
+        do {
+            _ = try Document.Definition(jsonString: json)
+            return "Unknown error"
+        } catch {
+            return DocumentParseError.detailedDescription(error: error, jsonString: json)
         }
     }
 }

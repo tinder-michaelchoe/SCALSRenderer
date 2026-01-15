@@ -30,6 +30,8 @@ extension Document {
     public struct Definition: Codable {
         public let id: String
         public let version: String?
+        /// Optional design system identifier (e.g., "lightspeed", "obsidian")
+        public let designSystem: String?
         public let state: [String: StateValue]?
         public let styles: [String: Style]?
         public let dataSources: [String: DataSource]?
@@ -39,6 +41,7 @@ extension Document {
         public init(
             id: String,
             version: String? = nil,
+            designSystem: String? = nil,
             state: [String: StateValue]? = nil,
             styles: [String: Style]? = nil,
             dataSources: [String: DataSource]? = nil,
@@ -47,6 +50,7 @@ extension Document {
         ) {
             self.id = id
             self.version = version
+            self.designSystem = designSystem
             self.state = state
             self.styles = styles
             self.dataSources = dataSources

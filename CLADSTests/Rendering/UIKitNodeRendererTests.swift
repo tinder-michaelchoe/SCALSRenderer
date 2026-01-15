@@ -354,7 +354,7 @@ struct ImageNodeRenderingTests {
         let context = createMockUIKitContext()
         
         let node = RenderNode.image(ImageNode(
-            source: .system(name: "star"),
+            source: .sfsymbol(name: "star"),
             style: IR.Style()
         ))
         
@@ -461,7 +461,7 @@ struct UIKitMockRenderersProtocolTests {
         let textFieldView = context.render(RenderNode.textField(TextFieldNode(placeholder: "Test", style: IR.Style(), bindingPath: nil)))
         #expect(textFieldView.accessibilityIdentifier == "mock_textfield")
         
-        let imageView = context.render(RenderNode.image(ImageNode(source: .system(name: "star"), style: IR.Style())))
+        let imageView = context.render(RenderNode.image(ImageNode(source: .sfsymbol(name: "star"), style: IR.Style())))
         #expect(imageView.accessibilityIdentifier == "mock_image")
         
         let spacerView = context.render(RenderNode.spacer)

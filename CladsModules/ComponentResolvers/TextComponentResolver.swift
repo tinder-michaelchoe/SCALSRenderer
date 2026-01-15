@@ -51,6 +51,7 @@ public struct TextComponentResolver: ComponentResolving {
         let renderNode = RenderNode.text(TextNode(
             id: component.id,
             content: contentResult.content,
+            styleId: component.styleId,
             style: style,
             padding: PaddingConverter.convert(component.padding),
             bindingPath: contentResult.bindingPath,

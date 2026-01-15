@@ -13,20 +13,24 @@ import SwiftUI
 public struct SwiftUIRenderer: Renderer {
     private let actionContext: ActionContext
     private let rendererRegistry: SwiftUINodeRendererRegistry
+    private let designSystemProvider: (any DesignSystemProvider)?
 
     public init(
         actionContext: ActionContext,
-        rendererRegistry: SwiftUINodeRendererRegistry
+        rendererRegistry: SwiftUINodeRendererRegistry,
+        designSystemProvider: (any DesignSystemProvider)? = nil
     ) {
         self.actionContext = actionContext
         self.rendererRegistry = rendererRegistry
+        self.designSystemProvider = designSystemProvider
     }
 
     public func render(_ tree: RenderTree) -> some View {
         RenderTreeView(
             tree: tree,
             actionContext: actionContext,
-            rendererRegistry: rendererRegistry
+            rendererRegistry: rendererRegistry,
+            designSystemProvider: designSystemProvider
         )
     }
 }
@@ -38,14 +42,21 @@ struct RenderTreeView: View {
     let tree: RenderTree
     let actionContext: ActionContext
     let rendererRegistry: SwiftUINodeRendererRegistry
+    let designSystemProvider: (any DesignSystemProvider)?
     
     // Observe the stateStore to trigger re-renders when state changes
     @ObservedObject private var stateStore: StateStore
     
-    init(tree: RenderTree, actionContext: ActionContext, rendererRegistry: SwiftUINodeRendererRegistry) {
+    init(
+        tree: RenderTree,
+        actionContext: ActionContext,
+        rendererRegistry: SwiftUINodeRendererRegistry,
+        designSystemProvider: (any DesignSystemProvider)? = nil
+    ) {
         self.tree = tree
         self.actionContext = actionContext
         self.rendererRegistry = rendererRegistry
+        self.designSystemProvider = designSystemProvider
         // IMPORTANT: Use actionContext.stateStore, not tree.stateStore!
         // ActionContext is a @StateObject that persists across view recreations,
         // so its stateStore is the stable reference that actions update.
@@ -79,7 +90,8 @@ struct RenderTreeView: View {
         SwiftUIRenderContext(
             tree: tree,
             actionContext: actionContext,
-            rendererRegistry: rendererRegistry
+            rendererRegistry: rendererRegistry,
+            designSystemProvider: designSystemProvider
         )
     }
 

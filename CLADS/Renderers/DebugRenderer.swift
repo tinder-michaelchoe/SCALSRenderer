@@ -251,7 +251,7 @@ public struct DebugRenderer: Renderer {
 
     private func imageSourceDescription(_ source: ImageNode.Source) -> String {
         switch source {
-        case .system(let name): return "system(\(name))"
+        case .sfsymbol(let name): return "sfsymbol(\(name))"
         case .asset(let name): return "asset(\(name))"
         case .url(let url): return "url(\(url.absoluteString))"
         case .statePath(let template): return "statePath(\(template))"

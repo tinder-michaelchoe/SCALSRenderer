@@ -538,7 +538,7 @@ public final class CladsUIKitView: UIView {
         imageView.translatesAutoresizingMaskIntoConstraints = false
 
         switch image.source {
-        case .system(let name):
+        case .sfsymbol(let name):
             imageView.image = UIImage(systemName: name)
         case .asset(let name):
             imageView.image = UIImage(named: name)

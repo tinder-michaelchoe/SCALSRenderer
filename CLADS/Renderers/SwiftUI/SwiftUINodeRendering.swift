@@ -16,15 +16,18 @@ public struct SwiftUIRenderContext {
     public let tree: RenderTree
     public let actionContext: ActionContext
     public let rendererRegistry: SwiftUINodeRendererRegistry
+    public let designSystemProvider: (any DesignSystemProvider)?
 
     public init(
         tree: RenderTree,
         actionContext: ActionContext,
-        rendererRegistry: SwiftUINodeRendererRegistry
+        rendererRegistry: SwiftUINodeRendererRegistry,
+        designSystemProvider: (any DesignSystemProvider)? = nil
     ) {
         self.tree = tree
         self.actionContext = actionContext
         self.rendererRegistry = rendererRegistry
+        self.designSystemProvider = designSystemProvider
     }
     
     /// The canonical StateStore that should be used for all state operations.
@@ -34,10 +37,22 @@ public struct SwiftUIRenderContext {
         actionContext.stateStore
     }
 
-    /// Render a child node using the registry
+    /// Render a child node using the registry.
+    ///
+    /// Checks design system provider first for native component rendering,
+    /// then falls back to the standard renderer registry.
     @MainActor
     public func render(_ node: RenderNode) -> AnyView {
-        rendererRegistry.render(node, context: self) ?? AnyView(EmptyView())
+        // Check if design system provider can render this node
+        if let provider = designSystemProvider,
+           let styleId = node.styleId,
+           provider.canRender(node, styleId: styleId),
+           let dsView = provider.render(node, styleId: styleId, context: self) {
+            return dsView
+        }
+        
+        // Fall back to standard rendering
+        return rendererRegistry.render(node, context: self) ?? AnyView(EmptyView())
     }
 }
 

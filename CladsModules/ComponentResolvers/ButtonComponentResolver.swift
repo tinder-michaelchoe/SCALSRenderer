@@ -57,6 +57,7 @@ public struct ButtonComponentResolver: ComponentResolving {
         let renderNode = RenderNode.button(ButtonNode(
             id: component.id,
             label: component.text ?? contentResult.content,
+            styleId: component.styleId,
             styles: buttonStyles,
             isSelectedBinding: component.isSelectedBinding,
             fillWidth: component.fillWidth ?? false,

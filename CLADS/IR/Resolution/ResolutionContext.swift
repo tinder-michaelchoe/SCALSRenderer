@@ -66,11 +66,12 @@ public final class ResolutionContext {
     /// Creates a context for resolving without dependency tracking
     public static func withoutTracking(
         document: Document.Definition,
-        stateStore: StateStore
+        stateStore: StateStore,
+        designSystemProvider: (any DesignSystemProvider)? = nil
     ) -> ResolutionContext {
         ResolutionContext(
             document: document,
-            styleResolver: StyleResolver(styles: document.styles),
+            styleResolver: StyleResolver(styles: document.styles, designSystemProvider: designSystemProvider),
             stateStore: stateStore,
             tracker: nil
         )
@@ -80,11 +81,12 @@ public final class ResolutionContext {
     public static func withTracking(
         document: Document.Definition,
         stateStore: StateStore,
-        tracker: DependencyTracker
+        tracker: DependencyTracker,
+        designSystemProvider: (any DesignSystemProvider)? = nil
     ) -> ResolutionContext {
         ResolutionContext(
             document: document,
-            styleResolver: StyleResolver(styles: document.styles),
+            styleResolver: StyleResolver(styles: document.styles, designSystemProvider: designSystemProvider),
             stateStore: stateStore,
             tracker: tracker
         )

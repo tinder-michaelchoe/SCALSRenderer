@@ -64,6 +64,7 @@ public struct SliderComponentResolver: ComponentResolving {
 
         let renderNode = RenderNode.slider(SliderNode(
             id: component.id,
+            styleId: component.styleId,
             bindingPath: component.bind,
             minValue: minValue,
             maxValue: maxValue,

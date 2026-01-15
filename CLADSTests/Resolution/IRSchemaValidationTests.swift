@@ -301,17 +301,17 @@ struct RenderNodeSchemaTests {
     }
     
     @Test @MainActor func imageNodeSourceMatchesSchema() throws {
-        // Schema imageSource oneOf: system, asset, url
+        // Schema imageSource oneOf: sfsymbol, asset, url
         
-        // System: { type: "system", name: string }
-        let systemImage = ImageNode(
+        // SFSymbol: { type: "sfsymbol", name: string }
+        let sfsymbolImage = ImageNode(
             id: "icon",
-            source: .system(name: "star.fill")
+            source: .sfsymbol(name: "star.fill")
         )
-        if case .system(let name) = systemImage.source {
+        if case .sfsymbol(let name) = sfsymbolImage.source {
             #expect(name == "star.fill")
         } else {
-            Issue.record("Expected system image")
+            Issue.record("Expected sfsymbol image")
         }
         
         // Asset: { type: "asset", name: string }

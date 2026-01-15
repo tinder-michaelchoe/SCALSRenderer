@@ -401,6 +401,10 @@
           "type": "string",
           "description": "The resolved text content"
         },
+        "styleId": {
+          "type": "string",
+          "description": "Original style ID from document (may have @ prefix for design system)"
+        },
         "style": {
           "$ref": "#/$defs/style"
         },
@@ -437,6 +441,10 @@
         "label": {
           "type": "string",
           "description": "Button text label"
+        },
+        "styleId": {
+          "type": "string",
+          "description": "Original style ID from document (may have @ prefix for design system)"
         },
         "styles": {
           "$ref": "#/$defs/buttonStyles"
@@ -488,6 +496,10 @@
         "placeholder": {
           "type": "string"
         },
+        "styleId": {
+          "type": "string",
+          "description": "Original style ID from document (may have @ prefix for design system)"
+        },
         "style": {
           "$ref": "#/$defs/style"
         },
@@ -510,6 +522,10 @@
         "id": {
           "type": "string"
         },
+        "styleId": {
+          "type": "string",
+          "description": "Original style ID from document (may have @ prefix for design system)"
+        },
         "bindingPath": {
           "type": "string",
           "description": "State path to bind the boolean value to"
@@ -531,6 +547,10 @@
         },
         "id": {
           "type": "string"
+        },
+        "styleId": {
+          "type": "string",
+          "description": "Original style ID from document (may have @ prefix for design system)"
         },
         "bindingPath": {
           "type": "string",
@@ -564,6 +584,10 @@
         },
         "source": {
           "$ref": "#/$defs/imageSource"
+        },
+        "styleId": {
+          "type": "string",
+          "description": "Original style ID from document (may have @ prefix for design system)"
         },
         "style": {
           "$ref": "#/$defs/style"

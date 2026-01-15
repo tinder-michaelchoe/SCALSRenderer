@@ -46,6 +46,7 @@ public struct ImageComponentResolver: ComponentResolving {
             source: source,
             placeholder: placeholder,
             loading: loading,
+            styleId: component.styleId,
             style: style,
             onTap: component.actions?.onTap
         ))
@@ -61,7 +62,7 @@ public struct ImageComponentResolver: ComponentResolving {
         if let image = component.image {
             // SF Symbol
             if let sfSymbolName = image.sfsymbol {
-                return .system(name: sfSymbolName)
+                return .sfsymbol(name: sfSymbolName)
             }
             
             // Asset catalog
@@ -97,7 +98,7 @@ public struct ImageComponentResolver: ComponentResolving {
                 if let value = data.value {
                     // Check for system: prefix for SF Symbols
                     if value.hasPrefix("system:") {
-                        return .system(name: String(value.dropFirst(7)))
+                        return .sfsymbol(name: String(value.dropFirst(7)))
                     }
                     // Check for url: prefix
                     if value.hasPrefix("url:"), let url = URL(string: String(value.dropFirst(4))) {
@@ -116,7 +117,7 @@ public struct ImageComponentResolver: ComponentResolving {
                 break  // Local binding images not supported yet
             }
         }
-        return .system(name: "questionmark")
+        return .sfsymbol(name: "questionmark")
     }
     
     /// Resolves the placeholder image source from the component
@@ -139,7 +140,7 @@ public struct ImageComponentResolver: ComponentResolving {
     private func resolveImagePlaceholder(_ placeholder: Document.ImagePlaceholder) -> ImageNode.Source? {
         // SF Symbol
         if let sfSymbolName = placeholder.sfsymbol {
-            return .system(name: sfSymbolName)
+            return .sfsymbol(name: sfSymbolName)
         }
         
         // Asset

@@ -35,7 +35,7 @@ struct ImageNodeView: View {
     
     /// Default placeholder when none specified (shown on error or no URL)
     private var defaultPlaceholder: ImageNode.Source {
-        .system(name: "photo")
+        .sfsymbol(name: "photo")
     }
     
     /// The effective placeholder to show on error or when URL is empty
@@ -68,7 +68,7 @@ struct ImageNodeView: View {
     private var imageContent: some View {
         Group {
             switch node.source {
-            case .system(let name):
+            case .sfsymbol(let name):
                 Image(systemName: name)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
@@ -137,7 +137,7 @@ struct ImageNodeView: View {
     @ViewBuilder
     private func renderSource(_ source: ImageNode.Source) -> some View {
         switch source {
-        case .system(let name):
+        case .sfsymbol(let name):
             Image(systemName: name)
                 .resizable()
                 .aspectRatio(contentMode: .fit)

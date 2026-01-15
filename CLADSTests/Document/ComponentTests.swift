@@ -743,14 +743,14 @@ struct ActionBindingTests {
 struct ImageSourceTests {
     
     @Test func imageSourceEquality() {
-        let system1 = Document.ImageSource(system: "star")
-        let system2 = Document.ImageSource(system: "star")
-        let system3 = Document.ImageSource(system: "heart")
+        let sfsymbol1 = Document.ImageSource(sfsymbol: "star")
+        let sfsymbol2 = Document.ImageSource(sfsymbol: "star")
+        let sfsymbol3 = Document.ImageSource(sfsymbol: "heart")
         let url1 = Document.ImageSource(url: "https://example.com")
         
-        #expect(system1 == system2)
-        #expect(system1 != system3)
-        #expect(system1 != url1)
+        #expect(sfsymbol1 == sfsymbol2)
+        #expect(sfsymbol1 != sfsymbol3)
+        #expect(sfsymbol1 != url1)
     }
     
     @Test func imageSourceWithAsset() {
@@ -761,7 +761,7 @@ struct ImageSourceTests {
     }
     
     @Test func imageSourceWithPlaceholder() {
-        let placeholder = Document.ImagePlaceholder(system: "photo")
+        let placeholder = Document.ImagePlaceholder(sfsymbol: "photo")
         let source = Document.ImageSource(url: "${imageUrl}", placeholder: placeholder)
         
         #expect(source.url == "${imageUrl}")
@@ -769,7 +769,7 @@ struct ImageSourceTests {
     }
     
     @Test func imageSourceEqualityWithPlaceholder() {
-        let placeholder = Document.ImagePlaceholder(system: "photo")
+        let placeholder = Document.ImagePlaceholder(sfsymbol: "photo")
         let source1 = Document.ImageSource(url: "https://example.com", placeholder: placeholder)
         let source2 = Document.ImageSource(url: "https://example.com", placeholder: placeholder)
         let source3 = Document.ImageSource(url: "https://example.com")

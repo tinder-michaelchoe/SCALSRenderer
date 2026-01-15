@@ -108,6 +108,8 @@ struct CladsExamplesView: View {
                         PhotoTouchUpExampleView()
                     case .feedbackSurvey:
                         FeedbackSurveyExampleView()
+                    case .designSystem:
+                        DesignSystemExampleView()
                     default:
                         ExampleSheetView(example: example)
                     }
@@ -319,6 +321,7 @@ enum Example: String, CaseIterable, Identifiable {
     case shoppingCart
     case musicPlayer
     case metMuseum
+    case designSystem
 
     // Tinder Examples
     case photoTouchUp
@@ -369,6 +372,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .shoppingCart: return "Shopping Cart"
         case .musicPlayer: return "Music Player"
         case .metMuseum: return "Met Museum"
+        case .designSystem: return "Design System"
         // Tinder
         case .photoTouchUp: return "Photo Touch Up"
         case .feedbackSurvey: return "Feedback Survey"
@@ -418,6 +422,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .shoppingCart: return "E-commerce cart with promo codes"
         case .musicPlayer: return "Player controls, queue & progress"
         case .metMuseum: return "Explore artwork via GET API"
+        case .designSystem: return "Lightspeed design system integration"
         // Tinder
         case .photoTouchUp: return "Before/after photo comparison with custom components"
         case .feedbackSurvey: return "Radio button survey with dismiss and alert"
@@ -467,6 +472,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .shoppingCart: return "cart.fill"
         case .musicPlayer: return "music.note.list"
         case .metMuseum: return "building.columns"
+        case .designSystem: return "paintbrush.pointed"
         // Tinder
         case .photoTouchUp: return "wand.and.stars"
         case .feedbackSurvey: return "text.bubble"
@@ -516,6 +522,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .shoppingCart: return .teal
         case .musicPlayer: return .teal
         case .metMuseum: return Color(red: 0.77, green: 0.12, blue: 0.23) // Met Museum red
+        case .designSystem: return Color(hex: "#6366F1") // Indigo (Lightspeed primary)
         // Tinder - Red/Orange (flame colors)
         case .photoTouchUp: return Color(red: 0.99, green: 0.35, blue: 0.37)
         case .feedbackSurvey: return Color(red: 0.99, green: 0.35, blue: 0.37)
@@ -565,6 +572,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .shoppingCart: return shoppingCartJSON
         case .musicPlayer: return musicPlayerJSON
         case .metMuseum: return metMuseumJSON
+        case .designSystem: return designSystemExampleJSON
         // Tinder
         case .photoTouchUp: return PhotoTouchUpJSON.bottomSheet
         case .feedbackSurvey: return FeedbackSurveyJSON.bottomSheet
@@ -602,6 +610,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .shoppingCart: return .fullSize
         case .musicPlayer: return .fullSize
         case .metMuseum: return .fullSize
+        case .designSystem: return .fullSize
         // Tinder - fixed height sheets
         case .photoTouchUp: return .fixed(height: 600)
         case .feedbackSurvey: return .detent(.large)
@@ -627,7 +636,7 @@ enum Example: String, CaseIterable, Identifiable {
     }
 
     static var styleExamples: [Example] {
-        [.basicStyles, .styleInheritance, .conditionalStyles]
+        [.basicStyles, .styleInheritance, .conditionalStyles, .designSystem]
     }
 
     static var complexExamples: [Example] {

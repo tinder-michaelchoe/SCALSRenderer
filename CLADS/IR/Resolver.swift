@@ -48,16 +48,19 @@ public struct Resolver {
     private let document: Document.Definition
     private let componentRegistry: ComponentResolverRegistry
     private let actionResolver: ActionResolver
+    private let designSystemProvider: (any DesignSystemProvider)?
 
     // MARK: - Initialization
 
     public init(
         document: Document.Definition,
-        componentRegistry: ComponentResolverRegistry
+        componentRegistry: ComponentResolverRegistry,
+        designSystemProvider: (any DesignSystemProvider)? = nil
     ) {
         self.document = document
         self.componentRegistry = componentRegistry
         self.actionResolver = ActionResolver()
+        self.designSystemProvider = designSystemProvider
     }
 
     // MARK: - Public API
@@ -104,7 +107,8 @@ public struct Resolver {
 
         let context = ResolutionContext.withoutTracking(
             document: document,
-            stateStore: stateStore
+            stateStore: stateStore,
+            designSystemProvider: designSystemProvider
         )
 
         let actions = actionResolver.resolveAll(document.actions)
@@ -149,7 +153,8 @@ public struct Resolver {
         let context = ResolutionContext.withTracking(
             document: document,
             stateStore: stateStore,
-            tracker: tracker
+            tracker: tracker,
+            designSystemProvider: designSystemProvider
         )
 
         let actions = actionResolver.resolveAll(document.actions)

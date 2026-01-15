@@ -320,14 +320,14 @@ struct ImageComponentResolutionTests {
     @Test @MainActor func resolvesSystemImageNode() throws {
         let imageNode = ImageNode(
             id: "icon",
-            source: .system(name: "star.fill")
+            source: .sfsymbol(name: "star.fill")
         )
         
         #expect(imageNode.id == "icon")
-        if case .system(let name) = imageNode.source {
+        if case .sfsymbol(let name) = imageNode.source {
             #expect(name == "star.fill")
         } else {
-            Issue.record("Expected system image source")
+            Issue.record("Expected sfsymbol image source")
         }
     }
     
@@ -377,7 +377,7 @@ struct ImageComponentResolutionTests {
         
         let imageNode = ImageNode(
             id: "tinted",
-            source: .system(name: "heart"),
+            source: .sfsymbol(name: "heart"),
             style: style
         )
         
@@ -391,7 +391,7 @@ struct ImageComponentResolutionTests {
         
         let imageNode = ImageNode(
             id: "sized",
-            source: .system(name: "star"),
+            source: .sfsymbol(name: "star"),
             style: style
         )
         
@@ -404,7 +404,7 @@ struct ImageComponentResolutionTests {
         
         let imageNode = ImageNode(
             id: "tappable",
-            source: .system(name: "photo"),
+            source: .sfsymbol(name: "photo"),
             onTap: action
         )
         
@@ -415,14 +415,14 @@ struct ImageComponentResolutionTests {
         let imageNode = ImageNode(
             id: "withPlaceholder",
             source: .statePath("${imageUrl}"),
-            placeholder: .system(name: "photo")
+            placeholder: .sfsymbol(name: "photo")
         )
         
         #expect(imageNode.placeholder != nil)
-        if case .system(let name) = imageNode.placeholder {
+        if case .sfsymbol(let name) = imageNode.placeholder {
             #expect(name == "photo")
         } else {
-            Issue.record("Expected system placeholder")
+            Issue.record("Expected sfsymbol placeholder")
         }
     }
     
@@ -458,7 +458,7 @@ struct ImageComponentResolutionTests {
     @Test @MainActor func imageNodeDefaultsToNilPlaceholder() throws {
         let imageNode = ImageNode(
             id: "noPlaceholder",
-            source: .system(name: "star")
+            source: .sfsymbol(name: "star")
         )
         
         #expect(imageNode.placeholder == nil)

@@ -392,7 +392,7 @@ struct SwiftUIRenderNodeKindTests {
     
     @Test func imageNodeReturnsImageKind() {
         let node = RenderNode.image(ImageNode(
-            source: .system(name: "star"),
+            source: .sfsymbol(name: "star"),
             style: IR.Style()
         ))
         

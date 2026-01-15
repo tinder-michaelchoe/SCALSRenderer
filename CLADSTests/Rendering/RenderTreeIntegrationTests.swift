@@ -96,7 +96,7 @@ private struct IntegrationImageRenderer: UIKitNodeRendering {
             return UIView()
         }
         let imageView = UIImageView()
-        if case .system(let name) = imageNode.source {
+        if case .sfsymbol(let name) = imageNode.source {
             imageView.image = UIImage(systemName: name)
         }
         return imageView
@@ -297,7 +297,7 @@ struct UIKitRenderTreeIntegrationTests {
         let context = createIntegrationUIKitContext()
         
         let node = RenderNode.image(ImageNode(
-            source: .system(name: "star.fill"),
+            source: .sfsymbol(name: "star.fill"),
             style: IR.Style()
         ))
         
@@ -590,7 +590,7 @@ struct RenderTreeEdgeCaseTests {
             children: [
                 .text(TextNode(content: "Text", style: IR.Style(), padding: .zero)),
                 .button(ButtonNode(label: "Button", styles: ButtonStyles())),
-                .image(ImageNode(source: .system(name: "star"), style: IR.Style())),
+                .image(ImageNode(source: .sfsymbol(name: "star"), style: IR.Style())),
                 .spacer,
                 .textField(TextFieldNode(placeholder: "Input", style: IR.Style(), bindingPath: nil))
             ]

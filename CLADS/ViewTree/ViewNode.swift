@@ -264,7 +264,7 @@ public struct ImageNodeData {
     public var loading: ImageNode.Source?
     public var style: IR.Style
 
-    public init(source: ImageNode.Source = .system(name: "questionmark"), placeholder: ImageNode.Source? = nil, loading: ImageNode.Source? = nil, style: IR.Style = IR.Style()) {
+    public init(source: ImageNode.Source = .sfsymbol(name: "questionmark"), placeholder: ImageNode.Source? = nil, loading: ImageNode.Source? = nil, style: IR.Style = IR.Style()) {
         self.source = source
         self.placeholder = placeholder
         self.loading = loading

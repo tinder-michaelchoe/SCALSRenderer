@@ -17,6 +17,7 @@ public struct CladsRendererView: View {
     @Environment(\.dismiss) private var dismiss
 
     private let swiftuiRendererRegistry: SwiftUINodeRendererRegistry
+    private let designSystemProvider: (any DesignSystemProvider)?
 
     /// Initialize with a document and registries.
     ///
@@ -27,13 +28,15 @@ public struct CladsRendererView: View {
     ///   - swiftuiRendererRegistry: Registry for SwiftUI renderers
     ///   - customComponents: Array of custom component types to register
     ///   - actionDelegate: Delegate for handling custom actions
+    ///   - designSystemProvider: Optional design system provider for style resolution and native components
     public init(
         document: Document.Definition,
         actionRegistry: ActionRegistry,
         componentRegistry: ComponentResolverRegistry,
         swiftuiRendererRegistry: SwiftUINodeRendererRegistry,
         customComponents: [any CustomComponent.Type] = [],
-        actionDelegate: CladsActionDelegate? = nil
+        actionDelegate: CladsActionDelegate? = nil,
+        designSystemProvider: (any DesignSystemProvider)? = nil
     ) {
         // Set up custom components if provided
         if !customComponents.isEmpty {
@@ -47,9 +50,14 @@ public struct CladsRendererView: View {
         }
 
         self.swiftuiRendererRegistry = swiftuiRendererRegistry
+        self.designSystemProvider = designSystemProvider
 
         // Resolve Document (AST) into RenderTree (IR)
-        let resolver = Resolver(document: document, componentRegistry: componentRegistry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: componentRegistry,
+            designSystemProvider: designSystemProvider
+        )
         let tree: RenderTree
         do {
             tree = try resolver.resolve()
@@ -76,7 +84,8 @@ public struct CladsRendererView: View {
         // Use SwiftUIRenderer to render the RenderTree
         let renderer = SwiftUIRenderer(
             actionContext: actionContext,
-            rendererRegistry: swiftuiRendererRegistry
+            rendererRegistry: swiftuiRendererRegistry,
+            designSystemProvider: designSystemProvider
         )
         renderer.render(renderTree)
             .onAppear {
@@ -106,6 +115,7 @@ extension CladsRendererView {
         swiftuiRendererRegistry: SwiftUINodeRendererRegistry,
         customComponents: [any CustomComponent.Type] = [],
         actionDelegate: CladsActionDelegate? = nil,
+        designSystemProvider: (any DesignSystemProvider)? = nil,
         debugMode: Bool = false
     ) {
         guard let document = try? Document.Definition(jsonString: jsonString) else {
@@ -118,6 +128,7 @@ extension CladsRendererView {
             swiftuiRendererRegistry: swiftuiRendererRegistry,
             customComponents: customComponents,
             actionDelegate: actionDelegate,
+            designSystemProvider: designSystemProvider,
             debugMode: debugMode
         )
     }
@@ -130,6 +141,7 @@ extension CladsRendererView {
         swiftuiRendererRegistry: SwiftUINodeRendererRegistry,
         customComponents: [any CustomComponent.Type] = [],
         actionDelegate: CladsActionDelegate? = nil,
+        designSystemProvider: (any DesignSystemProvider)? = nil,
         debugMode: Bool
     ) {
         // Set up custom components if provided
@@ -144,9 +156,14 @@ extension CladsRendererView {
         }
 
         self.swiftuiRendererRegistry = swiftuiRendererRegistry
+        self.designSystemProvider = designSystemProvider
 
         // Resolve Document (AST) into RenderTree (IR)
-        let resolver = Resolver(document: document, componentRegistry: componentRegistry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: componentRegistry,
+            designSystemProvider: designSystemProvider
+        )
         let tree: RenderTree
         do {
             tree = try resolver.resolve()

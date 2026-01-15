@@ -58,6 +58,7 @@ public struct ToggleComponentResolver: ComponentResolving {
 
         let renderNode = RenderNode.toggle(ToggleNode(
             id: component.id,
+            styleId: component.styleId,
             bindingPath: component.bind,
             style: style
         ))

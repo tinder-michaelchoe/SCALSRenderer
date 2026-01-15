@@ -17,6 +17,7 @@ extension CladsRendererView {
     ///   - customActions: View-specific action closures, keyed by action ID
     ///   - customComponents: Custom component types to register
     ///   - actionDelegate: Delegate for handling custom actions
+    ///   - designSystemProvider: Optional design system provider for style resolution
     ///
     /// Example:
     /// ```swift
@@ -37,7 +38,8 @@ extension CladsRendererView {
         document: Document.Definition,
         customActions: [String: ActionClosure] = [:],
         customComponents: [any CustomComponent.Type] = [],
-        actionDelegate: CladsActionDelegate? = nil
+        actionDelegate: CladsActionDelegate? = nil,
+        designSystemProvider: (any DesignSystemProvider)? = nil
     ) {
         // Merge custom actions into the registry
         let registry = ActionRegistry.default.merging(customActions: customActions)
@@ -48,7 +50,8 @@ extension CladsRendererView {
             componentRegistry: .default,
             swiftuiRendererRegistry: .default,
             customComponents: customComponents,
-            actionDelegate: actionDelegate
+            actionDelegate: actionDelegate,
+            designSystemProvider: designSystemProvider
         )
     }
 
@@ -59,6 +62,7 @@ extension CladsRendererView {
     ///   - customActions: View-specific action closures, keyed by action ID
     ///   - customComponents: Custom component types to register
     ///   - actionDelegate: Delegate for handling custom actions
+    ///   - designSystemProvider: Optional design system provider for style resolution
     ///   - debugMode: Enable debug output
     ///
     /// Example:
@@ -74,24 +78,31 @@ extension CladsRendererView {
         customActions: [String: ActionClosure] = [:],
         customComponents: [any CustomComponent.Type] = [],
         actionDelegate: CladsActionDelegate? = nil,
+        designSystemProvider: (any DesignSystemProvider)? = nil,
         debugMode: Bool = false
     ) {
-        guard let document = try? Document.Definition(jsonString: jsonString) else {
+        do {
+            let document = try Document.Definition(jsonString: jsonString)
+            
+            // Merge custom actions into the registry
+            let registry = ActionRegistry.default.merging(customActions: customActions)
+
+            self.init(
+                document: document,
+                actionRegistry: registry,
+                componentRegistry: .default,
+                swiftuiRendererRegistry: .default,
+                customComponents: customComponents,
+                actionDelegate: actionDelegate,
+                designSystemProvider: designSystemProvider,
+                debugMode: debugMode
+            )
+        } catch {
+            // Print detailed error for debugging
+            print("❌ CLADS JSON Parse Error:")
+            print(DocumentParseError.detailedDescription(error: error, jsonString: jsonString))
             return nil
         }
-
-        // Merge custom actions into the registry
-        let registry = ActionRegistry.default.merging(customActions: customActions)
-
-        self.init(
-            document: document,
-            actionRegistry: registry,
-            componentRegistry: .default,
-            swiftuiRendererRegistry: .default,
-            customComponents: customComponents,
-            actionDelegate: actionDelegate,
-            debugMode: debugMode
-        )
     }
 
     /// Initialize from a Document with optional debug output using default registries.
@@ -100,6 +111,7 @@ extension CladsRendererView {
         customActions: [String: ActionClosure] = [:],
         customComponents: [any CustomComponent.Type] = [],
         actionDelegate: CladsActionDelegate? = nil,
+        designSystemProvider: (any DesignSystemProvider)? = nil,
         debugMode: Bool
     ) {
         // Merge custom actions into the registry
@@ -112,6 +124,7 @@ extension CladsRendererView {
             swiftuiRendererRegistry: .default,
             customComponents: customComponents,
             actionDelegate: actionDelegate,
+            designSystemProvider: designSystemProvider,
             debugMode: debugMode
         )
     }

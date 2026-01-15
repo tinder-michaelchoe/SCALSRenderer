@@ -26,8 +26,8 @@ public struct ImageNodeRenderer: UIKitNodeRendering {
 
         // Set placeholder while loading
         let placeholderImage: UIImage? = {
-            switch imageNode.placeholder ?? .system(name: "photo") {
-            case .system(let name):
+            switch imageNode.placeholder ?? .sfsymbol(name: "photo") {
+            case .sfsymbol(let name):
                 return UIImage(systemName: name)
             case .asset(let name):
                 return UIImage(named: name)
@@ -37,7 +37,7 @@ public struct ImageNodeRenderer: UIKitNodeRendering {
         }()
         
         switch imageNode.source {
-        case .system(let name):
+        case .sfsymbol(let name):
             imageView.image = UIImage(systemName: name)
         case .asset(let name):
             imageView.image = UIImage(named: name)

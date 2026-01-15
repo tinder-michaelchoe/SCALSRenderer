@@ -14,6 +14,10 @@
       "type": "string",
       "description": "Document version string"
     },
+    "designSystem": {
+      "type": "string",
+      "description": "Design system identifier to use for @-prefixed styles (e.g., 'lightspeed', 'obsidian'). If specified, the corresponding DesignSystemProvider must be injected client-side."
+    },
     "state": {
       "type": "object",
       "description": "Initial state values for the document",
@@ -493,7 +497,7 @@
         },
         "styleId": {
           "type": "string",
-          "description": "Style ID to apply"
+          "description": "Style ID to apply. Use '@' prefix for design system styles (e.g., '@button.primary'), or reference local styles defined in the document's 'styles' object."
         },
         "colorScheme": {
           "type": "string",
@@ -801,7 +805,7 @@
         "id": { "type": "string" },
         "styleId": {
           "type": "string",
-          "description": "Style ID to apply"
+          "description": "Style ID to apply. Use '@' prefix for design system styles (e.g., '@button.primary'), or reference local styles defined in the document's 'styles' object."
         },
         "styles": {
           "$ref": "#/$defs/componentStyles",
