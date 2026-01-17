@@ -799,6 +799,9 @@
       "properties": {
         "type": {
           "type": "string",
+          "not": {
+            "enum": ["vstack", "hstack", "zstack", "sectionLayout", "forEach", "spacer"]
+          },
           "description": "Component type identifier",
           "examples": ["label", "button", "textfield", "image", "gradient", "toggle", "slider", "divider"]
         },

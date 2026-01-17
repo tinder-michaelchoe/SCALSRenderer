@@ -321,6 +321,7 @@ enum Example: String, CaseIterable, Identifiable {
     case shoppingCart
     case musicPlayer
     case metMuseum
+    case weatherDashboard
     case designSystem
 
     // Tinder Examples
@@ -372,6 +373,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .shoppingCart: return "Shopping Cart"
         case .musicPlayer: return "Music Player"
         case .metMuseum: return "Met Museum"
+        case .weatherDashboard: return "Weather Dashboard"
         case .designSystem: return "Design System"
         // Tinder
         case .photoTouchUp: return "Photo Touch Up"
@@ -422,6 +424,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .shoppingCart: return "E-commerce cart with promo codes"
         case .musicPlayer: return "Player controls, queue & progress"
         case .metMuseum: return "Explore artwork via GET API"
+        case .weatherDashboard: return "Weather with custom action & gradients"
         case .designSystem: return "Lightspeed design system integration"
         // Tinder
         case .photoTouchUp: return "Before/after photo comparison with custom components"
@@ -472,6 +475,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .shoppingCart: return "cart.fill"
         case .musicPlayer: return "music.note.list"
         case .metMuseum: return "building.columns"
+        case .weatherDashboard: return "cloud.sun.fill"
         case .designSystem: return "paintbrush.pointed"
         // Tinder
         case .photoTouchUp: return "wand.and.stars"
@@ -522,6 +526,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .shoppingCart: return .teal
         case .musicPlayer: return .teal
         case .metMuseum: return Color(red: 0.77, green: 0.12, blue: 0.23) // Met Museum red
+        case .weatherDashboard: return .cyan
         case .designSystem: return Color(hex: "#6366F1") // Indigo (Lightspeed primary)
         // Tinder - Red/Orange (flame colors)
         case .photoTouchUp: return Color(red: 0.99, green: 0.35, blue: 0.37)
@@ -572,6 +577,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .shoppingCart: return shoppingCartJSON
         case .musicPlayer: return musicPlayerJSON
         case .metMuseum: return metMuseumJSON
+        case .weatherDashboard: return weatherDashboardJSON
         case .designSystem: return designSystemExampleJSON
         // Tinder
         case .photoTouchUp: return PhotoTouchUpJSON.bottomSheet
@@ -610,6 +616,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .shoppingCart: return .fullSize
         case .musicPlayer: return .fullSize
         case .metMuseum: return .fullSize
+        case .weatherDashboard: return .fullSize
         case .designSystem: return .fullSize
         // Tinder - fixed height sheets
         case .photoTouchUp: return .fixed(height: 600)
@@ -640,7 +647,7 @@ enum Example: String, CaseIterable, Identifiable {
     }
 
     static var complexExamples: [Example] {
-        [.dadJokes, .taskManager, .shoppingCart, .musicPlayer, .metMuseum]
+        [.dadJokes, .taskManager, .shoppingCart, .musicPlayer, .metMuseum, .weatherDashboard]
     }
 
     static var tinderExamples: [Example] {

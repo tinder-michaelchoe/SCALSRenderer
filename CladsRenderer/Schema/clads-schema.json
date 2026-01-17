@@ -142,18 +142,58 @@
     },
     "imageSource": {
       "type": "object",
-      "description": "Image source configuration",
+      "description": "Image source (SF Symbol, asset catalog, or URL). URL supports ${path} template syntax for dynamic images from state.",
       "properties": {
-        "system": {
+        "sfsymbol": {
           "type": "string",
-          "description": "SF Symbol name"
+          "description": "SF Symbol name (e.g., 'star.fill', 'photo', 'arrow.right')"
         },
         "url": {
           "type": "string",
-          "format": "uri",
-          "description": "Remote image URL"
+          "description": "Remote image URL. Supports ${path} template syntax for dynamic URLs from state (e.g., '${artwork.primaryImage}')"
+        },
+        "asset": {
+          "type": "string",
+          "description": "Asset catalog image name (bundled with the app)"
+        },
+        "placeholder": {
+          "$ref": "#/$defs/imageSourcePlaceholder",
+          "description": "Placeholder image shown when URL is empty/invalid or on error. Default: SF Symbol 'photo'"
+        },
+        "loading": {
+          "$ref": "#/$defs/imageSourcePlaceholder",
+          "description": "Loading indicator shown while image is being fetched. Default: ProgressView spinner"
         }
       },
+      "oneOf": [
+        { "required": ["sfsymbol"] },
+        { "required": ["url"] },
+        { "required": ["asset"] }
+      ],
+      "additionalProperties": false
+    },
+    "imageSourcePlaceholder": {
+      "type": "object",
+      "description": "Placeholder image source (cannot be dynamic)",
+      "properties": {
+        "sfsymbol": {
+          "type": "string",
+          "description": "SF Symbol name (e.g., 'photo', 'photo.fill')"
+        },
+        "url": {
+          "type": "string",
+          "description": "Static remote image URL (no template syntax)"
+        },
+        "asset": {
+          "type": "string",
+          "description": "Asset catalog image name (bundled with the app)"
+        }
+      },
+      "oneOf": [
+        { "required": ["sfsymbol"] },
+        { "required": ["url"] },
+        { "required": ["asset"] }
+      ],
       "additionalProperties": false
     },
     "gradientStop": {

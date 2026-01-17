@@ -11,6 +11,28 @@ import CladsModules
 import SwiftUI
 
 struct ContentView: View {
+    @State private var selectedTab = 0
+    
+    var body: some View {
+        TabView(selection: $selectedTab) {
+            ExamplesListView()
+                .tabItem {
+                    Label("Examples", systemImage: "list.bullet.rectangle")
+                }
+                .tag(0)
+            
+            JSONPlaygroundView()
+                .tabItem {
+                    Label("Playground", systemImage: "curlybraces")
+                }
+                .tag(1)
+        }
+    }
+}
+
+// MARK: - Examples List View
+
+struct ExamplesListView: View {
     @State private var selectedExample: Example?
     @State private var fullScreenExample: Example?
     @State private var jsonViewerExample: Example?
@@ -132,6 +154,8 @@ struct ContentView: View {
         }
     }
 }
+
+// MARK: - End of ExamplesListView
 
 // MARK: - JSON Viewer Sheet
 
@@ -318,6 +342,7 @@ enum Example: String, CaseIterable, Identifiable {
     case shoppingCart
     case musicPlayer
     case metMuseum
+    case weatherDashboard
 
     // Custom Components
     case photoTouchUp
@@ -369,6 +394,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .shoppingCart: return "Shopping Cart"
         case .musicPlayer: return "Music Player"
         case .metMuseum: return "Met Museum"
+        case .weatherDashboard: return "Weather Dashboard"
         // Custom Components
         case .photoTouchUp: return "Photo Touch Up"
         case .feedbackSurvey: return "Feedback Survey"
@@ -419,6 +445,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .shoppingCart: return "E-commerce cart with promo codes"
         case .musicPlayer: return "Player controls, queue & progress"
         case .metMuseum: return "Explore artwork via GET API"
+        case .weatherDashboard: return "Weather with custom action & gradients"
         // Custom Components
         case .photoTouchUp: return "Before/after photo comparison"
         case .feedbackSurvey: return "Radio button survey"
@@ -469,6 +496,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .shoppingCart: return "cart.fill"
         case .musicPlayer: return "music.note.list"
         case .metMuseum: return "building.columns"
+        case .weatherDashboard: return "cloud.sun.fill"
         // Custom Components
         case .photoTouchUp: return "wand.and.stars"
         case .feedbackSurvey: return "text.bubble"
@@ -498,6 +526,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .shoppingCart: return .teal
         case .musicPlayer: return .teal
         case .metMuseum: return Color(red: 0.77, green: 0.12, blue: 0.23)
+        case .weatherDashboard: return .cyan
         // Custom Components - Coral
         case .photoTouchUp, .feedbackSurvey:
             return Color(red: 0.99, green: 0.35, blue: 0.37)
@@ -548,6 +577,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .shoppingCart: return shoppingCartJSON
         case .musicPlayer: return musicPlayerJSON
         case .metMuseum: return metMuseumJSON
+        case .weatherDashboard: return weatherDashboardJSON
         // Custom Components
         case .photoTouchUp: return PhotoTouchUpJSON.bottomSheet
         case .feedbackSurvey: return FeedbackSurveyJSON.bottomSheet
@@ -587,6 +617,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .shoppingCart: return .fullSize
         case .musicPlayer: return .fullSize
         case .metMuseum: return .fullSize
+        case .weatherDashboard: return .fullSize
         // Custom Components
         case .photoTouchUp: return .fixed(height: 600)
         case .feedbackSurvey: return .detent(.large)
@@ -616,7 +647,7 @@ enum Example: String, CaseIterable, Identifiable {
     }
 
     static var complexExamples: [Example] {
-        [.dadJokes, .taskManager, .shoppingCart, .musicPlayer, .metMuseum]
+        [.dadJokes, .taskManager, .shoppingCart, .musicPlayer, .metMuseum, .weatherDashboard]
     }
 
     static var customComponentExamples: [Example] {
