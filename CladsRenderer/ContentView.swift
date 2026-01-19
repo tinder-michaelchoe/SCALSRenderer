@@ -144,6 +144,8 @@ struct ExamplesListView: View {
                     DadJokesExampleView()
                 case .taskManager:
                     TaskManagerExampleView()
+                case .doubleDate:
+                    ExampleSheetView(example: example)
                 default:
                     ExampleSheetView(example: example)
                 }
@@ -347,6 +349,7 @@ enum Example: String, CaseIterable, Identifiable {
     // Custom Components
     case photoTouchUp
     case feedbackSurvey
+    case doubleDate
 
     var id: String { rawValue }
 
@@ -398,6 +401,7 @@ enum Example: String, CaseIterable, Identifiable {
         // Custom Components
         case .photoTouchUp: return "Photo Touch Up"
         case .feedbackSurvey: return "Feedback Survey"
+        case .doubleDate: return "Double Date"
         }
     }
 
@@ -449,6 +453,7 @@ enum Example: String, CaseIterable, Identifiable {
         // Custom Components
         case .photoTouchUp: return "Before/after photo comparison"
         case .feedbackSurvey: return "Radio button survey"
+        case .doubleDate: return "Onboarding with gradient background and hero image"
         }
     }
 
@@ -500,6 +505,7 @@ enum Example: String, CaseIterable, Identifiable {
         // Custom Components
         case .photoTouchUp: return "wand.and.stars"
         case .feedbackSurvey: return "text.bubble"
+        case .doubleDate: return "person.2.fill"
         }
     }
 
@@ -528,7 +534,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .metMuseum: return Color(red: 0.77, green: 0.12, blue: 0.23)
         case .weatherDashboard: return .cyan
         // Custom Components - Coral
-        case .photoTouchUp, .feedbackSurvey:
+        case .photoTouchUp, .feedbackSurvey, .doubleDate:
             return Color(red: 0.99, green: 0.35, blue: 0.37)
         }
     }
@@ -581,6 +587,7 @@ enum Example: String, CaseIterable, Identifiable {
         // Custom Components
         case .photoTouchUp: return PhotoTouchUpJSON.bottomSheet
         case .feedbackSurvey: return FeedbackSurveyJSON.bottomSheet
+        case .doubleDate: return DoubleDateJSON.bottomSheet
         }
     }
 
@@ -621,6 +628,7 @@ enum Example: String, CaseIterable, Identifiable {
         // Custom Components
         case .photoTouchUp: return .fixed(height: 600)
         case .feedbackSurvey: return .detent(.large)
+        case .doubleDate: return .fullScreen
         }
     }
 
@@ -651,7 +659,7 @@ enum Example: String, CaseIterable, Identifiable {
     }
 
     static var customComponentExamples: [Example] {
-        [.photoTouchUp, .feedbackSurvey]
+        [.photoTouchUp, .feedbackSurvey, .doubleDate]
     }
 }
 

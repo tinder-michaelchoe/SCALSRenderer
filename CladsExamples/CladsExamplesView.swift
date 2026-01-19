@@ -85,6 +85,17 @@ struct CladsExamplesView: View {
                     }
                 }
 
+                Section("Custom Components") {
+                    ForEach(Example.customComponentExamples) { example in
+                        ExampleRow(
+                            example: example,
+                            selectedExample: $selectedExample,
+                            fullScreenExample: $fullScreenExample,
+                            jsonViewerExample: $jsonViewerExample
+                        )
+                    }
+                }
+
                 Section("Tinder") {
                     ForEach(Example.tinderExamples) { example in
                         ExampleRow(
@@ -122,6 +133,8 @@ struct CladsExamplesView: View {
                     DadJokesExampleView()
                 case .taskManager:
                     TaskManagerExampleView()
+                case .doubleDate:
+                    ExampleSheetView(example: example)
                 default:
                     ExampleSheetView(example: example)
                 }
@@ -327,6 +340,7 @@ enum Example: String, CaseIterable, Identifiable {
     // Tinder Examples
     case photoTouchUp
     case feedbackSurvey
+    case doubleDate
 
     var id: String { rawValue }
 
@@ -378,6 +392,7 @@ enum Example: String, CaseIterable, Identifiable {
         // Tinder
         case .photoTouchUp: return "Photo Touch Up"
         case .feedbackSurvey: return "Feedback Survey"
+        case .doubleDate: return "Double Date"
         }
     }
 
@@ -429,6 +444,7 @@ enum Example: String, CaseIterable, Identifiable {
         // Tinder
         case .photoTouchUp: return "Before/after photo comparison with custom components"
         case .feedbackSurvey: return "Radio button survey with dismiss and alert"
+        case .doubleDate: return "Onboarding with gradient background and hero image"
         }
     }
 
@@ -480,6 +496,7 @@ enum Example: String, CaseIterable, Identifiable {
         // Tinder
         case .photoTouchUp: return "wand.and.stars"
         case .feedbackSurvey: return "text.bubble"
+        case .doubleDate: return "person.2.fill"
         }
     }
 
@@ -531,6 +548,7 @@ enum Example: String, CaseIterable, Identifiable {
         // Tinder - Red/Orange (flame colors)
         case .photoTouchUp: return Color(red: 0.99, green: 0.35, blue: 0.37)
         case .feedbackSurvey: return Color(red: 0.99, green: 0.35, blue: 0.37)
+        case .doubleDate: return Color(red: 0.99, green: 0.35, blue: 0.37)
         }
     }
 
@@ -582,6 +600,7 @@ enum Example: String, CaseIterable, Identifiable {
         // Tinder
         case .photoTouchUp: return PhotoTouchUpJSON.bottomSheet
         case .feedbackSurvey: return FeedbackSurveyJSON.bottomSheet
+        case .doubleDate: return DoubleDateJSON.bottomSheet
         }
     }
 
@@ -621,6 +640,7 @@ enum Example: String, CaseIterable, Identifiable {
         // Tinder - fixed height sheets
         case .photoTouchUp: return .fixed(height: 600)
         case .feedbackSurvey: return .detent(.large)
+        case .doubleDate: return .fullScreen
         }
     }
 
@@ -648,6 +668,10 @@ enum Example: String, CaseIterable, Identifiable {
 
     static var complexExamples: [Example] {
         [.dadJokes, .taskManager, .shoppingCart, .musicPlayer, .metMuseum, .weatherDashboard]
+    }
+
+    static var customComponentExamples: [Example] {
+        [.doubleDate]
     }
 
     static var tinderExamples: [Example] {
