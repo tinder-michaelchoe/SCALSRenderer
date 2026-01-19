@@ -21,13 +21,17 @@ public struct DadJokesExampleView: View {
     public init() {}
 
     public var body: some View {
-        NavigationStack {
-            if let document = try? Document.Definition(jsonString: dadJokesJSON) {
-                CladsRendererView(
-                    document: document,
-                    customActions: [
-                        // Custom action that fetches a joke from the API
-                        "fetchJoke": { params, context in
+        if let document = try? Document.Definition(jsonString: dadJokesJSON) {
+            CladsRendererView(
+                document: document,
+                customActions: [
+                    // Dismiss action
+                    "dismiss": { params, context in
+                        dismiss()
+                    },
+
+                    // Custom action that fetches a joke from the API
+                    "fetchJoke": { params, context in
                             // Set loading state
                             context.stateStore.set("isLoading", value: true)
                             context.stateStore.set("setup", value: "Loading...")
@@ -72,17 +76,9 @@ public struct DadJokesExampleView: View {
                         }
                     ]
                 )
-                .navigationTitle("Dad Jokes")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button("Close") { dismiss() }
-                    }
-                }
-            } else {
-                Text("Failed to parse JSON")
-                    .foregroundStyle(.red)
-            }
+        } else {
+            Text("Failed to parse JSON")
+                .foregroundStyle(.red)
         }
     }
 }
@@ -143,6 +139,15 @@ public let dadJokesJSON = """
   },
 
   "styles": {
+    "closeButton": {
+      "fontSize": 16,
+      "fontWeight": "semibold",
+      "textColor": "#007AFF",
+      "backgroundColor": "transparent",
+      "cornerRadius": 20,
+      "width": 40,
+      "height": 40
+    },
     "screenTitle": {
       "fontSize": 28,
       "fontWeight": "bold",
@@ -199,6 +204,10 @@ public let dadJokesJSON = """
     }
   },
 
+  "actions": {
+    "dismiss": { "type": "dismiss" }
+  },
+
   "root": {
     "backgroundColor": "#FFFFFF",
     "actions": {
@@ -210,9 +219,22 @@ public let dadJokesJSON = """
         "spacing": 0,
         "children": [
           {
+            "type": "hstack",
+            "padding": { "leading": 20, "trailing": 20, "top": 16 },
+            "children": [
+              {
+                "type": "button",
+                "image": { "sfsymbol": "xmark" },
+                "styleId": "closeButton",
+                "actions": { "onTap": { "type": "dismiss" } }
+              },
+              { "type": "spacer" }
+            ]
+          },
+          {
             "type": "vstack",
             "spacing": 24,
-            "padding": { "horizontal": 20, "top": 20 },
+            "padding": { "horizontal": 20, "top": 8 },
             "children": [
               {
                 "type": "vstack",
