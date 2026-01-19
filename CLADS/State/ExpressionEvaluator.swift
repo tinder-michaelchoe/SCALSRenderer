@@ -32,19 +32,21 @@ public protocol StateValueReading {
 ///
 /// Supports:
 /// - Simple keypaths: `"count"`, `"user.name"`
-/// - Array access: `"items[0]"`, `"items[0].name"`
+/// - Array access: `"items[0]"`, `"items[currentIndex]"`, `"items[0].name"`
 /// - Array properties: `"items.count"`, `"items.isEmpty"`, `"items.first"`, `"items.last"`
 /// - Array methods: `"items.contains(\"value\")"`, `"items.contains(varName)"`
 /// - Ternary: `"condition ? 'trueValue' : 'falseValue'"`
-/// - Arithmetic: `"count + 1"`, `"count - 1"`
-/// - Template interpolation: `"Hello ${name}!"`
+/// - Arithmetic: `"count + 1"`, `"count - 1"`, `"count * 2"`, `"count / 2"`, `"count % 3"`
+/// - Complex arithmetic: `"(index + 1) % 3"`, `"(a + b) * c"`, `"count + 1 - 2"`
+/// - Template interpolation: `"Hello ${name}!"`, `"Image ${(index + 1)}/3"`
 ///
 /// Example:
 /// ```swift
 /// let evaluator = ExpressionEvaluator()
 ///
 /// // With a state reader
-/// let result = evaluator.evaluate("count + 1", using: stateStore)
+/// let result = evaluator.evaluate("(count + 1) % 3", using: stateStore)
+/// let url = evaluator.evaluate("imageUrls[currentIndex]", using: stateStore)
 /// let message = evaluator.interpolate("Hello ${name}!", using: stateStore)
 /// ```
 public struct ExpressionEvaluator {
@@ -67,18 +69,34 @@ public struct ExpressionEvaluator {
             return ternaryResult
         }
 
-        // Check for array expressions
+        // Check for array expressions (before arithmetic to handle items[index])
         if let arrayResult = evaluateArrayExpression(trimmed, using: stateReader) {
             return arrayResult
         }
 
-        // Check if it's a simple arithmetic expression
-        if expression.contains("+") || expression.contains("-") {
+        // Check if it's a template string with ${...}
+        // Process templates BEFORE arithmetic check to avoid false positives from operators inside ${...}
+        if containsTemplates(trimmed) {
+            let interpolated = interpolate(trimmed, using: stateReader)
+            // If the interpolated result looks like an arithmetic expression, evaluate it
+            if isArithmeticExpression(interpolated), !containsTemplates(interpolated) {
+                return evaluateArithmetic(interpolated, using: stateReader)
+            }
+            return interpolated
+        }
+
+        // Check if it's a simple arithmetic expression (no templates)
+        if isArithmeticExpression(trimmed) {
             return evaluateArithmetic(expression, using: stateReader)
         }
 
-        // Otherwise, just interpolate
-        return interpolate(expression, using: stateReader)
+        // Try to get value directly from state (bare variable name)
+        if let value = stateReader.getValue(trimmed) {
+            return value
+        }
+
+        // Fallback: return as-is (for strings without state values)
+        return trimmed
     }
 
     // MARK: - Template Interpolation
@@ -130,6 +148,11 @@ public struct ExpressionEvaluator {
         // Check for array expressions
         if let arrayResult = evaluateArrayExpression(trimmed, using: stateReader) {
             return arrayResult
+        }
+
+        // Check for arithmetic expressions
+        if trimmed.contains("+") || trimmed.contains("-") || trimmed.contains("%") || trimmed.contains("*") || trimmed.contains("/") {
+            return evaluateArithmetic(trimmed, using: stateReader)
         }
 
         // Otherwise just get the value
@@ -221,6 +244,11 @@ public struct ExpressionEvaluator {
 
     /// Evaluate array-specific expressions.
     private func evaluateArrayExpression(_ expression: String, using stateReader: StateValueReading) -> Any? {
+        // items[indexVar] - dynamic array indexing with variable
+        if let match = matchDynamicArrayIndex(expression, using: stateReader) {
+            return match
+        }
+
         // items.count
         if expression.hasSuffix(".count") {
             let path = String(expression.dropLast(6))
@@ -249,6 +277,36 @@ public struct ExpressionEvaluator {
         if let match = matchContainsExpression(expression, using: stateReader) {
             let (arrayPath, searchValue) = match
             return stateReader.arrayContains(arrayPath, value: searchValue)
+        }
+
+        return nil
+    }
+
+    /// Match dynamic array indexing expressions like `items[indexVar]` where indexVar is a state variable.
+    private func matchDynamicArrayIndex(_ expression: String, using stateReader: StateValueReading) -> Any? {
+        // Pattern: arrayName[indexExpression]
+        guard let openBracket = expression.firstIndex(of: "["),
+              let closeBracket = expression.lastIndex(of: "]"),
+              openBracket < closeBracket else {
+            return nil
+        }
+
+        let arrayName = String(expression[..<openBracket])
+        let indexExpr = String(expression[expression.index(after: openBracket)..<closeBracket])
+
+        // Try to parse as integer literal first
+        if let literalIndex = Int(indexExpr) {
+            // Direct array access with literal index
+            return stateReader.getValue("\(arrayName)[\(literalIndex)]")
+        }
+
+        // Otherwise, evaluate the index expression to get the actual index
+        let indexValue = evaluate(indexExpr, using: stateReader)
+
+        // Convert the result to an integer index
+        if let index = indexValue as? Int {
+            // Build the keypath with the resolved index
+            return stateReader.getValue("\(arrayName)[\(index)]")
         }
 
         return nil
@@ -284,31 +342,160 @@ public struct ExpressionEvaluator {
 
     /// Evaluate simple arithmetic expressions.
     private func evaluateArithmetic(_ expression: String, using stateReader: StateValueReading) -> Any {
-        // Simple arithmetic: "${count} + 1"
-        let interpolated = interpolate(expression, using: stateReader)
+        var normalized = expression.trimmingCharacters(in: .whitespaces)
 
-        // Try to evaluate as simple addition (split on " + " to avoid issues with signs)
-        if let addRange = interpolated.range(of: " + ") {
-            let left = String(interpolated[..<addRange.lowerBound]).trimmingCharacters(in: .whitespaces)
-            let right = String(interpolated[addRange.upperBound...]).trimmingCharacters(in: .whitespaces)
-            if let leftNum = Int(left), let rightNum = Int(right) {
+        // Strip outer parentheses if present
+        if normalized.hasPrefix("(") && normalized.hasSuffix(")") {
+            let inner = String(normalized.dropFirst().dropLast()).trimmingCharacters(in: .whitespaces)
+            // Make sure we're not removing function call parens by checking for balanced parens
+            var parenCount = 0
+            var valid = true
+            for char in inner {
+                if char == "(" { parenCount += 1 }
+                else if char == ")" { parenCount -= 1 }
+                if parenCount < 0 { valid = false; break }
+            }
+            if valid && parenCount == 0 {
+                normalized = inner
+            }
+        }
+
+        // Normalize spacing around operators for easier parsing
+        normalized = normalized.replacingOccurrences(of: "%", with: " % ")
+        normalized = normalized.replacingOccurrences(of: "*", with: " * ")
+        normalized = normalized.replacingOccurrences(of: "/", with: " / ")
+        normalized = normalized.replacingOccurrences(of: "+", with: " + ")
+        normalized = normalized.replacingOccurrences(of: "-", with: " - ")
+
+        // Clean up multiple spaces
+        while normalized.contains("  ") {
+            normalized = normalized.replacingOccurrences(of: "  ", with: " ")
+        }
+        normalized = normalized.trimmingCharacters(in: .whitespaces)
+
+        // Try modulo (highest precedence of these operators)
+        if let modRange = normalized.range(of: " % ") {
+            let left = String(normalized[..<modRange.lowerBound]).trimmingCharacters(in: .whitespaces)
+            let right = String(normalized[modRange.upperBound...]).trimmingCharacters(in: .whitespaces)
+            if let leftNum = resolveIntValue(left, using: stateReader),
+               let rightNum = resolveIntValue(right, using: stateReader),
+               rightNum != 0 {
+                return leftNum % rightNum
+            }
+        }
+
+        // Try multiplication
+        if let mulRange = normalized.range(of: " * ") {
+            let left = String(normalized[..<mulRange.lowerBound]).trimmingCharacters(in: .whitespaces)
+            let right = String(normalized[mulRange.upperBound...]).trimmingCharacters(in: .whitespaces)
+            if let leftNum = resolveIntValue(left, using: stateReader),
+               let rightNum = resolveIntValue(right, using: stateReader) {
+                return leftNum * rightNum
+            }
+        }
+
+        // Try division
+        if let divRange = normalized.range(of: " / ") {
+            let left = String(normalized[..<divRange.lowerBound]).trimmingCharacters(in: .whitespaces)
+            let right = String(normalized[divRange.upperBound...]).trimmingCharacters(in: .whitespaces)
+            if let leftNum = resolveIntValue(left, using: stateReader),
+               let rightNum = resolveIntValue(right, using: stateReader),
+               rightNum != 0 {
+                return leftNum / rightNum
+            }
+        }
+
+        // Try to evaluate as simple addition
+        if let addRange = normalized.range(of: " + ") {
+            let left = String(normalized[..<addRange.lowerBound]).trimmingCharacters(in: .whitespaces)
+            let right = String(normalized[addRange.upperBound...]).trimmingCharacters(in: .whitespaces)
+            if let leftNum = resolveIntValue(left, using: stateReader),
+               let rightNum = resolveIntValue(right, using: stateReader) {
                 return leftNum + rightNum
             }
         }
 
-        // Try to evaluate as simple subtraction (split on " - " to avoid issues with negative numbers)
-        if let subRange = interpolated.range(of: " - ") {
-            let left = String(interpolated[..<subRange.lowerBound]).trimmingCharacters(in: .whitespaces)
-            let right = String(interpolated[subRange.upperBound...]).trimmingCharacters(in: .whitespaces)
-            if let leftNum = Int(left), let rightNum = Int(right) {
+        // Try to evaluate as simple subtraction
+        if let subRange = normalized.range(of: " - ") {
+            let left = String(normalized[..<subRange.lowerBound]).trimmingCharacters(in: .whitespaces)
+            let right = String(normalized[subRange.upperBound...]).trimmingCharacters(in: .whitespaces)
+            if let leftNum = resolveIntValue(left, using: stateReader),
+               let rightNum = resolveIntValue(right, using: stateReader) {
                 return leftNum - rightNum
             }
         }
 
-        return interpolated
+        return normalized
+    }
+
+    /// Resolve a string to an integer value - either parse as literal or look up in state
+    private func resolveIntValue(_ string: String, using stateReader: StateValueReading) -> Int? {
+        let trimmed = string.trimmingCharacters(in: .whitespaces)
+
+        // Remove parentheses if present
+        var cleaned = trimmed
+        if cleaned.hasPrefix("(") && cleaned.hasSuffix(")") {
+            cleaned = String(cleaned.dropFirst().dropLast()).trimmingCharacters(in: .whitespaces)
+        }
+
+        // Try parsing as integer literal
+        if let int = Int(cleaned) {
+            return int
+        }
+
+        // Try recursively evaluating (for nested expressions)
+        if cleaned.contains("+") || cleaned.contains("-") || cleaned.contains("*") || cleaned.contains("/") || cleaned.contains("%") {
+            let result = evaluateArithmetic(cleaned, using: stateReader)
+            if let int = result as? Int {
+                return int
+            }
+        }
+
+        // Try looking up as state variable
+        if let value = stateReader.getValue(cleaned) {
+            if let int = value as? Int {
+                return int
+            }
+        }
+
+        return nil
     }
 
     // MARK: - Helpers
+
+    /// Check if a string contains template syntax ${...} using regex.
+    /// Matches patterns like: "${count}", "Hello ${name}", "Item ${(index + 1)}"
+    private func containsTemplates(_ string: String) -> Bool {
+        let pattern = #"\$\{[^}]+\}"#
+
+        do {
+            let regex = try NSRegularExpression(pattern: pattern)
+            let range = NSRange(string.startIndex..., in: string)
+            return regex.firstMatch(in: string, range: range) != nil
+        } catch {
+            return false
+        }
+    }
+
+    /// Check if a string looks like an arithmetic expression using regex.
+    /// Matches patterns like: "5 + 3", "count - 1", "(index + 1) % 3", "count + 1 - 3"
+    private func isArithmeticExpression(_ string: String) -> Bool {
+        // Pattern matches arithmetic expressions with one or more operations
+        // Supports: operands (variables/numbers), operators (+,-,*,/,%), parentheses, and spaces
+        // Examples: "5 + 3", "count - 1", "(index + 1) % 3", "a + b * c"
+
+        // Simplified: just check if it contains at least one arithmetic operator surrounded by valid characters
+        // This is more permissive but will catch expressions like "(a + b) % c"
+        let pattern = #"[\w\.\)]\s*[\+\-\*/%]\s*[\w\.\(]"#
+
+        do {
+            let regex = try NSRegularExpression(pattern: pattern)
+            let range = NSRange(string.startIndex..., in: string)
+            return regex.firstMatch(in: string, range: range) != nil
+        } catch {
+            return false
+        }
+    }
 
     /// Convert any value to a string representation.
     private func stringValue(from value: Any?) -> String {

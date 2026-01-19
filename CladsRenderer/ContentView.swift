@@ -329,8 +329,7 @@ enum Example: String, CaseIterable, Identifiable {
     // Data (D)
     case staticData
     case bindingData
-    case expressionData
-    case stateInterpolation
+    case expressions
 
     // Styles (S)
     case basicStyles
@@ -384,8 +383,7 @@ enum Example: String, CaseIterable, Identifiable {
         // Data
         case .staticData: return "Static Data"
         case .bindingData: return "Binding Data"
-        case .expressionData: return "Expressions"
-        case .stateInterpolation: return "State Interpolation"
+        case .expressions: return "Expressions"
         // Styles
         case .basicStyles: return "Basic Styles"
         case .styleInheritance: return "Style Inheritance"
@@ -436,8 +434,7 @@ enum Example: String, CaseIterable, Identifiable {
         // Data
         case .staticData: return "Fixed values"
         case .bindingData: return "Two-way state binding"
-        case .expressionData: return "Computed values"
-        case .stateInterpolation: return "Template strings"
+        case .expressions: return "Arithmetic, templates, arrays, ternary & cycling"
         // Styles
         case .basicStyles: return "Font, color, spacing"
         case .styleInheritance: return "Extending base styles"
@@ -488,8 +485,7 @@ enum Example: String, CaseIterable, Identifiable {
         // Data
         case .staticData: return "doc.text"
         case .bindingData: return "link"
-        case .expressionData: return "function"
-        case .stateInterpolation: return "textformat.abc.dottedunderline"
+        case .expressions: return "function"
         // Styles
         case .basicStyles: return "paintpalette"
         case .styleInheritance: return "arrow.up.right.circle"
@@ -521,7 +517,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .setState, .toggleState, .showAlert, .dismiss, .navigate, .sequence, .arrayActions, .httpRequest:
             return .orange
         // Data - Green shades
-        case .staticData, .bindingData, .expressionData, .stateInterpolation:
+        case .staticData, .bindingData, .expressions:
             return .green
         // Styles - Pink shades
         case .basicStyles, .styleInheritance, .conditionalStyles, .designSystem:
@@ -570,8 +566,7 @@ enum Example: String, CaseIterable, Identifiable {
         // Data
         case .staticData: return staticDataJSON
         case .bindingData: return bindingDataJSON
-        case .expressionData: return expressionDataJSON
-        case .stateInterpolation: return stateInterpolationJSON
+        case .expressions: return expressionsJSON
         // Styles
         case .basicStyles: return basicStylesJSON
         case .styleInheritance: return styleInheritanceJSON
@@ -614,8 +609,10 @@ enum Example: String, CaseIterable, Identifiable {
             return .detent(.medium)
         case .httpRequest:
             return .fullSize
-        case .staticData, .bindingData, .expressionData, .stateInterpolation:
+        case .staticData, .bindingData:
             return .detent(.medium)
+        case .expressions:
+            return .fullSize
         case .basicStyles, .styleInheritance, .conditionalStyles:
             return .detent(.medium)
         case .designSystem:
@@ -649,7 +646,7 @@ enum Example: String, CaseIterable, Identifiable {
     }
 
     static var dataExamples: [Example] {
-        [.staticData, .bindingData, .expressionData, .stateInterpolation]
+        [.staticData, .bindingData, .expressions]
     }
 
     static var styleExamples: [Example] {

@@ -256,6 +256,7 @@ public struct DebugRenderer: Renderer {
         case .asset(let name): return "asset(\(name))"
         case .url(let url): return "url(\(url.absoluteString))"
         case .statePath(let template): return "statePath(\(template))"
+        case .activityIndicator: return "activityIndicator"
         }
     }
 

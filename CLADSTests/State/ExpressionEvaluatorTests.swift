@@ -16,7 +16,23 @@ struct MockStateReader: StateValueReading {
     var arrays: [String: [Any]] = [:]
 
     func getValue(_ keypath: String) -> Any? {
-        values[keypath]
+        // Check for array indexing like "items[0]"
+        if let openBracket = keypath.firstIndex(of: "["),
+           let closeBracket = keypath.lastIndex(of: "]"),
+           openBracket < closeBracket {
+            let arrayName = String(keypath[..<openBracket])
+            let indexStr = String(keypath[keypath.index(after: openBracket)..<closeBracket])
+
+            if let index = Int(indexStr),
+               let array = arrays[arrayName],
+               index >= 0 && index < array.count {
+                return array[index]
+            }
+            return nil
+        }
+
+        // Regular value lookup
+        return values[keypath]
     }
 
     func getArray(_ keypath: String) -> [Any]? {
@@ -100,6 +116,421 @@ struct ExpressionEvaluatorArithmeticTests {
 
         let result = evaluator.evaluate("${count} - 5", using: state)
         #expect(result as? Int == 0)
+    }
+
+    @Test func modulo() {
+        var state = MockStateReader()
+        state.values["count"] = 7
+
+        let result = evaluator.evaluate("${count} % 3", using: state)
+        #expect(result as? Int == 1)
+    }
+
+    @Test func moduloWithZeroResult() {
+        var state = MockStateReader()
+        state.values["count"] = 9
+
+        let result = evaluator.evaluate("${count} % 3", using: state)
+        #expect(result as? Int == 0)
+    }
+
+    @Test func moduloForCycling() {
+        var state = MockStateReader()
+        state.values["currentImageIndex"] = 2
+
+        let result = evaluator.evaluate("(currentImageIndex + 1) % 3", using: state)
+        #expect(result as? Int == 0)
+    }
+
+    @Test func multiplication() {
+        var state = MockStateReader()
+        state.values["count"] = 5
+
+        let result = evaluator.evaluate("${count} * 3", using: state)
+        #expect(result as? Int == 15)
+    }
+
+    @Test func multiplicationByZero() {
+        var state = MockStateReader()
+        state.values["count"] = 7
+
+        let result = evaluator.evaluate("${count} * 0", using: state)
+        #expect(result as? Int == 0)
+    }
+
+    @Test func division() {
+        var state = MockStateReader()
+        state.values["count"] = 15
+
+        let result = evaluator.evaluate("${count} / 3", using: state)
+        #expect(result as? Int == 5)
+    }
+
+    @Test func divisionWithRemainder() {
+        var state = MockStateReader()
+        state.values["count"] = 7
+
+        let result = evaluator.evaluate("${count} / 2", using: state)
+        #expect(result as? Int == 3)
+    }
+}
+
+// MARK: - Comprehensive Arithmetic Tests
+
+struct ExpressionEvaluatorComprehensiveArithmeticTests {
+    let evaluator = ExpressionEvaluator()
+
+    // MARK: Variable + Number Operations
+
+    @Test func variablePlusNumber() {
+        var state = MockStateReader()
+        state.values["count"] = 5
+
+        let result = evaluator.evaluate("count + 3", using: state)
+        #expect(result as? Int == 8)
+    }
+
+    @Test func variableMinusNumber() {
+        var state = MockStateReader()
+        state.values["count"] = 10
+
+        let result = evaluator.evaluate("count - 3", using: state)
+        #expect(result as? Int == 7)
+    }
+
+    @Test func variableTimesNumber() {
+        var state = MockStateReader()
+        state.values["count"] = 4
+
+        let result = evaluator.evaluate("count * 5", using: state)
+        #expect(result as? Int == 20)
+    }
+
+    @Test func variableDividedByNumber() {
+        var state = MockStateReader()
+        state.values["count"] = 20
+
+        let result = evaluator.evaluate("count / 4", using: state)
+        #expect(result as? Int == 5)
+    }
+
+    @Test func variableModuloNumber() {
+        var state = MockStateReader()
+        state.values["count"] = 7
+
+        let result = evaluator.evaluate("count % 3", using: state)
+        #expect(result as? Int == 1)
+    }
+
+    // MARK: Number + Variable Operations
+
+    @Test func numberPlusVariable() {
+        var state = MockStateReader()
+        state.values["count"] = 5
+
+        let result = evaluator.evaluate("3 + count", using: state)
+        #expect(result as? Int == 8)
+    }
+
+    @Test func numberMinusVariable() {
+        var state = MockStateReader()
+        state.values["count"] = 3
+
+        let result = evaluator.evaluate("10 - count", using: state)
+        #expect(result as? Int == 7)
+    }
+
+    @Test func numberTimesVariable() {
+        var state = MockStateReader()
+        state.values["count"] = 4
+
+        let result = evaluator.evaluate("5 * count", using: state)
+        #expect(result as? Int == 20)
+    }
+
+    @Test func numberDividedByVariable() {
+        var state = MockStateReader()
+        state.values["count"] = 4
+
+        let result = evaluator.evaluate("20 / count", using: state)
+        #expect(result as? Int == 5)
+    }
+
+    @Test func numberModuloVariable() {
+        var state = MockStateReader()
+        state.values["count"] = 3
+
+        let result = evaluator.evaluate("7 % count", using: state)
+        #expect(result as? Int == 1)
+    }
+
+    // MARK: Variable + Variable Operations
+
+    @Test func variablePlusVariable() {
+        var state = MockStateReader()
+        state.values["a"] = 5
+        state.values["b"] = 3
+
+        let result = evaluator.evaluate("a + b", using: state)
+        #expect(result as? Int == 8)
+    }
+
+    @Test func variableMinusVariable() {
+        var state = MockStateReader()
+        state.values["a"] = 10
+        state.values["b"] = 3
+
+        let result = evaluator.evaluate("a - b", using: state)
+        #expect(result as? Int == 7)
+    }
+
+    @Test func variableTimesVariable() {
+        var state = MockStateReader()
+        state.values["a"] = 4
+        state.values["b"] = 5
+
+        let result = evaluator.evaluate("a * b", using: state)
+        #expect(result as? Int == 20)
+    }
+
+    @Test func variableDividedByVariable() {
+        var state = MockStateReader()
+        state.values["a"] = 20
+        state.values["b"] = 4
+
+        let result = evaluator.evaluate("a / b", using: state)
+        #expect(result as? Int == 5)
+    }
+
+    @Test func variableModuloVariable() {
+        var state = MockStateReader()
+        state.values["a"] = 7
+        state.values["b"] = 3
+
+        let result = evaluator.evaluate("a % b", using: state)
+        #expect(result as? Int == 1)
+    }
+
+    // MARK: Chained Operations (Multiple Operators)
+
+    @Test func additionAndSubtraction() {
+        var state = MockStateReader()
+        state.values["count"] = 10
+
+        let result = evaluator.evaluate("count + 5 - 3", using: state)
+        #expect(result as? Int == 12)
+    }
+
+    @Test func multipleAdditions() {
+        var state = MockStateReader()
+        state.values["a"] = 1
+        state.values["b"] = 2
+        state.values["c"] = 3
+
+        let result = evaluator.evaluate("a + b + c", using: state)
+        #expect(result as? Int == 6)
+    }
+
+    @Test func multiplicationAndDivision() {
+        var state = MockStateReader()
+        state.values["count"] = 10
+
+        let result = evaluator.evaluate("count * 2 / 5", using: state)
+        #expect(result as? Int == 4)
+    }
+
+    @Test func complexChainedExpression() {
+        var state = MockStateReader()
+        state.values["a"] = 10
+        state.values["b"] = 5
+        state.values["c"] = 2
+
+        let result = evaluator.evaluate("a + b - c * 2", using: state)
+        // Note: This evaluates left-to-right, not with proper precedence
+        // 10 + 5 = 15, 15 - 2 = 13, 13 * 2 = 26
+        #expect(result as? Int == 26)
+    }
+
+    // MARK: Operations with Parentheses
+
+    @Test func parenthesesAdditionThenModulo() {
+        var state = MockStateReader()
+        state.values["index"] = 2
+
+        let result = evaluator.evaluate("(index + 1) % 3", using: state)
+        #expect(result as? Int == 0)
+    }
+
+    @Test func parenthesesMultiplication() {
+        var state = MockStateReader()
+        state.values["count"] = 5
+
+        let result = evaluator.evaluate("(count + 2) * 3", using: state)
+        #expect(result as? Int == 21)
+    }
+
+    @Test func parenthesesWithSpaces() {
+        var state = MockStateReader()
+        state.values["value"] = 10
+
+        let result = evaluator.evaluate("( value - 5 ) / 5", using: state)
+        #expect(result as? Int == 1)
+    }
+
+    // MARK: Different Spacing Variations
+
+    @Test func noSpacesAroundOperator() {
+        var state = MockStateReader()
+        state.values["count"] = 5
+
+        let result = evaluator.evaluate("count+3", using: state)
+        #expect(result as? Int == 8)
+    }
+
+    @Test func extraSpacesAroundOperator() {
+        var state = MockStateReader()
+        state.values["count"] = 5
+
+        let result = evaluator.evaluate("count   +   3", using: state)
+        #expect(result as? Int == 8)
+    }
+
+    @Test func spacesAtStartAndEnd() {
+        var state = MockStateReader()
+        state.values["count"] = 5
+
+        let result = evaluator.evaluate("  count + 3  ", using: state)
+        #expect(result as? Int == 8)
+    }
+
+    // MARK: Template Strings with Arithmetic
+
+    @Test func templateWithArithmeticInside() {
+        var state = MockStateReader()
+        state.values["count"] = 5
+
+        let result = evaluator.evaluate("${count} + 1", using: state)
+        #expect(result as? Int == 6)
+    }
+
+    @Test func templateWithMultipleVariables() {
+        var state = MockStateReader()
+        state.values["a"] = 10
+        state.values["b"] = 3
+
+        let result = evaluator.evaluate("${a} - ${b}", using: state)
+        #expect(result as? Int == 7)
+    }
+
+    @Test func interpolateWithArithmetic() {
+        var state = MockStateReader()
+        state.values["count"] = 5
+
+        let result = evaluator.interpolate("Result: ${(count * 2)}", using: state)
+        #expect(result == "Result: 10")
+    }
+
+    @Test func interpolateComplexArithmetic() {
+        var state = MockStateReader()
+        state.values["count"] = 5
+
+        let result = evaluator.interpolate("Double: ${(count * 2)}, Half: ${(count / 2)}", using: state)
+        #expect(result == "Double: 10, Half: 2")
+    }
+
+    // MARK: Property Access in Arithmetic
+
+    @Test func propertyAccessInArithmetic() {
+        var state = MockStateReader()
+        state.values["user.age"] = 25
+
+        let result = evaluator.evaluate("user.age + 5", using: state)
+        #expect(result as? Int == 30)
+    }
+
+    // MARK: Edge Cases That Should NOT Match Arithmetic
+
+    @Test func hyphenatedText() {
+        var state = MockStateReader()
+
+        let result = evaluator.evaluate("5-star rating", using: state)
+        // Should return as-is, not try to evaluate as arithmetic
+        #expect(result as? String == "5-star rating")
+    }
+
+    @Test func emailAddress() {
+        var state = MockStateReader()
+
+        let result = evaluator.evaluate("user@domain.com", using: state)
+        #expect(result as? String == "user@domain.com")
+    }
+
+    @Test func justText() {
+        var state = MockStateReader()
+
+        let result = evaluator.evaluate("Hello World", using: state)
+        #expect(result as? String == "Hello World")
+    }
+
+    @Test func textWithOperatorButNoOperands() {
+        var state = MockStateReader()
+
+        let result = evaluator.evaluate("Price: $10 + tax", using: state)
+        // Should not match arithmetic pattern
+        #expect(result as? String == "Price: $10 + tax")
+    }
+
+    // MARK: Zero and Boundary Cases
+
+    @Test func divisionResultingInZero() {
+        var state = MockStateReader()
+        state.values["count"] = 2
+
+        let result = evaluator.evaluate("count / 5", using: state)
+        #expect(result as? Int == 0)
+    }
+
+    @Test func moduloResultingInOriginalNumber() {
+        var state = MockStateReader()
+        state.values["count"] = 2
+
+        let result = evaluator.evaluate("count % 5", using: state)
+        #expect(result as? Int == 2)
+    }
+
+    @Test func multiplicationResultingInLargeNumber() {
+        var state = MockStateReader()
+        state.values["count"] = 1000
+
+        let result = evaluator.evaluate("count * 1000", using: state)
+        #expect(result as? Int == 1000000)
+    }
+
+    // MARK: Parentheses in the Middle Tests (Bug Fix)
+
+    @Test func parenthesesInMiddleWithModulo() {
+        var state = MockStateReader()
+        state.values["currentImageIndex"] = 2
+
+        let result = evaluator.evaluate("(currentImageIndex + 1) % 3", using: state)
+        #expect(result as? Int == 0)
+    }
+
+    @Test func parenthesesInMiddleWithMultiplication() {
+        var state = MockStateReader()
+        state.values["value"] = 5
+
+        let result = evaluator.evaluate("(value + 2) * 3", using: state)
+        #expect(result as? Int == 21)
+    }
+
+    @Test func nestedParenthesesExpression() {
+        var state = MockStateReader()
+        state.values["a"] = 10
+        state.values["b"] = 5
+
+        let result = evaluator.evaluate("(a + b) - 3", using: state)
+        #expect(result as? Int == 12)
     }
 }
 
@@ -292,6 +723,74 @@ struct ExpressionEvaluatorArrayTests {
 
         let result = evaluator.interpolate("You have ${items.count} items", using: state)
         #expect(result == "You have 3 items")
+    }
+
+    // MARK: Dynamic Array Indexing Tests
+
+    @Test func dynamicArrayIndexWithLiteral() {
+        var state = MockStateReader()
+        state.arrays["items"] = ["apple", "banana", "cherry"]
+
+        let result = evaluator.evaluate("items[1]", using: state)
+        #expect(result as? String == "banana")
+    }
+
+    @Test func dynamicArrayIndexWithVariable() {
+        var state = MockStateReader()
+        state.arrays["items"] = ["apple", "banana", "cherry"]
+        state.values["currentIndex"] = 2
+
+        let result = evaluator.evaluate("items[currentIndex]", using: state)
+        #expect(result as? String == "cherry")
+    }
+
+    @Test func dynamicArrayIndexWithArithmetic() {
+        var state = MockStateReader()
+        state.arrays["imageUrls"] = [
+            "https://example.com/image1.jpg",
+            "https://example.com/image2.jpg",
+            "https://example.com/image3.jpg"
+        ]
+        state.values["currentImageIndex"] = 1
+
+        let result = evaluator.evaluate("imageUrls[currentImageIndex]", using: state)
+        #expect(result as? String == "https://example.com/image2.jpg")
+    }
+
+    @Test func dynamicArrayIndexCycling() {
+        var state = MockStateReader()
+        state.arrays["items"] = ["a", "b", "c"]
+        state.values["index"] = 2
+
+        // Test cycling: (2 + 1) % 3 = 0
+        let newIndex = evaluator.evaluate("(index + 1) % 3", using: state)
+        #expect(newIndex as? Int == 0)
+
+        // Update state with new index
+        state.values["index"] = newIndex as! Int
+
+        // Access array with cycled index
+        let result = evaluator.evaluate("items[index]", using: state)
+        #expect(result as? String == "a")
+    }
+
+    @Test func dynamicArrayIndexInInterpolation() {
+        var state = MockStateReader()
+        state.arrays["fruits"] = ["🍎 Apple", "🍌 Banana", "🍒 Cherry"]
+        state.values["selected"] = 1
+
+        let result = evaluator.interpolate("Selected: ${fruits[selected]}", using: state)
+        #expect(result == "Selected: 🍌 Banana")
+    }
+
+    @Test func dynamicArrayIndexOutOfBounds() {
+        var state = MockStateReader()
+        state.arrays["items"] = ["a", "b", "c"]
+        state.values["index"] = 10
+
+        let result = evaluator.evaluate("items[index]", using: state)
+        // Should return nil for out of bounds
+        #expect(result == nil)
     }
 }
 

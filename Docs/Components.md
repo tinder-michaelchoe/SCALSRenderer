@@ -184,6 +184,18 @@ Buttons can include images from three sources:
 }
 ```
 
+**Activity Indicator:**
+```json
+{
+  "type": "button",
+  "text": "Loading...",
+  "image": { "activityIndicator": true },
+  "styleId": "loadingButton"
+}
+```
+
+**Note:** Activity indicators in buttons render as `ProgressView` (SwiftUI) or return `nil` for UIKit (text-only button). Use activity indicators to show loading states during async operations.
+
 ### Image Placement
 
 Control where the image appears relative to text:
@@ -475,7 +487,74 @@ Displays images from various sources.
 
 ### Image Sources
 
-The `data.value` string supports three prefixes:
+Images can be loaded from multiple sources:
+
+**SF Symbols:**
+```json
+{
+  "type": "image",
+  "image": { "sfsymbol": "star.fill" }
+}
+```
+
+**Asset Catalog:**
+```json
+{
+  "type": "image",
+  "image": { "asset": "heroImage" }
+}
+```
+
+**Remote URL:**
+```json
+{
+  "type": "image",
+  "image": { "url": "https://example.com/photo.jpg" }
+}
+```
+
+**Dynamic URL from State:**
+```json
+{
+  "type": "image",
+  "image": { "statePath": "https://api.example.com/avatar/${user.id}.jpg" }
+}
+```
+
+**Activity Indicator (Loading Spinner):**
+```json
+{
+  "type": "image",
+  "image": { "activityIndicator": true },
+  "styleId": "spinnerStyle"
+}
+```
+
+The activity indicator renders as:
+- **SwiftUI**: `ProgressView()` - the standard circular loading indicator
+- **UIKit**: `UIActivityIndicatorView` - the native iOS activity indicator
+
+**Use Cases:**
+- Loading placeholders while fetching data
+- Indicating background operations
+- Form submission states
+- Content refresh indicators
+
+**Styling:**
+```json
+{
+  "spinnerStyle": {
+    "width": 40,
+    "height": 40
+  }
+}
+```
+
+**Note:** Activity indicators automatically start animating when rendered. They ignore image-specific properties like `tintColor` and use system defaults.
+
+### Legacy Data Reference Format
+
+The older `data.value` string format with prefixes is still supported:
 
 | Prefix | Description | Example |
 |--------|-------------|---------|

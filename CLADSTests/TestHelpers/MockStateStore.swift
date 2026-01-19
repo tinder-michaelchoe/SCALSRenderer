@@ -168,20 +168,38 @@ public final class MockStateStore: StateStoring {
     }
     
     // MARK: - Callbacks
-    
+
     @discardableResult
     public func onStateChange(_ callback: @escaping StateChangeCallback) -> UUID {
         let id = UUID()
         callbacks[id] = callback
         return id
     }
-    
+
     public func removeStateChangeCallback(_ id: UUID) {
         callbacks.removeValue(forKey: id)
     }
-    
+
     public func removeAllCallbacks() {
         callbacks.removeAll()
+    }
+
+    // MARK: - Typed Observers
+
+    @discardableResult
+    public func observe<T: Decodable>(_ keypath: String, as type: T.Type, callback: @escaping (T?) -> Void) -> UUID {
+        let id = UUID()
+        // Simple implementation - just call callback with current value
+        let currentValue = get(keypath) as? T
+        callback(currentValue)
+        return id
+    }
+
+    @discardableResult
+    public func observe<T: Decodable>(_ keypath: String, as type: T.Type, onChange: @escaping (_ old: T?, _ new: T?) -> Void) -> UUID {
+        let id = UUID()
+        // Simple implementation - could be enhanced to actually track changes
+        return id
     }
     
     // MARK: - Snapshot

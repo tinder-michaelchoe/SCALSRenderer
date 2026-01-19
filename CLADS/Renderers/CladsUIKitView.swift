@@ -535,6 +535,22 @@ public final class CladsUIKitView: UIView {
     }
 
     private func renderImage(_ image: ImageNode) -> UIView {
+        // Handle activity indicator as a special case
+        if case .activityIndicator = image.source {
+            let activityIndicator = UIActivityIndicatorView(style: .medium)
+            activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+            activityIndicator.startAnimating()
+
+            if let width = image.style.width {
+                activityIndicator.widthAnchor.constraint(equalToConstant: width).isActive = true
+            }
+            if let height = image.style.height {
+                activityIndicator.heightAnchor.constraint(equalToConstant: height).isActive = true
+            }
+
+            return activityIndicator
+        }
+
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -550,6 +566,9 @@ public final class CladsUIKitView: UIView {
             // statePath should be resolved to a URL by the resolver before reaching here
             // If it reaches here, show placeholder
             imageView.image = UIImage(systemName: "photo")
+        case .activityIndicator:
+            // Already handled above
+            break
         }
 
         if let width = image.style.width {

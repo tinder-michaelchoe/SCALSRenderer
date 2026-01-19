@@ -480,57 +480,194 @@ public let imagesJSON = """
 {
   "id": "images-example",
   "version": "1.0",
+  "state": {
+    "dynamicImageUrl": "https://images.unsplash.com/photo-1745826092440-0d6542010bcc?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "currentImageIndex": 0,
+    "imageUrls": [
+      "https://images.unsplash.com/photo-1745826092440-0d6542010bcc?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://plus.unsplash.com/premium_photo-1717972598410-6a47fc079a16?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1519638617638-c589a8ba5b76?q=80&w=2662&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+    ]
+  },
+  "actions": {
+    "cycleImage": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "setState",
+          "path": "currentImageIndex",
+          "value": { "$expr": "(currentImageIndex + 1) % 3" }
+        },
+        {
+          "type": "setState",
+          "path": "dynamicImageUrl",
+          "value": { "$expr": "imageUrls[currentImageIndex]" }
+        }
+      ]
+    }
+  },
+  "dataSources": {
+    "imageCounter": {
+      "type": "binding",
+      "template": "Image ${(currentImageIndex + 1)}/3 (tap to cycle)"
+    }
+  },
   "styles": {
-    "iconDefault": { "width": 48, "height": 48 },
-    "iconRed": { "width": 48, "height": 48, "tintColor": "#FF3B30" },
-    "iconBlue": { "width": 48, "height": 48, "tintColor": "#007AFF" },
-    "iconGreen": { "width": 48, "height": 48, "tintColor": "#34C759" },
+    "sectionTitle": {
+      "fontSize": 16,
+      "fontWeight": "semibold",
+      "textColor": "#000000",
+      "textAlignment": "center"
+    },
+    "iconSmall": { "width": 40, "height": 40 },
+    "iconRed": { "width": 40, "height": 40, "tintColor": "#FF3B30" },
+    "iconBlue": { "width": 40, "height": 40, "tintColor": "#007AFF" },
+    "iconGreen": { "width": 40, "height": 40, "tintColor": "#34C759" },
+    "assetImage": { "width": 160, "height": 200, "cornerRadius": 12 },
     "urlImage": { "width": 200, "height": 150, "cornerRadius": 12 },
-    "caption": { "fontSize": 12, "textColor": "#888888", "textAlignment": "center" }
+    "dynamicImage": { "width": 240, "height": 180, "cornerRadius": 12 },
+    "spinner": { "width": 40, "height": 40 },
+    "caption": { "fontSize": 11, "textColor": "#888888", "textAlignment": "center" },
+    "changeImageButton": {
+      "fontSize": 14,
+      "fontWeight": "semibold",
+      "backgroundColor": "#007AFF",
+      "textColor": "#FFFFFF",
+      "height": 40,
+      "cornerRadius": 8
+    }
   },
   "root": {
-    "backgroundColor": "#FFFFFF",
-    "edgeInsets": { "top": 36, "leading": 28, "trailing": 28 },
+    "backgroundColor": "#F2F2F7",
+    "edgeInsets": { "top": 52 },
     "children": [{
-      "type": "vstack",
-      "spacing": 24,
-      "alignment": "center",
-      "children": [
+      "type": "sectionLayout",
+      "sectionSpacing": 32,
+      "sections": [
         {
-          "type": "hstack", "spacing": 24,
+          "id": "sf-symbols",
+          "layout": { "type": "list", "showsDividers": false, "contentInsets": { "horizontal": 20 } },
+          "header": { "type": "label", "text": "SF Symbols", "styleId": "sectionTitle", "padding": { "bottom": 12 } },
           "children": [
             {
-              "type": "vstack", "spacing": 4,
+              "type": "hstack",
+              "spacing": 20,
+              "alignment": "center",
               "children": [
-                { "type": "image", "image": { "sfsymbol": "star.fill" }, "styleId": "iconDefault" },
-                { "type": "label", "text": "Default", "styleId": "caption" }
-              ]
-            },
-            {
-              "type": "vstack", "spacing": 4,
-              "children": [
-                { "type": "image", "image": { "sfsymbol": "heart.fill" }, "styleId": "iconRed" },
-                { "type": "label", "text": "Red Tint", "styleId": "caption" }
-              ]
-            },
-            {
-              "type": "vstack", "spacing": 4,
-              "children": [
-                { "type": "image", "image": { "sfsymbol": "bell.fill" }, "styleId": "iconBlue" },
-                { "type": "label", "text": "Blue Tint", "styleId": "caption" }
-              ]
-            },
-            {
-              "type": "vstack", "spacing": 4,
-              "children": [
-                { "type": "image", "image": { "sfsymbol": "checkmark.circle.fill" }, "styleId": "iconGreen" },
-                { "type": "label", "text": "Green Tint", "styleId": "caption" }
+                {
+                  "type": "vstack", "spacing": 4, "alignment": "center",
+                  "children": [
+                    { "type": "image", "image": { "sfsymbol": "star.fill" }, "styleId": "iconSmall" },
+                    { "type": "label", "text": "Default", "styleId": "caption" }
+                  ]
+                },
+                {
+                  "type": "vstack", "spacing": 4, "alignment": "center",
+                  "children": [
+                    { "type": "image", "image": { "sfsymbol": "heart.fill" }, "styleId": "iconRed" },
+                    { "type": "label", "text": "Red", "styleId": "caption" }
+                  ]
+                },
+                {
+                  "type": "vstack", "spacing": 4, "alignment": "center",
+                  "children": [
+                    { "type": "image", "image": { "sfsymbol": "bell.fill" }, "styleId": "iconBlue" },
+                    { "type": "label", "text": "Blue", "styleId": "caption" }
+                  ]
+                },
+                {
+                  "type": "vstack", "spacing": 4, "alignment": "center",
+                  "children": [
+                    { "type": "image", "image": { "sfsymbol": "checkmark.circle.fill" }, "styleId": "iconGreen" },
+                    { "type": "label", "text": "Green", "styleId": "caption" }
+                  ]
+                }
               ]
             }
           ]
         },
-        { "type": "image", "image": { "url": "https://images.pexels.com/photos/1658967/pexels-photo-1658967.jpeg?w=400" }, "styleId": "urlImage" },
-        { "type": "label", "text": "URL-loaded image", "styleId": "caption" }
+        {
+          "id": "asset-catalog",
+          "layout": { "type": "list", "showsDividers": false, "contentInsets": { "horizontal": 20 } },
+          "header": { "type": "label", "text": "Asset Catalog", "styleId": "sectionTitle", "padding": { "bottom": 12 } },
+          "children": [
+            {
+              "type": "vstack",
+              "spacing": 8,
+              "alignment": "center",
+              "children": [
+                { "type": "image", "image": { "asset": "womanAligator" }, "styleId": "assetImage" },
+                { "type": "label", "text": "Local asset image", "styleId": "caption" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "remote-url",
+          "layout": { "type": "list", "showsDividers": false, "contentInsets": { "horizontal": 20 } },
+          "header": { "type": "label", "text": "Remote URL", "styleId": "sectionTitle", "padding": { "bottom": 12 } },
+          "children": [
+            {
+              "type": "vstack",
+              "spacing": 8,
+              "alignment": "center",
+              "children": [
+                { "type": "image", "image": { "url": "https://images.pexels.com/photos/1658967/pexels-photo-1658967.jpeg?w=400" }, "styleId": "urlImage" },
+                { "type": "label", "text": "URL-loaded image", "styleId": "caption" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "dynamic-url",
+          "layout": { "type": "list", "showsDividers": false, "contentInsets": { "horizontal": 20 } },
+          "header": { "type": "label", "text": "Dynamic URL (State Binding)", "styleId": "sectionTitle", "padding": { "bottom": 12 } },
+          "children": [
+            {
+              "type": "vstack",
+              "spacing": 12,
+              "alignment": "center",
+              "children": [
+                {
+                  "type": "image",
+                  "image": {
+                    "url": "${dynamicImageUrl}",
+                    "loading": { "activityIndicator": true }
+                  },
+                  "styleId": "dynamicImage"
+                },
+                {
+                  "type": "label",
+                  "dataSourceId": "imageCounter",
+                  "styleId": "caption"
+                },
+                {
+                  "type": "button",
+                  "text": "Next Image (Cycle)",
+                  "styleId": "changeImageButton",
+                  "fillWidth": true,
+                  "actions": { "onTap": "cycleImage" }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "activity-indicator",
+          "layout": { "type": "list", "showsDividers": false, "contentInsets": { "horizontal": 20 } },
+          "header": { "type": "label", "text": "Activity Indicator", "styleId": "sectionTitle", "padding": { "bottom": 12 } },
+          "children": [
+            {
+              "type": "vstack",
+              "spacing": 8,
+              "alignment": "center",
+              "children": [
+                { "type": "image", "image": { "activityIndicator": true }, "styleId": "spinner" },
+                { "type": "label", "text": "Loading spinner", "styleId": "caption" }
+              ]
+            }
+          ]
+        }
       ]
     }]
   }
@@ -1743,85 +1880,208 @@ public let bindingDataJSON = """
 }
 """
 
-// MARK: Expression Data
+// MARK: Expressions
 
-public let expressionDataJSON = """
-{
-  "id": "expressiondata-example",
-  "version": "1.0",
-  "state": { "price": 100, "quantity": 2, "discount": 10 },
-  "styles": {
-    "title": { "fontSize": 18, "fontWeight": "bold", "textColor": "#000000" },
-    "label": { "fontSize": 14, "textColor": "#666666" },
-    "value": { "fontSize": 20, "fontWeight": "semibold", "textColor": "#007AFF" },
-    "slider": { "tintColor": "#007AFF" }
-  },
-  "dataSources": {
-    "priceText": { "type": "binding", "template": "Price: $${price}" },
-    "quantityText": { "type": "binding", "template": "Quantity: ${quantity}" },
-    "discountText": { "type": "binding", "template": "Discount: ${discount}%" }
-  },
-  "root": {
-    "backgroundColor": "#FFFFFF",
-    "edgeInsets": { "top": 36, "leading": 28, "trailing": 28 },
-    "children": [{
-      "type": "vstack",
-      "spacing": 20,
-      "alignment": "leading",
-      "children": [
-        { "type": "label", "text": "Expression Evaluation", "styleId": "title" },
-        { "type": "label", "dataSourceId": "priceText", "styleId": "label" },
-        { "type": "slider", "bind": "price", "minValue": 0, "maxValue": 200, "styleId": "slider" },
-        { "type": "label", "dataSourceId": "quantityText", "styleId": "label" },
-        { "type": "slider", "bind": "quantity", "minValue": 1, "maxValue": 10, "styleId": "slider" },
-        { "type": "label", "dataSourceId": "discountText", "styleId": "label" },
-        { "type": "slider", "bind": "discount", "minValue": 0, "maxValue": 50, "styleId": "slider" }
-      ]
-    }]
-  }
-}
-"""
-
-// MARK: State Interpolation
-
-public let stateInterpolationJSON = """
+public let expressionsJSON = """
 {
   "id": "interpolation-example",
   "version": "1.0",
-  "state": { "firstName": "John", "lastName": "Doe", "age": 25 },
-  "styles": {
-    "title": { "fontSize": 18, "fontWeight": "bold", "textColor": "#000000" },
-    "label": { "fontSize": 14, "textColor": "#888888" },
-    "field": {
-      "fontSize": 16, "textColor": "#000000",
-      "backgroundColor": "#F2F2F7", "cornerRadius": 8,
-      "padding": { "horizontal": 12, "vertical": 12 }
+  "state": {
+    "firstName": "John",
+    "lastName": "Doe",
+    "score": 85,
+    "level": 3,
+    "currentIndex": 0,
+    "items": ["🍎 Apple", "🍌 Banana", "🍒 Cherry", "🍇 Grapes"],
+    "isLoggedIn": true
+  },
+  "actions": {
+    "nextItem": {
+      "type": "setState",
+      "path": "currentIndex",
+      "value": { "$expr": "(currentIndex + 1) % 4" }
     },
+    "prevItem": {
+      "type": "setState",
+      "path": "currentIndex",
+      "value": { "$expr": "(currentIndex + 3) % 4" }
+    },
+    "increaseScore": {
+      "type": "setState",
+      "path": "score",
+      "value": { "$expr": "score + 10" }
+    },
+    "decreaseScore": {
+      "type": "setState",
+      "path": "score",
+      "value": { "$expr": "score - 10" }
+    },
+    "incrementScore": {
+      "type": "setState",
+      "path": "score",
+      "value": { "$expr": "score + 1" }
+    },
+    "decrementScore": {
+      "type": "setState",
+      "path": "score",
+      "value": { "$expr": "score - 1" }
+    },
+    "levelUp": {
+      "type": "setState",
+      "path": "level",
+      "value": { "$expr": "level + 1" }
+    },
+    "toggleLogin": {
+      "type": "toggleState",
+      "path": "isLoggedIn"
+    }
+  },
+  "styles": {
+    "title": { "fontSize": 20, "fontWeight": "bold", "textColor": "#000000" },
+    "sectionTitle": { "fontSize": 16, "fontWeight": "semibold", "textColor": "#000000", "padding": { "top": 12, "bottom": 8 } },
+    "label": { "fontSize": 14, "textColor": "#666666", "padding": { "bottom": 4 } },
+    "value": { "fontSize": 16, "fontWeight": "medium", "textColor": "#007AFF" },
     "result": {
-      "fontSize": 16, "textColor": "#FFFFFF",
-      "backgroundColor": "#007AFF", "cornerRadius": 8,
-      "padding": { "all": 16 }
+      "fontSize": 15, "textColor": "#007AFF",
+      "backgroundColor": "#E3F2FD", "cornerRadius": 8,
+      "padding": { "horizontal": 12, "vertical": 10 }
+    },
+    "highlight": {
+      "fontSize": 18, "fontWeight": "semibold", "textColor": "#1B5E20",
+      "backgroundColor": "#C8E6C9", "cornerRadius": 10,
+      "padding": { "all": 16 }, "textAlignment": "center"
+    },
+    "code": {
+      "fontSize": 13, "fontFamily": "Menlo",
+      "textColor": "#D32F2F",
+      "backgroundColor": "#F2F2F7", "cornerRadius": 6,
+      "padding": { "horizontal": 8, "vertical": 4 }
+    },
+    "button": {
+      "fontSize": 14, "fontWeight": "medium",
+      "backgroundColor": "#007AFF", "textColor": "#FFFFFF",
+      "height": 38, "cornerRadius": 8
+    },
+    "smallButton": {
+      "fontSize": 13, "fontWeight": "medium",
+      "backgroundColor": "#34C759", "textColor": "#FFFFFF",
+      "height": 34, "cornerRadius": 8
+    },
+    "toggleButton": {
+      "fontSize": 14, "fontWeight": "medium",
+      "backgroundColor": "#007AFF", "textColor": "#FFFFFF",
+      "height": 38, "cornerRadius": 8,
+      "padding": { "horizontal": 24 }
     }
   },
   "dataSources": {
-    "greeting": { "type": "binding", "template": "Hello, ${firstName} ${lastName}! You are ${age} years old." }
+    "greeting": { "type": "binding", "template": "Hello, ${firstName} ${lastName}!" },
+    "scoreDisplay": { "type": "binding", "template": "Score: ${score}" },
+    "nextLevel": { "type": "binding", "template": "Next Level: ${(level + 1)}" },
+    "scoreMultiLevel": { "type": "binding", "template": "Total: ${((score + 10) * level)}" },
+    "levelProgress": { "type": "binding", "template": "Level ${level} (${(score % 100)}%)" },
+    "currentItem": { "type": "binding", "template": "${items[currentIndex]}" },
+    "itemPosition": { "type": "binding", "template": "Item ${(currentIndex + 1)} of ${items.count}" },
+    "firstItem": { "type": "binding", "template": "First: ${items.first}" },
+    "lastItem": { "type": "binding", "template": "Last: ${items.last}" },
+    "arraySize": { "type": "binding", "template": "Array has ${items.count} items" },
+    "loginStatus": { "type": "binding", "template": "${isLoggedIn ? '✓ Logged In' : '✗ Logged Out'}" },
+    "scoreCalc": { "type": "binding", "template": "Double: ${(score * 2)}, Half: ${(score / 2)}, Mod 10: ${(score % 10)}" }
   },
   "root": {
-    "backgroundColor": "#FFFFFF",
-    "edgeInsets": { "top": 36, "leading": 28, "trailing": 28 },
+    "backgroundColor": "#F2F2F7",
     "children": [{
-      "type": "vstack",
-      "spacing": 16,
-      "alignment": "leading",
-      "children": [
-        { "type": "label", "text": "Template Interpolation", "styleId": "title" },
-        { "type": "label", "text": "First Name", "styleId": "label" },
-        { "type": "textfield", "styleId": "field", "bind": "firstName" },
-        { "type": "label", "text": "Last Name", "styleId": "label" },
-        { "type": "textfield", "styleId": "field", "bind": "lastName" },
-        { "type": "label", "text": "Age", "styleId": "label" },
-        { "type": "slider", "bind": "age", "minValue": 0, "maxValue": 100 },
-        { "type": "label", "dataSourceId": "greeting", "styleId": "result" }
+      "type": "sectionLayout",
+      "sectionSpacing": 20,
+      "sections": [
+        {
+          "id": "header",
+          "layout": { "type": "list", "showsDividers": false, "contentInsets": { "horizontal": 20 } },
+          "children": [
+            { "type": "label", "text": "Expressions", "styleId": "title", "padding": { "top": 36, "bottom": 8 } },
+            { "type": "label", "text": "Arithmetic, templates, arrays, ternary & cycling", "styleId": "label" }
+          ]
+        },
+        {
+          "id": "basic",
+          "layout": { "type": "list", "showsDividers": false, "itemSpacing": 8, "contentInsets": { "horizontal": 20 } },
+          "header": { "type": "label", "text": "1. Basic Template Interpolation", "styleId": "sectionTitle" },
+          "children": [
+            { "type": "label", "text": "Combine firstName and lastName", "styleId": "code" },
+            { "type": "label", "dataSourceId": "greeting", "styleId": "result" }
+          ]
+        },
+        {
+          "id": "arithmetic",
+          "layout": { "type": "list", "showsDividers": false, "itemSpacing": 10, "contentInsets": { "horizontal": 20 } },
+          "header": { "type": "label", "text": "2. Arithmetic in Templates", "styleId": "sectionTitle" },
+          "children": [
+            { "type": "label", "dataSourceId": "scoreDisplay", "styleId": "highlight" },
+            {
+              "type": "hstack", "spacing": 8,
+              "children": [
+                { "type": "button", "text": "-1", "styleId": "button", "fillWidth": true, "actions": { "onTap": "decrementScore" } },
+                { "type": "button", "text": "+1", "styleId": "button", "fillWidth": true, "actions": { "onTap": "incrementScore" } },
+                { "type": "button", "text": "-10", "styleId": "button", "fillWidth": true, "actions": { "onTap": "decreaseScore" } },
+                { "type": "button", "text": "+10", "styleId": "button", "fillWidth": true, "actions": { "onTap": "increaseScore" } }
+              ]
+            },
+            { "type": "label", "text": "Addition: level + 1", "styleId": "code" },
+            { "type": "label", "dataSourceId": "nextLevel", "styleId": "value" },
+            { "type": "label", "text": "Multiple operations: * 2, / 2, % 10", "styleId": "code" },
+            { "type": "label", "dataSourceId": "scoreCalc", "styleId": "value" }
+          ]
+        },
+        {
+          "id": "complex",
+          "layout": { "type": "list", "showsDividers": false, "itemSpacing": 10, "contentInsets": { "horizontal": 20 } },
+          "header": { "type": "label", "text": "3. Complex Expressions with Parentheses", "styleId": "sectionTitle" },
+          "children": [
+            { "type": "label", "text": "Modulo: (score % 100)", "styleId": "code" },
+            { "type": "label", "dataSourceId": "levelProgress", "styleId": "value" },
+            { "type": "label", "text": "Nested: ((score + 10) * level)", "styleId": "code" },
+            { "type": "label", "dataSourceId": "scoreMultiLevel", "styleId": "value" }
+          ]
+        },
+        {
+          "id": "arrays",
+          "layout": { "type": "list", "showsDividers": false, "itemSpacing": 10, "contentInsets": { "horizontal": 20 } },
+          "header": { "type": "label", "text": "4. Dynamic Array Indexing", "styleId": "sectionTitle" },
+          "children": [
+            { "type": "label", "text": "Access: items[currentIndex]", "styleId": "code" },
+            { "type": "label", "dataSourceId": "currentItem", "styleId": "highlight" },
+            { "type": "label", "dataSourceId": "itemPosition", "styleId": "value" },
+            {
+              "type": "hstack", "spacing": 8,
+              "children": [
+                { "type": "button", "text": "← Previous", "styleId": "smallButton", "fillWidth": true, "actions": { "onTap": "prevItem" } },
+                { "type": "button", "text": "Next →", "styleId": "smallButton", "fillWidth": true, "actions": { "onTap": "nextItem" } }
+              ]
+            },
+            { "type": "label", "text": "Cycle uses: (currentIndex + 1) % 4", "styleId": "label" }
+          ]
+        },
+        {
+          "id": "properties",
+          "layout": { "type": "list", "showsDividers": false, "itemSpacing": 8, "contentInsets": { "horizontal": 20 } },
+          "header": { "type": "label", "text": "5. Array Properties", "styleId": "sectionTitle" },
+          "children": [
+            { "type": "label", "text": "Properties: .count, .first, .last", "styleId": "code" },
+            { "type": "label", "dataSourceId": "arraySize", "styleId": "value" },
+            { "type": "label", "dataSourceId": "firstItem", "styleId": "value" },
+            { "type": "label", "dataSourceId": "lastItem", "styleId": "value" }
+          ]
+        },
+        {
+          "id": "ternary",
+          "layout": { "type": "list", "showsDividers": false, "itemSpacing": 8, "contentInsets": { "horizontal": 20, "bottom": 36 } },
+          "header": { "type": "label", "text": "6. Ternary Expressions", "styleId": "sectionTitle" },
+          "children": [
+            { "type": "label", "text": "Boolean: isLoggedIn ? 'Logged In' : 'Logged Out'", "styleId": "code" },
+            { "type": "label", "dataSourceId": "loginStatus", "styleId": "result" },
+            { "type": "button", "text": "Toggle Login", "styleId": "toggleButton", "actions": { "onTap": "toggleLogin" } }
+          ]
+        }
       ]
     }]
   }

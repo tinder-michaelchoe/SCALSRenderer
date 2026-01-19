@@ -373,6 +373,13 @@ extension ImageNode.Source {
                 "class": "ios-image ios-image--dynamic",
                 "loading": "lazy"
             ])
+        case .activityIndicator:
+            // Activity indicator rendered as a loading spinner
+            return ("div", [
+                "class": "ios-activity-indicator",
+                "role": "progressbar",
+                "aria-label": "Loading"
+            ])
         }
     }
 }

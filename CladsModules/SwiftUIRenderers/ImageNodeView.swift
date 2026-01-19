@@ -94,6 +94,10 @@ struct ImageNodeView: View {
                     // Show placeholder when URL is not yet available
                     placeholderView
                 }
+
+            case .activityIndicator:
+                ProgressView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
         .frame(width: node.style.width, height: node.style.height)
@@ -160,6 +164,10 @@ struct ImageNodeView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .foregroundStyle(.secondary)
+
+        case .activityIndicator:
+            ProgressView()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 

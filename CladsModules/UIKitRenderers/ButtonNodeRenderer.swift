@@ -108,6 +108,11 @@ public struct ButtonNodeRenderer: UIKitNodeRendering {
         case .statePath(let template):
             // For dynamic templates, we'd need to resolve from state - return placeholder for now
             return UIImage(systemName: "photo")
+
+        case .activityIndicator:
+            // Activity indicators can't be used as button images in UIKit
+            // Return nil - button will be text-only
+            return nil
         }
     }
 }

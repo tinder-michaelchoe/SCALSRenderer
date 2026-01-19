@@ -135,8 +135,39 @@ Use `$expr` for dynamic values:
 ### Expression Syntax
 
 - `${path}` - Reference a state value
-- Basic arithmetic: `+`, `-`, `*`, `/`
+- Arithmetic: `+`, `-`, `*`, `/`, `%` (modulo)
+- Array indexing: `items[0]`, `items[currentIndex]`
+- Array properties: `items.count`, `items.isEmpty`, `items.first`, `items.last`
+- Ternary: `condition ? 'trueValue' : 'falseValue'`
 - String interpolation: `"Hello ${name}"`
+
+### Example: Cycling Through Array
+
+```json
+{
+  "state": {
+    "currentIndex": 0,
+    "items": ["apple", "banana", "cherry"]
+  },
+  "actions": {
+    "cycleNext": {
+      "type": "sequence",
+      "steps": [
+        {
+          "type": "setState",
+          "path": "currentIndex",
+          "value": { "$expr": "(currentIndex + 1) % 3" }
+        },
+        {
+          "type": "setState",
+          "path": "selectedItem",
+          "value": { "$expr": "items[currentIndex]" }
+        }
+      ]
+    }
+  }
+}
+```
 
 ### Example: Counter
 

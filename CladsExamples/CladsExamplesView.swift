@@ -154,17 +154,35 @@ struct JSONViewerSheet: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                if let json = example.json {
-                    Text(formatJSON(json))
-                        .font(.system(.caption, design: .monospaced))
-                        .textSelection(.enabled)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding()
-                } else {
-                    Text("No JSON available for this example")
-                        .foregroundStyle(.secondary)
-                        .padding()
+            VStack(spacing: 0) {
+                if let fileSize = example.fileSizeFormatted {
+                    HStack {
+                        Text("File Size:")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text(fileSize)
+                            .font(.caption)
+                            .foregroundStyle(.primary)
+                            .monospacedDigit()
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    .padding(.vertical, 8)
+                    .background(Color(uiColor: .secondarySystemBackground))
+                }
+
+                ScrollView {
+                    if let json = example.json {
+                        Text(formatJSON(json))
+                            .font(.system(.caption, design: .monospaced))
+                            .textSelection(.enabled)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding()
+                    } else {
+                        Text("No JSON available for this example")
+                            .foregroundStyle(.secondary)
+                            .padding()
+                    }
                 }
             }
             .navigationTitle(example.title)
@@ -229,6 +247,12 @@ struct ExampleRow: View {
                         Text(subtitle)
                             .font(.caption)
                             .foregroundStyle(Color.secondary)
+                    }
+                    if let fileSize = example.fileSizeFormatted {
+                        Text(fileSize)
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                            .monospacedDigit()
                     }
                 }
                 Spacer()
@@ -320,8 +344,7 @@ enum Example: String, CaseIterable, Identifiable {
     // Data (D)
     case staticData
     case bindingData
-    case expressionData
-    case stateInterpolation
+    case expressions
 
     // Styles (S)
     case basicStyles
@@ -375,8 +398,7 @@ enum Example: String, CaseIterable, Identifiable {
         // Data
         case .staticData: return "Static Data"
         case .bindingData: return "Binding Data"
-        case .expressionData: return "Expressions"
-        case .stateInterpolation: return "State Interpolation"
+        case .expressions: return "Expressions"
         // Styles
         case .basicStyles: return "Basic Styles"
         case .styleInheritance: return "Style Inheritance"
@@ -404,7 +426,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .textFields: return "User input"
         case .toggles: return "Boolean switches"
         case .sliders: return "Range selection"
-        case .images: return "System & URL images"
+        case .images: return "SF Symbols, assets, URLs, dynamic & spinners"
         case .gradients: return "Color transitions"
         // Layouts
         case .vstackHstack: return "Vertical & horizontal stacks"
@@ -427,8 +449,7 @@ enum Example: String, CaseIterable, Identifiable {
         // Data
         case .staticData: return "Fixed values"
         case .bindingData: return "Two-way state binding"
-        case .expressionData: return "Computed values"
-        case .stateInterpolation: return "Template strings"
+        case .expressions: return "Arithmetic, templates, arrays, ternary & cycling"
         // Styles
         case .basicStyles: return "Font, color, spacing"
         case .styleInheritance: return "Extending base styles"
@@ -479,8 +500,7 @@ enum Example: String, CaseIterable, Identifiable {
         // Data
         case .staticData: return "doc.text"
         case .bindingData: return "link"
-        case .expressionData: return "function"
-        case .stateInterpolation: return "textformat.abc.dottedunderline"
+        case .expressions: return "function"
         // Styles
         case .basicStyles: return "paintpalette"
         case .styleInheritance: return "arrow.up.right.circle"
@@ -531,8 +551,7 @@ enum Example: String, CaseIterable, Identifiable {
         // Data - Green shades
         case .staticData: return .green
         case .bindingData: return .green
-        case .expressionData: return .green
-        case .stateInterpolation: return .green
+        case .expressions: return .green
         // Styles - Pink shades
         case .basicStyles: return .pink
         case .styleInheritance: return .pink
@@ -583,8 +602,7 @@ enum Example: String, CaseIterable, Identifiable {
         // Data
         case .staticData: return staticDataJSON
         case .bindingData: return bindingDataJSON
-        case .expressionData: return expressionDataJSON
-        case .stateInterpolation: return stateInterpolationJSON
+        case .expressions: return expressionsJSON
         // Styles
         case .basicStyles: return basicStylesJSON
         case .styleInheritance: return styleInheritanceJSON
@@ -604,11 +622,30 @@ enum Example: String, CaseIterable, Identifiable {
         }
     }
 
+    /// Calculate the file size of the JSON string in kilobytes
+    var fileSizeKB: Double? {
+        guard let json = json,
+              let data = json.data(using: .utf8) else {
+            return nil
+        }
+        return Double(data.count) / 1024.0
+    }
+
+    /// Formatted file size string (e.g., "2.5 KB")
+    var fileSizeFormatted: String? {
+        guard let sizeKB = fileSizeKB else {
+            return nil
+        }
+        return String(format: "%.1f KB", sizeKB)
+    }
+
     var presentation: PresentationStyle {
         switch self {
         // Most basic examples work well with medium detent
-        case .labels, .buttons, .textFields, .toggles, .sliders, .images, .gradients, .sectionLayoutHorizontal:
+        case .labels, .buttons, .textFields, .toggles, .sliders, .gradients, .sectionLayoutHorizontal:
             return .detent(.medium)
+        case .images:
+            return .detent(.large)
         case .sectionLayoutGrid:
             return .detent(.fraction(0.3))
         case .vstackHstack, .zstack:
@@ -625,8 +662,10 @@ enum Example: String, CaseIterable, Identifiable {
             return .detent(.medium)
         case .httpRequest:
             return .fullSize
-        case .staticData, .bindingData, .expressionData, .stateInterpolation:
+        case .staticData, .bindingData:
             return .detent(.medium)
+        case .expressions:
+            return .fullSize
         case .basicStyles, .styleInheritance, .conditionalStyles:
             return .detent(.medium)
         // Complex examples - full size sheets
@@ -659,7 +698,7 @@ enum Example: String, CaseIterable, Identifiable {
     }
 
     static var dataExamples: [Example] {
-        [.staticData, .bindingData, .expressionData, .stateInterpolation]
+        [.staticData, .bindingData, .expressions]
     }
 
     static var styleExamples: [Example] {
@@ -684,28 +723,69 @@ enum Example: String, CaseIterable, Identifiable {
 struct ExampleSheetView: View {
     let example: Example
     @Environment(\.dismiss) private var dismiss
+    @State private var parseError: String?
 
     var body: some View {
         Group {
-            if let json = example.json,
-               let view = CladsRendererView(jsonString: json, debugMode: true) {
-                view
+            if let json = example.json {
+                if let view = createView(from: json) {
+                    view
+                } else if let error = parseError {
+                    errorView(error: error)
+                } else {
+                    errorView(error: "Unknown error occurred")
+                }
             } else {
-                errorView
+                errorView(error: "No JSON available for this example")
             }
         }
     }
 
-    private var errorView: some View {
-        VStack(spacing: 16) {
-            Image(systemName: "exclamationmark.triangle")
-                .font(.largeTitle)
-                .foregroundStyle(.red)
-            Text("Failed to parse JSON")
-                .foregroundStyle(.secondary)
-            Button("Dismiss") {
-                dismiss()
+    private func createView(from json: String) -> CladsRendererView? {
+        do {
+            let document = try Document.Definition(jsonString: json)
+            return CladsRendererView(document: document, debugMode: true)
+        } catch {
+            parseError = DocumentParseError.detailedDescription(error: error, jsonString: json)
+            return nil
+        }
+    }
+
+    private func errorView(error: String) -> some View {
+        ScrollView {
+            VStack(spacing: 20) {
+                Image(systemName: "exclamationmark.triangle")
+                    .font(.system(size: 48))
+                    .foregroundStyle(.red)
+
+                Text("Failed to parse JSON")
+                    .font(.headline)
+                    .foregroundStyle(.secondary)
+
+                Text(error)
+                    .font(.system(.caption, design: .monospaced))
+                    .foregroundStyle(.secondary)
+                    .textSelection(.enabled)
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color(uiColor: .secondarySystemBackground))
+                    .cornerRadius(8)
+
+                HStack(spacing: 12) {
+                    Button {
+                        UIPasteboard.general.string = error
+                    } label: {
+                        Label("Copy Error", systemImage: "doc.on.doc")
+                    }
+                    .buttonStyle(.bordered)
+
+                    Button("Dismiss") {
+                        dismiss()
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
             }
+            .padding()
         }
     }
 }

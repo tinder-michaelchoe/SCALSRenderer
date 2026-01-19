@@ -20,6 +20,22 @@ public struct ImageNodeRenderer: UIKitNodeRendering {
             return UIView()
         }
 
+        // Handle activity indicator as a special case
+        if case .activityIndicator = imageNode.source {
+            let activityIndicator = UIActivityIndicatorView(style: .medium)
+            activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+            activityIndicator.startAnimating()
+
+            if let width = imageNode.style.width {
+                activityIndicator.widthAnchor.constraint(equalToConstant: width).isActive = true
+            }
+            if let height = imageNode.style.height {
+                activityIndicator.heightAnchor.constraint(equalToConstant: height).isActive = true
+            }
+
+            return activityIndicator
+        }
+
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -33,9 +49,11 @@ public struct ImageNodeRenderer: UIKitNodeRendering {
                 return UIImage(named: name)
             case .url, .statePath:
                 return UIImage(systemName: "photo")
+            case .activityIndicator:
+                return nil // Don't use image for activity indicator placeholder
             }
         }()
-        
+
         switch imageNode.source {
         case .sfsymbol(let name):
             imageView.image = UIImage(systemName: name)
@@ -48,6 +66,9 @@ public struct ImageNodeRenderer: UIKitNodeRendering {
             // statePath should be resolved to a URL by the resolver before reaching here
             // If it reaches here, show placeholder
             imageView.image = placeholderImage
+        case .activityIndicator:
+            // Already handled above
+            break
         }
 
         if let width = imageNode.style.width {

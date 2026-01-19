@@ -409,15 +409,18 @@ extension Document {
         public let url: String?
         /// Asset catalog image name
         public let asset: String?
+        /// Activity indicator / loading spinner
+        public let activityIndicator: Bool?
         /// Placeholder image shown when URL is empty/invalid or on error
         public let placeholder: ImagePlaceholder?
         /// Loading indicator shown while image is being fetched
         public let loading: ImagePlaceholder?
 
-        public init(sfsymbol: String? = nil, url: String? = nil, asset: String? = nil, placeholder: ImagePlaceholder? = nil, loading: ImagePlaceholder? = nil) {
+        public init(sfsymbol: String? = nil, url: String? = nil, asset: String? = nil, activityIndicator: Bool? = nil, placeholder: ImagePlaceholder? = nil, loading: ImagePlaceholder? = nil) {
             self.sfsymbol = sfsymbol
             self.url = url
             self.asset = asset
+            self.activityIndicator = activityIndicator
             self.placeholder = placeholder
             self.loading = loading
         }

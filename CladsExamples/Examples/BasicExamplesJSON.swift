@@ -115,6 +115,19 @@ public let componentShowcaseJSON = """
     "urlImageStyle": {
       "cornerRadius": 12
     },
+    "spinnerStyle": {
+      "width": 40,
+      "height": 40
+    },
+    "loadingButton": {
+      "fontSize": 16,
+      "fontWeight": "medium",
+      "backgroundColor": "#E5E5EA",
+      "textColor": "#666666",
+      "cornerRadius": 10,
+      "height": 44,
+      "padding": { "horizontal": 20 }
+    },
     "greenToggleStyle": {
       "tintColor": "#34C759"
     },
@@ -433,7 +446,28 @@ public let componentShowcaseJSON = """
                   }
                 ]
               },
-              { "type": "image", "image": { "url": "https://images.pexels.com/photos/1658967/pexels-photo-1658967.jpeg" }, "styleId": "urlImageStyle" }
+              { "type": "image", "image": { "url": "https://images.pexels.com/photos/1658967/pexels-photo-1658967.jpeg" }, "styleId": "urlImageStyle" },
+              {
+                "type": "hstack",
+                "spacing": 20,
+                "padding": { "vertical": 12 },
+                "children": [
+                  {
+                    "type": "vstack",
+                    "spacing": 8,
+                    "children": [
+                      { "type": "image", "image": { "activityIndicator": true }, "styleId": "spinnerStyle" },
+                      { "type": "label", "text": "Loading", "styleId": "captionText" }
+                    ]
+                  },
+                  {
+                    "type": "button",
+                    "text": "Loading...",
+                    "image": { "activityIndicator": true },
+                    "styleId": "loadingButton"
+                  }
+                ]
+              }
             ]
           },
           {

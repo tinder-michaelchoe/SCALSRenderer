@@ -193,6 +193,9 @@ struct ButtonNodeView: View {
             } else {
                 Image(systemName: "photo")
             }
+
+        case .activityIndicator:
+            ProgressView()
         }
     }
 

@@ -220,7 +220,10 @@ Use expressions for dynamic updates:
 | Expression | Description | Example |
 |------------|-------------|---------|
 | `${path}` | State reference | `${count}` |
-| `+ - * /` | Arithmetic | `${count} + 1` |
+| `+ - * / %` | Arithmetic (including modulo) | `${count} + 1`, `${index} % 3` |
+| `items[index]` | Array indexing | `${items[0]}`, `${items[currentIndex]}` |
+| `.count .first .last .isEmpty` | Array properties | `${items.count}` |
+| `? :` | Ternary conditional | `${isEnabled ? 'On' : 'Off'}` |
 | String concat | String building | `${first} ${last}` |
 
 ---

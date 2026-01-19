@@ -68,7 +68,12 @@ public struct ImageComponentResolver: ComponentResolving {
             if let assetName = image.asset {
                 return .asset(name: assetName)
             }
-            
+
+            // Activity indicator
+            if image.activityIndicator == true {
+                return .activityIndicator
+            }
+
             // URL (may be static or dynamic template)
             if let urlString = image.url {
                 // Check for template syntax ${...}

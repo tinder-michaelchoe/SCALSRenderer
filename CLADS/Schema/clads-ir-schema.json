@@ -662,6 +662,16 @@
             }
           },
           "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["type"],
+          "properties": {
+            "type": {
+              "const": "activityIndicator"
+            }
+          },
+          "additionalProperties": false
         }
       ]
     },

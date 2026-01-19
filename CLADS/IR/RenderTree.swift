@@ -444,6 +444,8 @@ public struct ImageNode {
         case url(URL)
         /// Dynamic URL from state - supports templates like "${artwork.primaryImage}"
         case statePath(String)
+        /// Activity indicator / loading spinner
+        case activityIndicator
     }
 
     public let id: String?
