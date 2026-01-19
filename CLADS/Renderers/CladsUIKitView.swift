@@ -373,6 +373,10 @@ public final class CladsUIKitView: UIView {
             view = renderImage(image)
         case .gradient(let gradient):
             view = renderGradient(gradient)
+        case .shape:
+            // Use the UIKit renderer registry for shapes
+            let context = UIKitRenderContext(actionContext: actionContext, stateStore: renderTree.stateStore, colorScheme: renderTree.root.colorScheme, registry: rendererRegistry)
+            view = rendererRegistry.render(node, context: context)
         case .spacer:
             view = renderSpacer()
         case .divider(let divider):

@@ -180,6 +180,10 @@ extension Document {
         // Button-specific properties
         public let buttonShape: String?  // "circle", "capsule", "roundedSquare"
 
+        // Shape-specific properties
+        public let shapeType: String?  // "rectangle", "circle", "roundedRectangle", "capsule", "ellipse"
+        public let cornerRadius: Double?  // Corner radius for roundedRectangle shape
+
         // Gradient-specific properties
         public let gradientColors: [GradientColorConfig]?
         public let gradientStart: String?  // "top", "bottom", "leading", etc.
@@ -211,6 +215,8 @@ extension Document {
             imagePlacement: String? = nil,
             imageSpacing: CGFloat? = nil,
             buttonShape: String? = nil,
+            shapeType: String? = nil,
+            cornerRadius: Double? = nil,
             gradientColors: [GradientColorConfig]? = nil,
             gradientStart: String? = nil,
             gradientEnd: String? = nil,
@@ -237,6 +243,8 @@ extension Document {
             self.imagePlacement = imagePlacement
             self.imageSpacing = imageSpacing
             self.buttonShape = buttonShape
+            self.shapeType = shapeType
+            self.cornerRadius = cornerRadius
             self.gradientColors = gradientColors
             self.gradientStart = gradientStart
             self.gradientEnd = gradientEnd
@@ -252,6 +260,7 @@ extension Document {
             case fillWidth, actions, data, state
             case minValue, maxValue, image, imagePlacement, imageSpacing
             case buttonShape
+            case shapeType, cornerRadius
             case gradientColors, gradientStart, gradientEnd
         }
 
@@ -279,6 +288,8 @@ extension Document {
             imagePlacement = try container.decodeIfPresent(String.self, forKey: .imagePlacement)
             imageSpacing = try container.decodeIfPresent(CGFloat.self, forKey: .imageSpacing)
             buttonShape = try container.decodeIfPresent(String.self, forKey: .buttonShape)
+            shapeType = try container.decodeIfPresent(String.self, forKey: .shapeType)
+            cornerRadius = try container.decodeIfPresent(Double.self, forKey: .cornerRadius)
             gradientColors = try container.decodeIfPresent([GradientColorConfig].self, forKey: .gradientColors)
             gradientStart = try container.decodeIfPresent(String.self, forKey: .gradientStart)
             gradientEnd = try container.decodeIfPresent(String.self, forKey: .gradientEnd)

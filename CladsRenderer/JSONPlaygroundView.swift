@@ -464,6 +464,8 @@ private func printRenderNode(_ node: RenderNode?, indent: Int) {
         print("\(prefix)Image")
     case .gradient:
         print("\(prefix)Gradient")
+    case .shape(let s):
+        print("\(prefix)Shape(\(s.shapeType))")
     case .spacer:
         print("\(prefix)Spacer")
     case .divider:

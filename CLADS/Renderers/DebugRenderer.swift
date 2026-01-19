@@ -132,6 +132,21 @@ public struct DebugRenderer: Renderer {
             let propsStr = props.joined(separator: ", ")
             return "\(prefix)gradient (\(propsStr))"
 
+        case .shape(let shape):
+            var props: [String] = []
+            if let id = shape.id { props.append("id: \(id)") }
+            let shapeTypeName: String
+            switch shape.shapeType {
+            case .rectangle: shapeTypeName = "rectangle"
+            case .circle: shapeTypeName = "circle"
+            case .roundedRectangle(let r): shapeTypeName = "roundedRectangle(\(r))"
+            case .capsule: shapeTypeName = "capsule"
+            case .ellipse: shapeTypeName = "ellipse"
+            }
+            props.append("type: \(shapeTypeName)")
+            let propsStr = props.joined(separator: ", ")
+            return "\(prefix)shape (\(propsStr))"
+
         case .spacer:
             return "\(prefix)spacer"
 

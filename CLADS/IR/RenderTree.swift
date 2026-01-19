@@ -106,6 +106,7 @@ extension RenderNodeKind {
     public static let slider = RenderNodeKind(rawValue: "slider")
     public static let image = RenderNodeKind(rawValue: "image")
     public static let gradient = RenderNodeKind(rawValue: "gradient")
+    public static let shape = RenderNodeKind(rawValue: "shape")
     public static let spacer = RenderNodeKind(rawValue: "spacer")
     public static let divider = RenderNodeKind(rawValue: "divider")
     public static let custom = RenderNodeKind(rawValue: "custom")
@@ -145,6 +146,7 @@ public enum RenderNode {
     case slider(SliderNode)
     case image(ImageNode)
     case gradient(GradientNode)
+    case shape(ShapeNode)
     case spacer
     case divider(DividerNode)
     /// Custom render node for extensible components
@@ -162,6 +164,7 @@ public enum RenderNode {
         case .slider: return .slider
         case .image: return .image
         case .gradient: return .gradient
+        case .shape: return .shape
         case .spacer: return .spacer
         case .divider: return .divider
         case .custom(let kind, _): return kind
@@ -507,6 +510,34 @@ public struct GradientNode {
         self.colors = colors
         self.startPoint = startPoint
         self.endPoint = endPoint
+        self.style = style
+    }
+}
+
+// MARK: - Shape Node
+
+/// A shape component (rectangle, circle, roundedRectangle, capsule, ellipse)
+public struct ShapeNode {
+    /// Shape type with associated values for parameters like cornerRadius
+    public enum ShapeType: Hashable, Sendable {
+        case rectangle
+        case circle
+        case roundedRectangle(cornerRadius: CGFloat)
+        case capsule
+        case ellipse
+    }
+
+    public let id: String?
+    public let shapeType: ShapeType
+    public let style: IR.Style
+
+    public init(
+        id: String? = nil,
+        shapeType: ShapeType,
+        style: IR.Style = IR.Style()
+    ) {
+        self.id = id
+        self.shapeType = shapeType
         self.style = style
     }
 }

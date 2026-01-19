@@ -69,10 +69,13 @@ public struct HTMLNodeRenderer {
             
         case .gradient(let gradient):
             return renderGradient(gradient)
-            
+
+        case .shape(let shape):
+            return renderShape(shape)
+
         case .spacer:
             return renderSpacer()
-            
+
         case .divider(let divider):
             return renderDivider(divider)
             
@@ -465,9 +468,58 @@ public struct HTMLNodeRenderer {
         
         return "<div\(id) class=\"\(className)\" style=\"\(inlineStyle)\"></div>"
     }
-    
+
+    // MARK: - Shape Rendering
+
+    private func renderShape(_ shape: ShapeNode) -> String {
+        var classes = ["ios-shape"]
+
+        // Add CSS class for styling
+        if let id = shape.id {
+            classes.append("clads-shape-\(id.cssClassName)")
+        }
+
+        let id = shape.id.map { " id=\"\($0.htmlEscaped)\"" } ?? ""
+        let className = classes.joined(separator: " ")
+
+        // Build inline style
+        var inlineStyles: [String] = []
+
+        // Background color
+        if let bgColor = shape.style.backgroundColor {
+            inlineStyles.append("background-color: \(bgColor.cssRGBA)")
+        }
+
+        // Border
+        if let borderColor = shape.style.borderColor, let borderWidth = shape.style.borderWidth {
+            inlineStyles.append("border: \(Int(borderWidth))px solid \(borderColor.cssRGBA)")
+        }
+
+        // Border radius (for roundedRectangle, capsule, circle)
+        switch shape.shapeType {
+        case .roundedRectangle(let radius):
+            inlineStyles.append("border-radius: \(Int(radius))px")
+        case .circle, .capsule:
+            inlineStyles.append("border-radius: 50%")
+        case .rectangle, .ellipse:
+            break
+        }
+
+        // Dimensions
+        if let width = shape.style.width {
+            inlineStyles.append("width: \(Int(width))px")
+        }
+        if let height = shape.style.height {
+            inlineStyles.append("height: \(Int(height))px")
+        }
+
+        let inlineStyle = inlineStyles.isEmpty ? "" : " style=\"\(inlineStyles.joined(separator: "; "))\""
+
+        return "<div\(id) class=\"\(className)\"\(inlineStyle)></div>"
+    }
+
     // MARK: - Spacer Rendering
-    
+
     private func renderSpacer() -> String {
         return "<div class=\"ios-spacer\" aria-hidden=\"true\"></div>"
     }

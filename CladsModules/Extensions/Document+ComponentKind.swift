@@ -33,4 +33,7 @@ extension Document.ComponentKind {
 
     /// Divider/separator component
     public static let divider = Document.ComponentKind(rawValue: "divider")
+
+    /// Shape component (rectangle, circle, roundedRectangle, capsule, ellipse)
+    public static let shape = Document.ComponentKind(rawValue: "shape")
 }

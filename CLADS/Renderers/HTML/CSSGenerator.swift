@@ -21,6 +21,7 @@ public struct CSSGenerator {
     private var toggleCounter = 0
     private var sliderCounter = 0
     private var gradientCounter = 0
+    private var shapeCounter = 0
     private var dividerCounter = 0
     private var sectionLayoutCounter = 0
     private var generatedClasses: [String: String] = [:]
@@ -40,6 +41,7 @@ public struct CSSGenerator {
         toggleCounter = 0
         sliderCounter = 0
         gradientCounter = 0
+        shapeCounter = 0
         dividerCounter = 0
         sectionLayoutCounter = 0
         generatedClasses = [:]
@@ -135,10 +137,13 @@ public struct CSSGenerator {
             
         case .gradient(let gradient):
             css += generateGradientStyles(gradient)
-            
+
+        case .shape(let shape):
+            css += generateShapeStyles(shape)
+
         case .divider(let divider):
             css += generateDividerStyles(divider)
-            
+
         case .spacer:
             // Spacer uses base class, no custom CSS needed
             break
@@ -400,19 +405,32 @@ public struct CSSGenerator {
     private mutating func generateGradientStyles(_ gradient: GradientNode) -> String {
         let className = generateGradientClassName(for: gradient.id)
         var rules: [String] = []
-        
+
         // Gradient background
         rules.append("background: \(gradient.cssGradient)")
-        
+
         // Style rules
         let styleRules = gradient.style.cssRuleString()
         if !styleRules.isEmpty {
             rules.append(styleRules)
         }
-        
+
         return ".\(className) {\n    \(rules.joined(separator: ";\n    "));\n}\n\n"
     }
-    
+
+    private mutating func generateShapeStyles(_ shape: ShapeNode) -> String {
+        let className = generateShapeClassName(for: shape.id)
+        var rules: [String] = []
+
+        // Style rules
+        let styleRules = shape.style.cssRuleString()
+        if !styleRules.isEmpty {
+            rules.append(styleRules)
+        }
+
+        return ".\(className) {\n    \(rules.joined(separator: ";\n    "));\n}\n\n"
+    }
+
     private mutating func generateDividerStyles(_ divider: DividerNode) -> String {
         // Always increment counter to stay in sync with HTMLNodeRenderer
         let className = generateDividerClassName(for: divider.id)
@@ -501,7 +519,15 @@ public struct CSSGenerator {
         }
         return "clads-gradient-\(gradientCounter)"
     }
-    
+
+    private mutating func generateShapeClassName(for id: String?) -> String {
+        shapeCounter += 1
+        if let id = id {
+            return "clads-shape-\(id.cssClassName)"
+        }
+        return "clads-shape-\(shapeCounter)"
+    }
+
     private mutating func generateDividerClassName(for id: String?) -> String {
         dividerCounter += 1
         if let id = id {

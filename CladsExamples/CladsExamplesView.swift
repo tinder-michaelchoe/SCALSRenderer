@@ -320,6 +320,7 @@ enum Example: String, CaseIterable, Identifiable {
     case sliders
     case images
     case gradients
+    case shapes
 
     // Layouts (L)
     case vstackHstack
@@ -358,6 +359,7 @@ enum Example: String, CaseIterable, Identifiable {
     case musicPlayer
     case metMuseum
     case weatherDashboard
+    case plantCareTracker
     case designSystem
 
     // Tinder Examples
@@ -377,6 +379,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .sliders: return "Sliders"
         case .images: return "Images"
         case .gradients: return "Gradients"
+        case .shapes: return "Shapes"
         // Layouts
         case .vstackHstack: return "VStack & HStack"
         case .zstack: return "ZStack"
@@ -410,6 +413,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .musicPlayer: return "Music Player"
         case .metMuseum: return "Met Museum"
         case .weatherDashboard: return "Weather Dashboard"
+        case .plantCareTracker: return "Plant Care Tracker"
         case .designSystem: return "Design System"
         // Tinder
         case .photoTouchUp: return "Photo Touch Up"
@@ -428,6 +432,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .sliders: return "Range selection"
         case .images: return "SF Symbols, assets, URLs, dynamic & spinners"
         case .gradients: return "Color transitions"
+        case .shapes: return "Rectangle, circle, capsule, ellipse"
         // Layouts
         case .vstackHstack: return "Vertical & horizontal stacks"
         case .zstack: return "Layered overlays"
@@ -452,7 +457,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .expressions: return "Arithmetic, templates, arrays, ternary & cycling"
         // Styles
         case .basicStyles: return "Font, color, spacing"
-        case .styleInheritance: return "Extending base styles"
+        case .styleInheritance: return "Multi-level chains, overrides & reuse"
         case .conditionalStyles: return "State-based styling"
         // Complex
         case .dadJokes: return "Custom actions with REST API"
@@ -461,6 +466,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .musicPlayer: return "Player controls, queue & progress"
         case .metMuseum: return "Explore artwork via GET API"
         case .weatherDashboard: return "Weather with custom action & gradients"
+        case .plantCareTracker: return "Plant status cards with shapes and style inheritance"
         case .designSystem: return "Lightspeed design system integration"
         // Tinder
         case .photoTouchUp: return "Before/after photo comparison with custom components"
@@ -479,6 +485,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .sliders: return "slider.horizontal.3"
         case .images: return "photo"
         case .gradients: return "paintbrush"
+        case .shapes: return "circle.square"
         // Layouts
         case .vstackHstack: return "square.split.2x1"
         case .zstack: return "square.stack"
@@ -512,6 +519,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .musicPlayer: return "music.note.list"
         case .metMuseum: return "building.columns"
         case .weatherDashboard: return "cloud.sun.fill"
+        case .plantCareTracker: return "leaf.fill"
         case .designSystem: return "paintbrush.pointed"
         // Tinder
         case .photoTouchUp: return "wand.and.stars"
@@ -530,6 +538,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .sliders: return .blue
         case .images: return .blue
         case .gradients: return .blue
+        case .shapes: return .blue
         // Layouts - Purple shades
         case .vstackHstack: return .purple
         case .zstack: return .purple
@@ -563,6 +572,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .musicPlayer: return .teal
         case .metMuseum: return Color(red: 0.77, green: 0.12, blue: 0.23) // Met Museum red
         case .weatherDashboard: return .cyan
+        case .plantCareTracker: return .green
         case .designSystem: return Color(hex: "#6366F1") // Indigo (Lightspeed primary)
         // Tinder - Red/Orange (flame colors)
         case .photoTouchUp: return Color(red: 0.99, green: 0.35, blue: 0.37)
@@ -581,6 +591,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .sliders: return slidersJSON
         case .images: return imagesJSON
         case .gradients: return gradientsJSON
+        case .shapes: return shapesJSON
         // Layouts
         case .vstackHstack: return vstackHstackJSON
         case .zstack: return zstackJSON
@@ -614,6 +625,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .musicPlayer: return musicPlayerJSON
         case .metMuseum: return metMuseumJSON
         case .weatherDashboard: return weatherDashboardJSON
+        case .plantCareTracker: return plantCareTrackerJSON
         case .designSystem: return designSystemExampleJSON
         // Tinder
         case .photoTouchUp: return PhotoTouchUpJSON.bottomSheet
@@ -644,6 +656,8 @@ enum Example: String, CaseIterable, Identifiable {
         // Most basic examples work well with medium detent
         case .labels, .buttons, .textFields, .toggles, .sliders, .gradients, .sectionLayoutHorizontal:
             return .detent(.medium)
+        case .shapes:
+            return .fullSize
         case .images:
             return .detent(.large)
         case .sectionLayoutGrid:
@@ -666,8 +680,10 @@ enum Example: String, CaseIterable, Identifiable {
             return .detent(.medium)
         case .expressions:
             return .fullSize
-        case .basicStyles, .styleInheritance, .conditionalStyles:
+        case .basicStyles, .conditionalStyles:
             return .detent(.medium)
+        case .styleInheritance:
+            return .fullSize
         // Complex examples - full size sheets
         case .dadJokes: return .detent(.medium)
         case .taskManager: return .fullSize
@@ -675,6 +691,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .musicPlayer: return .fullSize
         case .metMuseum: return .fullSize
         case .weatherDashboard: return .fullSize
+        case .plantCareTracker: return .fullSize
         case .designSystem: return .fullSize
         // Tinder - fixed height sheets
         case .photoTouchUp: return .fixed(height: 600)
@@ -686,7 +703,7 @@ enum Example: String, CaseIterable, Identifiable {
     // MARK: - Category Arrays
 
     static var componentExamples: [Example] {
-        [.labels, .buttons, .textFields, .toggles, .sliders, .images, .gradients]
+        [.labels, .buttons, .textFields, .toggles, .sliders, .images, .gradients, .shapes]
     }
 
     static var layoutExamples: [Example] {
@@ -706,7 +723,7 @@ enum Example: String, CaseIterable, Identifiable {
     }
 
     static var complexExamples: [Example] {
-        [.dadJokes, .taskManager, .shoppingCart, .musicPlayer, .metMuseum, .weatherDashboard]
+        [.dadJokes, .taskManager, .shoppingCart, .musicPlayer, .metMuseum, .weatherDashboard, .plantCareTracker]
     }
 
     static var customComponentExamples: [Example] {

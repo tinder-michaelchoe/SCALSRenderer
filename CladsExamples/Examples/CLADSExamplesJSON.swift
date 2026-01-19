@@ -745,6 +745,164 @@ public let gradientsJSON = """
 }
 """
 
+// MARK: Shapes
+
+public let shapesJSON = """
+{
+  "id": "shapes-example",
+  "version": "1.0",
+  "styles": {
+    "sectionTitle": { "fontSize": 16, "fontWeight": "semibold", "textColor": "#000000", "padding": { "bottom": 12 } },
+    "shapeLabel": { "fontSize": 12, "textColor": "#666666" },
+    "filledRed": { "width": 60, "height": 60, "backgroundColor": "#FF6B6B" },
+    "filledBlue": { "width": 60, "height": 60, "backgroundColor": "#4ECDC4" },
+    "filledGreen": { "width": 60, "height": 60, "backgroundColor": "#95E1D3" },
+    "filledOrange": { "width": 80, "height": 40, "backgroundColor": "#FFA07A" },
+    "filledPurple": { "width": 70, "height": 50, "backgroundColor": "#DDA0DD" },
+    "strokedRed": { "width": 60, "height": 60, "borderColor": "#FF6B6B", "borderWidth": 3 },
+    "strokedBlue": { "width": 60, "height": 60, "borderColor": "#4ECDC4", "borderWidth": 3 },
+    "strokedGreen": { "width": 60, "height": 60, "borderColor": "#95E1D3", "borderWidth": 3 },
+    "strokedOrange": { "width": 80, "height": 40, "borderColor": "#FFA07A", "borderWidth": 3 },
+    "strokedPurple": { "width": 70, "height": 50, "borderColor": "#DDA0DD", "borderWidth": 3 },
+    "cardBackground": { "backgroundColor": "#F2F2F7", "cornerRadius": 16, "padding": { "all": 20 } },
+    "cardTitle": { "fontSize": 18, "fontWeight": "bold", "textColor": "#000000" },
+    "cardBody": { "fontSize": 14, "textColor": "#666666" },
+    "layer1": { "width": 120, "height": 120, "backgroundColor": "#C8C8FF80" },
+    "layer2": { "width": 80, "height": 80, "backgroundColor": "#FFC8C8B3" },
+    "overlayText": { "fontSize": 16, "fontWeight": "bold", "textColor": "#FFFFFF" }
+  },
+  "root": {
+    "backgroundColor": "#FFFFFF",
+    "children": [{
+      "type": "sectionLayout",
+      "sections": [{
+        "layout": {
+          "type": "list",
+          "showsDividers": false,
+          "itemSpacing": 24,
+          "contentInsets": { "horizontal": 20, "top": 88, "bottom": 36 }
+        },
+        "header": { "type": "label", "text": "Shapes Showcase", "styleId": "sectionTitle" },
+        "children": [
+          { "type": "label", "text": "Filled Shapes", "fontSize": 14, "fontWeight": "medium", "textColor": "#333333" },
+        {
+          "type": "hstack",
+          "spacing": 12,
+          "children": [
+            {
+              "type": "vstack",
+              "spacing": 4,
+              "children": [
+                { "type": "shape", "shapeType": "rectangle", "styleId": "filledRed" },
+                { "type": "label", "text": "Rectangle", "styleId": "shapeLabel" }
+              ]
+            },
+            {
+              "type": "vstack",
+              "spacing": 4,
+              "children": [
+                { "type": "shape", "shapeType": "circle", "styleId": "filledBlue" },
+                { "type": "label", "text": "Circle", "styleId": "shapeLabel" }
+              ]
+            },
+            {
+              "type": "vstack",
+              "spacing": 4,
+              "children": [
+                { "type": "shape", "shapeType": "roundedRectangle", "cornerRadius": 12, "styleId": "filledGreen" },
+                { "type": "label", "text": "Rounded", "styleId": "shapeLabel" }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "hstack",
+          "spacing": 12,
+          "children": [
+            {
+              "type": "vstack",
+              "spacing": 4,
+              "children": [
+                { "type": "shape", "shapeType": "capsule", "styleId": "filledOrange" },
+                { "type": "label", "text": "Capsule", "styleId": "shapeLabel" }
+              ]
+            },
+            {
+              "type": "vstack",
+              "spacing": 4,
+              "children": [
+                { "type": "shape", "shapeType": "ellipse", "styleId": "filledPurple" },
+                { "type": "label", "text": "Ellipse", "styleId": "shapeLabel" }
+              ]
+            }
+          ]
+        },
+
+        { "type": "divider", "padding": { "vertical": 8 } },
+
+        { "type": "label", "text": "Stroked Shapes", "fontSize": 14, "fontWeight": "medium", "textColor": "#333333" },
+        {
+          "type": "hstack",
+          "spacing": 12,
+          "children": [
+            {
+              "type": "vstack",
+              "spacing": 4,
+              "children": [
+                { "type": "shape", "shapeType": "rectangle", "styleId": "strokedRed" },
+                { "type": "label", "text": "Rectangle", "styleId": "shapeLabel" }
+              ]
+            },
+            {
+              "type": "vstack",
+              "spacing": 4,
+              "children": [
+                { "type": "shape", "shapeType": "circle", "styleId": "strokedBlue" },
+                { "type": "label", "text": "Circle", "styleId": "shapeLabel" }
+              ]
+            },
+            {
+              "type": "vstack",
+              "spacing": 4,
+              "children": [
+                { "type": "shape", "shapeType": "roundedRectangle", "cornerRadius": 12, "styleId": "strokedGreen" },
+                { "type": "label", "text": "Rounded", "styleId": "shapeLabel" }
+              ]
+            }
+          ]
+        },
+
+        { "type": "divider", "padding": { "vertical": 8 } },
+
+        { "type": "label", "text": "Container Backgrounds", "fontSize": 14, "fontWeight": "medium", "textColor": "#333333" },
+        {
+          "type": "vstack",
+          "styleId": "cardBackground",
+          "spacing": 8,
+          "children": [
+            { "type": "label", "text": "Card with Background", "styleId": "cardTitle" },
+            { "type": "label", "text": "VStack now supports backgroundColor, cornerRadius, and borders!", "styleId": "cardBody" }
+          ]
+        },
+
+        { "type": "divider", "padding": { "vertical": 8 } },
+
+        { "type": "label", "text": "Layered Design", "fontSize": 14, "fontWeight": "medium", "textColor": "#333333" },
+        {
+          "type": "zstack",
+          "children": [
+            { "type": "shape", "shapeType": "roundedRectangle", "cornerRadius": 20, "styleId": "layer1" },
+            { "type": "shape", "shapeType": "circle", "styleId": "layer2" },
+            { "type": "label", "text": "Layered", "styleId": "overlayText" }
+          ]
+        }
+        ]
+      }]
+    }]
+  }
+}
+"""
+
 // MARK: - Layouts (L)
 
 // MARK: VStack & HStack
@@ -2141,7 +2299,10 @@ public let styleInheritanceJSON = """
   "id": "styleinheritance-example",
   "version": "1.0",
   "styles": {
-    "title": { "fontSize": 18, "fontWeight": "bold", "textColor": "#000000" },
+    "sectionTitle": { "fontSize": 16, "fontWeight": "semibold", "textColor": "#000000", "padding": { "top": 20, "bottom": 8 } },
+    "description": { "fontSize": 13, "textColor": "#666666", "padding": { "bottom": 8 } },
+    "codeLabel": { "fontSize": 12, "fontFamily": "Menlo", "textColor": "#D32F2F", "backgroundColor": "#F8F8F8", "cornerRadius": 4, "padding": { "horizontal": 6, "vertical": 3 } },
+
     "baseButton": {
       "fontSize": 16, "fontWeight": "semibold",
       "cornerRadius": 10, "height": 44,
@@ -2159,25 +2320,165 @@ public let styleInheritanceJSON = """
       "inherits": "baseButton",
       "backgroundColor": "#FF3B30", "textColor": "#FFFFFF"
     },
-    "successButton": {
-      "inherits": "baseButton",
-      "backgroundColor": "#34C759", "textColor": "#FFFFFF"
+
+    "baseCard": {
+      "backgroundColor": "#F2F2F7",
+      "cornerRadius": 12,
+      "padding": { "all": 16 }
     },
-    "note": { "fontSize": 12, "textColor": "#888888", "textAlignment": "center" }
+    "accentCard": {
+      "inherits": "baseCard",
+      "backgroundColor": "#E3F2FD"
+    },
+    "accentCardBold": {
+      "inherits": "accentCard",
+      "backgroundColor": "#007AFF",
+      "padding": { "all": 20 }
+    },
+
+    "baseText": {
+      "fontSize": 16,
+      "textColor": "#333333"
+    },
+    "mediumText": {
+      "inherits": "baseText",
+      "fontWeight": "medium"
+    },
+    "largeBoldText": {
+      "inherits": "mediumText",
+      "fontSize": 20,
+      "fontWeight": "bold",
+      "textColor": "#000000"
+    },
+
+    "roundedButton": {
+      "fontSize": 14,
+      "fontWeight": "medium",
+      "cornerRadius": 20,
+      "height": 40,
+      "padding": { "horizontal": 16 }
+    },
+    "blueRoundedButton": {
+      "inherits": "roundedButton",
+      "backgroundColor": "#007AFF",
+      "textColor": "#FFFFFF"
+    },
+    "largeBlueRoundedButton": {
+      "inherits": "blueRoundedButton",
+      "fontSize": 16,
+      "height": 50,
+      "cornerRadius": 25
+    },
+
+    "compactButton": {
+      "inherits": "baseButton",
+      "fontSize": 14,
+      "height": 36,
+      "padding": { "horizontal": 12 }
+    },
+    "compactPrimaryButton": {
+      "inherits": "compactButton",
+      "backgroundColor": "#007AFF",
+      "textColor": "#FFFFFF"
+    },
+    "overriddenCompactButton": {
+      "inherits": "compactPrimaryButton",
+      "fontSize": 18,
+      "height": 50,
+      "backgroundColor": "#34C759",
+      "cornerRadius": 25
+    }
   },
   "root": {
     "backgroundColor": "#FFFFFF",
-    "edgeInsets": { "top": 36, "leading": 28, "trailing": 28 },
+    "edgeInsets": { "top": 44 },
     "children": [{
-      "type": "vstack",
-      "spacing": 16,
-      "children": [
-        { "type": "label", "text": "Style Inheritance", "styleId": "title" },
-        { "type": "label", "text": "All buttons inherit from baseButton", "styleId": "note" },
-        { "type": "button", "text": "Primary Button", "styleId": "primaryButton" },
-        { "type": "button", "text": "Secondary Button", "styleId": "secondaryButton" },
-        { "type": "button", "text": "Danger Button", "styleId": "dangerButton" },
-        { "type": "button", "text": "Success Button", "styleId": "successButton" }
+      "type": "sectionLayout",
+      "sectionSpacing": 16,
+      "sections": [
+        {
+          "id": "basic",
+          "layout": { "type": "list", "showsDividers": false, "itemSpacing": 12, "contentInsets": { "horizontal": 20 } },
+          "header": { "type": "label", "text": "1. Basic Inheritance", "styleId": "sectionTitle" },
+          "children": [
+            { "type": "label", "text": "All buttons inherit common properties from baseButton", "styleId": "description" },
+            { "type": "label", "text": "inherits: baseButton", "styleId": "codeLabel" },
+            { "type": "button", "text": "Primary", "styleId": "primaryButton" },
+            { "type": "button", "text": "Secondary", "styleId": "secondaryButton" },
+            { "type": "button", "text": "Danger", "styleId": "dangerButton" }
+          ]
+        },
+        {
+          "id": "multilevel",
+          "layout": { "type": "list", "showsDividers": false, "itemSpacing": 12, "contentInsets": { "horizontal": 20 } },
+          "header": { "type": "label", "text": "2. Multi-Level Inheritance (Grandparent → Parent → Child)", "styleId": "sectionTitle" },
+          "children": [
+            { "type": "label", "text": "Child inherits from parent, parent inherits from grandparent", "styleId": "description" },
+            {
+              "type": "vstack",
+              "spacing": 8,
+              "alignment": "leading",
+              "styleId": "baseCard",
+              "children": [
+                { "type": "label", "text": "Level 1: baseCard", "styleId": "codeLabel" },
+                { "type": "label", "text": "Gray bg (#F2F2F7), 12px radius, 16px padding", "fontSize": 12, "textColor": "#666666" }
+              ]
+            },
+            {
+              "type": "vstack",
+              "spacing": 8,
+              "alignment": "leading",
+              "styleId": "accentCard",
+              "children": [
+                { "type": "label", "text": "Level 2: accentCard (inherits: baseCard)", "styleId": "codeLabel" },
+                { "type": "label", "text": "Light blue bg (#E3F2FD) overrides gray", "fontSize": 12, "textColor": "#1976D2" }
+              ]
+            },
+            {
+              "type": "vstack",
+              "spacing": 8,
+              "alignment": "leading",
+              "styleId": "accentCardBold",
+              "children": [
+                { "type": "label", "text": "Level 3: accentCardBold (inherits: accentCard)", "styleId": "codeLabel" },
+                { "type": "label", "text": "Dark blue bg (#007AFF), 20px padding (overridden)", "fontSize": 12, "textColor": "#FFFFFF" }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "textchain",
+          "layout": { "type": "list", "showsDividers": false, "itemSpacing": 12, "contentInsets": { "horizontal": 20 } },
+          "header": { "type": "label", "text": "3. Text Style Chain", "styleId": "sectionTitle" },
+          "children": [
+            { "type": "label", "text": "Each level adds or overrides properties", "styleId": "description" },
+            { "type": "label", "text": "Base: 16px, gray", "styleId": "baseText" },
+            { "type": "label", "text": "Medium: 16px, gray, medium weight", "styleId": "mediumText" },
+            { "type": "label", "text": "Large Bold: 20px, black, bold", "styleId": "largeBoldText" }
+          ]
+        },
+        {
+          "id": "buttonchain",
+          "layout": { "type": "list", "showsDividers": false, "itemSpacing": 12, "contentInsets": { "horizontal": 20 } },
+          "header": { "type": "label", "text": "4. Button Chain (3 Levels)", "styleId": "sectionTitle" },
+          "children": [
+            { "type": "label", "text": "roundedButton → blueRoundedButton → largeBlueRoundedButton", "styleId": "description" },
+            { "type": "button", "text": "Small Rounded", "styleId": "blueRoundedButton" },
+            { "type": "button", "text": "Large Rounded", "styleId": "largeBlueRoundedButton" }
+          ]
+        },
+        {
+          "id": "override",
+          "layout": { "type": "list", "showsDividers": false, "itemSpacing": 12, "contentInsets": { "horizontal": 20, "bottom": 36 } },
+          "header": { "type": "label", "text": "5. Child Overriding Parent", "styleId": "sectionTitle" },
+          "children": [
+            { "type": "label", "text": "Child can override any inherited property", "styleId": "description" },
+            { "type": "label", "text": "baseButton → compactButton → compactPrimaryButton → overriddenCompactButton", "styleId": "codeLabel" },
+            { "type": "button", "text": "Compact Primary (blue, small)", "styleId": "compactPrimaryButton" },
+            { "type": "button", "text": "Overridden (green, large, more rounded)", "styleId": "overriddenCompactButton" },
+            { "type": "label", "text": "Overrides: fontSize (18), height (50), backgroundColor (green), cornerRadius (25)", "styleId": "description" }
+          ]
+        }
       ]
     }]
   }
@@ -3246,3 +3547,512 @@ public let weatherDashboardJSON = """
   }
 }
 """
+
+// MARK: Plant Care Tracker
+
+public let plantCareTrackerJSON = """
+{
+  "id": "plant-care-tracker",
+  "version": "1.0",
+  "styles": {
+    "headerTitle": {
+      "fontSize": 28,
+      "fontWeight": "bold",
+      "textColor": "#1C1C1E"
+    },
+    "headerSubtitle": {
+      "fontSize": 14,
+      "textColor": "#8E8E93"
+    },
+    "sectionHeader": {
+      "fontSize": 20,
+      "fontWeight": "semibold",
+      "textColor": "#1C1C1E"
+    },
+    "activityCard": {
+      "backgroundColor": "#F2F2F7",
+      "cornerRadius": 12,
+      "padding": { "all": 12 },
+      "width": 100
+    },
+    "statCard": {
+      "backgroundColor": "#F2F2F7",
+      "cornerRadius": 12,
+      "padding": { "all": 16 }
+    },
+    "statCircleGreen": {
+      "width": 60,
+      "height": 60,
+      "backgroundColor": "#4CAF50"
+    },
+    "statCircleOrange": {
+      "width": 60,
+      "height": 60,
+      "backgroundColor": "#FF9800"
+    },
+    "statCircleRed": {
+      "width": 60,
+      "height": 60,
+      "backgroundColor": "#F44336"
+    },
+    "statCircleBlue": {
+      "width": 60,
+      "height": 60,
+      "backgroundColor": "#007AFF"
+    },
+    "baseCard": {
+      "cornerRadius": 16,
+      "padding": { "all": 16 },
+      "backgroundColor": "#F2F2F7"
+    },
+    "healthyCard": {
+      "baseStyle": "baseCard",
+      "backgroundColor": "#E8F5E9",
+      "borderColor": "#4CAF50",
+      "borderWidth": 2
+    },
+    "warningCard": {
+      "baseStyle": "baseCard",
+      "backgroundColor": "#FFF3E0",
+      "borderColor": "#FF9800",
+      "borderWidth": 2
+    },
+    "criticalCard": {
+      "baseStyle": "baseCard",
+      "backgroundColor": "#FFEBEE",
+      "borderColor": "#F44336",
+      "borderWidth": 2
+    },
+    "plantName": {
+      "fontSize": 18,
+      "fontWeight": "semibold",
+      "textColor": "#1C1C1E"
+    },
+    "waterStatus": {
+      "fontSize": 14,
+      "textColor": "#3C3C43"
+    },
+    "sunlightInfo": {
+      "fontSize": 13,
+      "textColor": "#8E8E93"
+    },
+    "healthyStatus": {
+      "width": 12,
+      "height": 12,
+      "backgroundColor": "#4CAF50"
+    },
+    "warningStatus": {
+      "width": 12,
+      "height": 12,
+      "backgroundColor": "#FF9800"
+    },
+    "criticalStatus": {
+      "width": 12,
+      "height": 12,
+      "backgroundColor": "#F44336"
+    },
+    "healthyStatusSquare": {
+      "width": 12,
+      "height": 12,
+      "backgroundColor": "#4CAF50",
+      "cornerRadius": 3
+    },
+    "warningStatusSquare": {
+      "width": 12,
+      "height": 12,
+      "backgroundColor": "#FF9800",
+      "cornerRadius": 3
+    },
+    "waterBar85": {
+      "width": 170,
+      "height": 8,
+      "backgroundColor": "#4CAF50"
+    },
+    "waterBar65": {
+      "width": 130,
+      "height": 8,
+      "backgroundColor": "#4CAF50"
+    },
+    "waterBar30": {
+      "width": 60,
+      "height": 8,
+      "backgroundColor": "#FF9800"
+    },
+    "waterBar20": {
+      "width": 40,
+      "height": 8,
+      "backgroundColor": "#F44336"
+    },
+    "waterBar10": {
+      "width": 20,
+      "height": 8,
+      "backgroundColor": "#F44336"
+    },
+    "waterButton": {
+      "backgroundColor": "#007AFF",
+      "textColor": "#FFFFFF",
+      "cornerRadius": 8,
+      "padding": { "horizontal": 16, "vertical": 8 }
+    }
+  },
+  "root": {
+    "backgroundColor": "#FFFFFF",
+    "edgeInsets": { "top": 50 },
+    "children": [
+      {
+        "type": "vstack",
+        "spacing": 4,
+        "alignment": "leading",
+        "padding": { "horizontal": 20, "bottom": 20 },
+        "children": [
+          { "type": "label", "text": "🌱 My Plant Garden", "styleId": "headerTitle" },
+          { "type": "label", "text": "5 plants • 2 need water", "styleId": "headerSubtitle" }
+        ]
+      },
+      {
+        "type": "sectionLayout",
+        "sectionSpacing": 24,
+        "sections": [
+        {
+          "layout": {
+            "type": "horizontal",
+            "itemSpacing": 12,
+            "contentInsets": { "horizontal": 20 }
+          },
+          "header": {
+            "type": "label",
+            "text": "Recent Activity",
+            "styleId": "sectionHeader",
+            "padding": { "horizontal": 20, "bottom": 12 }
+          },
+          "children": [
+            {
+              "type": "vstack",
+              "styleId": "activityCard",
+              "spacing": 6,
+              "children": [
+                { "type": "label", "text": "🌱", "fontSize": 24 },
+                { "type": "label", "text": "Planted", "fontSize": 12, "fontWeight": "medium" },
+                { "type": "label", "text": "Monstera", "fontSize": 10, "textColor": "#8E8E93" }
+              ]
+            },
+            {
+              "type": "vstack",
+              "styleId": "activityCard",
+              "spacing": 6,
+              "children": [
+                { "type": "label", "text": "💧", "fontSize": 24 },
+                { "type": "label", "text": "Watered", "fontSize": 12, "fontWeight": "medium" },
+                { "type": "label", "text": "Pothos", "fontSize": 10, "textColor": "#8E8E93" }
+              ]
+            },
+            {
+              "type": "vstack",
+              "styleId": "activityCard",
+              "spacing": 6,
+              "children": [
+                { "type": "label", "text": "☀️", "fontSize": 24 },
+                { "type": "label", "text": "Moved", "fontSize": 12, "fontWeight": "medium" },
+                { "type": "label", "text": "Snake Plant", "fontSize": 10, "textColor": "#8E8E93" }
+              ]
+            },
+            {
+              "type": "vstack",
+              "styleId": "activityCard",
+              "spacing": 6,
+              "children": [
+                { "type": "label", "text": "✂️", "fontSize": 24 },
+                { "type": "label", "text": "Pruned", "fontSize": 12, "fontWeight": "medium" },
+                { "type": "label", "text": "Peace Lily", "fontSize": 10, "textColor": "#8E8E93" }
+              ]
+            }
+          ]
+        },
+        {
+          "layout": {
+            "type": "grid",
+            "columns": 2,
+            "itemSpacing": 16,
+            "contentInsets": { "horizontal": 20 }
+          },
+          "header": {
+            "type": "label",
+            "text": "Garden Stats",
+            "styleId": "sectionHeader",
+            "padding": { "horizontal": 20, "bottom": 12 }
+          },
+          "children": [
+            {
+              "type": "vstack",
+              "styleId": "statCard",
+              "spacing": 8,
+              "children": [
+                { "type": "shape", "shapeType": "circle", "styleId": "statCircleGreen" },
+                { "type": "label", "text": "Healthy", "fontSize": 14, "fontWeight": "semibold" },
+                { "type": "label", "text": "40%", "fontSize": 20, "fontWeight": "bold", "textColor": "#4CAF50" }
+              ]
+            },
+            {
+              "type": "vstack",
+              "styleId": "statCard",
+              "spacing": 8,
+              "children": [
+                { "type": "shape", "shapeType": "circle", "styleId": "statCircleOrange" },
+                { "type": "label", "text": "Warning", "fontSize": 14, "fontWeight": "semibold" },
+                { "type": "label", "text": "40%", "fontSize": 20, "fontWeight": "bold", "textColor": "#FF9800" }
+              ]
+            },
+            {
+              "type": "vstack",
+              "styleId": "statCard",
+              "spacing": 8,
+              "children": [
+                { "type": "shape", "shapeType": "circle", "styleId": "statCircleRed" },
+                { "type": "label", "text": "Critical", "fontSize": 14, "fontWeight": "semibold" },
+                { "type": "label", "text": "20%", "fontSize": 20, "fontWeight": "bold", "textColor": "#F44336" }
+              ]
+            },
+            {
+              "type": "vstack",
+              "styleId": "statCard",
+              "spacing": 8,
+              "children": [
+                { "type": "shape", "shapeType": "circle", "styleId": "statCircleBlue" },
+                { "type": "label", "text": "Total", "fontSize": 14, "fontWeight": "semibold" },
+                { "type": "label", "text": "5", "fontSize": 20, "fontWeight": "bold", "textColor": "#007AFF" }
+              ]
+            }
+          ]
+        },
+        {
+          "layout": {
+            "type": "list",
+            "showsDividers": false,
+            "itemSpacing": 16,
+            "contentInsets": { "horizontal": 20, "bottom": 24 }
+          },
+          "header": {
+            "type": "label",
+            "text": "My Plants",
+            "styleId": "sectionHeader",
+            "padding": { "horizontal": 20, "bottom": 12 }
+          },
+          "children": [
+            {
+              "type": "vstack",
+              "styleId": "healthyCard",
+              "spacing": 12,
+              "children": [
+                {
+                  "type": "hstack",
+                  "spacing": 8,
+                  "children": [
+                    { "type": "shape", "shapeType": "circle", "styleId": "healthyStatus" },
+                    { "type": "label", "text": "Monstera Deliciosa", "styleId": "plantName" },
+                    { "type": "spacer" }
+                  ]
+                },
+                {
+                  "type": "vstack",
+                  "spacing": 8,
+                  "alignment": "leading",
+                  "children": [
+                    { "type": "label", "text": "Water in 3 days", "styleId": "waterStatus" },
+                    {
+                      "type": "hstack",
+                      "spacing": 8,
+                      "children": [
+                        { "type": "label", "text": "💧", "fontSize": 14 },
+                        { "type": "shape", "shapeType": "capsule", "styleId": "waterBar85" },
+                        { "type": "label", "text": "85%", "fontSize": 12, "textColor": "#8E8E93" }
+                      ]
+                    },
+                    {
+                      "type": "hstack",
+                      "spacing": 4,
+                      "children": [
+                        { "type": "label", "text": "☀️", "fontSize": 13 },
+                        { "type": "label", "text": "Bright indirect", "styleId": "sunlightInfo" }
+                      ]
+                    },
+                    { "type": "label", "text": "Last watered: 3 days ago", "fontSize": 12, "textColor": "#8E8E93" }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "vstack",
+              "styleId": "warningCard",
+              "spacing": 12,
+              "children": [
+                {
+                  "type": "hstack",
+                  "spacing": 8,
+                  "children": [
+                    { "type": "shape", "shapeType": "roundedRectangle", "cornerRadius": 3, "styleId": "warningStatusSquare" },
+                    { "type": "label", "text": "Pothos", "styleId": "plantName" },
+                    { "type": "spacer" }
+                  ]
+                },
+                {
+                  "type": "vstack",
+                  "spacing": 8,
+                  "alignment": "leading",
+                  "children": [
+                    { "type": "label", "text": "Water today!", "styleId": "waterStatus" },
+                    {
+                      "type": "hstack",
+                      "spacing": 8,
+                      "children": [
+                        { "type": "label", "text": "💧", "fontSize": 14 },
+                        { "type": "shape", "shapeType": "capsule", "styleId": "waterBar30" },
+                        { "type": "label", "text": "30%", "fontSize": 12, "textColor": "#8E8E93" }
+                      ]
+                    },
+                    {
+                      "type": "hstack",
+                      "spacing": 4,
+                      "children": [
+                        { "type": "label", "text": "☀️", "fontSize": 13 },
+                        { "type": "label", "text": "Low to bright indirect", "styleId": "sunlightInfo" }
+                      ]
+                    },
+                    { "type": "label", "text": "Last watered: 7 days ago", "fontSize": 12, "textColor": "#8E8E93" }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "vstack",
+              "styleId": "criticalCard",
+              "spacing": 12,
+              "children": [
+                {
+                  "type": "hstack",
+                  "spacing": 8,
+                  "children": [
+                    { "type": "shape", "shapeType": "circle", "styleId": "criticalStatus" },
+                    { "type": "label", "text": "Snake Plant", "styleId": "plantName" },
+                    { "type": "spacer" }
+                  ]
+                },
+                {
+                  "type": "vstack",
+                  "spacing": 8,
+                  "alignment": "leading",
+                  "children": [
+                    { "type": "label", "text": "Needs water urgently!", "styleId": "waterStatus" },
+                    {
+                      "type": "hstack",
+                      "spacing": 8,
+                      "children": [
+                        { "type": "label", "text": "💧", "fontSize": 14 },
+                        { "type": "shape", "shapeType": "capsule", "styleId": "waterBar10" },
+                        { "type": "label", "text": "10%", "fontSize": 12, "textColor": "#8E8E93" }
+                      ]
+                    },
+                    {
+                      "type": "hstack",
+                      "spacing": 4,
+                      "children": [
+                        { "type": "label", "text": "☀️", "fontSize": 13 },
+                        { "type": "label", "text": "Low light", "styleId": "sunlightInfo" }
+                      ]
+                    },
+                    { "type": "label", "text": "Last watered: 12 days ago", "fontSize": 12, "textColor": "#8E8E93" }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "vstack",
+              "styleId": "healthyCard",
+              "spacing": 12,
+              "children": [
+                {
+                  "type": "hstack",
+                  "spacing": 8,
+                  "children": [
+                    { "type": "shape", "shapeType": "roundedRectangle", "cornerRadius": 3, "styleId": "healthyStatusSquare" },
+                    { "type": "label", "text": "Fiddle Leaf Fig", "styleId": "plantName" },
+                    { "type": "spacer" }
+                  ]
+                },
+                {
+                  "type": "vstack",
+                  "spacing": 8,
+                  "alignment": "leading",
+                  "children": [
+                    { "type": "label", "text": "Water in 2 days", "styleId": "waterStatus" },
+                    {
+                      "type": "hstack",
+                      "spacing": 8,
+                      "children": [
+                        { "type": "label", "text": "💧", "fontSize": 14 },
+                        { "type": "shape", "shapeType": "capsule", "styleId": "waterBar65" },
+                        { "type": "label", "text": "65%", "fontSize": 12, "textColor": "#8E8E93" }
+                      ]
+                    },
+                    {
+                      "type": "hstack",
+                      "spacing": 4,
+                      "children": [
+                        { "type": "label", "text": "☀️", "fontSize": 13 },
+                        { "type": "label", "text": "Bright indirect", "styleId": "sunlightInfo" }
+                      ]
+                    },
+                    { "type": "label", "text": "Last watered: 5 days ago", "fontSize": 12, "textColor": "#8E8E93" }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "vstack",
+              "styleId": "warningCard",
+              "spacing": 12,
+              "children": [
+                {
+                  "type": "hstack",
+                  "spacing": 8,
+                  "children": [
+                    { "type": "shape", "shapeType": "roundedRectangle", "cornerRadius": 3, "styleId": "warningStatusSquare" },
+                    { "type": "label", "text": "Peace Lily", "styleId": "plantName" },
+                    { "type": "spacer" }
+                  ]
+                },
+                {
+                  "type": "vstack",
+                  "spacing": 8,
+                  "alignment": "leading",
+                  "children": [
+                    { "type": "label", "text": "Water in 1 day", "styleId": "waterStatus" },
+                    {
+                      "type": "hstack",
+                      "spacing": 8,
+                      "children": [
+                        { "type": "label", "text": "💧", "fontSize": 14 },
+                        { "type": "shape", "shapeType": "capsule", "styleId": "waterBar20" },
+                        { "type": "label", "text": "20%", "fontSize": 12, "textColor": "#8E8E93" }
+                      ]
+                    },
+                    {
+                      "type": "hstack",
+                      "spacing": 4,
+                      "children": [
+                        { "type": "label", "text": "☀️", "fontSize": 13 },
+                        { "type": "label", "text": "Low to medium", "styleId": "sunlightInfo" }
+                      ]
+                    },
+                    { "type": "label", "text": "Last watered: 6 days ago", "fontSize": 12, "textColor": "#8E8E93" }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }]
+  }
+}
+"""
+

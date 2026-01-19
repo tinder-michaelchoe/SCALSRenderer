@@ -30,6 +30,9 @@ public struct ContainerNodeRenderer: UIKitNodeRendering {
             contentView = renderZStackContainer(containerNode, context: context)
         }
 
+        // Apply background styling
+        applyBackgroundStyling(to: contentView, style: containerNode.style)
+
         // Wrap in container for padding if needed
         if containerNode.padding != .zero {
             return wrapWithPadding(contentView, padding: containerNode.padding)
@@ -107,5 +110,35 @@ public struct ContainerNodeRenderer: UIKitNodeRendering {
             view.trailingAnchor.constraint(equalTo: wrapper.trailingAnchor, constant: -padding.trailing)
         ])
         return wrapper
+    }
+
+    // MARK: - Background Styling
+
+    private func applyBackgroundStyling(to view: UIView, style: IR.Style) {
+        // Apply background color
+        if let backgroundColor = style.backgroundColor {
+            view.backgroundColor = backgroundColor.uiColor
+        }
+
+        // Apply corner radius
+        if let cornerRadius = style.cornerRadius {
+            view.layer.cornerRadius = cornerRadius
+            view.clipsToBounds = true
+        }
+
+        // Apply border
+        if let borderColor = style.borderColor,
+           let borderWidth = style.borderWidth {
+            view.layer.borderColor = borderColor.uiColor.cgColor
+            view.layer.borderWidth = borderWidth
+        }
+
+        // Apply width/height constraints if specified
+        if let width = style.width {
+            view.widthAnchor.constraint(equalToConstant: width).isActive = true
+        }
+        if let height = style.height {
+            view.heightAnchor.constraint(equalToConstant: height).isActive = true
+        }
     }
 }

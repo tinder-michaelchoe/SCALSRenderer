@@ -119,6 +119,7 @@ public enum ViewNodeType {
     case slider(SliderNodeData)
     case image(ImageNodeData)
     case gradient(GradientNodeData)
+    case shape(ShapeNodeData)
     case spacer
     case customComponent(CustomComponentNodeData)
 }
@@ -292,6 +293,16 @@ public struct GradientNodeData {
         self.colors = colors
         self.startPoint = startPoint
         self.endPoint = endPoint
+        self.style = style
+    }
+}
+
+public struct ShapeNodeData {
+    public var shapeType: ShapeNode.ShapeType
+    public var style: IR.Style
+
+    public init(shapeType: ShapeNode.ShapeType, style: IR.Style = IR.Style()) {
+        self.shapeType = shapeType
         self.style = style
     }
 }

@@ -62,6 +62,14 @@ struct ContainerNodeView: View {
         .padding(.bottom, node.padding.bottom)
         .padding(.leading, node.padding.leading)
         .padding(.trailing, node.padding.trailing)
+        .background(node.style.backgroundColor?.swiftUI ?? Color.clear)
+        .cornerRadius(node.style.cornerRadius ?? 0)
+        .overlay(
+            RoundedRectangle(cornerRadius: node.style.cornerRadius ?? 0)
+                .stroke(node.style.borderColor?.swiftUI ?? Color.clear,
+                       lineWidth: node.style.borderWidth ?? 0)
+        )
+        .frame(width: node.style.width, height: node.style.height)
     }
 
     @ViewBuilder
