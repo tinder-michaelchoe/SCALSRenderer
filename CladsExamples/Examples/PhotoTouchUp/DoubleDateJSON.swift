@@ -49,7 +49,7 @@ public enum DoubleDateJSON {
                     "children": [
                       {
                         "type": "button",
-                        "text": "✕",
+                        "image": { "sfsymbol": "xmark" },
                         "styleId": "closeButton",
                         "actions": { "onTap": "dismiss" }
                       },
@@ -107,6 +107,9 @@ public enum DoubleDateJSON {
                       {
                         "type": "button",
                         "text": "Invite friends",
+                        "image": { "sfsymbol": "person.2.fill" },
+                        "imagePlacement": "leading",
+                        "imageSpacing": 8,
                         "styleId": "primaryButton",
                         "fillWidth": true,
                         "actions": { "onTap": "inviteFriends" }
@@ -114,6 +117,9 @@ public enum DoubleDateJSON {
                       {
                         "type": "button",
                         "text": "Maybe later",
+                        "image": { "sfsymbol": "arrow.right" },
+                        "imagePlacement": "trailing",
+                        "imageSpacing": 8,
                         "styleId": "secondaryButton",
                         "fillWidth": true,
                         "actions": { "onTap": "dismiss" }
@@ -131,10 +137,11 @@ public enum DoubleDateJSON {
           "height": 400
         },
         "closeButton": {
-          "fontSize": 28,
-          "fontWeight": "light",
+          "fontSize": 18,
+          "fontWeight": "semibold",
           "textColor": "#FFFFFF",
-          "backgroundColor": "transparent",
+          "backgroundColor": "rgba(255, 255, 255, 0.15)",
+          "cornerRadius": 22,
           "width": 44,
           "height": 44
         },
