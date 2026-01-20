@@ -9,13 +9,15 @@ import CLADS
 import CladsModules
 import SwiftUI
 
-struct CladsExamplesView: View {
+public struct CladsExamplesView: View {
 
     @State private var selectedExample: Example?
     @State private var fullScreenExample: Example?
     @State private var jsonViewerExample: Example?
 
-    var body: some View {
+    public init() {}
+
+    public var body: some View {
         NavigationStack {
             List {
                 // CLADS Categories
@@ -87,17 +89,6 @@ struct CladsExamplesView: View {
 
                 Section("Custom Components") {
                     ForEach(Example.customComponentExamples) { example in
-                        ExampleRow(
-                            example: example,
-                            selectedExample: $selectedExample,
-                            fullScreenExample: $fullScreenExample,
-                            jsonViewerExample: $jsonViewerExample
-                        )
-                    }
-                }
-
-                Section("Tinder") {
-                    ForEach(Example.tinderExamples) { example in
                         ExampleRow(
                             example: example,
                             selectedExample: $selectedExample,
@@ -362,7 +353,7 @@ enum Example: String, CaseIterable, Identifiable {
     case plantCareTracker
     case designSystem
 
-    // Tinder Examples
+    // Custom Components
     case photoTouchUp
     case feedbackSurvey
     case doubleDate
@@ -389,7 +380,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .sectionLayoutGrid: return "Section: Grid"
         case .sectionLayoutFlow: return "Section: Flow"
         case .sectionLayoutHorizontal: return "Section: Horizontal"
-                // Actions
+        // Actions
         case .setState: return "Set State"
         case .toggleState: return "Toggle State"
         case .showAlert: return "Show Alert"
@@ -415,7 +406,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .weatherDashboard: return "Weather Dashboard"
         case .plantCareTracker: return "Plant Care Tracker"
         case .designSystem: return "Design System"
-        // Tinder
+        // Custom Components
         case .photoTouchUp: return "Photo Touch Up"
         case .feedbackSurvey: return "Feedback Survey"
         case .doubleDate: return "Double Date"
@@ -441,8 +432,8 @@ enum Example: String, CaseIterable, Identifiable {
         case .sectionLayoutList: return "Vertical list with dividers"
         case .sectionLayoutGrid: return "Multi-column grid"
         case .sectionLayoutFlow: return "Wrapping flow layout"
-        case .sectionLayoutHorizontal: return "Scrolling carousel"
-                // Actions
+        case .sectionLayoutHorizontal: return "Carousel & card paging"
+        // Actions
         case .setState: return "Update state values"
         case .toggleState: return "Toggle boolean state"
         case .showAlert: return "Display alert dialogs"
@@ -467,8 +458,8 @@ enum Example: String, CaseIterable, Identifiable {
         case .metMuseum: return "Explore artwork via GET API"
         case .weatherDashboard: return "Weather with custom action & gradients"
         case .plantCareTracker: return "Plant status cards with shapes and style inheritance"
-        case .designSystem: return "Lightspeed design system integration"
-        // Tinder
+        case .designSystem: return "Lightspeed design system"
+        // Custom Components
         case .photoTouchUp: return "Before/after photo comparison with custom components"
         case .feedbackSurvey: return "Radio button survey with dismiss and alert"
         case .doubleDate: return "Onboarding with gradient background and hero image"
@@ -495,7 +486,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .sectionLayoutGrid: return "square.grid.2x2"
         case .sectionLayoutFlow: return "rectangle.3.group"
         case .sectionLayoutHorizontal: return "scroll"
-                // Actions
+        // Actions
         case .setState: return "arrow.right.circle"
         case .toggleState: return "arrow.triangle.swap"
         case .showAlert: return "exclamationmark.bubble"
@@ -520,8 +511,8 @@ enum Example: String, CaseIterable, Identifiable {
         case .metMuseum: return "building.columns"
         case .weatherDashboard: return "cloud.sun.fill"
         case .plantCareTracker: return "leaf.fill"
-        case .designSystem: return "paintbrush.pointed"
-        // Tinder
+        case .designSystem: return "sparkles"
+        // Custom Components
         case .photoTouchUp: return "wand.and.stars"
         case .feedbackSurvey: return "text.bubble"
         case .doubleDate: return "person.2.fill"
@@ -548,7 +539,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .sectionLayoutGrid: return .purple
         case .sectionLayoutFlow: return .purple
         case .sectionLayoutHorizontal: return .purple
-                // Actions - Orange shades
+        // Actions - Orange shades
         case .setState: return .orange
         case .toggleState: return .orange
         case .showAlert: return .orange
@@ -573,8 +564,9 @@ enum Example: String, CaseIterable, Identifiable {
         case .metMuseum: return Color(red: 0.77, green: 0.12, blue: 0.23) // Met Museum red
         case .weatherDashboard: return .cyan
         case .plantCareTracker: return .green
-        case .designSystem: return Color(hex: "#6366F1") // Indigo (Lightspeed primary)
-        // Tinder - Red/Orange (flame colors)
+        // Styles - Pink shades
+        case .designSystem: return .pink
+        // Custom Components - Coral
         case .photoTouchUp: return Color(red: 0.99, green: 0.35, blue: 0.37)
         case .feedbackSurvey: return Color(red: 0.99, green: 0.35, blue: 0.37)
         case .doubleDate: return Color(red: 0.99, green: 0.35, blue: 0.37)
@@ -601,7 +593,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .sectionLayoutGrid: return sectionGridJSON
         case .sectionLayoutFlow: return sectionFlowJSON
         case .sectionLayoutHorizontal: return sectionHorizontalJSON
-                // Actions
+        // Actions
         case .setState: return setStateJSON
         case .toggleState: return toggleStateJSON
         case .showAlert: return showAlertJSON
@@ -627,7 +619,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .weatherDashboard: return weatherDashboardJSON
         case .plantCareTracker: return plantCareTrackerJSON
         case .designSystem: return designSystemExampleJSON
-        // Tinder
+        // Custom Components
         case .photoTouchUp: return PhotoTouchUpJSON.bottomSheet
         case .feedbackSurvey: return FeedbackSurveyJSON.bottomSheet
         case .doubleDate: return DoubleDateJSON.bottomSheet
@@ -654,7 +646,7 @@ enum Example: String, CaseIterable, Identifiable {
     var presentation: PresentationStyle {
         switch self {
         // Most basic examples work well with medium detent
-        case .labels, .buttons, .textFields, .toggles, .sliders, .gradients, .sectionLayoutHorizontal:
+        case .labels, .buttons, .textFields, .toggles, .sliders, .gradients:
             return .detent(.medium)
         case .shapes:
             return .fullSize
@@ -672,6 +664,8 @@ enum Example: String, CaseIterable, Identifiable {
             return .fullSize
         case .sectionLayoutFlow:
             return .detent(.medium)
+        case .sectionLayoutHorizontal:
+            return .fullSize
         case .setState, .toggleState, .showAlert, .dismiss, .navigate, .sequence, .arrayActions:
             return .detent(.medium)
         case .httpRequest:
@@ -693,7 +687,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .weatherDashboard: return .fullSize
         case .plantCareTracker: return .fullSize
         case .designSystem: return .fullSize
-        // Tinder - fixed height sheets
+        // Custom Components
         case .photoTouchUp: return .fixed(height: 600)
         case .feedbackSurvey: return .detent(.large)
         case .doubleDate: return .fullScreen
@@ -727,11 +721,7 @@ enum Example: String, CaseIterable, Identifiable {
     }
 
     static var customComponentExamples: [Example] {
-        [.doubleDate]
-    }
-
-    static var tinderExamples: [Example] {
-        [.photoTouchUp, .feedbackSurvey]
+        [.photoTouchUp, .feedbackSurvey, .doubleDate]
     }
 }
 

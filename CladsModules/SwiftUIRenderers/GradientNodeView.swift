@@ -46,6 +46,14 @@ struct GradientNodeView: View {
             startPoint: node.startPoint.swiftUI,
             endPoint: node.endPoint.swiftUI
         )
-        .frame(width: node.style.width, height: node.style.height)
+        .frame(
+            width: node.style.width,
+            height: node.style.height,
+            alignment: .center
+        )
+        .frame(
+            maxWidth: node.style.width == nil ? .infinity : nil,
+            maxHeight: node.style.height == nil ? .infinity : nil
+        )
     }
 }

@@ -27,6 +27,7 @@ extension SwiftUINodeRendererRegistry {
         register(ShapeNodeSwiftUIRenderer())
         register(SpacerNodeSwiftUIRenderer())
         register(DividerNodeSwiftUIRenderer())
+        register(PageIndicatorNodeSwiftUIRenderer())
         register(ContainerNodeSwiftUIRenderer())
         register(SectionLayoutNodeSwiftUIRenderer())
     }

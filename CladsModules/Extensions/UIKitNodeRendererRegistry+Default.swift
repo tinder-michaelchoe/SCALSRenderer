@@ -25,6 +25,7 @@ extension UIKitNodeRendererRegistry {
         register(ShapeNodeRenderer())
         register(SpacerNodeRenderer())
         register(DividerNodeRenderer())
+        register(PageIndicatorNodeRenderer())
         register(ContainerNodeRenderer())
         register(SectionLayoutNodeRenderer())
     }

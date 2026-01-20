@@ -470,6 +470,8 @@ private func printRenderNode(_ node: RenderNode?, indent: Int) {
         print("\(prefix)Spacer")
     case .divider:
         print("\(prefix)Divider")
+    case .pageIndicator(let pi):
+        print("\(prefix)PageIndicator(pageCount: \(pi.pageCountStatic ?? 0))")
     case .custom(let kind, _):
         print("\(prefix)Custom(\(kind.rawValue))")
     }

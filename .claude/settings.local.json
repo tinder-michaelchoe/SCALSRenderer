@@ -8,7 +8,28 @@
       "WebFetch(domain:dev.iachieved.it)",
       "WebFetch(domain:www.donnywals.com)",
       "WebFetch(domain:api.weather.gov)",
-      "WebFetch(domain:weather-gov.github.io)"
+      "WebFetch(domain:weather-gov.github.io)",
+      "Bash(swiftc:*)",
+      "Bash(swift -frontend -parse:*)",
+      "Bash(grep:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(find:*)",
+      "Bash(code:*)",
+      "Bash(swift package resolve:*)",
+      "Bash(swift build:*)",
+      "Bash(swift run:*)",
+      "Bash(ls:*)",
+      "Bash(swift test:*)",
+      "Bash(npm run build:*)",
+      "Bash(for:*)",
+      "Bash(do sed -i '' '/^\\\\/\\\\/# sourceMappingURL=/d' \"$f\")",
+      "Bash(done)",
+      "Bash(npm run build:js:*)",
+      "Bash(wasm-objdump:*)",
+      "Bash(node -e:*)",
+      "Bash(./build-wasm.sh:*)",
+      "Bash(git checkout:*)"
     ]
   }
 }

@@ -36,4 +36,7 @@ extension Document.ComponentKind {
 
     /// Shape component (rectangle, circle, roundedRectangle, capsule, ellipse)
     public static let shape = Document.ComponentKind(rawValue: "shape")
+
+    /// Page indicator component (pagination dots)
+    public static let pageIndicator = Document.ComponentKind(rawValue: "pageIndicator")
 }

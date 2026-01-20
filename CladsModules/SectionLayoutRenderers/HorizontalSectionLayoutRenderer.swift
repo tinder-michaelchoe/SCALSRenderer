@@ -30,21 +30,88 @@ public struct HorizontalSectionLayoutRenderer: SwiftUISectionLayoutRendering {
 private struct HorizontalSectionContentView: View {
     let section: IR.Section
     let context: SwiftUISectionRenderContext
-    
+
+    @EnvironmentObject var stateStore: ObservableStateStore
+    @State private var currentPage: Int = 0
+    @State private var scrollPosition: Int? = 0
+
+    // Check if this is card-based paging (paging enabled with binding)
+    private var isCardPaging: Bool {
+        section.config.isPagingEnabled && section.config.currentPageBinding != nil
+    }
+
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: section.config.showsIndicators) {
-            LazyHStack(spacing: section.config.itemSpacing) {
-                ForEach(Array(section.children.enumerated()), id: \.offset) { _, child in
-                    HorizontalSectionItemView(
-                        child: child,
-                        context: context,
-                        dimensions: section.config.itemDimensions
-                    )
+        if isCardPaging {
+            // Use ScrollView for card-based paging with orthogonal scrolling behavior
+            GeometryReader { geometry in
+                let cardWidth = geometry.size.width * section.config.cardWidth
+                let spacing = section.config.cardSpacing
+                let leadingPadding = (geometry.size.width - cardWidth) / 2
+
+                ScrollView(.horizontal, showsIndicators: false) {
+                    LazyHStack(spacing: spacing) {
+                        ForEach(Array(section.children.enumerated()), id: \.offset) { index, child in
+                            CardPageItemView(
+                                child: child,
+                                context: context,
+                                cardWidth: section.config.cardWidth,
+                                containerWidth: geometry.size.width
+                            )
+                            .id(index)
+                        }
+                    }
+                    .scrollTargetLayout()
+                }
+                .contentMargins(.horizontal, leadingPadding, for: .scrollContent)
+                .scrollTargetBehavior(.paging)
+                .scrollPosition(id: $scrollPosition)
+                .onChange(of: scrollPosition) { _, newValue in
+                    if let newPage = newValue, newPage != currentPage {
+                        currentPage = newPage
+                        if let binding = section.config.currentPageBinding {
+                            stateStore.set(binding, value: newPage)
+                        }
+                    }
+                }
+                .onAppear {
+                    if let binding = section.config.currentPageBinding,
+                       let stored = stateStore.get(binding, as: Int.self) {
+                        currentPage = stored
+                        scrollPosition = stored
+                    }
                 }
             }
-            .scrollTargetLayout()
+        } else {
+            // Standard horizontal scrolling
+            ScrollView(.horizontal, showsIndicators: section.config.showsIndicators) {
+                LazyHStack(spacing: section.config.itemSpacing) {
+                    ForEach(Array(section.children.enumerated()), id: \.offset) { _, child in
+                        HorizontalSectionItemView(
+                            child: child,
+                            context: context,
+                            dimensions: section.config.itemDimensions
+                        )
+                    }
+                }
+                .scrollTargetLayout()
+            }
+            .applySnapBehavior(section.config.snapBehavior)
         }
-        .applySnapBehavior(section.config.snapBehavior)
+    }
+}
+
+// MARK: - Card Page Item View
+
+/// A view for card-based paging with configurable width
+private struct CardPageItemView: View {
+    let child: RenderNode
+    let context: SwiftUISectionRenderContext
+    let cardWidth: CGFloat
+    let containerWidth: CGFloat
+
+    var body: some View {
+        context.renderChild(child)
+            .frame(width: containerWidth * cardWidth)
     }
 }
 

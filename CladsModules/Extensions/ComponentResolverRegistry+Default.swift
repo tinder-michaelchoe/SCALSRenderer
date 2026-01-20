@@ -26,5 +26,6 @@ extension ComponentResolverRegistry {
         register(GradientComponentResolver())
         register(ShapeComponentResolver())
         register(DividerComponentResolver())
+        register(PageIndicatorComponentResolver())
     }
 }
