@@ -29,7 +29,13 @@
       "Bash(wasm-objdump:*)",
       "Bash(node -e:*)",
       "Bash(./build-wasm.sh:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "WebFetch(domain:fatbobman.com)",
+      "Bash(swift --version:*)",
+      "Bash(swift sdk:*)",
+      "Bash(chmod:*)",
+      "Bash(ln:*)",
+      "Bash(npm install @wasmer/wasi)"
     ]
   }
 }

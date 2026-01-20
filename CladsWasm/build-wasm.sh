@@ -55,9 +55,21 @@ else
     cp "$WASM_PATH" "$OUTPUT_DIR/clads-preview.wasm"
 fi
 
+# Step 3: Copy to SchemaEditor if it exists
+SCHEMA_EDITOR_PATH="../../SchemaEditor/public/clads-preview.wasm"
+if [ -d "../../SchemaEditor/public" ]; then
+    echo ""
+    echo "Step 3: Copying to SchemaEditor..."
+    cp "$OUTPUT_DIR/clads-preview.wasm" "$SCHEMA_EDITOR_PATH"
+    echo "Copied to: $SCHEMA_EDITOR_PATH"
+fi
+
 echo ""
 echo "=== Build Complete ==="
 echo "Output: $OUTPUT_DIR/clads-preview.wasm"
+if [ -f "$SCHEMA_EDITOR_PATH" ]; then
+    echo "Deployed to: $SCHEMA_EDITOR_PATH"
+fi
 echo ""
 echo "Next steps:"
 echo "  1. Run 'npm install' to install JS dependencies"
