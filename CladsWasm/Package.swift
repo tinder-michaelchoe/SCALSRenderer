@@ -50,8 +50,7 @@ let package = Package(
             dependencies: ["CLADS"],
             path: "CladsModules",
             exclude: [
-                "ComponentResolvers/PageIndicatorComponentResolver.swift",
-                "ComponentResolvers/ShapeComponentResolver.swift"
+                "ComponentResolvers/PageIndicatorComponentResolver.swift"
             ],
             sources: [
                 "ComponentResolvers",

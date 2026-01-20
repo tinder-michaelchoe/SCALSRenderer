@@ -377,6 +377,10 @@ public final class CladsUIKitView: UIView {
             // Use the UIKit renderer registry for shapes
             let context = UIKitRenderContext(actionContext: actionContext, stateStore: renderTree.stateStore, colorScheme: renderTree.root.colorScheme, registry: rendererRegistry)
             view = rendererRegistry.render(node, context: context)
+        case .pageIndicator:
+            // Use the UIKit renderer registry for page indicators
+            let context = UIKitRenderContext(actionContext: actionContext, stateStore: renderTree.stateStore, colorScheme: renderTree.root.colorScheme, registry: rendererRegistry)
+            view = rendererRegistry.render(node, context: context)
         case .spacer:
             view = renderSpacer()
         case .divider(let divider):

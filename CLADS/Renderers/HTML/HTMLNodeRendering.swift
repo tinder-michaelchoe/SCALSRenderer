@@ -73,12 +73,15 @@ public struct HTMLNodeRenderer {
         case .shape(let shape):
             return renderShape(shape)
 
+        case .pageIndicator(let pageIndicator):
+            return renderPageIndicator(pageIndicator)
+
         case .spacer:
             return renderSpacer()
 
         case .divider(let divider):
             return renderDivider(divider)
-            
+
         case .custom(let kind, let customNode):
             return renderCustomNode(kind: kind, node: customNode)
         }
@@ -516,6 +519,59 @@ public struct HTMLNodeRenderer {
         let inlineStyle = inlineStyles.isEmpty ? "" : " style=\"\(inlineStyles.joined(separator: "; "))\""
 
         return "<div\(id) class=\"\(className)\"\(inlineStyle)></div>"
+    }
+
+    // MARK: - Page Indicator Rendering
+
+    private func renderPageIndicator(_ pageIndicator: PageIndicatorNode) -> String {
+        var classes = ["ios-page-indicator"]
+
+        if let id = pageIndicator.id {
+            classes.append("clads-page-indicator-\(id.cssClassName)")
+        }
+
+        let id = pageIndicator.id.map { " id=\"\($0.htmlEscaped)\"" } ?? ""
+        let className = classes.joined(separator: " ")
+
+        // Build container inline style
+        var containerStyles: [String] = []
+
+        // Padding
+        if let paddingTop = pageIndicator.style.paddingTop {
+            containerStyles.append("padding-top: \(Int(paddingTop))px")
+        }
+        if let paddingBottom = pageIndicator.style.paddingBottom {
+            containerStyles.append("padding-bottom: \(Int(paddingBottom))px")
+        }
+        if let paddingLeading = pageIndicator.style.paddingLeading {
+            containerStyles.append("padding-left: \(Int(paddingLeading))px")
+        }
+        if let paddingTrailing = pageIndicator.style.paddingTrailing {
+            containerStyles.append("padding-right: \(Int(paddingTrailing))px")
+        }
+
+        containerStyles.append("display: flex")
+        containerStyles.append("gap: \(Int(pageIndicator.dotSpacing))px")
+        containerStyles.append("align-items: center")
+        containerStyles.append("justify-content: center")
+
+        let containerStyle = " style=\"\(containerStyles.joined(separator: "; "))\""
+
+        // Note: Actual page count and current page would need to be resolved from state
+        // For HTML rendering, we'll render placeholder dots
+        let pageCount = pageIndicator.pageCountStatic ?? 5
+        let dotSize = Int(pageIndicator.dotSize)
+        let inactiveDotColor = pageIndicator.dotColor.cssRGBA
+        let activeDotColor = pageIndicator.currentDotColor.cssRGBA
+
+        var dotsHTML = ""
+        for index in 0..<pageCount {
+            let dotColor = index == 0 ? activeDotColor : inactiveDotColor // Default to first page active
+            let dotStyle = "width: \(dotSize)px; height: \(dotSize)px; border-radius: 50%; background-color: \(dotColor);"
+            dotsHTML += "<div class=\"ios-page-dot\" style=\"\(dotStyle)\"></div>"
+        }
+
+        return "<div\(id) class=\"\(className)\"\(containerStyle)>\(dotsHTML)</div>"
     }
 
     // MARK: - Spacer Rendering

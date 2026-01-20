@@ -107,6 +107,7 @@ extension RenderNodeKind {
     public static let image = RenderNodeKind(rawValue: "image")
     public static let gradient = RenderNodeKind(rawValue: "gradient")
     public static let shape = RenderNodeKind(rawValue: "shape")
+    public static let pageIndicator = RenderNodeKind(rawValue: "pageIndicator")
     public static let spacer = RenderNodeKind(rawValue: "spacer")
     public static let divider = RenderNodeKind(rawValue: "divider")
     public static let custom = RenderNodeKind(rawValue: "custom")
@@ -147,6 +148,7 @@ public enum RenderNode {
     case image(ImageNode)
     case gradient(GradientNode)
     case shape(ShapeNode)
+    case pageIndicator(PageIndicatorNode)
     case spacer
     case divider(DividerNode)
     /// Custom render node for extensible components
@@ -165,6 +167,7 @@ public enum RenderNode {
         case .image: return .image
         case .gradient: return .gradient
         case .shape: return .shape
+        case .pageIndicator: return .pageIndicator
         case .spacer: return .spacer
         case .divider: return .divider
         case .custom(let kind, _): return kind
@@ -538,6 +541,43 @@ public struct ShapeNode {
     ) {
         self.id = id
         self.shapeType = shapeType
+        self.style = style
+    }
+}
+
+// MARK: - Page Indicator Node
+
+/// A page indicator component showing dots for pagination
+public struct PageIndicatorNode {
+    public let id: String?
+    public let currentPagePath: String       // State path to read current page
+    public let pageCountPath: String?        // State path to read page count (optional)
+    public let pageCountStatic: Int?         // Static page count (if not from state)
+    public let dotSize: CGFloat
+    public let dotSpacing: CGFloat
+    public let dotColor: IR.Color
+    public let currentDotColor: IR.Color
+    public let style: IR.Style
+
+    public init(
+        id: String? = nil,
+        currentPagePath: String,
+        pageCountPath: String? = nil,
+        pageCountStatic: Int? = nil,
+        dotSize: CGFloat = 8,
+        dotSpacing: CGFloat = 8,
+        dotColor: IR.Color = IR.Color(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0),
+        currentDotColor: IR.Color = IR.Color(red: 0.0, green: 0.478, blue: 1.0, alpha: 1.0),
+        style: IR.Style = IR.Style()
+    ) {
+        self.id = id
+        self.currentPagePath = currentPagePath
+        self.pageCountPath = pageCountPath
+        self.pageCountStatic = pageCountStatic
+        self.dotSize = dotSize
+        self.dotSpacing = dotSpacing
+        self.dotColor = dotColor
+        self.currentDotColor = currentDotColor
         self.style = style
     }
 }

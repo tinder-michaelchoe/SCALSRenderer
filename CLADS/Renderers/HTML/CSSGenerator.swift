@@ -22,6 +22,7 @@ public struct CSSGenerator {
     private var sliderCounter = 0
     private var gradientCounter = 0
     private var shapeCounter = 0
+    private var pageIndicatorCounter = 0
     private var dividerCounter = 0
     private var sectionLayoutCounter = 0
     private var generatedClasses: [String: String] = [:]
@@ -140,6 +141,9 @@ public struct CSSGenerator {
 
         case .shape(let shape):
             css += generateShapeStyles(shape)
+
+        case .pageIndicator(let pageIndicator):
+            css += generatePageIndicatorStyles(pageIndicator)
 
         case .divider(let divider):
             css += generateDividerStyles(divider)
@@ -431,6 +435,23 @@ public struct CSSGenerator {
         return ".\(className) {\n    \(rules.joined(separator: ";\n    "));\n}\n\n"
     }
 
+    private mutating func generatePageIndicatorStyles(_ pageIndicator: PageIndicatorNode) -> String {
+        let className = generatePageIndicatorClassName(for: pageIndicator.id)
+        var rules: [String] = []
+
+        // Style rules
+        let styleRules = pageIndicator.style.cssRuleString()
+        if !styleRules.isEmpty {
+            rules.append(styleRules)
+        }
+
+        guard !rules.isEmpty else {
+            return ""
+        }
+
+        return ".\(className) {\n    \(rules.joined(separator: ";\n    "));\n}\n\n"
+    }
+
     private mutating func generateDividerStyles(_ divider: DividerNode) -> String {
         // Always increment counter to stay in sync with HTMLNodeRenderer
         let className = generateDividerClassName(for: divider.id)
@@ -526,6 +547,14 @@ public struct CSSGenerator {
             return "clads-shape-\(id.cssClassName)"
         }
         return "clads-shape-\(shapeCounter)"
+    }
+
+    private mutating func generatePageIndicatorClassName(for id: String?) -> String {
+        pageIndicatorCounter += 1
+        if let id = id {
+            return "clads-page-indicator-\(id.cssClassName)"
+        }
+        return "clads-page-indicator-\(pageIndicatorCounter)"
     }
 
     private mutating func generateDividerClassName(for id: String?) -> String {

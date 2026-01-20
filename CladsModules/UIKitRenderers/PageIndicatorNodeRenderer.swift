@@ -102,15 +102,8 @@ private class PageIndicatorUIView: UIView {
     }
 
     private func getCurrentPage() -> Int {
-        if let path = node.currentPagePath {
-            return stateStore.get(path) as? Int ?? 0
-        }
-        if let template = node.currentPageTemplate {
-            // Simple extraction: "${varName}" -> "varName"
-            let cleaned = template.replacingOccurrences(of: "${", with: "").replacingOccurrences(of: "}", with: "")
-            return stateStore.get(cleaned) as? Int ?? 0
-        }
-        return 0
+        // Get current page from state
+        return stateStore.get(node.currentPagePath) as? Int ?? 0
     }
 
     private func getPageCount() -> Int {

@@ -189,6 +189,14 @@ extension Document {
         public let gradientStart: String?  // "top", "bottom", "leading", etc.
         public let gradientEnd: String?
 
+        // PageIndicator-specific properties
+        public let currentPage: String?      // State path to current page (required)
+        public let pageCount: Int?           // Total number of pages (optional, can be computed)
+        public let dotSize: CGFloat?         // Dot diameter in points
+        public let dotSpacing: CGFloat?      // Space between dots
+        public let dotColor: String?         // Inactive dot color (hex)
+        public let currentDotColor: String?  // Active dot color (hex)
+
         /// Additional properties for custom/extensible components.
         /// Captures any JSON keys not defined in the standard properties.
         public let additionalProperties: [String: AnyCodableValue]?
@@ -220,6 +228,12 @@ extension Document {
             gradientColors: [GradientColorConfig]? = nil,
             gradientStart: String? = nil,
             gradientEnd: String? = nil,
+            currentPage: String? = nil,
+            pageCount: Int? = nil,
+            dotSize: CGFloat? = nil,
+            dotSpacing: CGFloat? = nil,
+            dotColor: String? = nil,
+            currentDotColor: String? = nil,
             additionalProperties: [String: AnyCodableValue]? = nil
         ) {
             self.type = type
@@ -248,6 +262,12 @@ extension Document {
             self.gradientColors = gradientColors
             self.gradientStart = gradientStart
             self.gradientEnd = gradientEnd
+            self.currentPage = currentPage
+            self.pageCount = pageCount
+            self.dotSize = dotSize
+            self.dotSpacing = dotSpacing
+            self.dotColor = dotColor
+            self.currentDotColor = currentDotColor
             self.additionalProperties = additionalProperties
         }
 
@@ -262,6 +282,7 @@ extension Document {
             case buttonShape
             case shapeType, cornerRadius
             case gradientColors, gradientStart, gradientEnd
+            case currentPage, pageCount, dotSize, dotSpacing, dotColor, currentDotColor
         }
 
         public init(from decoder: Decoder) throws {
@@ -293,6 +314,12 @@ extension Document {
             gradientColors = try container.decodeIfPresent([GradientColorConfig].self, forKey: .gradientColors)
             gradientStart = try container.decodeIfPresent(String.self, forKey: .gradientStart)
             gradientEnd = try container.decodeIfPresent(String.self, forKey: .gradientEnd)
+            currentPage = try container.decodeIfPresent(String.self, forKey: .currentPage)
+            pageCount = try container.decodeIfPresent(Int.self, forKey: .pageCount)
+            dotSize = try container.decodeIfPresent(CGFloat.self, forKey: .dotSize)
+            dotSpacing = try container.decodeIfPresent(CGFloat.self, forKey: .dotSpacing)
+            dotColor = try container.decodeIfPresent(String.self, forKey: .dotColor)
+            currentDotColor = try container.decodeIfPresent(String.self, forKey: .currentDotColor)
 
             // Decode `data` as a dictionary of DataReferences
             data = try container.decodeIfPresent([String: DataReference].self, forKey: .data)

@@ -147,6 +147,18 @@ public struct DebugRenderer: Renderer {
             let propsStr = props.joined(separator: ", ")
             return "\(prefix)shape (\(propsStr))"
 
+        case .pageIndicator(let pageIndicator):
+            var props: [String] = []
+            if let id = pageIndicator.id { props.append("id: \(id)") }
+            props.append("currentPage: \(pageIndicator.currentPagePath)")
+            if let pageCount = pageIndicator.pageCountStatic {
+                props.append("pageCount: \(pageCount)")
+            } else if let path = pageIndicator.pageCountPath {
+                props.append("pageCount: \(path)")
+            }
+            let propsStr = props.joined(separator: ", ")
+            return "\(prefix)pageIndicator (\(propsStr))"
+
         case .spacer:
             return "\(prefix)spacer"
 

@@ -752,6 +752,7 @@ public let shapesJSON = """
   "id": "shapes-example",
   "version": "1.0",
   "styles": {
+    "showcaseTitle": { "fontSize": 28, "fontWeight": "bold", "textColor": "#000000", "padding": { "bottom": 4 } },
     "sectionTitle": { "fontSize": 16, "fontWeight": "semibold", "textColor": "#000000", "padding": { "bottom": 12 } },
     "shapeLabel": { "fontSize": 12, "textColor": "#666666" },
     "filledRed": { "width": 60, "height": 60, "backgroundColor": "#FF6B6B" },
@@ -773,16 +774,17 @@ public let shapesJSON = """
   },
   "root": {
     "backgroundColor": "#FFFFFF",
+    "edgeInsets": { "top": 56 },
     "children": [{
       "type": "sectionLayout",
       "sections": [{
         "layout": {
           "type": "list",
           "showsDividers": false,
-          "itemSpacing": 24,
-          "contentInsets": { "horizontal": 20, "top": 88, "bottom": 36 }
+          "itemSpacing": 20,
+          "contentInsets": { "horizontal": 20, "top": 12, "bottom": 36 }
         },
-        "header": { "type": "label", "text": "Shapes Showcase", "styleId": "sectionTitle" },
+        "header": { "type": "label", "text": "Shapes Showcase", "styleId": "showcaseTitle" },
         "children": [
           { "type": "label", "text": "Filled Shapes", "fontSize": 14, "fontWeight": "medium", "textColor": "#333333" },
         {

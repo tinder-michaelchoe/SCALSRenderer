@@ -36,7 +36,8 @@ public func cladsInit() {
     compRegistry.register(TextFieldComponentResolver())
     compRegistry.register(GradientComponentResolver())
     compRegistry.register(DividerComponentResolver())
-    // PageIndicator and Shape not yet in IR - excluding from WASM build
+    compRegistry.register(ShapeComponentResolver())
+    // PageIndicator not yet in IR - excluding from WASM build
     componentRegistry = compRegistry
 
     // Register all section layout resolvers

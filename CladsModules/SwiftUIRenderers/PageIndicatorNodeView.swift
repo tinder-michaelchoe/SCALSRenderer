@@ -33,17 +33,8 @@ struct PageIndicatorView: View {
     @EnvironmentObject var stateStore: ObservableStateStore
 
     private var currentPage: Int {
-        // Try direct state path first
-        if let path = node.currentPagePath {
-            return stateStore.get(path, as: Int.self) ?? 0
-        }
-        // Try template (for now, treat as state path by extracting variable name)
-        if let template = node.currentPageTemplate {
-            // Simple extraction: "${varName}" -> "varName"
-            let cleaned = template.replacingOccurrences(of: "${", with: "").replacingOccurrences(of: "}", with: "")
-            return stateStore.get(cleaned, as: Int.self) ?? 0
-        }
-        return 0
+        // Get current page from state
+        return stateStore.get(node.currentPagePath, as: Int.self) ?? 0
     }
 
     private var pageCount: Int {

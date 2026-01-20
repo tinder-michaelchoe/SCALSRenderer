@@ -36,54 +36,15 @@ private struct HorizontalSectionContentView: View {
     @State private var scrollPosition: Int? = 0
 
     // Check if this is card-based paging (paging enabled with binding)
+    // Note: Card paging features not yet implemented in IR layer
     private var isCardPaging: Bool {
-        section.config.isPagingEnabled && section.config.currentPageBinding != nil
+        false // section.config.isPagingEnabled && section.config.currentPageBinding != nil
     }
 
     var body: some View {
-        if isCardPaging {
-            // Use ScrollView for card-based paging with orthogonal scrolling behavior
-            GeometryReader { geometry in
-                let cardWidth = geometry.size.width * section.config.cardWidth
-                let spacing = section.config.cardSpacing
-                let leadingPadding = (geometry.size.width - cardWidth) / 2
-
-                ScrollView(.horizontal, showsIndicators: false) {
-                    LazyHStack(spacing: spacing) {
-                        ForEach(Array(section.children.enumerated()), id: \.offset) { index, child in
-                            CardPageItemView(
-                                child: child,
-                                context: context,
-                                cardWidth: section.config.cardWidth,
-                                containerWidth: geometry.size.width
-                            )
-                            .id(index)
-                        }
-                    }
-                    .scrollTargetLayout()
-                }
-                .contentMargins(.horizontal, leadingPadding, for: .scrollContent)
-                .scrollTargetBehavior(.paging)
-                .scrollPosition(id: $scrollPosition)
-                .onChange(of: scrollPosition) { _, newValue in
-                    if let newPage = newValue, newPage != currentPage {
-                        currentPage = newPage
-                        if let binding = section.config.currentPageBinding {
-                            stateStore.set(binding, value: newPage)
-                        }
-                    }
-                }
-                .onAppear {
-                    if let binding = section.config.currentPageBinding,
-                       let stored = stateStore.get(binding, as: Int.self) {
-                        currentPage = stored
-                        scrollPosition = stored
-                    }
-                }
-            }
-        } else {
-            // Standard horizontal scrolling
-            ScrollView(.horizontal, showsIndicators: section.config.showsIndicators) {
+        // Standard horizontal scrolling
+        // Note: Card paging features commented out - not yet implemented in IR layer
+        ScrollView(.horizontal, showsIndicators: section.config.showsIndicators) {
                 LazyHStack(spacing: section.config.itemSpacing) {
                     ForEach(Array(section.children.enumerated()), id: \.offset) { _, child in
                         HorizontalSectionItemView(
@@ -92,11 +53,10 @@ private struct HorizontalSectionContentView: View {
                             dimensions: section.config.itemDimensions
                         )
                     }
-                }
-                .scrollTargetLayout()
             }
-            .applySnapBehavior(section.config.snapBehavior)
+            .scrollTargetLayout()
         }
+        .applySnapBehavior(section.config.snapBehavior)
     }
 }
 

@@ -82,7 +82,7 @@ public extension RenderNode {
         case .textField(let n): return n.styleId
         case .toggle(let n): return n.styleId
         case .slider(let n): return n.styleId
-        case .container, .sectionLayout, .gradient, .shape, .spacer, .divider, .custom:
+        case .container, .sectionLayout, .gradient, .shape, .pageIndicator, .spacer, .divider, .custom:
             return nil
         }
     }

@@ -29,18 +29,8 @@ public struct PageIndicatorComponentResolver: ComponentResolving {
 
         let style = context.styleResolver.resolve(component.styleId)
 
-        // Determine if currentPage is a template or state path
-        let currentPagePath: String?
-        let currentPageTemplate: String?
-        if currentPageStr.contains("${") {
-            // Template interpolation (e.g., "${pageIndex}")
-            currentPagePath = nil
-            currentPageTemplate = currentPageStr
-        } else {
-            // Direct state path (e.g., "currentPage")
-            currentPagePath = currentPageStr
-            currentPageTemplate = nil
-        }
+        // currentPage is always a state path (non-optional)
+        let currentPagePath = currentPageStr
 
         // Resolve pageCount - can be static int, state path, or template
         let pageCountPath: String?
@@ -75,7 +65,6 @@ public struct PageIndicatorComponentResolver: ComponentResolving {
         let node = PageIndicatorNode(
             id: component.id,
             currentPagePath: currentPagePath,
-            currentPageTemplate: currentPageTemplate,
             pageCountPath: pageCountPath,
             pageCountStatic: pageCountStatic,
             dotSize: component.dotSize ?? 8,
@@ -87,9 +76,7 @@ public struct PageIndicatorComponentResolver: ComponentResolving {
 
         // Track state dependencies
         if context.isTracking {
-            if let path = currentPagePath {
-                context.tracker?.recordRead(path)
-            }
+            context.tracker?.recordRead(currentPagePath)
             if let path = pageCountPath {
                 context.tracker?.recordRead(path)
             }
