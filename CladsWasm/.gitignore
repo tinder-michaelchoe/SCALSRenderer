@@ -1,0 +1,23 @@
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# Node
+node_modules/
+package-lock.json
+
+# Build outputs
+dist/*.wasm
+dist/*.js
+dist/*.d.ts
+dist/*.map
+
+# IDE
+.DS_Store
+.vscode/
+*.xcodeproj
+*.xcworkspace
+
+# Logs
+*.log
+npm-debug.log*
