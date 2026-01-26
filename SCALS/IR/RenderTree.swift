@@ -149,7 +149,7 @@ public enum RenderNode {
     case gradient(GradientNode)
     case shape(ShapeNode)
     case pageIndicator(PageIndicatorNode)
-    case spacer
+    case spacer(SpacerNode)
     case divider(DividerNode)
     /// Custom render node for extensible components
     case custom(kind: RenderNodeKind, node: any CustomRenderNode)
@@ -579,6 +579,26 @@ public struct PageIndicatorNode {
         self.dotColor = dotColor
         self.currentDotColor = currentDotColor
         self.style = style
+    }
+}
+
+// MARK: - Spacer Node
+
+/// A spacer component with optional sizing properties
+public struct SpacerNode {
+    /// Minimum length in points (flexible - can grow)
+    public let minLength: CGFloat?
+
+    /// Fixed width in points (exact size)
+    public let width: CGFloat?
+
+    /// Fixed height in points (exact size)
+    public let height: CGFloat?
+
+    public init(minLength: CGFloat? = nil, width: CGFloat? = nil, height: CGFloat? = nil) {
+        self.minLength = minLength
+        self.width = width
+        self.height = height
     }
 }
 

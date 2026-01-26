@@ -122,7 +122,13 @@ public struct LayoutResolver: LayoutResolving {
             let result = try componentRegistry.resolve(component, context: context)
             return NodeResolutionResult(renderNode: result.renderNode, viewNode: result.viewNode)
 
-        case .spacer:
+        case .spacer(let spacer):
+            let spacerNode = SpacerNode(
+                minLength: spacer.minLength,
+                width: spacer.width,
+                height: spacer.height
+            )
+
             let viewNode: ViewNode?
             if context.isTracking {
                 viewNode = ViewNode(id: UUID().uuidString, nodeType: .spacer)
@@ -130,7 +136,11 @@ public struct LayoutResolver: LayoutResolving {
             } else {
                 viewNode = nil
             }
-            return NodeResolutionResult(renderNode: .spacer, viewNode: viewNode)
+
+            return NodeResolutionResult(
+                renderNode: .spacer(spacerNode),
+                viewNode: viewNode
+            )
         }
     }
 

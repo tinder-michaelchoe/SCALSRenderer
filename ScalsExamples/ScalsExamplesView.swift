@@ -9,13 +9,45 @@ import SCALS
 import ScalsModules
 import SwiftUI
 
+// MARK: - Detent Options
+
+enum DetentOption: String, CaseIterable {
+    case medium = "Medium"
+    case large = "Large"
+    case dynamic = "Dynamic"
+}
+
 public struct ScalsExamplesView: View {
 
     @State private var selectedExample: Example?
     @State private var fullScreenExample: Example?
     @State private var jsonViewerExample: Example?
+    @State private var measuredSheetSize: CGSize = .zero
+    @AppStorage("selectedDetent") private var selectedDetent: String = DetentOption.dynamic.rawValue
 
     public init() {}
+
+    /// Determines the effective presentation style based on user's detent selection
+    private func effectivePresentationStyle(for example: Example) -> PresentationStyle {
+        // Full screen presentations always use their own style
+        if case .fullScreen = example.presentation {
+            return example.presentation
+        }
+
+        // Apply user's detent preference for sheet presentations
+        guard let detentOption = DetentOption(rawValue: selectedDetent) else {
+            return example.presentation
+        }
+
+        switch detentOption {
+        case .medium:
+            return .detent(.medium)
+        case .large:
+            return .detent(.large)
+        case .dynamic:
+            return .dynamicHeight
+        }
+    }
 
     public var body: some View {
         NavigationStack {
@@ -116,7 +148,10 @@ public struct ScalsExamplesView: View {
                         ExampleSheetView(example: example)
                     }
                 }
-                .modifier(PresentationStyleModifier(style: example.presentation))
+                .modifier(PresentationStyleModifier(
+                    style: effectivePresentationStyle(for: example),
+                    measuredSize: $measuredSheetSize
+                ))
             }
             .fullScreenCover(item: $fullScreenExample) { example in
                 switch example {
@@ -218,6 +253,7 @@ struct ExampleRow: View {
     @Binding var selectedExample: Example?
     @Binding var fullScreenExample: Example?
     @Binding var jsonViewerExample: Example?
+    @AppStorage("selectedDetent") private var selectedDetent: String = DetentOption.dynamic.rawValue
 
     var body: some View {
         Button {
@@ -253,6 +289,27 @@ struct ExampleRow: View {
             }
         }
         .contextMenu {
+            // Detent submenu (only show for sheet presentations)
+            if case .fullScreen = example.presentation {
+                // Skip for full screen
+            } else {
+                Menu {
+                    ForEach(DetentOption.allCases, id: \.rawValue) { option in
+                        Button {
+                            selectedDetent = option.rawValue
+                        } label: {
+                            if selectedDetent == option.rawValue {
+                                Label(option.rawValue, systemImage: "checkmark")
+                            } else {
+                                Text(option.rawValue)
+                            }
+                        }
+                    }
+                } label: {
+                    Label("Detent", systemImage: "arrow.up.and.down")
+                }
+            }
+
             if example.json != nil {
                 Button {
                     jsonViewerExample = example
@@ -285,6 +342,8 @@ enum PresentationStyle: Equatable {
     case fullSize
     /// Full screen cover (no sheet chrome)
     case fullScreen
+    /// Dynamic height based on measured content size
+    case dynamicHeight
 
     var label: String {
         switch self {
@@ -296,6 +355,7 @@ enum PresentationStyle: Equatable {
         case .autoSize: return "Auto"
         case .fullSize: return "Full"
         case .fullScreen: return "Screen"
+        case .dynamicHeight: return "Dynamic"
         }
     }
 }
@@ -318,6 +378,7 @@ enum Example: String, CaseIterable, Identifiable {
     case zstack
     case nested
     case alignment
+    case spacerExample
     case sectionLayout
     case sectionLayoutList
     case sectionLayoutGrid
@@ -377,6 +438,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .zstack: return "ZStack"
         case .nested: return "Nested"
         case .alignment: return "Alignment"
+        case .spacerExample: return "Spacer"
         case .sectionLayout: return "Section Layout"
         case .sectionLayoutList: return "Section: List"
         case .sectionLayoutGrid: return "Section: Grid"
@@ -431,6 +493,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .zstack: return "Layered overlays"
         case .nested: return "VStack with nested HStack"
         case .alignment: return "All alignment options for containers"
+        case .spacerExample: return "Flexible spacing with minLength and fixed sizing"
         case .sectionLayout: return "Combined section layouts"
         case .sectionLayoutList: return "Vertical list with dividers"
         case .sectionLayoutGrid: return "Multi-column grid"
@@ -485,6 +548,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .zstack: return "square.stack"
         case .nested: return "rectangle.on.rectangle"
         case .alignment: return "arrow.up.left.and.arrow.down.right"
+        case .spacerExample: return "space"
         case .sectionLayout: return "rectangle.split.3x1"
         case .sectionLayoutList: return "list.bullet"
         case .sectionLayoutGrid: return "square.grid.2x2"
@@ -539,6 +603,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .zstack: return .purple
         case .nested: return .purple
         case .alignment: return .purple
+        case .spacerExample: return .purple
         case .sectionLayout: return .purple
         case .sectionLayoutList: return .purple
         case .sectionLayoutGrid: return .purple
@@ -594,6 +659,7 @@ enum Example: String, CaseIterable, Identifiable {
         case .zstack: return zstackJSON
         case .nested: return nestedJSON
         case .alignment: return alignmentJSON
+        case .spacerExample: return spacerExampleJSON
         case .sectionLayout: return sectionLayoutJSON
         case .sectionLayoutList: return sectionListJSON
         case .sectionLayoutGrid: return sectionGridJSON
@@ -666,6 +732,8 @@ enum Example: String, CaseIterable, Identifiable {
             return .fullSize
         case .alignment:
             return .fullSize
+        case .spacerExample:
+            return .fullSize
         case .sectionLayout:
             return .fullSize
         case .sectionLayoutList:
@@ -709,7 +777,7 @@ enum Example: String, CaseIterable, Identifiable {
     }
 
     static var layoutExamples: [Example] {
-        [.vstackHstack, .zstack, .nested, .alignment, .sectionLayout, .sectionLayoutList, .sectionLayoutGrid, .sectionLayoutFlow, .sectionLayoutHorizontal]
+        [.vstackHstack, .zstack, .nested, .alignment, .spacerExample, .sectionLayout, .sectionLayoutList, .sectionLayoutGrid, .sectionLayoutFlow, .sectionLayoutHorizontal]
     }
 
     static var actionExamples: [Example] {
@@ -809,6 +877,7 @@ struct ExampleSheetView: View {
 
 struct PresentationStyleModifier: ViewModifier {
     let style: PresentationStyle
+    @Binding var measuredSize: CGSize
 
     func body(content: Content) -> some View {
         switch style {
@@ -834,6 +903,14 @@ struct PresentationStyleModifier: ViewModifier {
 
         case .fullScreen:
             content
+
+        case .dynamicHeight:
+            // Apply size measurement and use dynamic height detent
+            let detentHeight = measuredSize.height > 0 ? measuredSize.height + 20 : 400
+            content
+                .measuringSize($measuredSize)
+                .presentationDetents([.height(detentHeight)])
+                .presentationDragIndicator(.visible)
         }
     }
 }

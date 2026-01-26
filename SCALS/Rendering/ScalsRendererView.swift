@@ -428,3 +428,46 @@ extension ScalsRendererView {
     }
 }
 
+// MARK: - Size Measurement
+
+extension ScalsRendererView {
+    /// Measures the size of this renderer view and binds it to the provided binding.
+    ///
+    /// Useful for dynamic bottom sheet sizing based on content.
+    ///
+    /// - Parameter size: Binding to store the measured size
+    /// - Returns: A view that measures and reports its size
+    public func measuringSize(_ size: Binding<CGSize>) -> some View {
+        self.modifier(SizeMeasuringModifier(size: size))
+    }
+}
+
+/// Internal view modifier for size measurement
+/// This is defined here to match the ScalsRendererView context
+private struct SizeMeasuringModifier: ViewModifier {
+    @Binding var size: CGSize
+
+    func body(content: Content) -> some View {
+        content
+            .background(
+                GeometryReader { geometry in
+                    Color.clear
+                        .preference(key: SizePreferenceKey.self, value: geometry.size)
+                }
+            )
+            .onPreferenceChange(SizePreferenceKey.self) { newSize in
+                DispatchQueue.main.async {
+                    self.size = newSize
+                }
+            }
+    }
+}
+
+/// Preference key for size propagation
+private struct SizePreferenceKey: PreferenceKey {
+    static var defaultValue: CGSize = .zero
+    static func reduce(value: inout CGSize, nextValue: () -> CGSize) {
+        value = nextValue()
+    }
+}
+

@@ -14,7 +14,7 @@ extension Document {
         case sectionLayout(SectionLayout)
         case forEach(ForEach)
         case component(Component)
-        case spacer
+        case spacer(Spacer)
 
         enum CodingKeys: String, CodingKey {
             case type
@@ -32,7 +32,7 @@ extension Document {
             case "forEach":
                 self = .forEach(try ForEach(from: decoder))
             case "spacer":
-                self = .spacer
+                self = .spacer(try Spacer(from: decoder))
             default:
                 // Assume it's a component
                 self = .component(try Component(from: decoder))
@@ -49,7 +49,8 @@ extension Document {
                 try forEach.encode(to: encoder)
             case .component(let component):
                 try component.encode(to: encoder)
-            case .spacer:
+            case .spacer(let spacer):
+                try spacer.encode(to: encoder)
                 var container = encoder.container(keyedBy: CodingKeys.self)
                 try container.encode("spacer", forKey: .type)
             }
@@ -341,6 +342,28 @@ extension Document {
             self.padding = padding
             self.template = template
             self.emptyView = emptyView
+        }
+    }
+}
+
+// MARK: - Spacer
+
+extension Document {
+    /// Spacer component with optional sizing properties
+    public struct Spacer: Codable {
+        /// Minimum length in points (flexible - can grow)
+        public let minLength: CGFloat?
+
+        /// Fixed width in points (exact size)
+        public let width: CGFloat?
+
+        /// Fixed height in points (exact size)
+        public let height: CGFloat?
+
+        public init(minLength: CGFloat? = nil, width: CGFloat? = nil, height: CGFloat? = nil) {
+            self.minLength = minLength
+            self.width = width
+            self.height = height
         }
     }
 }

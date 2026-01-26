@@ -248,7 +248,13 @@ public struct SectionLayoutResolver: SectionLayoutResolving {
             let result = try componentRegistry.resolve(component, context: context)
             return NodeResolutionResult(renderNode: result.renderNode, viewNode: result.viewNode)
 
-        case .spacer:
+        case .spacer(let spacer):
+            let spacerNode = SpacerNode(
+                minLength: spacer.minLength,
+                width: spacer.width,
+                height: spacer.height
+            )
+
             let viewNode: ViewNode?
             if context.isTracking {
                 viewNode = ViewNode(id: UUID().uuidString, nodeType: .spacer)
@@ -256,7 +262,11 @@ public struct SectionLayoutResolver: SectionLayoutResolving {
             } else {
                 viewNode = nil
             }
-            return NodeResolutionResult(renderNode: .spacer, viewNode: viewNode)
+
+            return NodeResolutionResult(
+                renderNode: .spacer(spacerNode),
+                viewNode: viewNode
+            )
         }
     }
 }

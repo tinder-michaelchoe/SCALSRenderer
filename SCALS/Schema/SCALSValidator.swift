@@ -228,7 +228,25 @@ public struct SCALSValidator {
         }
         
         if type == "spacer" {
-            // Spacer is valid with just type
+            // Validate spacer properties
+            if let minLength = node["minLength"] as? Double {
+                if minLength < 0 {
+                    errors.append(.invalidRange(value: minLength, min: 0, max: nil, path: "\(path).minLength"))
+                }
+            }
+
+            if let width = node["width"] as? Double {
+                if width < 0 {
+                    errors.append(.invalidRange(value: width, min: 0, max: nil, path: "\(path).width"))
+                }
+            }
+
+            if let height = node["height"] as? Double {
+                if height < 0 {
+                    errors.append(.invalidRange(value: height, min: 0, max: nil, path: "\(path).height"))
+                }
+            }
+
             return
         }
         

@@ -155,8 +155,12 @@ struct ButtonNodeView: View {
         switch source {
         case .sfsymbol(let name):
             Image(systemName: name)
+                .renderingMode(currentStyle.tintColor != nil ? .template : .original)
+                .foregroundStyle(currentStyle.tintColor?.swiftUI ?? Color.primary)
         case .asset(let name):
             Image(name)
+                .renderingMode(currentStyle.tintColor != nil ? .template : .original)
+                .foregroundStyle(currentStyle.tintColor?.swiftUI ?? Color.primary)
         case .url(let url):
             AsyncImage(url: url) { phase in
                 switch phase {

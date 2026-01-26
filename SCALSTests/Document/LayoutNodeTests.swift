@@ -108,9 +108,11 @@ struct LayoutNodeTypeDiscriminationTests {
         """
         let data = json.data(using: .utf8)!
         let node = try JSONDecoder().decode(Document.LayoutNode.self, from: data)
-        
-        if case .spacer = node {
-            // Success
+
+        if case .spacer(let spacer) = node {
+            #expect(spacer.minLength == nil)
+            #expect(spacer.width == nil)
+            #expect(spacer.height == nil)
         } else {
             Issue.record("Expected spacer type")
         }
@@ -165,6 +167,91 @@ struct LayoutNodeTypeDiscriminationTests {
             #expect(component.type.rawValue == "customWidget")
         } else {
             Issue.record("Expected unknown type to be decoded as component")
+        }
+    }
+}
+
+// MARK: - Spacer Tests
+
+struct SpacerTests {
+
+    @Test func decodesSpacerWithMinLength() throws {
+        let json = """
+        { "type": "spacer", "minLength": 20 }
+        """
+        let data = json.data(using: .utf8)!
+        let node = try JSONDecoder().decode(Document.LayoutNode.self, from: data)
+
+        if case .spacer(let spacer) = node {
+            #expect(spacer.minLength == 20)
+            #expect(spacer.width == nil)
+            #expect(spacer.height == nil)
+        } else {
+            Issue.record("Expected spacer node")
+        }
+    }
+
+    @Test func decodesSpacerWithFixedSize() throws {
+        let json = """
+        { "type": "spacer", "width": 50, "height": 30 }
+        """
+        let data = json.data(using: .utf8)!
+        let node = try JSONDecoder().decode(Document.LayoutNode.self, from: data)
+
+        if case .spacer(let spacer) = node {
+            #expect(spacer.minLength == nil)
+            #expect(spacer.width == 50)
+            #expect(spacer.height == 30)
+        } else {
+            Issue.record("Expected spacer node")
+        }
+    }
+
+    @Test func decodesSpacerEmpty() throws {
+        let json = """
+        { "type": "spacer" }
+        """
+        let data = json.data(using: .utf8)!
+        let node = try JSONDecoder().decode(Document.LayoutNode.self, from: data)
+
+        if case .spacer(let spacer) = node {
+            #expect(spacer.minLength == nil)
+            #expect(spacer.width == nil)
+            #expect(spacer.height == nil)
+        } else {
+            Issue.record("Expected spacer node")
+        }
+    }
+
+    @Test func decodesSpacerWithAllProperties() throws {
+        let json = """
+        { "type": "spacer", "minLength": 10, "width": 100, "height": 50 }
+        """
+        let data = json.data(using: .utf8)!
+        let node = try JSONDecoder().decode(Document.LayoutNode.self, from: data)
+
+        if case .spacer(let spacer) = node {
+            #expect(spacer.minLength == 10)
+            #expect(spacer.width == 100)
+            #expect(spacer.height == 50)
+        } else {
+            Issue.record("Expected spacer node")
+        }
+    }
+
+    @Test func encodesSpacerWithProperties() throws {
+        let spacer = Document.Spacer(minLength: 20, width: nil, height: 50)
+        let node = Document.LayoutNode.spacer(spacer)
+
+        let data = try JSONEncoder().encode(node)
+        let decoded = try JSONDecoder().decode(Document.LayoutNode.self, from: data)
+
+        if case .spacer(let decodedSpacer) = decoded {
+            #expect(decodedSpacer.minLength == 20)
+            #expect(decodedSpacer.width == nil)
+            #expect(decodedSpacer.height == 50)
+        } else {
+            Issue.record("Expected spacer after round trip")
         }
     }
 }
@@ -382,8 +469,8 @@ struct NestedLayoutTests {
                 #expect(hstack.type == .hstack)
                 #expect(hstack.children.count == 3)
                 
-                if case .spacer = hstack.children[1] {
-                    // Success
+                if case .spacer(let spacer) = hstack.children[1] {
+                    #expect(spacer.minLength == nil)
                 } else {
                     Issue.record("Expected spacer in hstack")
                 }
@@ -462,8 +549,8 @@ struct NestedLayoutTests {
                 #expect(button.type.rawValue == "button")
             }
             
-            if case .spacer = layout.children[2] {
-                // Success
+            if case .spacer(let spacer) = layout.children[2] {
+                #expect(spacer.minLength == nil)
             }
             
             if case .layout(let hstack) = layout.children[3] {
@@ -539,7 +626,7 @@ struct LayoutNodeRoundTripTests {
                 horizontalAlignment: .center,
                 spacing: 16,
                 padding: Document.Padding(horizontal: 20),
-                children: [.spacer]
+                children: [.spacer(Document.Spacer())]
             )
         )
         
@@ -556,13 +643,15 @@ struct LayoutNodeRoundTripTests {
     }
     
     @Test func roundTripsSpacer() throws {
-        let original = Document.LayoutNode.spacer
-        
+        let original = Document.LayoutNode.spacer(Document.Spacer(minLength: 20, width: nil, height: 50))
+
         let data = try JSONEncoder().encode(original)
         let decoded = try JSONDecoder().decode(Document.LayoutNode.self, from: data)
-        
-        if case .spacer = decoded {
-            // Success
+
+        if case .spacer(let spacer) = decoded {
+            #expect(spacer.minLength == 20)
+            #expect(spacer.width == nil)
+            #expect(spacer.height == 50)
         } else {
             Issue.record("Expected spacer after round trip")
         }

@@ -788,7 +788,19 @@
       "description": "Flexible space element",
       "required": ["type"],
       "properties": {
-        "type": { "const": "spacer" }
+        "type": { "const": "spacer" },
+        "minLength": {
+          "type": "number",
+          "description": "Minimum length in points (flexible - can grow)"
+        },
+        "width": {
+          "type": "number",
+          "description": "Fixed width in points (exact size)"
+        },
+        "height": {
+          "type": "number",
+          "description": "Fixed height in points (exact size)"
+        }
       },
       "additionalProperties": false
     },

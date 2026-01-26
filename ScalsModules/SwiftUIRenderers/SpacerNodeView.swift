@@ -17,9 +17,17 @@ public struct SpacerNodeSwiftUIRenderer: SwiftUINodeRendering {
 
     @MainActor
     public func render(_ node: RenderNode, context: SwiftUIRenderContext) -> AnyView {
-        guard case .spacer = node else {
+        guard case .spacer(let spacerNode) = node else {
             return AnyView(EmptyView())
         }
-        return AnyView(Spacer())
+
+        // Create spacer with minLength if specified
+        let spacer = Spacer(minLength: spacerNode.minLength ?? 0)
+
+        // Apply fixed sizing if specified
+        let sized = spacer
+            .frame(width: spacerNode.width, height: spacerNode.height)
+
+        return AnyView(sized)
     }
 }

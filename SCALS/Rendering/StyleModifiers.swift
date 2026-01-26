@@ -16,6 +16,7 @@ public extension View {
             .foregroundColor(style.textColor?.swiftUI)
             .multilineTextAlignment(style.textAlignment?.swiftUI ?? .leading)
             .lineLimit(nil)
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     func applyContainerStyle(_ style: IR.Style) -> some View {

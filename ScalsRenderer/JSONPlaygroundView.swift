@@ -29,6 +29,13 @@ enum RendererType: String, CaseIterable, Identifiable {
 
 // MARK: - JSON Playground View
 
+// Detent options for sheet presentation
+enum PlaygroundDetentOption: String, CaseIterable {
+    case medium = "Medium"
+    case large = "Large"
+    case dynamic = "Dynamic"
+}
+
 // Sheet presentation data
 struct HTMLSheetData: Identifiable {
     let id = UUID()
@@ -42,6 +49,8 @@ struct JSONPlaygroundView: View {
     @State private var htmlSheetData: HTMLSheetData?
     @State private var parseError: String?
     @State private var selectedRenderer: RendererType = .swiftUI
+    @State private var measuredSheetSize: CGSize = .zero
+    @AppStorage("playgroundDetent") private var selectedDetent: String = PlaygroundDetentOption.dynamic.rawValue
     @FocusState private var isTextEditorFocused: Bool
     
     var body: some View {
@@ -72,18 +81,37 @@ struct JSONPlaygroundView: View {
                 
                 ToolbarItem(placement: .topBarTrailing) {
                     Menu {
+                        // Detent submenu
+                        Menu {
+                            ForEach(PlaygroundDetentOption.allCases, id: \.rawValue) { option in
+                                Button {
+                                    selectedDetent = option.rawValue
+                                } label: {
+                                    if selectedDetent == option.rawValue {
+                                        Label(option.rawValue, systemImage: "checkmark")
+                                    } else {
+                                        Text(option.rawValue)
+                                    }
+                                }
+                            }
+                        } label: {
+                            Label("Sheet Detent", systemImage: "arrow.up.and.down")
+                        }
+
+                        Divider()
+
                         Button {
                             jsonText = sampleJSON
                         } label: {
                             Label("Load Sample", systemImage: "doc.text")
                         }
-                        
+
                         Button {
                             UIPasteboard.general.string = jsonText
                         } label: {
                             Label("Copy JSON", systemImage: "doc.on.doc")
                         }
-                        
+
                         Button {
                             if let clipboardString = UIPasteboard.general.string {
                                 jsonText = clipboardString
@@ -91,9 +119,9 @@ struct JSONPlaygroundView: View {
                         } label: {
                             Label("Paste from Clipboard", systemImage: "doc.on.clipboard")
                         }
-                        
+
                         Divider()
-                        
+
                         Button(role: .destructive) {
                             jsonText = ""
                         } label: {
@@ -114,7 +142,11 @@ struct JSONPlaygroundView: View {
                 }
             }
             .sheet(isPresented: $showingSwiftUISheet) {
-                RenderedJSONSheet(jsonString: jsonText)
+                RenderedJSONSheet(
+                    jsonString: jsonText,
+                    selectedDetent: selectedDetent,
+                    measuredSize: $measuredSheetSize
+                )
             }
             .sheet(item: $htmlSheetData) { data in
                 HTMLPreviewSheet(html: data.html, jsonString: data.jsonString)
@@ -280,18 +312,28 @@ struct JSONPlaygroundView: View {
 
 struct RenderedJSONSheet: View {
     let jsonString: String
+    let selectedDetent: String
+    @Binding var measuredSize: CGSize
     @State private var hasError = false
-    
+
     var body: some View {
         Group {
             if let view = ScalsRendererView(jsonString: jsonString, debugMode: true) {
-                view
+                if let detentOption = PlaygroundDetentOption(rawValue: selectedDetent),
+                   detentOption == .dynamic {
+                    view
+                        .measuringSize($measuredSize)
+                } else {
+                    view
+                }
             } else {
                 errorView
             }
         }
-        .presentationDetents([.medium, .large])
-        .presentationDragIndicator(.visible)
+        .modifier(PlaygroundPresentationModifier(
+            selectedDetent: selectedDetent,
+            measuredSize: measuredSize
+        ))
     }
     
     private var errorView: some View {
@@ -330,6 +372,37 @@ struct RenderedJSONSheet: View {
             return "Unknown error"
         } catch {
             return DocumentParseError.detailedDescription(error: error, jsonString: jsonString)
+        }
+    }
+}
+
+// MARK: - Playground Presentation Modifier
+
+struct PlaygroundPresentationModifier: ViewModifier {
+    let selectedDetent: String
+    let measuredSize: CGSize
+
+    func body(content: Content) -> some View {
+        guard let detentOption = PlaygroundDetentOption(rawValue: selectedDetent) else {
+            return content
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+        }
+
+        switch detentOption {
+        case .medium:
+            return content
+                .presentationDetents([.medium])
+                .presentationDragIndicator(.visible)
+        case .large:
+            return content
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+        case .dynamic:
+            let detentHeight = measuredSize.height > 0 ? measuredSize.height + 20 : 400
+            return content
+                .presentationDetents([.height(detentHeight)])
+                .presentationDragIndicator(.visible)
         }
     }
 }
