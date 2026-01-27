@@ -42,7 +42,8 @@
       "Bash(open:*)",
       "Bash(gem list:*)",
       "Bash(test:*)",
-      "Bash(swift -frontend -typecheck:*)"
+      "Bash(swift -frontend -typecheck:*)",
+      "Bash(xargs basename:*)"
     ]
   }
 }
