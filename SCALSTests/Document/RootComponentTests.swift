@@ -245,9 +245,9 @@ struct PositioningTests {
     }
 }
 
-// MARK: - RootActions Tests
+// MARK: - LifecycleActions Tests
 
-struct RootActionsTests {
+struct LifecycleActionsTests {
     
     @Test func decodesOnAppearReference() throws {
         let json = """
@@ -567,13 +567,13 @@ struct RootComponentRoundTripTests {
     }
     
     @Test func roundTripsRootActions() throws {
-        let original = Document.RootActions(
+        let original = Document.LifecycleActions(
             onAppear: .reference("loadData"),
             onDisappear: .inline(.dismiss)
         )
-        
+
         let data = try JSONEncoder().encode(original)
-        let decoded = try JSONDecoder().decode(Document.RootActions.self, from: data)
+        let decoded = try JSONDecoder().decode(Document.LifecycleActions.self, from: data)
         
         if case .reference(let ref) = decoded.onAppear {
             #expect(ref == "loadData")

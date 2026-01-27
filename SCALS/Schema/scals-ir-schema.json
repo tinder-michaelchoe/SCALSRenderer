@@ -52,7 +52,7 @@
           "$ref": "#/$defs/style"
         },
         "actions": {
-          "$ref": "#/$defs/rootActions"
+          "$ref": "#/$defs/lifecycleActions"
         },
         "children": {
           "type": "array",
@@ -70,9 +70,9 @@
       "description": "The color scheme for rendering"
     },
 
-    "rootActions": {
+    "lifecycleActions": {
       "type": "object",
-      "description": "Lifecycle action bindings for the root",
+      "description": "Lifecycle action bindings for the root component",
       "properties": {
         "onAppear": {
           "$ref": "#/$defs/actionBinding"

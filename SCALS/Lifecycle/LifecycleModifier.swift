@@ -1,21 +1,21 @@
 //
-//  RootActionsModifier.swift
+//  LifecycleModifier.swift
 //  ScalsRendererFramework
 //
-//  SwiftUI view modifier that applies root action hooks.
+//  SwiftUI view modifier that applies lifecycle action hooks.
 //
 
 import SwiftUI
 
-// MARK: - Root Actions Modifier
+// MARK: - Lifecycle Modifier
 
-/// View modifier that applies root action bindings to a view.
+/// View modifier that applies lifecycle action bindings to a view.
 ///
 /// To add support for a new event:
-/// 1. Add the case to `RootActionEvent`
+/// 1. Add the case to `LifecycleActions.LifecycleEvent`
 /// 2. Add the corresponding SwiftUI modifier here
-struct RootActionsModifier: ViewModifier {
-    let actions: RootActions
+struct LifecycleModifier: ViewModifier {
+    let actions: LifecycleActions
     let context: ActionContext
 
     func body(content: Content) -> some View {
@@ -32,7 +32,7 @@ struct RootActionsModifier: ViewModifier {
         // }
     }
 
-    private func execute(_ event: RootActionEvent) {
+    private func execute(_ event: LifecycleActions.LifecycleEvent) {
         if let action = actions.action(for: event) {
             context.execute(action)
         }
@@ -42,8 +42,8 @@ struct RootActionsModifier: ViewModifier {
 // MARK: - View Extension
 
 public extension View {
-    /// Apply root action hooks to this view
-    func rootActions(_ actions: RootActions, context: ActionContext) -> some View {
-        modifier(RootActionsModifier(actions: actions, context: context))
+    /// Apply lifecycle action hooks to this view
+    func lifecycleActions(_ actions: LifecycleActions, context: ActionContext) -> some View {
+        modifier(LifecycleModifier(actions: actions, context: context))
     }
 }

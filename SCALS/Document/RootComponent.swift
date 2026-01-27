@@ -28,7 +28,7 @@ extension Document {
         public let colorScheme: String?
 
         /// Lifecycle and other action bindings for the root
-        public let actions: RootActions?
+        public let actions: LifecycleActions?
 
         /// Child nodes contained within the root
         public let children: [LayoutNode]
@@ -38,7 +38,7 @@ extension Document {
             edgeInsets: EdgeInsets? = nil,
             styleId: String? = nil,
             colorScheme: String? = nil,
-            actions: RootActions? = nil,
+            actions: LifecycleActions? = nil,
             children: [LayoutNode] = []
         ) {
             self.backgroundColor = backgroundColor
@@ -50,8 +50,8 @@ extension Document {
         }
     }
     
-    /// Action bindings for the root component (lifecycle hooks)
-    public struct RootActions: Codable {
+    /// Lifecycle action bindings for the root component
+    public struct LifecycleActions: Codable {
         public let onAppear: Component.ActionBinding?
         public let onDisappear: Component.ActionBinding?
 

@@ -89,7 +89,7 @@ struct RenderTreeView: View {
         }
         .environmentObject(observableStateStore)
         .environmentObject(observableActionContext)
-        .rootActions(tree.root.actions, context: actionContext)
+        .lifecycleActions(tree.root.actions, context: actionContext)
     }
 
     private var context: SwiftUIRenderContext {

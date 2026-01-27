@@ -198,7 +198,7 @@ public struct Resolver {
             edgeInsets: EdgeInsetsConverter.convert(root.edgeInsets),
             colorScheme: colorScheme,
             style: style,
-            actions: RootActions(from: root.actions),
+            actions: LifecycleActions(from: root.actions),
             children: children
         )
     }
@@ -245,7 +245,7 @@ public struct Resolver {
             edgeInsets: EdgeInsetsConverter.convert(root.edgeInsets),
             colorScheme: colorScheme,
             style: style,
-            actions: RootActions(from: root.actions),
+            actions: LifecycleActions(from: root.actions),
             children: renderChildren
         )
 

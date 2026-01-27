@@ -47,7 +47,7 @@ public struct RootNode {
     public let edgeInsets: IR.PositionedEdgeInsets?
     public let colorScheme: IR.ColorScheme
     public let style: IR.Style
-    public let actions: RootActions
+    public let actions: LifecycleActions
     public let children: [RenderNode]
 
     public init(
@@ -55,7 +55,7 @@ public struct RootNode {
         edgeInsets: IR.PositionedEdgeInsets? = nil,
         colorScheme: IR.ColorScheme = .system,
         style: IR.Style = IR.Style(),
-        actions: RootActions = RootActions(),
+        actions: LifecycleActions = LifecycleActions(),
         children: [RenderNode] = []
     ) {
         self.backgroundColor = backgroundColor

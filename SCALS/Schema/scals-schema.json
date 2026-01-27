@@ -505,7 +505,7 @@
           "description": "Color scheme preference"
         },
         "actions": {
-          "$ref": "#/$defs/rootActions"
+          "$ref": "#/$defs/lifecycleActions"
         },
         "children": {
           "type": "array",
@@ -514,9 +514,9 @@
       },
       "additionalProperties": false
     },
-    "rootActions": {
+    "lifecycleActions": {
       "type": "object",
-      "description": "Lifecycle action bindings for root",
+      "description": "Lifecycle action bindings for root component",
       "properties": {
         "onAppear": { "$ref": "#/$defs/actionBinding" },
         "onDisappear": { "$ref": "#/$defs/actionBinding" }

@@ -1,45 +1,48 @@
 //
-//  RootActions.swift
+//  Lifecycle.swift
 //  ScalsRendererFramework
 //
-//  Root-level action handling for ScalsRenderer views.
+//  Lifecycle action handling for ScalsRenderer views.
 //
 
 import Foundation
 
-// MARK: - Root Action Event
+// MARK: - Lifecycle Actions (IR)
 
-/// Supported root-level action events for ScalsRenderer views.
+/// Container for lifecycle action bindings (IR layer).
 ///
-/// To add a new event:
-/// 1. Add a case here
-/// 2. Add the corresponding modifier in `RootActionsModifier`
-public enum RootActionEvent: String, CaseIterable {
-    /// Triggered when the view appears on screen
-    case onAppear
+/// Parsed from the document's `root.actions` and used by `LifecycleModifier`
+/// to execute actions at the appropriate lifecycle points.
+public struct LifecycleActions {
 
-    /// Triggered when the view disappears from screen
-    case onDisappear
+    // MARK: - Lifecycle Event
 
-    // Future events:
-    // case onForeground
-    // case onBackground
-}
+    /// Supported lifecycle events for ScalsRenderer views.
+    ///
+    /// To add a new event:
+    /// 1. Add a case here
+    /// 2. Add the corresponding modifier in `LifecycleModifier`
+    public enum LifecycleEvent: String, CaseIterable {
+        /// Triggered when the view appears on screen
+        case onAppear
 
-// MARK: - Root Actions (IR)
+        /// Triggered when the view disappears from screen
+        case onDisappear
 
-/// Container for root-level action bindings (IR layer).
-///
-/// Parsed from the document's `root.actions` and used by `RootActionsModifier`
-/// to execute actions at the appropriate points.
-public struct RootActions {
-    private var actions: [RootActionEvent: Document.Component.ActionBinding] = [:]
+        // Future events:
+        // case onForeground
+        // case onBackground
+    }
 
-    /// Create empty root actions
+    // MARK: - Properties and Initialization
+
+    private var actions: [LifecycleEvent: Document.Component.ActionBinding] = [:]
+
+    /// Create empty lifecycle actions
     public init() {}
 
-    /// Create root actions from document root actions
-    public init(from documentActions: Document.RootActions?) {
+    /// Create lifecycle actions from document lifecycle actions
+    public init(from documentActions: Document.LifecycleActions?) {
         guard let documentActions = documentActions else { return }
 
         if let onAppear = documentActions.onAppear {
@@ -50,8 +53,10 @@ public struct RootActions {
         }
     }
 
+    // MARK: - Public Methods
+
     /// Get the action binding for a specific event
-    public func action(for event: RootActionEvent) -> Document.Component.ActionBinding? {
+    public func action(for event: LifecycleEvent) -> Document.Component.ActionBinding? {
         actions[event]
     }
 
@@ -61,7 +66,7 @@ public struct RootActions {
     }
 
     /// All events that have actions defined
-    public var definedEvents: [RootActionEvent] {
+    public var definedEvents: [LifecycleEvent] {
         Array(actions.keys)
     }
 }

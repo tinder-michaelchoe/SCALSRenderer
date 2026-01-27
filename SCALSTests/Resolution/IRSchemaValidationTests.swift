@@ -139,7 +139,7 @@ struct RootNodeSchemaTests {
             id: "test",
             actions: ["onLoad": .dismiss],
             root: Document.RootComponent(
-                actions: Document.RootActions(onAppear: .reference("onLoad")),
+                actions: Document.LifecycleActions(onAppear: .reference("onLoad")),
                 children: []
             )
         )
@@ -148,7 +148,7 @@ struct RootNodeSchemaTests {
         let resolver = Resolver(document: document, componentRegistry: registry)
         let renderTree = try resolver.resolve()
         
-        // Schema: rootActions has optional onAppear/onDisappear
+        // Schema: lifecycleActions has optional onAppear/onDisappear
         #expect(renderTree.root.actions.action(for: .onAppear) != nil)
     }
     

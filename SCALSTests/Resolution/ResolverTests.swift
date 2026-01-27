@@ -241,7 +241,7 @@ struct ResolverActionTests {
             id: "test-doc",
             actions: ["onLoadAction": .dismiss],
             root: Document.RootComponent(
-                actions: Document.RootActions(
+                actions: Document.LifecycleActions(
                     onAppear: .reference("onLoadAction")
                 ),
                 children: []
