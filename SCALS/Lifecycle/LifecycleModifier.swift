@@ -41,7 +41,7 @@ struct RootActionsModifier: ViewModifier {
 
 // MARK: - View Extension
 
-extension View {
+public extension View {
     /// Apply root action hooks to this view
     func rootActions(_ actions: RootActions, context: ActionContext) -> some View {
         modifier(RootActionsModifier(actions: actions, context: context))
