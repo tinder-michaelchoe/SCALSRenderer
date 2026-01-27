@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SCALS
 import SwiftUI
 
 // MARK: - SwiftUI Render Context

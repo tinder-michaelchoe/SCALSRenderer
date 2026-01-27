@@ -5,6 +5,7 @@
 //  Renders a RenderTree into SwiftUI views.
 //
 
+import SCALS
 import SwiftUI
 
 // MARK: - SwiftUI Renderer

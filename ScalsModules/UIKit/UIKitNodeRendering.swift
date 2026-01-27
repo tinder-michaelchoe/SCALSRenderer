@@ -5,6 +5,7 @@
 //  Protocol and context for UIKit node rendering.
 //
 
+import SCALS
 import UIKit
 
 // MARK: - Render Context
