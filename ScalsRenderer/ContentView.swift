@@ -5,7 +5,6 @@
 //  Main app view with tabs for Examples and JSON Playground.
 //
 
-import ScalsExamples
 import SwiftUI
 
 struct ContentView: View {
@@ -13,7 +12,7 @@ struct ContentView: View {
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            ScalsExamplesView()
+            ExampleCatalogView()
                 .tabItem {
                     Label("Examples", systemImage: "list.bullet.rectangle")
                 }
