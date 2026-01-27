@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SCALS
 import SwiftUI
 
 /// SwiftUI renderer for custom components.

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SCALS
 
 // MARK: - Component Registration
 

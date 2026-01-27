@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SCALS
 import SwiftUI
 
 // MARK: - SCALS Actions Modifier
