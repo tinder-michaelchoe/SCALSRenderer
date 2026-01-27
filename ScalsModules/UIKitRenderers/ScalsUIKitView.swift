@@ -5,9 +5,10 @@
 //  UIKit integration with delegate pattern for state callbacks and efficient updates.
 //
 
-import UIKit
-import SwiftUI
 import Combine
+import SCALS
+import SwiftUI
+import UIKit
 
 // MARK: - Delegate Protocol
 

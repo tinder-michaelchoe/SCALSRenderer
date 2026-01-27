@@ -6,8 +6,9 @@
 //  This bridges the platform-agnostic ActionContext with SwiftUI's environment system.
 //
 
-import SwiftUI
 import Combine
+import SCALS
+import SwiftUI
 
 /// SwiftUI wrapper for `ActionContext` that provides `ObservableObject` conformance.
 ///

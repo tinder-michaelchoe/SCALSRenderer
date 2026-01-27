@@ -6,8 +6,9 @@
 //  This bridges the platform-agnostic StateStore with SwiftUI's reactive system.
 //
 
-import SwiftUI
 import Combine
+import SCALS
+import SwiftUI
 
 /// SwiftUI wrapper for `StateStore` that provides `ObservableObject` conformance.
 ///

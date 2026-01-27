@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
 
 /// Resolver for custom components.
 ///

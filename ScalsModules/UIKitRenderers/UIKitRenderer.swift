@@ -5,6 +5,7 @@
 //  Renders a RenderTree into UIKit views.
 //
 
+import SCALS
 import UIKit
 
 // MARK: - UIKit Renderer
