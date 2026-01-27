@@ -5,6 +5,7 @@
 //  SwiftUI View extensions for applying IR.Style properties.
 //
 
+import SCALS
 import SwiftUI
 
 // MARK: - Style Modifiers
