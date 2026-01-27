@@ -5,6 +5,7 @@
 //  UIKit-specific implementation of AlertPresenting.
 //
 
+import SCALS
 import UIKit
 
 // MARK: - UIKit Alert Presenter
