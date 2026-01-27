@@ -6,6 +6,7 @@
 //  This file bridges the platform-agnostic IR layer with SwiftUI rendering.
 //
 
+import SCALS
 import SwiftUI
 
 // MARK: - IR.Color → SwiftUI.Color

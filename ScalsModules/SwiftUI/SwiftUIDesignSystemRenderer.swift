@@ -6,6 +6,7 @@
 //  This extends the platform-agnostic DesignSystemProvider with SwiftUI rendering capabilities.
 //
 
+import SCALS
 import SwiftUI
 
 // MARK: - SwiftUI Design System Renderer Protocol

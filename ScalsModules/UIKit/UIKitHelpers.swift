@@ -6,6 +6,7 @@
 //
 
 import Combine
+import SCALS
 import SwiftUI
 import UIKit
 

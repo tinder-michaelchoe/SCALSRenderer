@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import SCALS
 
 // MARK: - iOS Design Tokens
 

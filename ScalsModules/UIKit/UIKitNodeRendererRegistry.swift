@@ -5,6 +5,7 @@
 //  Registry for UIKit node renderers.
 //
 
+import SCALS
 import UIKit
 
 /// Registry that maps RenderNodeKind to UIKitNodeRendering implementations.

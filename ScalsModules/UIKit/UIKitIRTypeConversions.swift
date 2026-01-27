@@ -6,6 +6,7 @@
 //  This file bridges the platform-agnostic IR layer with UIKit rendering.
 //
 
+import SCALS
 import UIKit
 
 // MARK: - IR.Color → UIColor
