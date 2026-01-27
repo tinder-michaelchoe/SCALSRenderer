@@ -24,8 +24,6 @@ let package = Package(
             name: "SCALS",
             path: "SCALS",
             exclude: [
-                // Extensibility (all depends on SwiftUI/UIKit)
-                "Extensibility",
                 // Lifecycle modifier (depends on SwiftUI)
                 "Lifecycle/LifecycleModifier.swift"
             ],

@@ -7,7 +7,7 @@
 //
 
 import Combine
-import ScalsModules
+import SCALS
 import SwiftUI
 
 /// Main entry point for rendering a document
