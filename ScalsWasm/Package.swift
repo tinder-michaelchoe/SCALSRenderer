@@ -24,13 +24,6 @@ let package = Package(
             name: "SCALS",
             path: "SCALS",
             exclude: [
-                // SwiftUI/UIKit renderers
-                "Renderers/SwiftUI",
-                "Renderers/UIKit",
-                "Renderers/ScalsUIKitView.swift",
-                "Renderers/DebugRenderer.swift",
-                "Renderers/UIKitRenderer.swift",
-                "Rendering",
                 // Extensibility (all depends on SwiftUI/UIKit)
                 "Extensibility",
                 // Lifecycle modifier (depends on SwiftUI)
@@ -66,12 +59,32 @@ let package = Package(
                 ])
             ]
         ),
+        // ScalsHTMLRenderers module (HTML-only rendering for WASM)
+        .target(
+            name: "ScalsHTMLRenderers",
+            dependencies: ["SCALS"],
+            path: "ScalsModules",
+            sources: [
+                "HTMLRenderers"
+            ],
+            resources: [
+                .copy("HTMLRenderers/Resources")
+            ],
+            swiftSettings: [
+                .swiftLanguageVersion(.v5),
+                .unsafeFlags([
+                    "-Xfrontend", "-disable-availability-checking",
+                    "-Xfrontend", "-assume-single-threaded"
+                ])
+            ]
+        ),
         // Main executable
         .executableTarget(
             name: "ScalsWasm",
             dependencies: [
                 "SCALS",
-                "ScalsResolvers"
+                "ScalsResolvers",
+                "ScalsHTMLRenderers"
             ],
             path: "Sources/ScalsWasm",
             swiftSettings: [

@@ -6,8 +6,9 @@
 //  Document (AST) → Resolver → RenderTree (IR) → SwiftUIRenderer → View
 //
 
-import SwiftUI
 import Combine
+import ScalsModules
+import SwiftUI
 
 /// Main entry point for rendering a document
 public struct ScalsRendererView: View {
