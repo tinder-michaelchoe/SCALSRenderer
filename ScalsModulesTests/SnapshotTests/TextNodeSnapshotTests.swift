@@ -182,4 +182,127 @@ final class TextNodeSnapshotTests: XCTestCase {
             record: false
         )
     }
+
+    // MARK: - Font Weight Tests
+
+    @MainActor
+    func testTextWithFontWeights() async throws {
+        // Test text with various font weights
+        let weights: [(IR.FontWeight, String)] = [
+            (.regular, "regular"),
+            (.medium, "medium"),
+            (.semibold, "semibold"),
+            (.bold, "bold")
+        ]
+
+        for (weight, name) in weights {
+            var style = IR.Style()
+            style.fontSize = 18
+            style.fontWeight = weight
+            style.textColor = IR.Color.black
+
+            let node = RenderNode.text(TextNode(
+                content: "Font Weight: \(name)",
+                style: style,
+                padding: .zero
+            ))
+
+            // SwiftUI
+            let swiftUIImage = await RendererTestHelpers.renderSwiftUI(
+                node,
+                size: StandardSnapshotSizes.compact
+            )
+            assertSnapshot(
+                of: swiftUIImage,
+                as: .image,
+                named: "swiftui-text-weight-\(name)",
+                record: false
+            )
+
+            // UIKit
+            let uikitImage = await RendererTestHelpers.renderUIKit(
+                node,
+                size: StandardSnapshotSizes.compact
+            )
+            assertSnapshot(
+                of: uikitImage,
+                as: .image,
+                named: "uikit-text-weight-\(name)",
+                record: false
+            )
+
+            // HTML
+            let htmlImage = try await RendererTestHelpers.renderHTML(
+                node,
+                size: StandardSnapshotSizes.compact
+            )
+            assertSnapshot(
+                of: htmlImage,
+                as: .image,
+                named: "html-text-weight-\(name)",
+                record: false
+            )
+        }
+    }
+
+    // MARK: - Font Size Tests
+
+    @MainActor
+    func testTextWithFontSizes() async throws {
+        // Test text with various font sizes
+        let sizes: [(CGFloat, String)] = [
+            (12, "small"),
+            (16, "medium"),
+            (24, "large"),
+            (32, "xlarge")
+        ]
+
+        for (size, name) in sizes {
+            var style = IR.Style()
+            style.fontSize = size
+            style.textColor = IR.Color.black
+
+            let node = RenderNode.text(TextNode(
+                content: "Size: \(Int(size))pt",
+                style: style,
+                padding: .zero
+            ))
+
+            // SwiftUI
+            let swiftUIImage = await RendererTestHelpers.renderSwiftUI(
+                node,
+                size: StandardSnapshotSizes.compact
+            )
+            assertSnapshot(
+                of: swiftUIImage,
+                as: .image,
+                named: "swiftui-text-size-\(name)",
+                record: false
+            )
+
+            // UIKit
+            let uikitImage = await RendererTestHelpers.renderUIKit(
+                node,
+                size: StandardSnapshotSizes.compact
+            )
+            assertSnapshot(
+                of: uikitImage,
+                as: .image,
+                named: "uikit-text-size-\(name)",
+                record: false
+            )
+
+            // HTML
+            let htmlImage = try await RendererTestHelpers.renderHTML(
+                node,
+                size: StandardSnapshotSizes.compact
+            )
+            assertSnapshot(
+                of: htmlImage,
+                as: .image,
+                named: "html-text-size-\(name)",
+                record: false
+            )
+        }
+    }
 }
