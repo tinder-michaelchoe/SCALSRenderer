@@ -25,7 +25,7 @@ This plan outlines a comprehensive snapshot testing strategy for the ScalsRender
 ### Primary Goals
 1. **Cross-Renderer Consistency**: Verify that SwiftUI, UIKit, and HTML renderers produce equivalent visual output for identical IR
 2. **Regression Prevention**: Catch visual regressions when renderer implementations change
-3. **Canonical Compliance**: Compare renderer outputs against canonical SwiftUI/UIKit implementations
+3. **Canonical Compliance**: SwiftUI renderer is the canonical reference - UIKit and HTML must match SwiftUI's output
 4. **Example Coverage**: Validate all 48 example files render correctly
 
 ### Success Metrics

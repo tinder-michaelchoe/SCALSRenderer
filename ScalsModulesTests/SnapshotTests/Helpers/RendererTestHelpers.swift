@@ -156,6 +156,9 @@ struct RendererTestHelpers {
     /// Captures a SwiftUI view as a UIImage
     @MainActor
     private static func captureSwiftUIView<Content: View>(_ view: Content, size: CGSize, traits: UITraitCollection) async -> UIImage {
+        // Create a window to host the view (required for SwiftUI rendering)
+        let window = UIWindow(frame: CGRect(origin: .zero, size: size))
+
         let controller = UIHostingController(rootView: view)
         controller.view.frame = CGRect(origin: .zero, size: size)
         controller.view.backgroundColor = .systemBackground
@@ -165,14 +168,28 @@ struct RendererTestHelpers {
             controller.traitOverrides.userInterfaceStyle = userInterfaceStyle
         }
 
+        // Add controller to window
+        window.rootViewController = controller
+        window.makeKeyAndVisible()
+
         // Force layout
+        controller.view.setNeedsLayout()
         controller.view.layoutIfNeeded()
+
+        // Small delay to ensure SwiftUI has rendered
+        try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
 
         // Render to image
         let renderer = UIGraphicsImageRenderer(size: size)
-        return renderer.image { context in
+        let image = renderer.image { context in
             controller.view.layer.render(in: context.cgContext)
         }
+
+        // Clean up
+        window.isHidden = true
+        window.rootViewController = nil
+
+        return image
     }
 
     /// Captures a UIKit view as a UIImage

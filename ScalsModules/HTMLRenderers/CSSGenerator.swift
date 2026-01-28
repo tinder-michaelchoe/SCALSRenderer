@@ -305,12 +305,19 @@ public struct CSSGenerator {
     private mutating func generateTextStyles(_ text: TextNode) -> String {
         // Always increment counter to stay in sync with HTMLNodeRenderer
         let className = generateTextClassName(for: text.id)
-        
+
         guard !text.style.cssRuleString().isEmpty || text.id != nil else {
             return ""
         }
-        let rules = text.style.cssRuleString()
-        
+        var rules = text.style.cssRuleString()
+
+        // Add top padding to match SwiftUI's natural text spacing
+        if !rules.isEmpty {
+            rules += "; padding-top: 2px"
+        } else {
+            rules = "padding-top: 2px"
+        }
+
         if !rules.isEmpty {
             return ".\(className) {\n    \(rules);\n}\n\n"
         }

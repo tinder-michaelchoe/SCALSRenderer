@@ -13,20 +13,6 @@ import SCALS
 
 final class TextNodeSnapshotTests: XCTestCase {
 
-    // MARK: - Test Configuration
-
-    override class func setUp() {
-        super.setUp()
-        // Configure SnapshotTesting to use external snapshot directory
-        // This must be set before any tests run
-        setenv("SNAPSHOT_REFERENCE_DIR", "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer-Snapshots", 1)
-    }
-
-    override func setUp() {
-        super.setUp()
-        // Snapshots will be saved to ScalsRenderer-Snapshots directory (outside repo)
-    }
-
     // MARK: - Basic Text Tests
 
     @MainActor
@@ -37,7 +23,7 @@ final class TextNodeSnapshotTests: XCTestCase {
         style.textColor = IR.Color.black
 
         let node = RenderNode.text(TextNode(
-            content: "Hello World",
+            content: "testTextWithBasicStyle",
             style: style,
             padding: .zero
         ))
@@ -47,21 +33,36 @@ final class TextNodeSnapshotTests: XCTestCase {
             node,
             size: StandardSnapshotSizes.compact
         )
-        assertSnapshot(of: swiftUIImage, as: .image, named: "swiftui-text-basic")
+        assertSnapshot(
+            of: swiftUIImage,
+            as: .image,
+            named: "swiftui-text-basic",
+            record: false
+        )
 
         // Render with UIKit
         let uikitImage = await RendererTestHelpers.renderUIKit(
             node,
             size: StandardSnapshotSizes.compact
         )
-        assertSnapshot(of: uikitImage, as: .image, named: "uikit-text-basic")
+        assertSnapshot(
+            of: uikitImage,
+            as: .image,
+            named: "uikit-text-basic",
+            record: false
+        )
 
         // Render with HTML
         let htmlImage = try await RendererTestHelpers.renderHTML(
             node,
             size: StandardSnapshotSizes.compact
         )
-        assertSnapshot(of: htmlImage, as: .image, named: "html-text-basic")
+        assertSnapshot(
+            of: htmlImage,
+            as: .image,
+            named: "html-text-basic",
+            record: false
+        )
     }
 
     @MainActor
@@ -72,7 +73,7 @@ final class TextNodeSnapshotTests: XCTestCase {
         style.textColor = IR.Color.black
 
         let node = RenderNode.text(TextNode(
-            content: "Hello World",
+            content: "testTextWithCanonicalComparison",
             style: style,
             padding: .zero
         ))
@@ -85,14 +86,100 @@ final class TextNodeSnapshotTests: XCTestCase {
 
         // Canonical SwiftUI
         let canonicalImage = await RendererTestHelpers.renderCanonicalView({
-            Text("Hello World")
+            Text("testTextWithCanonicalComparison")
                 .font(.system(size: 16))
                 .foregroundColor(.black)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }, size: StandardSnapshotSizes.compact)
 
         // Compare SCALS vs canonical
-        assertSnapshot(of: scalsImage, as: .image, named: "scals-text-basic")
-        assertSnapshot(of: canonicalImage, as: .image, named: "canonical-text-basic")
+        assertSnapshot(of: scalsImage, as: .image, named: "scals-text-basic", record: false)
+        assertSnapshot(of: canonicalImage, as: .image, named: "canonical-text-basic", record: false)
+    }
+
+    // MARK: - Color Scheme Tests
+
+    @MainActor
+    func testTextWithColorSchemes() async throws {
+        // Test text rendering in both light and dark modes
+        var style = IR.Style()
+        style.fontSize = 18
+        style.textColor = IR.Color(red: 0.2, green: 0.2, blue: 0.8, alpha: 1.0)  // Blue text
+
+        let node = RenderNode.text(TextNode(
+            content: "testTextWithColorSchemes",
+            style: style,
+            padding: .zero
+        ))
+
+        // Light mode traits
+        let lightTraits = UITraitCollection(userInterfaceStyle: .light)
+
+        // Dark mode traits
+        let darkTraits = UITraitCollection(userInterfaceStyle: .dark)
+
+        // SwiftUI - Light
+        let swiftUILightImage = await RendererTestHelpers.renderSwiftUI(
+            node,
+            size: StandardSnapshotSizes.compact,
+            traits: lightTraits
+        )
+        assertSnapshot(
+            of: swiftUILightImage,
+            as: .image,
+            named: "swiftui-text-light",
+            record: false
+        )
+
+        // SwiftUI - Dark
+        let swiftUIDarkImage = await RendererTestHelpers.renderSwiftUI(
+            node,
+            size: StandardSnapshotSizes.compact,
+            traits: darkTraits
+        )
+        assertSnapshot(
+            of: swiftUIDarkImage,
+            as: .image,
+            named: "swiftui-text-dark",
+            record: false
+        )
+
+        // UIKit - Light
+        let uikitLightImage = await RendererTestHelpers.renderUIKit(
+            node,
+            size: StandardSnapshotSizes.compact,
+            traits: lightTraits
+        )
+        assertSnapshot(
+            of: uikitLightImage,
+            as: .image,
+            named: "uikit-text-light",
+            record: false
+        )
+
+        // UIKit - Dark
+        let uikitDarkImage = await RendererTestHelpers.renderUIKit(
+            node,
+            size: StandardSnapshotSizes.compact,
+            traits: darkTraits
+        )
+        assertSnapshot(
+            of: uikitDarkImage,
+            as: .image,
+            named: "uikit-text-dark",
+            record: false
+        )
+
+        // HTML - Light (HTML doesn't use traits, but renders light by default)
+        let htmlLightImage = try await RendererTestHelpers.renderHTML(
+            node,
+            size: StandardSnapshotSizes.compact
+        )
+        assertSnapshot(
+            of: htmlLightImage,
+            as: .image,
+            named: "html-text-light",
+            record: false
+        )
     }
 }

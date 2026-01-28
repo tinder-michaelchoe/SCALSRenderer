@@ -37,6 +37,8 @@ struct TextNodeView: View {
     var body: some View {
         Text(displayContent)
             .applyTextStyle(node.style)
+            .baselineOffset(0)
+            .frame(maxWidth: .infinity, alignment: .topLeading)
             .padding(.top, node.padding.top)
             .padding(.bottom, node.padding.bottom)
             .padding(.leading, node.padding.leading)

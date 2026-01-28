@@ -69,6 +69,7 @@ final class RenderTreeUIView: UIView {
         let contentStack = UIStackView()
         contentStack.axis = .vertical
         contentStack.spacing = 0
+        contentStack.alignment = .leading
         contentStack.translatesAutoresizingMaskIntoConstraints = false
         addSubview(contentStack)
 
@@ -81,9 +82,9 @@ final class RenderTreeUIView: UIView {
                 equalTo: anchorGuide(for: edgeInsets?.top).topAnchor,
                 constant: edgeInsets?.top?.value ?? 0
             ),
-            // Bottom constraint
+            // Bottom constraint - use <= to allow top alignment
             contentStack.bottomAnchor.constraint(
-                equalTo: anchorGuide(for: edgeInsets?.bottom).bottomAnchor,
+                lessThanOrEqualTo: anchorGuide(for: edgeInsets?.bottom).bottomAnchor,
                 constant: -(edgeInsets?.bottom?.value ?? 0)
             ),
             // Leading constraint

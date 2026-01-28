@@ -26,6 +26,19 @@ public struct TextNodeRenderer: UIKitNodeRendering {
         label.numberOfLines = 0
         label.applyStyle(textNode.style)
 
-        return label
+        // Wrap in container to add natural text spacing to match SwiftUI
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+        container.addSubview(label)
+
+        // Add top padding to match SwiftUI's natural text spacing (approximately 2-3pt)
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: container.topAnchor, constant: 2),
+            label.leadingAnchor.constraint(equalTo: container.leadingAnchor),
+            label.trailingAnchor.constraint(equalTo: container.trailingAnchor),
+            label.bottomAnchor.constraint(equalTo: container.bottomAnchor)
+        ])
+
+        return container
     }
 }
