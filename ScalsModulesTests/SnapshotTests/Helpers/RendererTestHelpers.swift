@@ -14,6 +14,12 @@ import SCALS
 /// Helper functions for rendering nodes and trees to UIImage for snapshot testing
 struct RendererTestHelpers {
 
+    // MARK: - HTML Capture State Management
+
+    /// Temporary storage for active webViews to prevent deallocation during capture
+    private static var activeWebViews: [String: WKWebView] = [:]
+    private static let webViewLock = NSLock()
+
     // MARK: - SwiftUI Rendering
 
     /// Renders a RenderNode using SwiftUI renderer and captures it as an image
@@ -194,22 +200,41 @@ struct RendererTestHelpers {
     /// Captures HTML as a UIImage using WKWebView
     @MainActor
     private static func captureHTML(_ html: String, size: CGSize) async throws -> UIImage {
+        // Create unique ID for this capture operation
+        let captureId = UUID().uuidString
+
         return try await withCheckedThrowingContinuation { continuation in
             let webView = WKWebView(frame: CGRect(origin: .zero, size: size))
             webView.isOpaque = false
             webView.backgroundColor = .systemBackground
 
+            // Store webView to prevent deallocation
+            webViewLock.lock()
+            activeWebViews[captureId] = webView
+            webViewLock.unlock()
+
             // Create navigation delegate to track load completion
             class NavigationDelegate: NSObject, WKNavigationDelegate {
                 var completion: ((Result<UIImage, Error>) -> Void)?
+                let captureId: String
+
+                init(captureId: String) {
+                    self.captureId = captureId
+                    super.init()
+                }
 
                 func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
                     // Small delay to ensure rendering is complete
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                         let config = WKSnapshotConfiguration()
                         config.rect = CGRect(origin: .zero, size: webView.frame.size)
 
                         webView.takeSnapshot(with: config) { image, error in
+                            // Clean up stored webView
+                            RendererTestHelpers.webViewLock.lock()
+                            RendererTestHelpers.activeWebViews.removeValue(forKey: self.captureId)
+                            RendererTestHelpers.webViewLock.unlock()
+
                             if let error = error {
                                 self.completion?(.failure(error))
                             } else if let image = image {
@@ -222,21 +247,32 @@ struct RendererTestHelpers {
                 }
 
                 func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+                    // Clean up stored webView
+                    RendererTestHelpers.webViewLock.lock()
+                    RendererTestHelpers.activeWebViews.removeValue(forKey: captureId)
+                    RendererTestHelpers.webViewLock.unlock()
+
                     completion?(.failure(error))
                 }
 
                 func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+                    // Clean up stored webView
+                    RendererTestHelpers.webViewLock.lock()
+                    RendererTestHelpers.activeWebViews.removeValue(forKey: captureId)
+                    RendererTestHelpers.webViewLock.unlock()
+
                     completion?(.failure(error))
                 }
             }
 
-            let delegate = NavigationDelegate()
+            let delegate = NavigationDelegate(captureId: captureId)
             delegate.completion = { result in
                 continuation.resume(with: result)
             }
 
-            // Need to retain delegate until completion
-            objc_setAssociatedObject(webView, "delegate", delegate, .OBJC_ASSOCIATION_RETAIN)
+            // Retain delegate with webView
+            let key = UnsafeRawPointer(bitPattern: "delegate".hashValue)!
+            objc_setAssociatedObject(webView, key, delegate, .OBJC_ASSOCIATION_RETAIN)
             webView.navigationDelegate = delegate
 
             // Load HTML
