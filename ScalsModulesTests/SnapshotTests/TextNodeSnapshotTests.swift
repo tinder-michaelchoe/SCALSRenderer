@@ -15,8 +15,12 @@ final class TextNodeSnapshotTests: XCTestCase {
 
     // MARK: - Test Configuration
 
-    /// Custom snapshot directory outside the repository
-    static let snapshotDirectory = "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer-Snapshots/__Snapshots__"
+    override class func setUp() {
+        super.setUp()
+        // Configure SnapshotTesting to use external snapshot directory
+        // This must be set before any tests run
+        setenv("SNAPSHOT_REFERENCE_DIR", "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer-Snapshots", 1)
+    }
 
     override func setUp() {
         super.setUp()
@@ -43,21 +47,21 @@ final class TextNodeSnapshotTests: XCTestCase {
             node,
             size: StandardSnapshotSizes.compact
         )
-        assertSnapshot(of: swiftUIImage, as: .image, named: "swiftui-text-basic", snapshotDirectory: Self.snapshotDirectory)
+        assertSnapshot(of: swiftUIImage, as: .image, named: "swiftui-text-basic")
 
         // Render with UIKit
         let uikitImage = await RendererTestHelpers.renderUIKit(
             node,
             size: StandardSnapshotSizes.compact
         )
-        assertSnapshot(of: uikitImage, as: .image, named: "uikit-text-basic", snapshotDirectory: Self.snapshotDirectory)
+        assertSnapshot(of: uikitImage, as: .image, named: "uikit-text-basic")
 
         // Render with HTML
         let htmlImage = try await RendererTestHelpers.renderHTML(
             node,
             size: StandardSnapshotSizes.compact
         )
-        assertSnapshot(of: htmlImage, as: .image, named: "html-text-basic", snapshotDirectory: Self.snapshotDirectory)
+        assertSnapshot(of: htmlImage, as: .image, named: "html-text-basic")
     }
 
     @MainActor
@@ -88,7 +92,7 @@ final class TextNodeSnapshotTests: XCTestCase {
         }, size: StandardSnapshotSizes.compact)
 
         // Compare SCALS vs canonical
-        assertSnapshot(of: scalsImage, as: .image, named: "scals-text-basic", snapshotDirectory: Self.snapshotDirectory)
-        assertSnapshot(of: canonicalImage, as: .image, named: "canonical-text-basic", snapshotDirectory: Self.snapshotDirectory)
+        assertSnapshot(of: scalsImage, as: .image, named: "scals-text-basic")
+        assertSnapshot(of: canonicalImage, as: .image, named: "canonical-text-basic")
     }
 }
