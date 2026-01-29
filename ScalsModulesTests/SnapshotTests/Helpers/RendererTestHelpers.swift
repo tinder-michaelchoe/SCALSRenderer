@@ -75,7 +75,14 @@ struct RendererTestHelpers {
         size: CGSize,
         traits: UITraitCollection = UITraitCollection()
     ) async -> UIImage {
-        let view = content()
+        let view: some View = {
+            VStack {
+                content()
+                Spacer()
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .edgesIgnoringSafeArea(.all)
+        }()
         return await captureSwiftUIView(view, size: size, traits: traits)
     }
 
@@ -224,6 +231,9 @@ struct RendererTestHelpers {
             let webView = WKWebView(frame: CGRect(origin: .zero, size: size))
             webView.isOpaque = false
             webView.backgroundColor = .systemBackground
+            webView.scrollView.contentInset = .zero
+            webView.scrollView.scrollIndicatorInsets = .zero
+            webView.scrollView.contentInsetAdjustmentBehavior = .never
 
             // Store webView to prevent deallocation
             webViewLock.lock()

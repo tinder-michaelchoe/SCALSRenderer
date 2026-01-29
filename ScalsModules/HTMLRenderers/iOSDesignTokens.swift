@@ -278,6 +278,8 @@ html {
 }
 
 body {
+    margin: 0;
+    padding: 0;
     font-family: var(--ios-font-stack);
     font-size: 17px;
     line-height: 1.47;
@@ -291,7 +293,7 @@ body {
 .scals-root {
     min-height: 100vh;
     min-height: 100dvh;
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    padding: 0;
 }
 
 /* iOS Button Base */
@@ -375,7 +377,9 @@ body {
 .ios-text {
     font-family: var(--ios-font-stack);
     color: var(--ios-label);
-    text-align: center;
+    text-align: left;
+    line-height: 1;
+    display: block;
 }
 
 .ios-text--secondary {

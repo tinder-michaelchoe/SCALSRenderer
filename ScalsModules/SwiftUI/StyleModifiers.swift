@@ -8,16 +8,35 @@
 import SCALS
 import SwiftUI
 
+// MARK: - TextAlignment Extension
+
+extension TextAlignment {
+    func toFrameAlignment() -> Alignment {
+        switch self {
+        case .leading:
+            return .leading
+        case .center:
+            return .center
+        case .trailing:
+            return .trailing
+        }
+    }
+}
+
 // MARK: - Style Modifiers
 
 public extension View {
     func applyTextStyle(_ style: IR.Style) -> some View {
-        self
+        let alignment = style.textAlignment?.swiftUI ?? .leading
+
+        return self
             .font(style.swiftUIFont)
             .foregroundColor(style.textColor?.swiftUI)
-            .multilineTextAlignment(style.textAlignment?.swiftUI ?? .leading)
+            .multilineTextAlignment(alignment)
             .lineLimit(nil)
             .fixedSize(horizontal: false, vertical: true)
+            // For center/trailing alignment, expand to full width so alignment is visible
+            .frame(maxWidth: (alignment == .center || alignment == .trailing) ? .infinity : nil, alignment: alignment.toFrameAlignment())
     }
 
     func applyContainerStyle(_ style: IR.Style) -> some View {

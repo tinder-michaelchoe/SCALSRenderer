@@ -43,12 +43,12 @@ Expand TextNode tests with more variants, then move to other core components (Bu
 ### TextNode Tests
 - ✅ testTextWithBasicStyle (SwiftUI, UIKit, HTML)
 - ✅ testTextWithCanonicalComparison
-- ⬜ testTextWithColorSchemes (light/dark mode)
-- ⬜ testTextWithFontWeights (regular, bold, semibold, etc.)
-- ⬜ testTextWithFontSizes (various sizes)
-- ⬜ testTextWithAlignment (leading, center, trailing)
-- ⬜ testTextWithMultiline
-- ⬜ testTextWithPadding
+- ✅ testTextWithColorSchemes (light/dark mode)
+- ✅ testTextWithFontWeights (regular, medium, semibold, bold)
+- ✅ testTextWithFontSizes (12pt, 16pt, 24pt, 32pt)
+- ✅ testTextWithAlignment (leading, center, trailing)
+- ✅ testTextWithMultiline
+- ✅ testTextWithPadding
 
 ### ButtonNode Tests
 - ⬜ testButtonWithBasicStyle
@@ -64,9 +64,9 @@ Expand TextNode tests with more variants, then move to other core components (Bu
 - ⬜ testVStackWithAlignment
 
 ### Progress
-- **Tests Passing**: 2
+- **Tests Passing**: 8
 - **Tests Failing**: 0
-- **Components Covered**: TextNode (partial)
+- **Components Covered**: TextNode (complete)
 
 ---
 
@@ -75,9 +75,9 @@ Expand TextNode tests with more variants, then move to other core components (Bu
 | Phase | Status | Tests | Components | Completion |
 |-------|--------|-------|------------|------------|
 | Phase 1 | ✅ Complete | 2/2 | TextNode (basic) | 100% |
-| Phase 2 | 🚧 In Progress | 2/20 | TextNode, Button, Containers | 10% |
+| Phase 2 | 🚧 In Progress | 8/20 | TextNode (complete), Button, Containers | 40% |
 | Phase 3 | ⬜ Not Started | 0 | Cross-renderer | 0% |
 | Phase 4 | ⬜ Not Started | 0 | Examples | 0% |
 | Phase 5 | ⬜ Not Started | 0 | Canonical | 0% |
 
-**Overall Progress**: 2 tests passing, 0 tests failing
+**Overall Progress**: 8 tests passing, 0 tests failing

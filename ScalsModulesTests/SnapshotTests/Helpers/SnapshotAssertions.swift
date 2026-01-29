@@ -30,23 +30,18 @@ func assertSnapshot<Value, Format>(
     testName: String = #function,
     line: UInt = #line
 ) {
-    let failure: String?
-    do {
-        failure = verifySnapshot(
-            of: try value(),
-            as: snapshotting,
-            named: name,
-            record: recording,
-            snapshotDirectory: snapshotDirectory,
-            timeout: timeout,
-            file: file,
-            testName: testName,
-            line: line
-        )
-    } catch {
-        XCTFail("Threw error: \(error)", file: file, line: line)
-        return
-    }
+
+    let failure: String? = verifySnapshot(
+        of: try value(),
+        as: snapshotting,
+        named: name,
+        record: recording,
+        snapshotDirectory: snapshotDirectory,
+        timeout: timeout,
+        file: file,
+        testName: testName,
+        line: line
+    )
 
     if let message = failure {
         XCTFail(message, file: file, line: line)

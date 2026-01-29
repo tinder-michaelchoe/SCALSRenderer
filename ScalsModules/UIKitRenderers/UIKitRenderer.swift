@@ -69,7 +69,8 @@ final class RenderTreeUIView: UIView {
         let contentStack = UIStackView()
         contentStack.axis = .vertical
         contentStack.spacing = 0
-        contentStack.alignment = .leading
+        contentStack.alignment = .fill  // Changed from .leading to .fill so subviews expand to full width
+        contentStack.distribution = .fill
         contentStack.translatesAutoresizingMaskIntoConstraints = false
         addSubview(contentStack)
 

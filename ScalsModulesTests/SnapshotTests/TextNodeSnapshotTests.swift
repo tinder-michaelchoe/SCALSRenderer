@@ -36,7 +36,7 @@ final class TextNodeSnapshotTests: XCTestCase {
         assertSnapshot(
             of: swiftUIImage,
             as: .image,
-            named: "swiftui-text-basic",
+            named: "text-basic-swiftui",
             record: false
         )
 
@@ -48,7 +48,7 @@ final class TextNodeSnapshotTests: XCTestCase {
         assertSnapshot(
             of: uikitImage,
             as: .image,
-            named: "uikit-text-basic",
+            named: "text-basic-uikit",
             record: false
         )
 
@@ -60,7 +60,7 @@ final class TextNodeSnapshotTests: XCTestCase {
         assertSnapshot(
             of: htmlImage,
             as: .image,
-            named: "html-text-basic",
+            named: "text-basic-html",
             record: false
         )
     }
@@ -93,8 +93,8 @@ final class TextNodeSnapshotTests: XCTestCase {
         }, size: StandardSnapshotSizes.compact)
 
         // Compare SCALS vs canonical
-        assertSnapshot(of: scalsImage, as: .image, named: "scals-text-basic", record: false)
-        assertSnapshot(of: canonicalImage, as: .image, named: "canonical-text-basic", record: false)
+        assertSnapshot(of: scalsImage, as: .image, named: "text-basic-scals", record: false)
+        assertSnapshot(of: canonicalImage, as: .image, named: "text-basic-canonical", record: false)
     }
 
     // MARK: - Color Scheme Tests
@@ -127,7 +127,7 @@ final class TextNodeSnapshotTests: XCTestCase {
         assertSnapshot(
             of: swiftUILightImage,
             as: .image,
-            named: "swiftui-text-light",
+            named: "text-light-swiftui",
             record: false
         )
 
@@ -140,7 +140,7 @@ final class TextNodeSnapshotTests: XCTestCase {
         assertSnapshot(
             of: swiftUIDarkImage,
             as: .image,
-            named: "swiftui-text-dark",
+            named: "text-dark-swiftui",
             record: false
         )
 
@@ -153,7 +153,7 @@ final class TextNodeSnapshotTests: XCTestCase {
         assertSnapshot(
             of: uikitLightImage,
             as: .image,
-            named: "uikit-text-light",
+            named: "text-light-uikit",
             record: false
         )
 
@@ -166,7 +166,7 @@ final class TextNodeSnapshotTests: XCTestCase {
         assertSnapshot(
             of: uikitDarkImage,
             as: .image,
-            named: "uikit-text-dark",
+            named: "text-dark-uikit",
             record: false
         )
 
@@ -178,9 +178,29 @@ final class TextNodeSnapshotTests: XCTestCase {
         assertSnapshot(
             of: htmlLightImage,
             as: .image,
-            named: "html-text-light",
+            named: "text-light-html",
             record: false
         )
+
+        // Canonical comparisons
+        let canonicalLightImage = await RendererTestHelpers.renderCanonicalView({
+            Text("testTextWithColorSchemes")
+                .font(.system(size: 18))
+                .foregroundColor(Color(red: 0.2, green: 0.2, blue: 0.8))
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        }, size: StandardSnapshotSizes.compact, traits: lightTraits)
+
+        let canonicalDarkImage = await RendererTestHelpers.renderCanonicalView({
+            Text("testTextWithColorSchemes")
+                .font(.system(size: 18))
+                .foregroundColor(Color(red: 0.2, green: 0.2, blue: 0.8))
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        }, size: StandardSnapshotSizes.compact, traits: darkTraits)
+
+        assertSnapshot(of: swiftUILightImage, as: .image, named: "text-light-scals", record: false)
+        assertSnapshot(of: canonicalLightImage, as: .image, named: "text-light-canonical", record: false)
+        assertSnapshot(of: swiftUIDarkImage, as: .image, named: "text-dark-scals", record: false)
+        assertSnapshot(of: canonicalDarkImage, as: .image, named: "text-dark-canonical", record: false)
     }
 
     // MARK: - Font Weight Tests
@@ -215,7 +235,7 @@ final class TextNodeSnapshotTests: XCTestCase {
             assertSnapshot(
                 of: swiftUIImage,
                 as: .image,
-                named: "swiftui-text-weight-\(name)",
+                named: "text-weight-\(name)-swiftui",
                 record: false
             )
 
@@ -227,7 +247,7 @@ final class TextNodeSnapshotTests: XCTestCase {
             assertSnapshot(
                 of: uikitImage,
                 as: .image,
-                named: "uikit-text-weight-\(name)",
+                named: "text-weight-\(name)-uikit",
                 record: false
             )
 
@@ -239,9 +259,30 @@ final class TextNodeSnapshotTests: XCTestCase {
             assertSnapshot(
                 of: htmlImage,
                 as: .image,
-                named: "html-text-weight-\(name)",
+                named: "text-weight-\(name)-html",
                 record: false
             )
+
+            // Canonical comparison
+            let fontWeight: Font.Weight = {
+                switch weight {
+                case .regular: return .regular
+                case .medium: return .medium
+                case .semibold: return .semibold
+                case .bold: return .bold
+                default: return .regular
+                }
+            }()
+
+            let canonicalImage = await RendererTestHelpers.renderCanonicalView({
+                Text("Font Weight: \(name)")
+                    .font(.system(size: 18, weight: fontWeight))
+                    .foregroundColor(.black)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            }, size: StandardSnapshotSizes.compact)
+
+            assertSnapshot(of: swiftUIImage, as: .image, named: "text-weight-\(name)-scals", record: false)
+            assertSnapshot(of: canonicalImage, as: .image, named: "text-weight-\(name)-canonical", record: false)
         }
     }
 
@@ -276,7 +317,7 @@ final class TextNodeSnapshotTests: XCTestCase {
             assertSnapshot(
                 of: swiftUIImage,
                 as: .image,
-                named: "swiftui-text-size-\(name)",
+                named: "text-size-\(name)-swiftui",
                 record: false
             )
 
@@ -288,7 +329,7 @@ final class TextNodeSnapshotTests: XCTestCase {
             assertSnapshot(
                 of: uikitImage,
                 as: .image,
-                named: "uikit-text-size-\(name)",
+                named: "text-size-\(name)-uikit",
                 record: false
             )
 
@@ -300,9 +341,231 @@ final class TextNodeSnapshotTests: XCTestCase {
             assertSnapshot(
                 of: htmlImage,
                 as: .image,
-                named: "html-text-size-\(name)",
+                named: "text-size-\(name)-html",
                 record: false
             )
+
+            // Canonical comparison
+            let canonicalImage = await RendererTestHelpers.renderCanonicalView({
+                Text("Size: \(Int(size))pt")
+                    .font(.system(size: size))
+                    .foregroundColor(.black)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            }, size: StandardSnapshotSizes.compact)
+
+            assertSnapshot(of: swiftUIImage, as: .image, named: "text-size-\(name)-scals", record: false)
+            assertSnapshot(of: canonicalImage, as: .image, named: "text-size-\(name)-canonical", record: false)
         }
+    }
+
+    // MARK: - Text Alignment Tests
+
+    @MainActor
+    func testTextWithAlignment() async throws {
+        let alignments: [(IR.TextAlignment, String)] = [
+            (.leading, "leading"),
+            (.center, "center"),
+            (.trailing, "trailing")
+        ]
+
+        for (alignment, name) in alignments {
+            var textStyle = IR.Style()
+            textStyle.fontSize = 16
+            textStyle.textColor = IR.Color.black
+            textStyle.textAlignment = alignment
+
+            let textNode = TextNode(
+                content: "Aligned \(name)",
+                style: textStyle,
+                padding: .zero
+            )
+
+            let node = RenderNode.text(textNode)
+
+            // SwiftUI
+            let swiftUIImage = await RendererTestHelpers.renderSwiftUI(
+                node,
+                size: StandardSnapshotSizes.compact
+            )
+            assertSnapshot(
+                of: swiftUIImage,
+                as: .image,
+                named: "text-align-\(name)-swiftui",
+                record: false
+            )
+
+            // UIKit
+            let uikitImage = await RendererTestHelpers.renderUIKit(
+                node,
+                size: StandardSnapshotSizes.compact
+            )
+            assertSnapshot(
+                of: uikitImage,
+                as: .image,
+                named: "text-align-\(name)-uikit",
+                record: false
+            )
+
+            // HTML
+            let htmlImage = try await RendererTestHelpers.renderHTML(
+                node,
+                size: StandardSnapshotSizes.compact
+            )
+            assertSnapshot(
+                of: htmlImage,
+                as: .image,
+                named: "text-align-\(name)-html",
+                record: false
+            )
+
+            // Canonical comparison
+            let textAlignment: TextAlignment = {
+                switch alignment {
+                case .leading: return .leading
+                case .center: return .center
+                case .trailing: return .trailing
+                }
+            }()
+
+            let canonicalImage = await RendererTestHelpers.renderCanonicalView({
+                Text("Aligned \(name)")
+                    .font(.system(size: 16))
+                    .foregroundColor(.black)
+                    .multilineTextAlignment(textAlignment)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            }, size: StandardSnapshotSizes.compact)
+
+            assertSnapshot(of: swiftUIImage, as: .image, named: "text-align-\(name)-scals", record: false)
+            assertSnapshot(of: canonicalImage, as: .image, named: "text-align-\(name)-canonical", record: false)
+        }
+    }
+
+    // MARK: - Multiline Text Tests
+
+    @MainActor
+    func testTextWithMultiline() async throws {
+        var style = IR.Style()
+        style.fontSize = 16
+        style.textColor = IR.Color.black
+
+        let node = RenderNode.text(TextNode(
+            content: "This is a multiline text example that should wrap to multiple lines when the content is too long to fit on a single line.",
+            style: style,
+            padding: .zero
+        ))
+
+        // SwiftUI
+        let swiftUIImage = await RendererTestHelpers.renderSwiftUI(
+            node,
+            size: StandardSnapshotSizes.compact
+        )
+        assertSnapshot(
+            of: swiftUIImage,
+            as: .image,
+            named: "text-multiline-swiftui",
+            record: false
+        )
+
+        // UIKit
+        let uikitImage = await RendererTestHelpers.renderUIKit(
+            node,
+            size: StandardSnapshotSizes.compact
+        )
+        assertSnapshot(
+            of: uikitImage,
+            as: .image,
+            named: "text-multiline-uikit",
+            record: false
+        )
+
+        // HTML
+        let htmlImage = try await RendererTestHelpers.renderHTML(
+            node,
+            size: StandardSnapshotSizes.compact
+        )
+        assertSnapshot(
+            of: htmlImage,
+            as: .image,
+            named: "text-multiline-html",
+            record: false
+        )
+
+        // Canonical comparison
+        let canonicalImage = await RendererTestHelpers.renderCanonicalView({
+            Text("This is a multiline text example that should wrap to multiple lines when the content is too long to fit on a single line.")
+                .font(.system(size: 16))
+                .foregroundColor(.black)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        }, size: StandardSnapshotSizes.compact)
+
+        assertSnapshot(of: swiftUIImage, as: .image, named: "text-multiline-scals", record: false)
+        assertSnapshot(of: canonicalImage, as: .image, named: "text-multiline-canonical", record: false)
+    }
+
+    // MARK: - Text Padding Tests
+
+    @MainActor
+    func testTextWithPadding() async throws {
+        var style = IR.Style()
+        style.fontSize = 16
+        style.textColor = IR.Color.black
+
+        let node = RenderNode.text(TextNode(
+            content: "Text with padding",
+            style: style,
+            padding: IR.EdgeInsets(top: 16, leading: 32, bottom: 16, trailing: 32)
+        ))
+
+        // SwiftUI
+        let swiftUIImage = await RendererTestHelpers.renderSwiftUI(
+            node,
+            size: StandardSnapshotSizes.compact
+        )
+        assertSnapshot(
+            of: swiftUIImage,
+            as: .image,
+            named: "text-padding-swiftui",
+            record: false
+        )
+
+        // UIKit
+        let uikitImage = await RendererTestHelpers.renderUIKit(
+            node,
+            size: StandardSnapshotSizes.compact
+        )
+        assertSnapshot(
+            of: uikitImage,
+            as: .image,
+            named: "text-padding-uikit",
+            record: false
+        )
+
+        // HTML
+        let htmlImage = try await RendererTestHelpers.renderHTML(
+            node,
+            size: StandardSnapshotSizes.compact
+        )
+        assertSnapshot(
+            of: htmlImage,
+            as: .image,
+            named: "text-padding-html",
+            record: false
+        )
+
+        // Canonical comparison
+        let canonicalImage = await RendererTestHelpers.renderCanonicalView({
+            Text("Text with padding")
+                .font(.system(size: 16))
+                .foregroundColor(.black)
+                .padding(.top, 16)
+                .padding(.bottom, 16)
+                .padding(.leading, 32)
+                .padding(.trailing, 32)
+                .background(Color(red: 0.9, green: 0.9, blue: 0.9))
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        }, size: StandardSnapshotSizes.compact)
+
+        assertSnapshot(of: swiftUIImage, as: .image, named: "text-padding-scals", record: false)
+        assertSnapshot(of: canonicalImage, as: .image, named: "text-padding-canonical", record: false)
     }
 }

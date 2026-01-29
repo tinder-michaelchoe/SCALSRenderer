@@ -70,23 +70,21 @@ struct RenderTreeView: View {
     }
 
     var body: some View {
-        ZStack(alignment: .topLeading) {
-            // Background - convert IR.Color to SwiftUI.Color
-            if let bg = tree.root.backgroundColor {
-                bg.swiftUI.ignoresSafeArea()
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(Array(tree.root.children.enumerated()), id: \.offset) { _, node in
+                RenderNodeView(node: node, context: context)
             }
-
-            // Content with edge insets using custom RootLayout
-            RootLayout(edgeInsets: tree.root.edgeInsets) {
-                VStack(alignment: .leading, spacing: 0) {
-                    ForEach(Array(tree.root.children.enumerated()), id: \.offset) { _, node in
-                        RenderNodeView(node: node, context: context)
-                    }
-                    Spacer(minLength: 0)
-                }
-            }
-            .ignoresSafeArea(edges: absoluteEdges)
+            Spacer(minLength: 0)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+        .modifier(ConditionalBackgroundModifier(backgroundColor: tree.root.backgroundColor))
+        .edgesIgnoringSafeArea(.all)
+        .padding(EdgeInsets(
+            top: tree.root.edgeInsets?.top?.value ?? 0,
+            leading: tree.root.edgeInsets?.leading?.value ?? 0,
+            bottom: tree.root.edgeInsets?.bottom?.value ?? 0,
+            trailing: tree.root.edgeInsets?.trailing?.value ?? 0
+        ))
         .environmentObject(observableStateStore)
         .environmentObject(observableActionContext)
         .lifecycleActions(tree.root.actions, context: actionContext)
@@ -162,5 +160,22 @@ struct RenderNodeView: View {
 
     var body: some View {
         context.render(node)
+    }
+}
+
+// MARK: - Conditional Background Modifier
+
+/// ViewModifier that conditionally applies containerRelativeFrame and background
+struct ConditionalBackgroundModifier: ViewModifier {
+    let backgroundColor: IR.Color?
+
+    func body(content: Content) -> some View {
+        if let bg = backgroundColor {
+            content
+                .containerRelativeFrame([.horizontal, .vertical])
+                .background(bg.swiftUI)
+        } else {
+            content
+        }
     }
 }

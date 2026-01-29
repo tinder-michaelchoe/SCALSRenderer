@@ -26,19 +26,28 @@ public struct TextNodeRenderer: UIKitNodeRendering {
         label.numberOfLines = 0
         label.applyStyle(textNode.style)
 
-        // Wrap in container to add natural text spacing to match SwiftUI
-        let container = UIView()
-        container.translatesAutoresizingMaskIntoConstraints = false
-        container.addSubview(label)
+        // If there's padding or background color, wrap in a container
+        if textNode.padding != .zero || textNode.style.backgroundColor != nil {
+            let container = UIView()
+            container.translatesAutoresizingMaskIntoConstraints = false
+            container.addSubview(label)
 
-        // Add top padding to match SwiftUI's natural text spacing (approximately 2-3pt)
-        NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalTo: container.topAnchor, constant: 2),
-            label.leadingAnchor.constraint(equalTo: container.leadingAnchor),
-            label.trailingAnchor.constraint(equalTo: container.trailingAnchor),
-            label.bottomAnchor.constraint(equalTo: container.bottomAnchor)
-        ])
+            // Apply background color
+            if let bgColor = textNode.style.backgroundColor {
+                container.backgroundColor = bgColor.uiColor
+            }
 
-        return container
+            // Apply padding constraints
+            NSLayoutConstraint.activate([
+                label.topAnchor.constraint(equalTo: container.topAnchor, constant: textNode.padding.top),
+                label.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -textNode.padding.bottom),
+                label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: textNode.padding.leading),
+                label.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -textNode.padding.trailing)
+            ])
+
+            return container
+        }
+
+        return label
     }
 }

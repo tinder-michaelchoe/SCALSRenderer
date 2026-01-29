@@ -306,22 +306,43 @@ public struct CSSGenerator {
         // Always increment counter to stay in sync with HTMLNodeRenderer
         let className = generateTextClassName(for: text.id)
 
-        guard !text.style.cssRuleString().isEmpty || text.id != nil else {
+        var ruleParts: [String] = []
+
+        // Add style rules
+        let styleRules = text.style.cssRuleString()
+        if !styleRules.isEmpty {
+            ruleParts.append(styleRules)
+        }
+
+        // Add padding rules if present
+        if text.padding != .zero {
+            var paddingRules: [String] = []
+            if text.padding.top > 0 {
+                paddingRules.append("padding-top: \(Int(text.padding.top))px")
+            }
+            if text.padding.bottom > 0 {
+                paddingRules.append("padding-bottom: \(Int(text.padding.bottom))px")
+            }
+            if text.padding.leading > 0 {
+                paddingRules.append("padding-left: \(Int(text.padding.leading))px")
+            }
+            if text.padding.trailing > 0 {
+                paddingRules.append("padding-right: \(Int(text.padding.trailing))px")
+            }
+            ruleParts.append(contentsOf: paddingRules)
+        }
+
+        // Add display: inline-block if there's padding (so padding is visible on inline elements)
+        if text.padding != .zero || text.style.backgroundColor != nil {
+            ruleParts.append("display: inline-block")
+        }
+
+        guard !ruleParts.isEmpty else {
             return ""
         }
-        var rules = text.style.cssRuleString()
 
-        // Add top padding to match SwiftUI's natural text spacing
-        if !rules.isEmpty {
-            rules += "; padding-top: 2px"
-        } else {
-            rules = "padding-top: 2px"
-        }
-
-        if !rules.isEmpty {
-            return ".\(className) {\n    \(rules);\n}\n\n"
-        }
-        return ""
+        let rules = ruleParts.joined(separator: ";\n    ")
+        return ".\(className) {\n    \(rules);\n}\n\n"
     }
     
     private mutating func generateButtonStyles(_ button: ButtonNode) -> String {
