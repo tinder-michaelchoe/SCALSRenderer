@@ -51,10 +51,10 @@ Expand TextNode tests with more variants, then move to other core components (Bu
 - ✅ testTextWithPadding
 
 ### ButtonNode Tests
-- ⬜ testButtonWithBasicStyle
-- ⬜ testButtonWithStates (normal, disabled, selected)
-- ⬜ testButtonWithCustomColors
-- ⬜ testButtonWithBorder
+- ✅ testButtonWithBasicStyle
+- ✅ testButtonWithStates (normal, disabled, selected)
+- ✅ testButtonWithCustomColors
+- ✅ testButtonWithBorder
 
 ### Container Tests
 - ⬜ testVStackBasic
@@ -64,9 +64,9 @@ Expand TextNode tests with more variants, then move to other core components (Bu
 - ⬜ testVStackWithAlignment
 
 ### Progress
-- **Tests Passing**: 8
+- **Tests Passing**: 12
 - **Tests Failing**: 0
-- **Components Covered**: TextNode (complete)
+- **Components Covered**: TextNode (complete), ButtonNode (complete)
 
 ---
 
@@ -75,9 +75,9 @@ Expand TextNode tests with more variants, then move to other core components (Bu
 | Phase | Status | Tests | Components | Completion |
 |-------|--------|-------|------------|------------|
 | Phase 1 | ✅ Complete | 2/2 | TextNode (basic) | 100% |
-| Phase 2 | 🚧 In Progress | 8/20 | TextNode (complete), Button, Containers | 40% |
+| Phase 2 | 🚧 In Progress | 12/20 | TextNode (complete), ButtonNode (complete), Containers | 60% |
 | Phase 3 | ⬜ Not Started | 0 | Cross-renderer | 0% |
 | Phase 4 | ⬜ Not Started | 0 | Examples | 0% |
 | Phase 5 | ⬜ Not Started | 0 | Canonical | 0% |
 
-**Overall Progress**: 8 tests passing, 0 tests failing
+**Overall Progress**: 12 tests passing, 0 tests failing
