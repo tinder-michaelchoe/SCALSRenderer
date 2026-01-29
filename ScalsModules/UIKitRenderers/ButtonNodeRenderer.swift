@@ -30,6 +30,20 @@ public struct ButtonNodeRenderer: UIKitNodeRendering {
         var config = UIButton.Configuration.plain()
         config.title = buttonNode.label
 
+        // Apply text color from style
+        if let textColor = buttonNode.style.textColor {
+            config.baseForegroundColor = textColor.uiColor
+        }
+
+        // Apply background color from style
+        if let bgColor = buttonNode.style.backgroundColor {
+            config.background.backgroundColor = bgColor.uiColor
+        }
+
+        // Remove default corner styling from configuration
+        config.background.cornerRadius = 0
+        config.cornerStyle = .fixed
+
         // Configure image if present
         if let imageSource = buttonNode.image {
             config.image = resolveUIImage(imageSource, context: context)
@@ -38,9 +52,24 @@ public struct ButtonNodeRenderer: UIKitNodeRendering {
         }
 
         button.configuration = config
-        button.applyStyle(buttonNode.style)
 
-        // Apply button shape if specified
+        // Apply font from style
+        if let font = buttonNode.style.uiFont {
+            button.titleLabel?.font = font
+        }
+
+        // Apply background color to button layer as well
+        if let bgColor = buttonNode.style.backgroundColor {
+            button.backgroundColor = bgColor.uiColor
+        }
+
+        // Apply corner radius from style or button shape
+        if let cornerRadius = buttonNode.style.cornerRadius {
+            button.layer.cornerRadius = cornerRadius
+            button.clipsToBounds = true
+        }
+
+        // Apply button shape if specified (overrides style corner radius)
         applyButtonShape(button, node: buttonNode)
 
         if buttonNode.fillWidth {

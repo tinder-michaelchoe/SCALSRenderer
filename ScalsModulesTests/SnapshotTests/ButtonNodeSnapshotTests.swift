@@ -78,11 +78,11 @@ final class ButtonNodeSnapshotTests: XCTestCase {
             Button("Tap Me") {}
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(.white)
+                .padding(.horizontal, 20)
                 .frame(height: 44)
                 .frame(maxWidth: .infinity)
                 .background(Color(red: 0.0, green: 0.48, blue: 1.0))
                 .cornerRadius(10)
-                .padding(.horizontal, 20)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }, size: StandardSnapshotSizes.compact)
 

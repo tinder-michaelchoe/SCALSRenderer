@@ -325,6 +325,11 @@ body {
     cursor: not-allowed;
 }
 
+.ios-button--full-width {
+    width: 100%;
+    display: flex;
+}
+
 .ios-button--secondary {
     background-color: transparent;
     color: var(--ios-blue);
