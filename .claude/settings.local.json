@@ -47,7 +47,15 @@
       "Bash(wc:*)",
       "WebFetch(domain:github.com)",
       "Bash(tee:*)",
-      "Bash(xargs ls:*)"
+      "Bash(xargs ls:*)",
+      "Bash(git -C /Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer log --oneline -10)",
+      "Bash(git -C /Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer show c5e87e2 --stat)",
+      "Bash(git -C /Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer show e438953 --stat)",
+      "Bash(git -C /Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer show c5e87e2)",
+      "Bash(xcrun xcresulttool:*)",
+      "Bash(git restore:*)",
+      "Bash(xcrun simctl:*)",
+      "Bash(timeout 90 bash:*)"
     ]
   }
 }

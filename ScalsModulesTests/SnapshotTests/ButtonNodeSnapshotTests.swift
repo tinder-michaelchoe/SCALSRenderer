@@ -202,11 +202,11 @@ final class ButtonNodeSnapshotTests: XCTestCase {
                 Button("\(name.capitalized) Button") {}
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundColor(Color(textColor.uiColor))
+                    .padding(.horizontal, 20)
                     .frame(height: 44)
                     .frame(maxWidth: .infinity)
                     .background(Color(uiColor))
                     .cornerRadius(10)
-                    .padding(.horizontal, 20)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }, size: StandardSnapshotSizes.compact)
 
@@ -258,6 +258,7 @@ final class ButtonNodeSnapshotTests: XCTestCase {
             Button("Bordered Button") {}
                 .font(.system(size: 16, weight: .semibold))
                 .foregroundColor(Color(red: 0.0, green: 0.48, blue: 1.0))
+                .padding(.horizontal, 20)
                 .frame(height: 44)
                 .frame(maxWidth: .infinity)
                 .background(Color.clear)
@@ -266,7 +267,7 @@ final class ButtonNodeSnapshotTests: XCTestCase {
                     RoundedRectangle(cornerRadius: 10)
                         .stroke(Color(red: 0.0, green: 0.48, blue: 1.0), lineWidth: 2)
                 )
-                .padding(.horizontal, 20)
+                .padding(1)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }, size: StandardSnapshotSizes.compact)
 

@@ -1,0 +1,69 @@
+{
+  "" : {
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/ScalsModulesTests-primary.dia",
+    "emit-module-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/ScalsModulesTests-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/ScalsModulesTests-primary-emit-module.dia",
+    "pch" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/ScalsModulesTests-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/ScalsModulesTests-primary.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsModulesTests/CladsModulesTests.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/CladsModulesTests.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/CladsModulesTests.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/CladsModulesTests.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/CladsModulesTests.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/CladsModulesTests.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/CladsModulesTests.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/CladsModulesTests.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/CladsModulesTests~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsModulesTests/SnapshotTests/Helpers/RendererTestHelpers.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/RendererTestHelpers.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/RendererTestHelpers.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/RendererTestHelpers.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/RendererTestHelpers.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/RendererTestHelpers.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/RendererTestHelpers.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/RendererTestHelpers.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/RendererTestHelpers~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsModulesTests/SnapshotTests/Helpers/SnapshotAssertions.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/SnapshotAssertions.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/SnapshotAssertions.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/SnapshotAssertions.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/SnapshotAssertions.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/SnapshotAssertions.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/SnapshotAssertions.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/SnapshotAssertions.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/SnapshotAssertions~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsModulesTests/SnapshotTests/Helpers/StandardSnapshotSizes.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/StandardSnapshotSizes.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/StandardSnapshotSizes.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/StandardSnapshotSizes.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/StandardSnapshotSizes.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/StandardSnapshotSizes.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/StandardSnapshotSizes.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/StandardSnapshotSizes.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/StandardSnapshotSizes~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsModulesTests/SnapshotTests/TextNodeSnapshotTests.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/TextNodeSnapshotTests.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/TextNodeSnapshotTests.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/TextNodeSnapshotTests.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/TextNodeSnapshotTests.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/TextNodeSnapshotTests.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/TextNodeSnapshotTests.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/TextNodeSnapshotTests.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/TextNodeSnapshotTests~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsModulesTests/TestSetupVerification.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/TestSetupVerification.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/TestSetupVerification.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/TestSetupVerification.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/TestSetupVerification.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/TestSetupVerification.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/TestSetupVerification.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/TestSetupVerification.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/ScalsModulesTests.build/Objects-normal/arm64/TestSetupVerification~partial.swiftmodule"
+  }
+}

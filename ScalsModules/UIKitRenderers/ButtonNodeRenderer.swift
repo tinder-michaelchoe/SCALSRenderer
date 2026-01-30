@@ -28,7 +28,15 @@ public struct ButtonNodeRenderer: UIKitNodeRendering {
 
         // Configure button with UIButton.Configuration (iOS 17+ minimum)
         var config = UIButton.Configuration.plain()
-        config.title = buttonNode.label
+
+        // Apply attributed title with font styling
+        if let font = buttonNode.style.uiFont {
+            var attributes = AttributeContainer()
+            attributes.font = font
+            config.attributedTitle = AttributedString(buttonNode.label, attributes: attributes)
+        } else {
+            config.title = buttonNode.label
+        }
 
         // Apply text color from style
         if let textColor = buttonNode.style.textColor {
@@ -40,10 +48,6 @@ public struct ButtonNodeRenderer: UIKitNodeRendering {
             config.background.backgroundColor = bgColor.uiColor
         }
 
-        // Remove default corner styling from configuration
-        config.background.cornerRadius = 0
-        config.cornerStyle = .fixed
-
         // Configure image if present
         if let imageSource = buttonNode.image {
             config.image = resolveUIImage(imageSource, context: context)
@@ -51,22 +55,25 @@ public struct ButtonNodeRenderer: UIKitNodeRendering {
             config.imagePadding = buttonNode.imageSpacing
         }
 
+        // Apply corner radius to configuration background
+        if let cornerRadius = buttonNode.style.cornerRadius {
+            config.background.cornerRadius = cornerRadius
+        }
+
         button.configuration = config
 
-        // Apply font from style
-        if let font = buttonNode.style.uiFont {
-            button.titleLabel?.font = font
-        }
-
-        // Apply background color to button layer as well
-        if let bgColor = buttonNode.style.backgroundColor {
-            button.backgroundColor = bgColor.uiColor
-        }
-
-        // Apply corner radius from style or button shape
+        // Apply corner radius from style or button shape to layer as well
         if let cornerRadius = buttonNode.style.cornerRadius {
             button.layer.cornerRadius = cornerRadius
             button.clipsToBounds = true
+        }
+
+        // Apply border from style
+        if let borderWidth = buttonNode.style.borderWidth, borderWidth > 0 {
+            button.layer.borderWidth = borderWidth
+            if let borderColor = buttonNode.style.borderColor {
+                button.layer.borderColor = borderColor.uiColor.cgColor
+            }
         }
 
         // Apply button shape if specified (overrides style corner radius)

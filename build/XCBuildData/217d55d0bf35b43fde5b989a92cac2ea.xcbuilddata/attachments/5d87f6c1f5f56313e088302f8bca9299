@@ -1,0 +1,429 @@
+{
+  "" : {
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SCALS-primary.dia",
+    "emit-module-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SCALS-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SCALS-primary-emit-module.dia",
+    "pch" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SCALS-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SCALS-primary.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Actions/ActionExecutor.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionExecutor.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionExecutor.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionExecutor.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionExecutor.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionExecutor.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionExecutor.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionExecutor.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionExecutor~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Actions/ActionHandler.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionHandler.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionHandler.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionHandler.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionHandler.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionHandler.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionHandler.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionHandler.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionHandler~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Actions/ActionRegistry.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionRegistry.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionRegistry.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionRegistry.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionRegistry.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionRegistry.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionRegistry.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionRegistry.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionRegistry~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Debug/DocumentDebugDescription.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DocumentDebugDescription.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DocumentDebugDescription.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DocumentDebugDescription.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DocumentDebugDescription.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DocumentDebugDescription.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DocumentDebugDescription.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DocumentDebugDescription.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DocumentDebugDescription~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Document/Action.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Action.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Action.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Action.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Action.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Action.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Action.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Action.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Action~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Document/ActionTypes.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionTypes.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionTypes.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionTypes.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionTypes.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionTypes.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionTypes.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionTypes.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionTypes~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Document/Component.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Component.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Component.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Component.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Component.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Component.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Component.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Component.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Component~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Document/ComponentProperties.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentProperties.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentProperties.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentProperties.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentProperties.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentProperties.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentProperties.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentProperties.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentProperties~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Document/DataSource.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DataSource.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DataSource.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DataSource.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DataSource.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DataSource.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DataSource.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DataSource.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DataSource~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Document/Document+JSON.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Document+JSON.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Document+JSON.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Document+JSON.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Document+JSON.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Document+JSON.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Document+JSON.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Document+JSON.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Document+JSON~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Document/Document.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Document.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Document.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Document.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Document.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Document.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Document.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Document.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Document~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Document/LayoutNode.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LayoutNode.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LayoutNode.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LayoutNode.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LayoutNode.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LayoutNode.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LayoutNode.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LayoutNode.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LayoutNode~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Document/RootComponent.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/RootComponent.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/RootComponent.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/RootComponent.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/RootComponent.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/RootComponent.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/RootComponent.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/RootComponent.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/RootComponent~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Document/SectionLayout.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayout.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayout.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayout.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayout.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayout.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayout.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayout.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayout~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Document/Style.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Style.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Style.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Style.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Style.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Style.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Style.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Style.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Style~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Extensibility/CustomComponent.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponent.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponent.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponent.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponent.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponent.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponent.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponent.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponent~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Extensibility/CustomComponentRenderNode.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponentRenderNode.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponentRenderNode.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponentRenderNode.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponentRenderNode.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponentRenderNode.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponentRenderNode.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponentRenderNode.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponentRenderNode~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Extensibility/CustomComponentResolver.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponentResolver.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponentResolver.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponentResolver.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponentResolver.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponentResolver.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponentResolver.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponentResolver.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/CustomComponentResolver~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/IR/IR.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/IR.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/IR.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/IR.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/IR.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/IR.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/IR.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/IR.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/IR~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/IR/RenderTree.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/RenderTree.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/RenderTree.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/RenderTree.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/RenderTree.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/RenderTree.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/RenderTree.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/RenderTree.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/RenderTree~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/IR/Resolution/ActionResolver.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionResolver.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionResolver.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionResolver.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionResolver.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionResolver.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionResolver.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionResolver.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ActionResolver~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/IR/Resolution/ComponentResolverRegistry.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentResolverRegistry.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentResolverRegistry.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentResolverRegistry.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentResolverRegistry.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentResolverRegistry.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentResolverRegistry.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentResolverRegistry.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentResolverRegistry~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/IR/Resolution/ComponentResolving.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentResolving.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentResolving.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentResolving.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentResolving.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentResolving.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentResolving.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentResolving.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ComponentResolving~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/IR/Resolution/ContentResolver.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ContentResolver.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ContentResolver.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ContentResolver.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ContentResolver.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ContentResolver.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ContentResolver.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ContentResolver.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ContentResolver~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/IR/Resolution/Converters.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Converters.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Converters.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Converters.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Converters.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Converters.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Converters.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Converters.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Converters~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/IR/Resolution/LayoutResolver.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LayoutResolver.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LayoutResolver.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LayoutResolver.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LayoutResolver.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LayoutResolver.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LayoutResolver.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LayoutResolver.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LayoutResolver~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/IR/Resolution/ResolutionContext.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ResolutionContext.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ResolutionContext.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ResolutionContext.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ResolutionContext.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ResolutionContext.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ResolutionContext.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ResolutionContext.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ResolutionContext~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/IR/Resolution/SectionLayoutConfigResolving.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayoutConfigResolving.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayoutConfigResolving.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayoutConfigResolving.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayoutConfigResolving.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayoutConfigResolving.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayoutConfigResolving.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayoutConfigResolving.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayoutConfigResolving~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/IR/Resolution/SectionLayoutResolver.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayoutResolver.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayoutResolver.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayoutResolver.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayoutResolver.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayoutResolver.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayoutResolver.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayoutResolver.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SectionLayoutResolver~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/IR/Resolver.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Resolver.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Resolver.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Resolver.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Resolver.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Resolver.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Resolver.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Resolver.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Resolver~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Lifecycle/Lifecycle.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Lifecycle.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Lifecycle.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Lifecycle.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Lifecycle.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Lifecycle.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Lifecycle.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Lifecycle.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Lifecycle~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Lifecycle/LifecycleModifier.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LifecycleModifier.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LifecycleModifier.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LifecycleModifier.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LifecycleModifier.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LifecycleModifier.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LifecycleModifier.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LifecycleModifier.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/LifecycleModifier~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Renderers/Renderer.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Renderer.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Renderer.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Renderer.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Renderer.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Renderer.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Renderer.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Renderer.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/Renderer~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Schema/SCALSValidator.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SCALSValidator.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SCALSValidator.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SCALSValidator.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SCALSValidator.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SCALSValidator.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SCALSValidator.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SCALSValidator.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/SCALSValidator~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/State/ExpressionEvaluator.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ExpressionEvaluator.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ExpressionEvaluator.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ExpressionEvaluator.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ExpressionEvaluator.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ExpressionEvaluator.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ExpressionEvaluator.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ExpressionEvaluator.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ExpressionEvaluator~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/State/KeypathAccessor.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/KeypathAccessor.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/KeypathAccessor.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/KeypathAccessor.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/KeypathAccessor.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/KeypathAccessor.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/KeypathAccessor.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/KeypathAccessor.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/KeypathAccessor~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/State/StateStore.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/StateStore.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/StateStore.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/StateStore.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/StateStore.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/StateStore.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/StateStore.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/StateStore.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/StateStore~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Styles/DesignSystemProvider.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DesignSystemProvider.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DesignSystemProvider.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DesignSystemProvider.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DesignSystemProvider.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DesignSystemProvider.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DesignSystemProvider.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DesignSystemProvider.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DesignSystemProvider~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/Styles/StyleResolver.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/StyleResolver.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/StyleResolver.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/StyleResolver.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/StyleResolver.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/StyleResolver.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/StyleResolver.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/StyleResolver.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/StyleResolver~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/ViewTree/DependencyTracker.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DependencyTracker.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DependencyTracker.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DependencyTracker.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DependencyTracker.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DependencyTracker.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DependencyTracker.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DependencyTracker.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/DependencyTracker~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/ViewTree/ViewNode.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ViewNode.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ViewNode.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ViewNode.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ViewNode.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ViewNode.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ViewNode.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ViewNode.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ViewNode~partial.swiftmodule"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/ViewTree/ViewTreeUpdater.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ViewTreeUpdater.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ViewTreeUpdater.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ViewTreeUpdater.dia",
+    "index-unit-output-path" : "/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ViewTreeUpdater.o",
+    "llvm-bc" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ViewTreeUpdater.bc",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ViewTreeUpdater.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ViewTreeUpdater.swiftdeps",
+    "swiftmodule" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphoneos/SCALS.build/Objects-normal/arm64/ViewTreeUpdater~partial.swiftmodule"
+  }
+}

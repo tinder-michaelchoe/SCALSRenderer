@@ -85,6 +85,18 @@ struct ButtonNodeView: View {
                 // Convert IR.Color to SwiftUI.Color
                 .background(currentStyle.backgroundColor?.swiftUI ?? .clear)
                 .cornerRadius(effectiveCornerRadius)
+                .overlay(
+                    Group {
+                        if
+                            let borderWidth = currentStyle.borderWidth,
+                            let borderColor = currentStyle.borderColor,
+                            borderWidth > 0
+                        {
+                            RoundedRectangle(cornerRadius: effectiveCornerRadius)
+                                .strokeBorder(borderColor.swiftUI, lineWidth: borderWidth)
+                        }
+                    }
+                )
         }
         .buttonStyle(.plain)
     }

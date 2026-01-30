@@ -415,7 +415,7 @@ public final class ScalsUIKitView: UIView {
             stackView.axis = container.layoutType == .vstack ? .vertical : .horizontal
             stackView.spacing = container.spacing
             stackView.alignment = container.alignment.toUIKit(for: container.layoutType)
-            stackView.distribution = .fill
+            stackView.distribution = .fillProportionally
             stackView.translatesAutoresizingMaskIntoConstraints = false
 
             for child in container.children {
