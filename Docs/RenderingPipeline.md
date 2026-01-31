@@ -92,33 +92,46 @@ The **Resolver** transforms the Document model into a **RenderTree** (IR). This 
 
 ### Resolution Process
 
-1. **Style Resolution**: Style IDs are resolved, inheritance is flattened, and final `IR.Style` objects are created
-2. **Data Binding**: Data source references are resolved against the `StateStore`
-3. **Action Resolution**: Action definitions are parsed and validated
-4. **Layout Resolution**: Layout nodes are converted to `RenderNode` with resolved properties
+1. **Style Resolution**: Style IDs are resolved, inheritance is flattened into a temporary `ResolvedStyle` object
+2. **Property Resolution**: Style properties are extracted from `ResolvedStyle` and merged with node-level properties
+3. **Data Binding**: Data source references are resolved against the `StateStore`
+4. **Action Resolution**: Action definitions are parsed and validated
+5. **Layout Resolution**: Layout nodes are converted to `RenderNode` with **fully resolved, flattened properties**
+
+**Important**: `ResolvedStyle` is a **temporary type** used only during resolution. It is **not stored** in the IR tree. All properties are extracted and placed directly on IR nodes.
 
 ### Key Transformations
 
-| Document (Input) | IR (Output) |
-|-------------|-------------|
-| `Document.Layout` | `ContainerNode` |
-| `Document.SectionLayout` | `SectionLayoutNode` |
-| `Document.Component` (label) | `TextNode` |
-| `Document.Component` (button) | `ButtonNode` |
-| `Document.Component` (textfield) | `TextFieldNode` |
-| `Document.Component` (image) | `ImageNode` |
-| `Document.Component` (gradient) | `GradientNode` |
-| `Document.Style` (by ID) | `IR.Style` |
-| `Document.SectionDefinition` | `IR.Section` |
+| Document (Input) | IR (Output) | Properties Flattened |
+|-------------|-------------|---------------------|
+| `Document.Layout` | `ContainerNode` | padding, backgroundColor, cornerRadius, shadow, border |
+| `Document.SectionLayout` | `SectionLayoutNode` | spacing, alignment, config |
+| `Document.Component` (label) | `TextNode` | content, textColor, fontSize, fontWeight, textAlignment, backgroundColor |
+| `Document.Component` (button) | `ButtonNode` | label, backgroundColor, textColor, cornerRadius, padding, action |
+| `Document.Component` (textfield) | `TextFieldNode` | placeholder, value, textColor, backgroundColor, binding |
+| `Document.Component` (image) | `ImageNode` | source, contentMode, width, height, aspectRatio |
+| `Document.Component` (gradient) | `GradientNode` | colors, startPoint, endPoint |
+| `Document.Style` (by ID) | ~~`IR.Style`~~ **ResolvedStyle** (temp) → properties on nodes | Style inheritance flattened during resolution |
+| `Document.SectionDefinition` | `IR.Section` | type, config, items |
 
 ### File Location
 
 ```
-ScalsRendererFramework/IR/
-├── IR.swift           # IR namespace: IR.Style, IR.Section, IR.SectionType
-├── Resolver.swift     # Main resolver
-├── RenderTree.swift   # RenderTree, RenderNode, node types
-└── Resolution/        # Specialized resolvers
+ScalsRendererFramework/
+├── Document/
+│   ├── IRConversions.swift           # IRConvertible protocol conformances
+│   └── ...                           # Document type definitions
+├── IR/
+│   ├── DocumentIRConversion.swift    # IRConvertible protocol definition
+│   ├── IRInitializers.swift          # IR initializers with resolution/merging logic
+│   ├── IR.swift                      # IR namespace: IR.Shadow, IR.Border, IR.Section, etc.
+│   ├── Resolver.swift                # Main resolver
+│   ├── RenderTree.swift              # RenderTree, RenderNode, node types with flattened properties
+│   └── Resolution/
+│       ├── ResolvedStyle.swift       # Temporary resolution artifact (not in IR tree)
+│       ├── StyleResolver.swift       # Returns ResolvedStyle during resolution
+│       ├── LayoutResolver.swift      # Extracts properties from ResolvedStyle
+│       └── ...                       # Other specialized resolvers
 ```
 
 ## Stage 4: RenderTree (IR)
@@ -137,22 +150,25 @@ The **RenderTree** is the Intermediate Representation - a fully resolved, render
 | `RenderTree` | Root container with resolved tree and state store |
 | `RootNode` | Resolved root with background, insets, color scheme |
 | `RenderNode` | Enum of all renderable node types |
-| `ContainerNode` | Resolved VStack/HStack/ZStack |
+| `ContainerNode` | Resolved VStack/HStack/ZStack with **flattened properties** (padding, backgroundColor, cornerRadius, shadow, border, etc.) |
 | `SectionLayoutNode` | Resolved section-based layout |
-| `TextNode` | Resolved text with content and style |
-| `ButtonNode` | Resolved button with label, style, action |
-| `TextFieldNode` | Resolved text input with binding |
-| `ImageNode` | Resolved image with source |
+| `TextNode` | Resolved text with **flattened properties** (content, textColor, fontSize, fontWeight, textAlignment, backgroundColor, etc.) |
+| `ButtonNode` | Resolved button with **flattened properties** (label, backgroundColor, textColor, cornerRadius, action, etc.) |
+| `TextFieldNode` | Resolved text input with binding and **flattened properties** |
+| `ImageNode` | Resolved image with **flattened properties** (source, contentMode, width, height, aspectRatio, etc.) |
 | `GradientNode` | Resolved gradient with adaptive colors |
-| `IR.Style` | Flattened style properties |
+| ~~`IR.Style`~~ | **ELIMINATED** - Properties now directly on nodes |
+| `ResolvedStyle` | **Temporary** type used during Document→IR resolution (not in IR tree) |
 | `IR.Section` | Resolved section with layout type and config |
 
 ### IR Design Principles
 
 1. **Renderer-Agnostic**: No SwiftUI or UIKit types in the IR - use `IR.*` types instead
-2. **Fully Resolved**: No unresolved references or lazy evaluation
+2. **Fully Resolved**: No unresolved references or lazy evaluation - all properties have final values
 3. **Immutable**: The tree doesn't change after resolution
 4. **Self-Contained**: All information needed for rendering is present
+5. **Flat Structure**: No nested `.style` objects - all properties directly on nodes
+6. **Canonical Representation**: Multiple Document representations resolve to single IR form
 
 ### Platform-Agnostic IR Types
 
@@ -195,21 +211,50 @@ public protocol Renderer {
 
 ### Rendering Process
 
-Each renderer traverses the RenderTree and creates corresponding platform views:
+Each renderer traverses the RenderTree and creates corresponding platform views. With flattened IR nodes, renderers are **simple and declarative** - no arithmetic, no nil coalescing, just direct property access:
 
 ```swift
-// SwiftUI
+// SwiftUI - Properties are already resolved and flattened
 case .text(let text):
     Text(text.content)
-        .applyTextStyle(text.style)
+        .foregroundColor(text.textColor.swiftUI)
+        .font(.system(size: text.fontSize, weight: text.fontWeight.swiftUI))
+        .multilineTextAlignment(text.textAlignment.swiftUI)
+        .padding(text.padding.swiftUI)
+        .background(text.backgroundColor.swiftUI)
 
-// UIKit
+// UIKit - Same simplicity
 case .text(let text):
     let label = UILabel()
     label.text = text.content
-    label.applyStyle(text.style)
+    label.textColor = text.textColor.uiColor
+    label.font = .systemFont(ofSize: text.fontSize, weight: text.fontWeight.uiKit)
+    label.textAlignment = text.textAlignment.uiKit
     return label
+
+// Container with optional shadow - checked with if-let, no nil coalescing
+case .container(let container):
+    contentView
+        .padding(container.padding.swiftUI)
+        .background(container.backgroundColor.swiftUI)
+        .cornerRadius(container.cornerRadius)
+
+    if let shadow = container.shadow {
+        contentView.shadow(
+            color: shadow.color.swiftUI,
+            radius: shadow.radius,
+            x: shadow.x,
+            y: shadow.y
+        )
+    }
 ```
+
+**Key Renderer Principles**:
+- ✅ Direct property access: `node.backgroundColor`, not `node.style.backgroundColor ?? .clear`
+- ✅ Platform conversions only: `.swiftUI`, `.uiColor`, `.cssRGBA`
+- ✅ No arithmetic: `node.padding`, not `node.padding + stylePadding`
+- ✅ Optional properties with if-let: Only when truly optional (shadow, border)
+- ✅ All resolution logic happened in the Resolution layer
 
 ### File Locations
 
@@ -239,11 +284,12 @@ ScalsRendererFramework/Renderers/
 ┌──────────┐    ┌───────────────────┐    ┌───────────────────┐    ┌─────────────┐
 │   JSON   │───▶│ Document.Definition│───▶│     Resolver      │───▶│ RenderTree  │
 └──────────┘    └───────────────────┘    └───────────────────┘    └──────┬──────┘
-                                                │                        │
-                                                ▼                        │
+                                                │                        │ (Flat)
+                                                ▼ (temp)                 │ (Resolved)
                                        ┌─────────────────┐               │
                                        │  StyleResolver  │               │
-                                       │ (→ IR.Style)    │               │
+                                       │→ ResolvedStyle  │               │
+                                       │  (not in IR)    │               │
                                        └─────────────────┘               │
                                                                          │
                     ┌────────────────────────────────────────────────────┤
@@ -253,6 +299,8 @@ ScalsRendererFramework/Renderers/
             │ SwiftUI View │    │   UIView     │    │   Debug String   │
             └──────────────┘    └──────────────┘    └──────────────────┘
 ```
+
+**Note**: `ResolvedStyle` is a temporary artifact that exists only during the resolution process. Properties are extracted from it and placed directly on IR nodes. The final `RenderTree` contains **flattened nodes** with no nested style objects.
 
 ## Runtime Interaction
 
