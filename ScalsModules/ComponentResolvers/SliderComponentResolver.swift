@@ -17,7 +17,8 @@ public struct SliderComponentResolver: ComponentResolving {
 
     @MainActor
     public func resolve(_ component: Document.Component, context: ResolutionContext) throws -> ComponentResolutionResult {
-        let style = context.styleResolver.resolve(component.styleId)
+        // Resolve style to get flattened properties
+        let resolvedStyle = context.styleResolver.resolve(component.styleId)
         let nodeId = component.id ?? UUID().uuidString
 
         // Resolve binding path (global or local)
@@ -35,8 +36,7 @@ public struct SliderComponentResolver: ComponentResolving {
                 nodeType: .slider(SliderNodeData(
                     bindingPath: bindingPath,
                     minValue: minValue,
-                    maxValue: maxValue,
-                    style: style
+                    maxValue: maxValue
                 ))
             )
             viewNode?.parent = context.parentViewNode
@@ -61,13 +61,26 @@ public struct SliderComponentResolver: ComponentResolving {
             initializeLocalState(on: viewNode, from: localState)
         }
 
+        // Resolve padding by merging node-level padding with style padding
+        let padding = IR.EdgeInsets(
+            from: component.padding,
+            mergingTop: resolvedStyle.paddingTop ?? 0,
+            mergingBottom: resolvedStyle.paddingBottom ?? 0,
+            mergingLeading: resolvedStyle.paddingLeading ?? 0,
+            mergingTrailing: resolvedStyle.paddingTrailing ?? 0
+        )
+
+        // Create SliderNode with flattened properties (no .style)
         let renderNode = RenderNode.slider(SliderNode(
             id: component.id,
             styleId: component.styleId,
             bindingPath: component.bind,
             minValue: minValue,
             maxValue: maxValue,
-            style: style
+            tintColor: resolvedStyle.tintColor,
+            padding: padding,
+            width: resolvedStyle.width,
+            height: resolvedStyle.height
         ))
 
         return ComponentResolutionResult(renderNode: renderNode, viewNode: viewNode)

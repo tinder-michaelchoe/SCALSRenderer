@@ -120,31 +120,57 @@
           "description": "Tint color for images/icons. Supports hex format or CSS rgba format"
         },
         "width": {
-          "type": "number",
-          "description": "Fixed width in points"
+          "$ref": "#/$defs/dimensionValue",
+          "description": "Width - absolute points or fractional (percentage of container)"
         },
         "height": {
-          "type": "number",
-          "description": "Fixed height in points"
+          "$ref": "#/$defs/dimensionValue",
+          "description": "Height - absolute points or fractional (percentage of container)"
         },
         "minWidth": {
-          "type": "number",
-          "description": "Minimum width in points"
+          "$ref": "#/$defs/dimensionValue",
+          "description": "Minimum width - absolute points or fractional"
         },
         "minHeight": {
-          "type": "number",
-          "description": "Minimum height in points"
+          "$ref": "#/$defs/dimensionValue",
+          "description": "Minimum height - absolute points or fractional"
         },
         "maxWidth": {
-          "type": "number",
-          "description": "Maximum width in points"
+          "$ref": "#/$defs/dimensionValue",
+          "description": "Maximum width - absolute points or fractional"
         },
         "maxHeight": {
-          "type": "number",
-          "description": "Maximum height in points"
+          "$ref": "#/$defs/dimensionValue",
+          "description": "Maximum height - absolute points or fractional"
         },
         "padding": {
           "$ref": "#/$defs/padding"
+        },
+        "shadow": {
+          "$ref": "#/$defs/shadow"
+        }
+      },
+      "additionalProperties": false
+    },
+    "shadow": {
+      "type": "object",
+      "description": "Shadow configuration",
+      "properties": {
+        "color": {
+          "type": "string",
+          "description": "Shadow color. Supports hex format or CSS rgba format"
+        },
+        "radius": {
+          "type": "number",
+          "description": "Shadow blur radius in points"
+        },
+        "x": {
+          "type": "number",
+          "description": "Horizontal shadow offset in points"
+        },
+        "y": {
+          "type": "number",
+          "description": "Vertical shadow offset in points"
         }
       },
       "additionalProperties": false

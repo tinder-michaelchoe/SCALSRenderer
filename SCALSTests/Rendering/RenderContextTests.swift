@@ -10,6 +10,7 @@ import Testing
 import UIKit
 import SwiftUI
 @testable import SCALS
+@testable import ScalsModules
 
 // MARK: - Mock Renderers for Context Tests
 
@@ -221,9 +222,7 @@ struct UIKitRenderContextRenderingTests {
         )
         
         let textNode = RenderNode.text(TextNode(
-            content: "Child",
-            style: IR.Style(),
-            padding: .zero
+            content: "Child"
         ))
         
         let view = context.render(textNode)
@@ -249,9 +248,7 @@ struct UIKitRenderContextRenderingTests {
         
         // Test text node
         let textView = context.render(RenderNode.text(TextNode(
-            content: "Text",
-            style: IR.Style(),
-            padding: .zero
+            content: "Text"
         )))
         #expect(textView is UILabel)
         
@@ -303,9 +300,7 @@ struct SwiftUIRenderContextInitializationTests {
         let actionContext = createContextTestActionContext(stateStore: stateStore)
         
         let textNode = RenderNode.text(TextNode(
-            content: "Test",
-            style: IR.Style(),
-            padding: .zero
+            content: "Test"
         ))
         let tree = RenderTree(
             root: RootNode(children: [textNode]),
@@ -342,17 +337,15 @@ struct SwiftUIRenderContextRenderingTests {
         )
         
         let node = RenderNode.text(TextNode(
-            content: "Test",
-            style: IR.Style(),
-            padding: .zero
+            content: "Test"
         ))
-        
+
         let view = context.render(node)
-        
+
         // Should return an AnyView (wrapping EmptyView if no renderer)
         _ = view
     }
-    
+
     @Test @MainActor func renderUsesRegisteredRenderer() {
         let registry = SwiftUINodeRendererRegistry()
         
@@ -383,13 +376,11 @@ struct SwiftUIRenderContextRenderingTests {
         )
         
         let node = RenderNode.text(TextNode(
-            content: "Original",
-            style: IR.Style(),
-            padding: .zero
+            content: "Original"
         ))
-        
+
         let view = context.render(node)
-        
+
         // View should be rendered via the mock renderer
         _ = view
     }

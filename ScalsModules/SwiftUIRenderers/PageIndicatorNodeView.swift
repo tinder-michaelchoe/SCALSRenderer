@@ -59,10 +59,10 @@ struct PageIndicatorView: View {
             }
         }
         .padding(EdgeInsets(
-            top: node.style.paddingTop ?? 0,
-            leading: node.style.paddingLeading ?? 0,
-            bottom: node.style.paddingBottom ?? 0,
-            trailing: node.style.paddingTrailing ?? 0
+            top: node.padding.top,
+            leading: node.padding.leading,
+            bottom: node.padding.bottom,
+            trailing: node.padding.trailing
         ))
     }
 }

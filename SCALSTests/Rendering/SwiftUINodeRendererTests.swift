@@ -9,6 +9,7 @@ import Foundation
 import Testing
 import SwiftUI
 @testable import SCALS
+@testable import ScalsModules
 
 // MARK: - Test Helpers
 
@@ -98,7 +99,7 @@ struct SwiftUIRendererTests {
         )
         
         let tree = createTestRenderTree(children: [
-            .text(TextNode(content: "Test", style: IR.Style(), padding: .zero))
+            .text(TextNode(content: "Test"))
         ])
         let view = renderer.render(tree)
         
@@ -172,11 +173,9 @@ struct SwiftUIRenderContextTests {
         )
         
         let node = RenderNode.text(TextNode(
-            content: "Test",
-            style: IR.Style(),
-            padding: .zero
+            content: "Test"
         ))
-        
+
         // Should return AnyView wrapping EmptyView
         let view = context.render(node)
         _ = view
@@ -186,32 +185,30 @@ struct SwiftUIRenderContextTests {
 // MARK: - RootNode Tests
 
 struct RootNodeTests {
-    
+
     @Test func createsWithDefaults() {
         let root = RootNode()
-        
-        #expect(root.backgroundColor == nil)
+
+        #expect(root.backgroundColor == .clear)
         #expect(root.edgeInsets == nil)
         #expect(root.colorScheme == .system)
         #expect(root.children.isEmpty)
     }
-    
+
     @Test func createsWithChildren() {
         let textNode = RenderNode.text(TextNode(
-            content: "Test",
-            style: IR.Style(),
-            padding: .zero
+            content: "Test"
         ))
-        
+
         let root = RootNode(children: [textNode])
-        
+
         #expect(root.children.count == 1)
     }
-    
+
     @Test func createsWithBackgroundColor() {
-        let root = RootNode(backgroundColor: Color.blue)
-        
-        #expect(root.backgroundColor == Color.blue)
+        let root = RootNode(backgroundColor: .blue)
+
+        #expect(root.backgroundColor == .blue)
     }
     
     @Test func createsWithColorScheme() {
@@ -328,85 +325,60 @@ struct CustomSwiftUIRendererTests {
 struct SwiftUIRenderNodeKindTests {
     
     @Test func textNodeReturnsTextKind() {
-        let node = RenderNode.text(TextNode(
-            content: "Test",
-            style: IR.Style(),
-            padding: .zero
-        ))
-        
+        let node = RenderNode.text(TextNode(content: "Test"))
+
         #expect(node.kind == .text)
     }
-    
+
     @Test func buttonNodeReturnsButtonKind() {
-        let node = RenderNode.button(ButtonNode(
-            label: "Test",
-            styles: ButtonStyles()
-        ))
-        
+        let node = RenderNode.button(ButtonNode(label: "Test"))
+
         #expect(node.kind == .button)
     }
-    
+
     @Test func containerNodeReturnsContainerKind() {
-        let node = RenderNode.container(ContainerNode(
-            layoutType: .vstack,
-            children: []
-        ))
-        
+        let node = RenderNode.container(ContainerNode())
+
         #expect(node.kind == .container)
     }
-    
+
     @Test func spacerNodeReturnsSpacerKind() {
-        let node = RenderNode.spacer
-        
+        let node = RenderNode.spacer(SpacerNode())
+
         #expect(node.kind == .spacer)
     }
-    
+
     @Test func textFieldNodeReturnsTextFieldKind() {
-        let node = RenderNode.textField(TextFieldNode(
-            placeholder: "Test",
-            style: IR.Style(),
-            bindingPath: nil
-        ))
-        
+        let node = RenderNode.textField(TextFieldNode(placeholder: "Test"))
+
         #expect(node.kind == .textField)
     }
-    
+
     @Test func toggleNodeReturnsToggleKind() {
-        let node = RenderNode.toggle(ToggleNode(
-            bindingPath: nil,
-            style: IR.Style()
-        ))
-        
+        let node = RenderNode.toggle(ToggleNode())
+
         #expect(node.kind == .toggle)
     }
-    
+
     @Test func sliderNodeReturnsSliderKind() {
-        let node = RenderNode.slider(SliderNode(
-            bindingPath: nil,
-            minValue: 0,
-            maxValue: 1
-        ))
-        
+        let node = RenderNode.slider(SliderNode())
+
         #expect(node.kind == .slider)
     }
-    
+
     @Test func imageNodeReturnsImageKind() {
-        let node = RenderNode.image(ImageNode(
-            source: .sfsymbol(name: "star"),
-            style: IR.Style()
-        ))
-        
+        let node = RenderNode.image(ImageNode(source: .sfsymbol(name: "star")))
+
         #expect(node.kind == .image)
     }
-    
+
     @Test func gradientNodeReturnsGradientKind() {
         let node = RenderNode.gradient(GradientNode(
             colors: [],
             startPoint: .top,
-            endPoint: .bottom,
-            style: IR.Style()
+            endPoint: .bottom
         ))
-        
+
         #expect(node.kind == .gradient)
     }
     

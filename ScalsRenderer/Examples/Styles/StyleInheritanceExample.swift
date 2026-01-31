@@ -30,7 +30,7 @@ public let styleInheritanceJSON = """
     "baseCard": {
       "backgroundColor": "#F2F2F7",
       "cornerRadius": 12,
-      "padding": { "all": 16 }
+      "padding": { "horizontal": 16, "vertical": 20 }
     },
     "accentCard": {
       "inherits": "baseCard",
@@ -39,7 +39,7 @@ public let styleInheritanceJSON = """
     "accentCardBold": {
       "inherits": "accentCard",
       "backgroundColor": "#007AFF",
-      "padding": { "all": 20 }
+      "padding": { "horizontal": 20, "vertical": 20 }
     },
 
     "baseText": {
@@ -116,7 +116,7 @@ public let styleInheritanceJSON = """
         },
         {
           "id": "multilevel",
-          "layout": { "type": "list", "showsDividers": false, "itemSpacing": 12, "contentInsets": { "horizontal": 20 } },
+          "layout": { "type": "list", "showsDividers": false, "itemSpacing": 12, "alignment": "center", "contentInsets": { "horizontal": 20 } },
           "header": { "type": "label", "text": "2. Multi-Level Inheritance (Grandparent → Parent → Child)", "styleId": "sectionTitle" },
           "children": [
             { "type": "label", "text": "Child inherits from parent, parent inherits from grandparent", "styleId": "description" },

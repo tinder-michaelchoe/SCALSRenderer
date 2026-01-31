@@ -195,7 +195,7 @@ extension IR.UnitPoint {
 
 extension IR.Style {
     /// Generate CSS rules from this style
-    public func cssRules() -> [String: String] {
+    public func cssRules(excludePadding: Bool = false) -> [String: String] {
         var rules: [String: String] = [:]
         
         // Typography
@@ -229,7 +229,16 @@ extension IR.Style {
         if let color = borderColor {
             rules["border-color"] = color.cssRGBA
         }
-        
+
+        // Shadow
+        if shadowColor != nil || shadowRadius != nil || shadowX != nil || shadowY != nil {
+            let color = shadowColor?.cssRGBA ?? "transparent"
+            let x = shadowX ?? 0
+            let y = shadowY ?? 0
+            let blur = shadowRadius ?? 0
+            rules["box-shadow"] = "\(Int(x))px \(Int(y))px \(Int(blur))px \(color)"
+        }
+
         // Image tint (using CSS filter for SF Symbols)
         if let tint = tintColor {
             // Note: This works for monochrome images/icons
@@ -238,25 +247,49 @@ extension IR.Style {
         }
         
         // Sizing
-        if let w = width { rules["width"] = "\(Int(w))px" }
-        if let h = height { rules["height"] = "\(Int(h))px" }
-        if let minW = minWidth { rules["min-width"] = "\(Int(minW))px" }
-        if let minH = minHeight { rules["min-height"] = "\(Int(minH))px" }
-        if let maxW = maxWidth { rules["max-width"] = "\(Int(maxW))px" }
-        if let maxH = maxHeight { rules["max-height"] = "\(Int(maxH))px" }
+        if let w = width {
+            rules["width"] = dimensionToCss(w)
+        }
+        if let h = height {
+            rules["height"] = dimensionToCss(h)
+        }
+        if let minW = minWidth {
+            rules["min-width"] = dimensionToCss(minW)
+        }
+        if let minH = minHeight {
+            rules["min-height"] = dimensionToCss(minH)
+        }
+        if let maxW = maxWidth {
+            rules["max-width"] = dimensionToCss(maxW)
+        }
+        if let maxH = maxHeight {
+            rules["max-height"] = dimensionToCss(maxH)
+        }
         
         // Padding
-        if let pt = paddingTop { rules["padding-top"] = "\(Int(pt))px" }
-        if let pb = paddingBottom { rules["padding-bottom"] = "\(Int(pb))px" }
-        if let pl = paddingLeading { rules["padding-left"] = "\(Int(pl))px" }
-        if let pr = paddingTrailing { rules["padding-right"] = "\(Int(pr))px" }
+        if !excludePadding {
+            if let pt = paddingTop { rules["padding-top"] = "\(Int(pt))px" }
+            if let pb = paddingBottom { rules["padding-bottom"] = "\(Int(pb))px" }
+            if let pl = paddingLeading { rules["padding-left"] = "\(Int(pl))px" }
+            if let pr = paddingTrailing { rules["padding-right"] = "\(Int(pr))px" }
+        }
         
         return rules
     }
-    
+
+    /// Convert DimensionValue to CSS string
+    private func dimensionToCss(_ dimension: IR.DimensionValue) -> String {
+        switch dimension {
+        case .absolute(let value):
+            return "\(Int(value))px"
+        case .fractional(let fraction):
+            return "\(Int(fraction * 100))%"
+        }
+    }
+
     /// Generate CSS rule string (e.g., "color: red; font-size: 16px;")
-    public func cssRuleString() -> String {
-        cssRules()
+    public func cssRuleString(excludePadding: Bool = false) -> String {
+        cssRules(excludePadding: excludePadding)
             .map { "\($0.key): \($0.value)" }
             .sorted()  // For consistent output
             .joined(separator: "; ")
@@ -381,6 +414,111 @@ extension ImageNode.Source {
                 "role": "progressbar",
                 "aria-label": "Loading"
             ])
+        }
+    }
+}
+
+// MARK: - ButtonStateStyle → CSS
+
+extension ButtonStateStyle {
+    /// Generate CSS rules from this button state style
+    public func cssRules() -> [String: String] {
+        var rules: [String: String] = [:]
+
+        // Typography
+        rules["color"] = textColor.cssRGBA
+        rules["font-size"] = "\(Int(fontSize))px"
+        rules["font-weight"] = fontWeight.cssValue
+
+        // Background & Border
+        rules["background-color"] = backgroundColor.cssRGBA
+        if cornerRadius > 0 {
+            rules["border-radius"] = "\(Int(cornerRadius))px"
+        }
+        if let border = border {
+            rules["border"] = "\(Int(border.width))px solid \(border.color.cssRGBA)"
+        }
+
+        // Shadow
+        if let shadow = shadow {
+            rules["box-shadow"] = "\(Int(shadow.x))px \(Int(shadow.y))px \(Int(shadow.radius))px \(shadow.color.cssRGBA)"
+        }
+
+        // Sizing
+        if let w = width {
+            rules["width"] = dimensionToCss(w)
+        }
+        if let h = height {
+            rules["height"] = dimensionToCss(h)
+        }
+        if let minW = minWidth {
+            rules["min-width"] = dimensionToCss(minW)
+        }
+        if let minH = minHeight {
+            rules["min-height"] = dimensionToCss(minH)
+        }
+        if let maxW = maxWidth {
+            rules["max-width"] = dimensionToCss(maxW)
+        }
+        if let maxH = maxHeight {
+            rules["max-height"] = dimensionToCss(maxH)
+        }
+
+        // Padding
+        if !padding.isEmpty {
+            rules["padding"] = padding.cssPadding
+        }
+
+        return rules
+    }
+
+    /// Convert DimensionValue to CSS string
+    private func dimensionToCss(_ dimension: IR.DimensionValue) -> String {
+        switch dimension {
+        case .absolute(let value):
+            return "\(Int(value))px"
+        case .fractional(let fraction):
+            return "\(Int(fraction * 100))%"
+        }
+    }
+
+    /// Generate CSS rule string
+    public func cssRuleString() -> String {
+        cssRules()
+            .map { "\($0.key): \($0.value)" }
+            .sorted()
+            .joined(separator: "; ")
+    }
+}
+
+// MARK: - IR.Shadow → CSS
+
+extension IR.Shadow {
+    /// Generate CSS box-shadow value
+    public var cssBoxShadow: String {
+        "\(Int(x))px \(Int(y))px \(Int(radius))px \(color.cssRGBA)"
+    }
+}
+
+// MARK: - IR.Border → CSS
+
+extension IR.Border {
+    /// Generate CSS border value
+    public var cssBorder: String {
+        "\(Int(width))px solid \(color.cssRGBA)"
+    }
+}
+
+// MARK: - IR.DimensionValue → CSS
+
+extension IR.DimensionValue {
+    /// Convert to CSS dimension string
+    public var cssValue: String {
+        switch self {
+        case .absolute(let value):
+            return "\(Int(value))px"
+        case .fractional(let fraction):
+            return "\(Int(fraction * 100))%"
         }
     }
 }

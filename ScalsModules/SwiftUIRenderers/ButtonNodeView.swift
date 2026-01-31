@@ -41,24 +41,39 @@ struct ButtonNodeView: View {
     }
 
     /// Get the current style based on selection state
-    private var currentStyle: IR.Style {
+    private var currentStyle: ButtonStateStyle {
         node.styles.style(isSelected: isSelected)
     }
 
     /// Calculate effective corner radius based on buttonShape or style
     private var effectiveCornerRadius: CGFloat {
         guard let shape = node.buttonShape else {
-            return currentStyle.cornerRadius ?? 0
+            return currentStyle.cornerRadius
         }
 
         switch shape {
         case .circle:
-            let width = currentStyle.width ?? 44
-            let height = currentStyle.height ?? 44
+            let width: CGFloat
+            if case .absolute(let value) = currentStyle.width {
+                width = value
+            } else {
+                width = 44
+            }
+            let height: CGFloat
+            if case .absolute(let value) = currentStyle.height {
+                height = value
+            } else {
+                height = 44
+            }
             return min(width, height) / 2
 
         case .capsule:
-            let height = currentStyle.height ?? 44
+            let height: CGFloat
+            if case .absolute(let value) = currentStyle.height {
+                height = value
+            } else {
+                height = 44
+            }
             return height / 2
 
         case .roundedSquare:
@@ -69,38 +84,28 @@ struct ButtonNodeView: View {
     var body: some View {
         Button(action: handleTap) {
             buttonLabel
-                .applyTextStyle(currentStyle)
-                .padding(.top, currentStyle.paddingTop ?? 0)
-                .padding(.bottom, currentStyle.paddingBottom ?? 0)
-                .padding(.leading, currentStyle.paddingLeading ?? 0)
-                .padding(.trailing, currentStyle.paddingTrailing ?? 0)
-                .frame(
+                .applyTextStyle(from: currentStyle)
+                .padding(.top, currentStyle.padding.top)
+                .padding(.bottom, currentStyle.padding.bottom)
+                .padding(.leading, currentStyle.padding.leading)
+                .padding(.trailing, currentStyle.padding.trailing)
+                .modifier(DimensionFrameModifier(
                     width: currentStyle.width,
-                    height: currentStyle.height
-                )
+                    height: currentStyle.height,
+                    minWidth: currentStyle.minWidth,
+                    minHeight: currentStyle.minHeight,
+                    maxWidth: currentStyle.maxWidth,
+                    maxHeight: currentStyle.maxHeight
+                ))
                 .frame(
                     maxWidth: node.fillWidth ? .infinity : nil,
-                    alignment: alignmentForTextAlignment(currentStyle.textAlignment)
+                    alignment: .center
                 )
                 // Convert IR.Color to SwiftUI.Color
-                .background(currentStyle.backgroundColor?.swiftUI ?? .clear)
+                .background(currentStyle.backgroundColor.swiftUI)
                 .cornerRadius(effectiveCornerRadius)
         }
         .buttonStyle(.plain)
-    }
-
-    /// Convert IR.TextAlignment to SwiftUI.Alignment for frame positioning
-    private func alignmentForTextAlignment(_ textAlignment: IR.TextAlignment?) -> Alignment {
-        switch textAlignment {
-        case .leading:
-            return .leading
-        case .center:
-            return .center
-        case .trailing:
-            return .trailing
-        case .none:
-            return .center
-        }
     }
 
     @ViewBuilder

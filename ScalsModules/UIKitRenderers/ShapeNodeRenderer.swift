@@ -52,8 +52,18 @@ private final class ShapeView: UIView {
     private func updateShape() {
         guard let node = currentNode else { return }
 
-        let width = node.style.width ?? bounds.width
-        let height = node.style.height ?? bounds.height
+        let width: CGFloat
+        if case .absolute(let value) = node.width {
+            width = value
+        } else {
+            width = bounds.width
+        }
+        let height: CGFloat
+        if case .absolute(let value) = node.height {
+            height = value
+        } else {
+            height = bounds.height
+        }
         let rect = CGRect(x: 0, y: 0, width: width, height: height)
 
         let path: UIBezierPath
@@ -76,29 +86,48 @@ private final class ShapeView: UIView {
     private func applyStyle() {
         guard let node = currentNode else { return }
 
-        // Apply fill color
-        if let backgroundColor = node.style.backgroundColor {
-            shapeLayer.fillColor = backgroundColor.uiColor.cgColor
-        } else {
-            shapeLayer.fillColor = UIColor.clear.cgColor
-        }
+        // Apply fill color (non-optional)
+        shapeLayer.fillColor = node.fillColor.uiColor.cgColor
 
         // Apply stroke
-        if let borderColor = node.style.borderColor,
-           let borderWidth = node.style.borderWidth {
-            shapeLayer.strokeColor = borderColor.uiColor.cgColor
-            shapeLayer.lineWidth = borderWidth
+        if let strokeColor = node.strokeColor {
+            shapeLayer.strokeColor = strokeColor.uiColor.cgColor
+            shapeLayer.lineWidth = node.strokeWidth
         } else {
             shapeLayer.strokeColor = UIColor.clear.cgColor
             shapeLayer.lineWidth = 0
         }
 
         // Apply size constraints if specified
-        if let width = node.style.width {
-            widthAnchor.constraint(equalToConstant: width).isActive = true
+        if let width = node.width {
+            switch width {
+            case .absolute(let value):
+                widthAnchor.constraint(equalToConstant: value).isActive = true
+            case .fractional(let fraction):
+                if let superview = superview {
+                    widthAnchor.constraint(
+                        equalTo: superview.widthAnchor,
+                        multiplier: fraction
+                    ).isActive = true
+                } else {
+                    print("Warning: Cannot apply fractional width - view has no superview")
+                }
+            }
         }
-        if let height = node.style.height {
-            heightAnchor.constraint(equalToConstant: height).isActive = true
+        if let height = node.height {
+            switch height {
+            case .absolute(let value):
+                heightAnchor.constraint(equalToConstant: value).isActive = true
+            case .fractional(let fraction):
+                if let superview = superview {
+                    heightAnchor.constraint(
+                        equalTo: superview.heightAnchor,
+                        multiplier: fraction
+                    ).isActive = true
+                } else {
+                    print("Warning: Cannot apply fractional height - view has no superview")
+                }
+            }
         }
     }
 

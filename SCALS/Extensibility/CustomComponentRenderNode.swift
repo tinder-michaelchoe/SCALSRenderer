@@ -21,17 +21,17 @@ public struct CustomComponentRenderNode: CustomRenderNode {
     /// The original component from the document
     public let component: Document.Component
 
-    /// Resolved style for this component
-    public let style: IR.Style
+    /// Resolved style for this component (temporary resolution artifact)
+    public let resolvedStyle: ResolvedStyle
 
     public init(
         typeName: String,
         component: Document.Component,
-        style: IR.Style
+        resolvedStyle: ResolvedStyle
     ) {
         self.typeName = typeName
         self.component = component
-        self.style = style
+        self.resolvedStyle = resolvedStyle
     }
 }
 

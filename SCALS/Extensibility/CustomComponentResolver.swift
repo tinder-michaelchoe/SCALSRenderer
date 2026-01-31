@@ -37,7 +37,8 @@ public struct CustomComponentResolver {
             throw CustomComponentResolutionError.notRegistered(typeName)
         }
 
-        let style = context.styleResolver.resolve(component.styleId)
+        // Resolve style to get flattened properties
+        let resolvedStyle = context.styleResolver.resolve(component.styleId)
         let nodeId = component.id ?? UUID().uuidString
 
         // Create view node if tracking
@@ -45,7 +46,7 @@ public struct CustomComponentResolver {
         if context.isTracking {
             viewNode = ViewNode(
                 id: nodeId,
-                nodeType: .customComponent(CustomComponentNodeData(typeName: typeName, style: style))
+                nodeType: .customComponent(CustomComponentNodeData(typeName: typeName))
             )
             viewNode?.parent = context.parentViewNode
         } else {
@@ -60,7 +61,7 @@ public struct CustomComponentResolver {
         let customNode = CustomComponentRenderNode(
             typeName: typeName,
             component: component,
-            style: style
+            resolvedStyle: resolvedStyle
         )
 
         let renderNode = RenderNode.custom(kind: .customComponent, node: customNode)

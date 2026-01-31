@@ -30,11 +30,11 @@ public struct ContainerNodeRenderer: UIKitNodeRendering {
             contentView = renderZStackContainer(containerNode, context: context)
         }
 
-        // Apply background styling
-        applyBackgroundStyling(to: contentView, style: containerNode.style)
+        // Apply background styling - use flattened properties directly from node
+        applyBackgroundStyling(to: contentView, container: containerNode)
 
-        // Wrap in container for padding if needed
-        if containerNode.padding != .zero {
+        // Padding is already resolved - directly on node
+        if !containerNode.padding.isEmpty {
             return wrapWithPadding(contentView, padding: containerNode.padding)
         }
 
@@ -114,31 +114,60 @@ public struct ContainerNodeRenderer: UIKitNodeRendering {
 
     // MARK: - Background Styling
 
-    private func applyBackgroundStyling(to view: UIView, style: IR.Style) {
-        // Apply background color
-        if let backgroundColor = style.backgroundColor {
-            view.backgroundColor = backgroundColor.uiColor
-        }
+    private func applyBackgroundStyling(to view: UIView, container: ContainerNode) {
+        // Apply background color - directly from node (non-optional)
+        view.backgroundColor = container.backgroundColor.uiColor
 
-        // Apply corner radius
-        if let cornerRadius = style.cornerRadius {
-            view.layer.cornerRadius = cornerRadius
+        // Apply corner radius - directly from node
+        if container.cornerRadius > 0 {
+            view.layer.cornerRadius = container.cornerRadius
             view.clipsToBounds = true
         }
 
-        // Apply border
-        if let borderColor = style.borderColor,
-           let borderWidth = style.borderWidth {
-            view.layer.borderColor = borderColor.uiColor.cgColor
-            view.layer.borderWidth = borderWidth
+        // Apply border - directly from node
+        if let border = container.border {
+            view.layer.borderColor = border.color.uiColor.cgColor
+            view.layer.borderWidth = border.width
         }
 
-        // Apply width/height constraints if specified
-        if let width = style.width {
-            view.widthAnchor.constraint(equalToConstant: width).isActive = true
+        // Apply shadow - directly from node
+        if let shadow = container.shadow {
+            view.layer.shadowColor = shadow.color.uiColor.cgColor
+            view.layer.shadowRadius = shadow.radius
+            view.layer.shadowOffset = CGSize(width: shadow.x, height: shadow.y)
+            view.layer.shadowOpacity = Float(shadow.color.alpha)
         }
-        if let height = style.height {
-            view.heightAnchor.constraint(equalToConstant: height).isActive = true
+
+        // Apply width/height constraints if specified - directly from node
+        if let width = container.width {
+            switch width {
+            case .absolute(let value):
+                view.widthAnchor.constraint(equalToConstant: value).isActive = true
+            case .fractional(let fraction):
+                if let superview = view.superview {
+                    view.widthAnchor.constraint(
+                        equalTo: superview.widthAnchor,
+                        multiplier: fraction
+                    ).isActive = true
+                } else {
+                    print("Warning: Cannot apply fractional width - view has no superview")
+                }
+            }
+        }
+        if let height = container.height {
+            switch height {
+            case .absolute(let value):
+                view.heightAnchor.constraint(equalToConstant: value).isActive = true
+            case .fractional(let fraction):
+                if let superview = view.superview {
+                    view.heightAnchor.constraint(
+                        equalTo: superview.heightAnchor,
+                        multiplier: fraction
+                    ).isActive = true
+                } else {
+                    print("Warning: Cannot apply fractional height - view has no superview")
+                }
+            }
         }
     }
 }

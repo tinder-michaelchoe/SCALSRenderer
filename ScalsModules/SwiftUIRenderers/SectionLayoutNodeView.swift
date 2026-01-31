@@ -78,10 +78,10 @@ struct SectionView: View {
 
     var body: some View {
         VStack(alignment: swiftUIAlignment, spacing: 0) {
-            // Header
+            // Header (always leading aligned)
             if let header = section.header {
                 renderNode(header)
-                    .frame(maxWidth: .infinity, alignment: Alignment(horizontal: swiftUIAlignment, vertical: .center))
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.leading, section.config.contentInsets.leading)
                     .padding(.trailing, section.config.contentInsets.trailing)
             }
@@ -162,7 +162,6 @@ struct SectionView: View {
             ForEach(Array(section.children.enumerated()), id: \.offset) { index, child in
                 VStack(spacing: 0) {
                     renderNode(child)
-                        .frame(maxWidth: .infinity, alignment: Alignment(horizontal: swiftUIAlignment, vertical: .center))
                     if section.config.showsDividers && index < section.children.count - 1 {
                         Divider()
                     }

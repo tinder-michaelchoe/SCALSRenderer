@@ -27,11 +27,38 @@ public struct GradientNodeRenderer: UIKitNodeRendering {
         )
         gradientView.translatesAutoresizingMaskIntoConstraints = false
 
-        if let width = gradientNode.style.width {
-            gradientView.widthAnchor.constraint(equalToConstant: width).isActive = true
+        // Apply width constraint - directly on node
+        if let width = gradientNode.width {
+            switch width {
+            case .absolute(let value):
+                gradientView.widthAnchor.constraint(equalToConstant: value).isActive = true
+            case .fractional(let fraction):
+                if let superview = gradientView.superview {
+                    gradientView.widthAnchor.constraint(
+                        equalTo: superview.widthAnchor,
+                        multiplier: fraction
+                    ).isActive = true
+                } else {
+                    print("Warning: Cannot apply fractional width - view has no superview")
+                }
+            }
         }
-        if let height = gradientNode.style.height {
-            gradientView.heightAnchor.constraint(equalToConstant: height).isActive = true
+
+        // Apply height constraint - directly on node
+        if let height = gradientNode.height {
+            switch height {
+            case .absolute(let value):
+                gradientView.heightAnchor.constraint(equalToConstant: value).isActive = true
+            case .fractional(let fraction):
+                if let superview = gradientView.superview {
+                    gradientView.heightAnchor.constraint(
+                        equalTo: superview.heightAnchor,
+                        multiplier: fraction
+                    ).isActive = true
+                } else {
+                    print("Warning: Cannot apply fractional height - view has no superview")
+                }
+            }
         }
 
         return gradientView

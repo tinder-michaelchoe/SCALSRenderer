@@ -39,7 +39,7 @@ struct TextFieldNodeView: View {
 
     var body: some View {
         TextField(node.placeholder, text: $text)
-            .applyTextStyle(node.style)
+            .applyTextStyle(from: node)
             .onAppear {
                 syncFromState()
             }

@@ -72,9 +72,7 @@ struct RenderTreeView: View {
     var body: some View {
         ZStack {
             // Background - convert IR.Color to SwiftUI.Color
-            if let bg = tree.root.backgroundColor {
-                bg.swiftUI.ignoresSafeArea()
-            }
+            tree.root.backgroundColor.swiftUI.ignoresSafeArea()
 
             // Content with edge insets using custom RootLayout
             RootLayout(edgeInsets: tree.root.edgeInsets) {

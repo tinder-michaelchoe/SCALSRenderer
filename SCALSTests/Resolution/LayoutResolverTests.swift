@@ -39,7 +39,7 @@ struct LayoutResolverVStackTests {
         
         let layout = Document.Layout(
             type: .vstack,
-            children: [.spacer]
+            children: [.spacer(Document.Spacer())]
         )
         
         let result = try resolver.resolve(layout, context: context)
@@ -163,7 +163,7 @@ struct LayoutResolverHStackTests {
         
         let layout = Document.Layout(
             type: .hstack,
-            children: [.spacer, .spacer]
+            children: [.spacer(Document.Spacer()), .spacer(Document.Spacer())]
         )
         
         let result = try resolver.resolve(layout, context: context)
@@ -208,7 +208,7 @@ struct LayoutResolverZStackTests {
         
         let layout = Document.Layout(
             type: .zstack,
-            children: [.spacer]
+            children: [.spacer(Document.Spacer())]
         )
         
         let result = try resolver.resolve(layout, context: context)
@@ -324,8 +324,8 @@ struct LayoutResolverNestedTests {
         let layout = Document.Layout(
             type: .vstack,
             children: [
-                .layout(Document.Layout(type: .hstack, children: [.spacer])),
-                .layout(Document.Layout(type: .hstack, children: [.spacer, .spacer]))
+                .layout(Document.Layout(type: .hstack, children: [.spacer(Document.Spacer())])),
+                .layout(Document.Layout(type: .hstack, children: [.spacer(Document.Spacer()), .spacer(Document.Spacer())]))
             ]
         )
         
@@ -365,7 +365,7 @@ struct LayoutResolverNestedTests {
                     children: [
                         .layout(Document.Layout(
                             type: .zstack,
-                            children: [.spacer]
+                            children: [.spacer(Document.Spacer())]
                         ))
                     ]
                 ))
@@ -408,7 +408,7 @@ struct LayoutResolverForEachTests {
         
         let forEach = Document.ForEach(
             items: "items",
-            template: .spacer
+            template: .spacer(Document.Spacer())
         )
         
         let result = try resolver.resolveNode(.forEach(forEach), context: context)
@@ -429,7 +429,7 @@ struct LayoutResolverForEachTests {
         
         let forEach = Document.ForEach(
             items: "items",
-            template: .spacer
+            template: .spacer(Document.Spacer())
         )
         
         let result = try resolver.resolveNode(.forEach(forEach), context: context)
@@ -448,7 +448,7 @@ struct LayoutResolverForEachTests {
         
         let forEach = Document.ForEach(
             items: "nonExistentItems",
-            template: .spacer
+            template: .spacer(Document.Spacer())
         )
         
         let result = try resolver.resolveNode(.forEach(forEach), context: context)
@@ -470,7 +470,7 @@ struct LayoutResolverForEachTests {
         let forEach = Document.ForEach(
             items: "items",
             layout: .vstack,
-            template: .spacer
+            template: .spacer(Document.Spacer())
         )
         
         let result = try resolver.resolveNode(.forEach(forEach), context: context)
@@ -492,7 +492,7 @@ struct LayoutResolverForEachTests {
         let forEach = Document.ForEach(
             items: "items",
             layout: .hstack,
-            template: .spacer
+            template: .spacer(Document.Spacer())
         )
         
         let result = try resolver.resolveNode(.forEach(forEach), context: context)
@@ -514,7 +514,7 @@ struct LayoutResolverForEachTests {
         let forEach = Document.ForEach(
             items: "items",
             spacing: 12,
-            template: .spacer
+            template: .spacer(Document.Spacer())
         )
         
         let result = try resolver.resolveNode(.forEach(forEach), context: context)
@@ -535,10 +535,10 @@ struct LayoutResolverForEachTests {
         
         let forEach = Document.ForEach(
             items: "items",
-            template: .spacer,
+            template: .spacer(Document.Spacer()),
             emptyView: .layout(Document.Layout(
                 type: .vstack,
-                children: [.spacer, .spacer]
+                children: [.spacer(Document.Spacer()), .spacer(Document.Spacer())]
             ))
         )
         
@@ -561,7 +561,7 @@ struct LayoutResolverForEachTests {
         
         let forEach = Document.ForEach(
             items: "myList",
-            template: .spacer
+            template: .spacer(Document.Spacer())
         )
         
         let result = try resolver.resolveNode(.forEach(forEach), context: context)
@@ -583,7 +583,7 @@ struct LayoutResolverSpacerTests {
         let resolver = LayoutResolver(componentRegistry: registry)
         let context = createTestContext()
         
-        let result = try resolver.resolveNode(.spacer, context: context)
+        let result = try resolver.resolveNode(.spacer(Document.Spacer()), context: context)
         
         if case .spacer = result.renderNode {
             // Success
@@ -600,9 +600,9 @@ struct LayoutResolverSpacerTests {
         let layout = Document.Layout(
             type: .hstack,
             children: [
-                .spacer,
+                .spacer(Document.Spacer()),
                 .layout(Document.Layout(type: .vstack, children: [])),
-                .spacer
+                .spacer(Document.Spacer())
             ]
         )
         

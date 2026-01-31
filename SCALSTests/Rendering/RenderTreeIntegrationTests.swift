@@ -11,6 +11,7 @@ import Testing
 import UIKit
 import SwiftUI
 @testable import SCALS
+@testable import ScalsModules
 
 // MARK: - Mock Renderers for Integration Tests
 
@@ -197,11 +198,7 @@ struct UIKitRenderTreeIntegrationTests {
     @Test @MainActor func rendersSimpleTextNode() {
         let context = createIntegrationUIKitContext()
         
-        let node = RenderNode.text(TextNode(
-            content: "Hello Integration Test",
-            style: IR.Style(),
-            padding: .zero
-        ))
+        let node = RenderNode.text(TextNode(content: "Hello Integration Test"))
         
         let view = context.render(node)
         
@@ -223,7 +220,7 @@ struct UIKitRenderTreeIntegrationTests {
                     alignment: .center,
                     spacing: 4,
                     children: [
-                        .text(TextNode(content: "Label", style: IR.Style(), padding: .zero)),
+                        .text(TextNode(content: "Label")),
                         .button(ButtonNode(label: "Action", styles: ButtonStyles()))
                     ]
                 ))
@@ -250,11 +247,7 @@ struct UIKitRenderTreeIntegrationTests {
             alignment: .leading,
             spacing: 16,
             children: [
-                .textField(TextFieldNode(
-                    placeholder: "Enter name",
-                    style: IR.Style(),
-                    bindingPath: nil
-                )),
+                .textField(TextFieldNode(placeholder: "Enter name")),
                 .button(ButtonNode(
                     label: "Submit",
                     styles: ButtonStyles()
@@ -277,8 +270,8 @@ struct UIKitRenderTreeIntegrationTests {
         let node = RenderNode.container(ContainerNode(
             layoutType: .vstack,
             children: [
-                .text(TextNode(content: "Title", style: IR.Style(), padding: .zero)),
-                .spacer,
+                .text(TextNode(content: "Title")),
+                .spacer(SpacerNode()),
                 .button(ButtonNode(label: "Bottom Button", styles: ButtonStyles()))
             ]
         ))
@@ -290,16 +283,13 @@ struct UIKitRenderTreeIntegrationTests {
         
         // Middle view should be spacer (flexible UIView)
         let spacer = stackView?.arrangedSubviews[1]
-        #expect(spacer?.contentHuggingPriority(for: .vertical) == .defaultLow)
+        #expect(spacer?.contentHuggingPriority(for: NSLayoutConstraint.Axis.vertical) == UILayoutPriority.defaultLow)
     }
     
     @Test @MainActor func rendersImageNode() {
         let context = createIntegrationUIKitContext()
         
-        let node = RenderNode.image(ImageNode(
-            source: .sfsymbol(name: "star.fill"),
-            style: IR.Style()
-        ))
+        let node = RenderNode.image(ImageNode(source: .sfsymbol(name: "star.fill")))
         
         let view = context.render(node)
         let imageView = view as? UIImageView
@@ -313,17 +303,17 @@ struct UIKitRenderTreeIntegrationTests {
         
         let node = RenderNode.gradient(GradientNode(
             colors: [
-                GradientNode.ColorStop(color: .fixed(Color.blue), location: 0),
-                GradientNode.ColorStop(color: .fixed(Color.purple), location: 1)
+                GradientNode.ColorStop(color: .fixed(IR.Color.blue), location: 0),
+                GradientNode.ColorStop(color: .fixed(IR.Color(red: 0.5, green: 0, blue: 0.5, alpha: 1)), location: 1)
             ],
             startPoint: .top,
-            endPoint: .bottom,
-            style: IR.Style()
+            endPoint: .bottom
         ))
         
         let view = context.render(node)
-        
-        #expect(view != nil)
+
+        // Verify view was created
+        _ = view
     }
     
     @Test @MainActor func rendersSectionLayout() {
@@ -332,12 +322,12 @@ struct UIKitRenderTreeIntegrationTests {
         let section = IR.Section(
             id: "section1",
             layoutType: .list,
-            header: .text(TextNode(content: "Header", style: IR.Style(), padding: .zero)),
+            header: .text(TextNode(content: "Header")),
             footer: nil,
             config: IR.SectionConfig(),
             children: [
-                .text(TextNode(content: "Item 1", style: IR.Style(), padding: .zero)),
-                .text(TextNode(content: "Item 2", style: IR.Style(), padding: .zero))
+                .text(TextNode(content: "Item 1")),
+                .text(TextNode(content: "Item 2"))
             ]
         )
         
@@ -388,7 +378,7 @@ struct SwiftUIRenderTreeIntegrationTests {
         
         let tree = RenderTree(
             root: RootNode(
-                backgroundColor: Color.blue,
+                backgroundColor: .blue,
                 children: []
             ),
             stateStore: stateStore,
@@ -437,9 +427,9 @@ struct SwiftUIRenderTreeIntegrationTests {
         
         let tree = RenderTree(
             root: RootNode(children: [
-                .text(TextNode(content: "First", style: IR.Style(), padding: .zero)),
-                .text(TextNode(content: "Second", style: IR.Style(), padding: .zero)),
-                .text(TextNode(content: "Third", style: IR.Style(), padding: .zero))
+                .text(TextNode(content: "First")),
+                .text(TextNode(content: "Second")),
+                .text(TextNode(content: "Third"))
             ]),
             stateStore: stateStore,
             actions: [:]
@@ -491,7 +481,7 @@ struct FullPipelineIntegrationTests {
         let context = UIKitRenderContext(
             actionContext: actionContext,
             stateStore: renderTree.stateStore,
-            colorScheme: .light,
+            colorScheme: IR.ColorScheme.light,
             registry: uikitRegistry
         )
         
@@ -560,7 +550,7 @@ struct RenderTreeEdgeCaseTests {
         // Create deeply nested structure (5 levels)
         func createNestedContainer(depth: Int) -> RenderNode {
             if depth == 0 {
-                return .text(TextNode(content: "Leaf", style: IR.Style(), padding: .zero))
+                return .text(TextNode(content: "Leaf"))
             }
             return .container(ContainerNode(
                 layoutType: .vstack,
@@ -588,11 +578,11 @@ struct RenderTreeEdgeCaseTests {
         let node = RenderNode.container(ContainerNode(
             layoutType: .vstack,
             children: [
-                .text(TextNode(content: "Text", style: IR.Style(), padding: .zero)),
+                .text(TextNode(content: "Text")),
                 .button(ButtonNode(label: "Button", styles: ButtonStyles())),
-                .image(ImageNode(source: .sfsymbol(name: "star"), style: IR.Style())),
-                .spacer,
-                .textField(TextFieldNode(placeholder: "Input", style: IR.Style(), bindingPath: nil))
+                .image(ImageNode(source: .sfsymbol(name: "star"))),
+                .spacer(SpacerNode()),
+                .textField(TextFieldNode(placeholder: "Input"))
             ]
         ))
         

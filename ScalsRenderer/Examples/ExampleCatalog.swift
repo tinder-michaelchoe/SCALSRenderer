@@ -407,6 +407,8 @@ enum Example: String, CaseIterable, Identifiable {
     case basicStyles
     case styleInheritance
     case conditionalStyles
+    case shadows
+    case fractionalSizing
 
     // Complex Examples (Combining SCALS Elements)
     case componentShowcase
@@ -466,6 +468,8 @@ enum Example: String, CaseIterable, Identifiable {
         case .basicStyles: return "Basic Styles"
         case .styleInheritance: return "Style Inheritance"
         case .conditionalStyles: return "Conditional Styles"
+        case .shadows: return "Shadows"
+        case .fractionalSizing: return "Fractional Sizing"
         // Complex
         case .componentShowcase: return "Component Showcase"
         case .dadJokes: return "Dad Jokes"
@@ -523,6 +527,8 @@ enum Example: String, CaseIterable, Identifiable {
         case .basicStyles: return "Font, color, spacing"
         case .styleInheritance: return "Multi-level chains, overrides & reuse"
         case .conditionalStyles: return "State-based styling"
+        case .shadows: return "Box shadows with color, radius & offset"
+        case .fractionalSizing: return "Responsive widths and heights"
         // Complex
         case .componentShowcase: return "All component types in one demo"
         case .dadJokes: return "Custom actions with REST API"
@@ -580,6 +586,8 @@ enum Example: String, CaseIterable, Identifiable {
         case .basicStyles: return "paintpalette"
         case .styleInheritance: return "arrow.up.right.circle"
         case .conditionalStyles: return "questionmark.diamond"
+        case .shadows: return "square.on.square.dashed"
+        case .fractionalSizing: return "rectangle.ratio.16.to.9"
         // Complex
         case .componentShowcase: return "square.grid.3x3"
         case .dadJokes: return "face.smiling"
@@ -637,6 +645,8 @@ enum Example: String, CaseIterable, Identifiable {
         case .basicStyles: return .pink
         case .styleInheritance: return .pink
         case .conditionalStyles: return .pink
+        case .shadows: return .pink
+        case .fractionalSizing: return .pink
         // Complex - Teal/Indigo
         case .componentShowcase: return .indigo
         case .dadJokes: return .yellow
@@ -695,6 +705,8 @@ enum Example: String, CaseIterable, Identifiable {
         case .basicStyles: return basicStylesJSON
         case .styleInheritance: return styleInheritanceJSON
         case .conditionalStyles: return conditionalStylesJSON
+        case .shadows: return shadowsJSON
+        case .fractionalSizing: return fractionalSizingJSON
         // Complex
         case .componentShowcase: return componentShowcaseJSON
         case .dadJokes: return dadJokesJSON
@@ -769,6 +781,10 @@ enum Example: String, CaseIterable, Identifiable {
             return .detent(.medium)
         case .styleInheritance:
             return .fullSize
+        case .shadows:
+            return .fullSize
+        case .fractionalSizing:
+            return .fullSize
         // Complex examples - full size sheets
         case .componentShowcase: return .fullSize
         case .dadJokes: return .detent(.medium)
@@ -806,7 +822,7 @@ enum Example: String, CaseIterable, Identifiable {
     }
 
     static var styleExamples: [Example] {
-        [.basicStyles, .styleInheritance, .conditionalStyles, .designSystem]
+        [.basicStyles, .styleInheritance, .conditionalStyles, .shadows, .fractionalSizing, .designSystem]
     }
 
     static var complexExamples: [Example] {
@@ -823,17 +839,15 @@ enum Example: String, CaseIterable, Identifiable {
 struct ExampleSheetView: View {
     let example: Example
     @Environment(\.dismiss) private var dismiss
-    @State private var parseError: String?
 
     var body: some View {
         Group {
             if let json = example.json {
-                if let view = createView(from: json) {
+                switch createView(from: json) {
+                case .success(let view):
                     view
-                } else if let error = parseError {
+                case .failure(let error):
                     errorView(error: error)
-                } else {
-                    errorView(error: "Unknown error occurred")
                 }
             } else {
                 errorView(error: "No JSON available for this example")
@@ -841,13 +855,18 @@ struct ExampleSheetView: View {
         }
     }
 
-    private func createView(from json: String) -> ScalsRendererView? {
+    private enum ParseResult {
+        case success(ScalsRendererView)
+        case failure(String)
+    }
+
+    private func createView(from json: String) -> ParseResult {
         do {
             let document = try Document.Definition(jsonString: json)
-            return ScalsRendererView(document: document, debugMode: true)
+            return .success(ScalsRendererView(document: document, debugMode: true))
         } catch {
-            parseError = DocumentParseError.detailedDescription(error: error, jsonString: json)
-            return nil
+            let errorDescription = DocumentParseError.detailedDescription(error: error, jsonString: json)
+            return .failure(errorDescription)
         }
     }
 

@@ -39,63 +39,62 @@ struct ShapeNodeView: View {
             switch node.shapeType {
             case .rectangle:
                 Rectangle()
-                    .fill(node.style.backgroundColor?.swiftUI ?? Color.clear)
+                    .fill(node.fillColor.swiftUI)
                     .overlay(
                         Rectangle()
-                            .stroke(node.style.borderColor?.swiftUI ?? Color.clear,
-                                   lineWidth: node.style.borderWidth ?? 0)
+                            .stroke(node.strokeColor?.swiftUI ?? Color.clear,
+                                   lineWidth: node.strokeWidth)
                     )
             case .circle:
                 Circle()
-                    .fill(node.style.backgroundColor?.swiftUI ?? Color.clear)
+                    .fill(node.fillColor.swiftUI)
                     .overlay(
                         Circle()
-                            .stroke(node.style.borderColor?.swiftUI ?? Color.clear,
-                                   lineWidth: node.style.borderWidth ?? 0)
+                            .stroke(node.strokeColor?.swiftUI ?? Color.clear,
+                                   lineWidth: node.strokeWidth)
                     )
             case .roundedRectangle(let cornerRadius):
                 RoundedRectangle(cornerRadius: cornerRadius)
-                    .fill(node.style.backgroundColor?.swiftUI ?? Color.clear)
+                    .fill(node.fillColor.swiftUI)
                     .overlay(
                         RoundedRectangle(cornerRadius: cornerRadius)
-                            .stroke(node.style.borderColor?.swiftUI ?? Color.clear,
-                                   lineWidth: node.style.borderWidth ?? 0)
+                            .stroke(node.strokeColor?.swiftUI ?? Color.clear,
+                                   lineWidth: node.strokeWidth)
                     )
             case .capsule:
                 Capsule()
-                    .fill(node.style.backgroundColor?.swiftUI ?? Color.clear)
+                    .fill(node.fillColor.swiftUI)
                     .overlay(
                         Capsule()
-                            .stroke(node.style.borderColor?.swiftUI ?? Color.clear,
-                                   lineWidth: node.style.borderWidth ?? 0)
+                            .stroke(node.strokeColor?.swiftUI ?? Color.clear,
+                                   lineWidth: node.strokeWidth)
                     )
             case .ellipse:
                 Ellipse()
-                    .fill(node.style.backgroundColor?.swiftUI ?? Color.clear)
+                    .fill(node.fillColor.swiftUI)
                     .overlay(
                         Ellipse()
-                            .stroke(node.style.borderColor?.swiftUI ?? Color.clear,
-                                   lineWidth: node.style.borderWidth ?? 0)
+                            .stroke(node.strokeColor?.swiftUI ?? Color.clear,
+                                   lineWidth: node.strokeWidth)
                     )
             }
         }
-        .frame(
-            width: node.style.width,
-            height: node.style.height,
-            alignment: .center
-        )
-        .frame(
-            maxWidth: node.style.width == nil ? .infinity : nil,
-            maxHeight: node.style.height == nil ? .infinity : nil
-        )
+        .modifier(DimensionFrameModifier(
+            width: node.width,
+            height: node.height,
+            minWidth: nil,
+            minHeight: nil,
+            maxWidth: node.width == nil ? .absolute(.infinity) : nil,
+            maxHeight: node.height == nil ? .absolute(.infinity) : nil
+        ))
         .padding(strokePadding)
     }
 
     // Add padding to prevent stroke from being clipped
     private var strokePadding: CGFloat {
-        if let borderWidth = node.style.borderWidth, borderWidth > 0 {
+        if node.strokeWidth > 0 {
             // Add padding equal to half the stroke width to prevent clipping
-            return borderWidth / 2
+            return node.strokeWidth / 2
         }
         return 0
     }

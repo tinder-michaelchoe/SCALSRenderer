@@ -537,7 +537,7 @@ struct RootComponentRoundTripTests {
             ),
             styleId: "rootStyle",
             colorScheme: "dark",
-            children: [.spacer]
+            children: [.spacer(Document.Spacer())]
         )
         
         let data = try JSONEncoder().encode(original)

@@ -547,6 +547,8 @@ private func printRenderNode(_ node: RenderNode?, indent: Int) {
         print("\(prefix)PageIndicator(pageCount: \(pi.pageCountStatic ?? 0))")
     case .custom(let kind, _):
         print("\(prefix)Custom(\(kind.rawValue))")
+    @unknown default:
+        print("\(prefix)Unknown node type")
     }
 }
 

@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://scals.io/schema/v1/ir.json",
   "title": "SCALS Intermediate Representation (IR) Schema",
-  "description": "JSON Schema for the resolved render tree output. This is the platform-agnostic IR that renderers consume after the Document has been resolved.",
+  "description": "JSON Schema for the resolved render tree output. This is the platform-agnostic IR that renderers consume after the Document has been resolved. All style properties are fully resolved and flattened directly onto nodes.",
   "type": "object",
   "$ref": "#/$defs/renderTree",
 
@@ -35,8 +35,8 @@
 
     "rootNode": {
       "type": "object",
-      "description": "The resolved root container",
-      "required": ["colorScheme", "style", "actions", "children"],
+      "description": "The resolved root container with fully flattened properties",
+      "required": ["backgroundColor", "colorScheme", "actions", "children", "padding", "cornerRadius"],
       "properties": {
         "backgroundColor": {
           "$ref": "#/$defs/color",
@@ -48,9 +48,6 @@
         "colorScheme": {
           "$ref": "#/$defs/colorScheme"
         },
-        "style": {
-          "$ref": "#/$defs/style"
-        },
         "actions": {
           "$ref": "#/$defs/lifecycleActions"
         },
@@ -59,6 +56,22 @@
           "items": {
             "$ref": "#/$defs/renderNode"
           }
+        },
+        "padding": {
+          "$ref": "#/$defs/directionalEdgeInsets",
+          "description": "Fully resolved padding"
+        },
+        "cornerRadius": {
+          "type": "number",
+          "description": "Corner radius in points"
+        },
+        "shadow": {
+          "$ref": "#/$defs/shadow",
+          "description": "Optional shadow effect"
+        },
+        "border": {
+          "$ref": "#/$defs/border",
+          "description": "Optional border effect"
         }
       },
       "additionalProperties": false
@@ -104,8 +117,8 @@
 
     "containerNode": {
       "type": "object",
-      "description": "A layout container (VStack, HStack, ZStack)",
-      "required": ["nodeType", "layoutType", "alignment", "spacing", "padding", "style", "children"],
+      "description": "A layout container (VStack, HStack, ZStack) with fully flattened style properties",
+      "required": ["nodeType", "layoutType", "alignment", "spacing", "children", "padding", "backgroundColor", "cornerRadius"],
       "properties": {
         "nodeType": {
           "const": "container"
@@ -126,17 +139,49 @@
           "type": "number",
           "description": "Spacing between children in points"
         },
-        "padding": {
-          "$ref": "#/$defs/directionalEdgeInsets"
-        },
-        "style": {
-          "$ref": "#/$defs/style"
-        },
         "children": {
           "type": "array",
           "items": {
             "$ref": "#/$defs/renderNode"
           }
+        },
+        "padding": {
+          "$ref": "#/$defs/directionalEdgeInsets",
+          "description": "Fully resolved padding (node-level + style-level merged)"
+        },
+        "backgroundColor": {
+          "$ref": "#/$defs/color",
+          "description": "Background color (always present, use clear for transparent)"
+        },
+        "cornerRadius": {
+          "type": "number",
+          "description": "Corner radius in points"
+        },
+        "shadow": {
+          "$ref": "#/$defs/shadow",
+          "description": "Optional shadow effect"
+        },
+        "border": {
+          "$ref": "#/$defs/border",
+          "description": "Optional border effect"
+        },
+        "width": {
+          "$ref": "#/$defs/dimensionValue"
+        },
+        "height": {
+          "$ref": "#/$defs/dimensionValue"
+        },
+        "minWidth": {
+          "$ref": "#/$defs/dimensionValue"
+        },
+        "minHeight": {
+          "$ref": "#/$defs/dimensionValue"
+        },
+        "maxWidth": {
+          "$ref": "#/$defs/dimensionValue"
+        },
+        "maxHeight": {
+          "$ref": "#/$defs/dimensionValue"
         }
       },
       "additionalProperties": false
@@ -349,33 +394,24 @@
       "oneOf": [
         {
           "type": "object",
-          "required": ["type", "value"],
           "properties": {
-            "type": {
-              "const": "absolute"
-            },
-            "value": {
-              "type": "number",
-              "description": "Absolute value in points"
-            }
+            "absolute": { "type": "number" }
           },
-          "additionalProperties": false
+          "required": ["absolute"],
+          "additionalProperties": false,
+          "description": "Absolute value in points"
         },
         {
           "type": "object",
-          "required": ["type", "value"],
           "properties": {
-            "type": {
-              "const": "fractional"
-            },
-            "value": {
+            "fractional": {
               "type": "number",
-              "minimum": 0,
-              "maximum": 1,
-              "description": "Fraction of container size (0.0 to 1.0)"
+              "description": "Fraction of container (0.0 to 1.0)"
             }
           },
-          "additionalProperties": false
+          "required": ["fractional"],
+          "additionalProperties": false,
+          "description": "Fractional value relative to container"
         }
       ]
     },
@@ -388,8 +424,8 @@
 
     "textNode": {
       "type": "object",
-      "description": "A text/label component",
-      "required": ["nodeType", "content", "style", "padding", "isDynamic"],
+      "description": "A text/label component with fully flattened style properties",
+      "required": ["nodeType", "content", "padding", "textColor", "fontSize", "fontWeight", "textAlignment", "backgroundColor", "cornerRadius", "isDynamic"],
       "properties": {
         "nodeType": {
           "const": "text"
@@ -405,12 +441,6 @@
           "type": "string",
           "description": "Original style ID from document (may have @ prefix for design system)"
         },
-        "style": {
-          "$ref": "#/$defs/style"
-        },
-        "padding": {
-          "$ref": "#/$defs/directionalEdgeInsets"
-        },
         "bindingPath": {
           "type": "string",
           "description": "State path to read content from dynamically"
@@ -422,6 +452,50 @@
         "isDynamic": {
           "type": "boolean",
           "description": "Whether this text node has dynamic content"
+        },
+        "padding": {
+          "$ref": "#/$defs/directionalEdgeInsets",
+          "description": "Fully resolved padding"
+        },
+        "textColor": {
+          "$ref": "#/$defs/color",
+          "description": "Text color"
+        },
+        "fontSize": {
+          "type": "number",
+          "description": "Font size in points"
+        },
+        "fontWeight": {
+          "type": "string",
+          "enum": ["ultraLight", "thin", "light", "regular", "medium", "semibold", "bold", "heavy", "black"],
+          "description": "Font weight"
+        },
+        "textAlignment": {
+          "type": "string",
+          "enum": ["leading", "center", "trailing"],
+          "description": "Text alignment"
+        },
+        "backgroundColor": {
+          "$ref": "#/$defs/color",
+          "description": "Background color"
+        },
+        "cornerRadius": {
+          "type": "number",
+          "description": "Corner radius for background"
+        },
+        "shadow": {
+          "$ref": "#/$defs/shadow",
+          "description": "Optional shadow effect"
+        },
+        "border": {
+          "$ref": "#/$defs/border",
+          "description": "Optional border effect"
+        },
+        "width": {
+          "$ref": "#/$defs/dimensionValue"
+        },
+        "height": {
+          "$ref": "#/$defs/dimensionValue"
         }
       },
       "additionalProperties": false
@@ -429,7 +503,7 @@
 
     "buttonNode": {
       "type": "object",
-      "description": "A button component",
+      "description": "A button component with state-based styles",
       "required": ["nodeType", "label", "styles", "fillWidth", "imagePlacement", "imageSpacing"],
       "properties": {
         "nodeType": {
@@ -447,7 +521,8 @@
           "description": "Original style ID from document (may have @ prefix for design system)"
         },
         "styles": {
-          "$ref": "#/$defs/buttonStyles"
+          "$ref": "#/$defs/buttonStyles",
+          "description": "Resolved styles for different button states (normal, selected, disabled)"
         },
         "isSelectedBinding": {
           "type": "string",
@@ -484,17 +559,84 @@
 
     "buttonStyles": {
       "type": "object",
-      "description": "Resolved styles for different button states",
+      "description": "Resolved styles for different button states (normal, selected, disabled)",
       "required": ["normal"],
       "properties": {
         "normal": {
-          "$ref": "#/$defs/style"
+          "$ref": "#/$defs/buttonStateStyle",
+          "description": "Style for normal (unselected) state"
         },
         "selected": {
-          "$ref": "#/$defs/style"
+          "$ref": "#/$defs/buttonStateStyle",
+          "description": "Style for selected state"
         },
         "disabled": {
-          "$ref": "#/$defs/style"
+          "$ref": "#/$defs/buttonStateStyle",
+          "description": "Style for disabled state"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "buttonStateStyle": {
+      "type": "object",
+      "description": "Fully resolved style for a specific button state with all properties flattened",
+      "required": ["textColor", "fontSize", "fontWeight", "backgroundColor", "cornerRadius", "padding"],
+      "properties": {
+        "textColor": {
+          "$ref": "#/$defs/color",
+          "description": "Text color"
+        },
+        "fontSize": {
+          "type": "number",
+          "description": "Font size in points"
+        },
+        "fontWeight": {
+          "type": "string",
+          "enum": ["ultraLight", "thin", "light", "regular", "medium", "semibold", "bold", "heavy", "black"],
+          "description": "Font weight"
+        },
+        "backgroundColor": {
+          "$ref": "#/$defs/color",
+          "description": "Background color"
+        },
+        "cornerRadius": {
+          "type": "number",
+          "description": "Corner radius in points"
+        },
+        "border": {
+          "$ref": "#/$defs/border",
+          "description": "Optional border effect"
+        },
+        "shadow": {
+          "$ref": "#/$defs/shadow",
+          "description": "Optional shadow effect"
+        },
+        "tintColor": {
+          "$ref": "#/$defs/color",
+          "description": "Tint color for images/icons"
+        },
+        "width": {
+          "$ref": "#/$defs/dimensionValue"
+        },
+        "height": {
+          "$ref": "#/$defs/dimensionValue"
+        },
+        "minWidth": {
+          "$ref": "#/$defs/dimensionValue"
+        },
+        "minHeight": {
+          "$ref": "#/$defs/dimensionValue"
+        },
+        "maxWidth": {
+          "$ref": "#/$defs/dimensionValue"
+        },
+        "maxHeight": {
+          "$ref": "#/$defs/dimensionValue"
+        },
+        "padding": {
+          "$ref": "#/$defs/directionalEdgeInsets",
+          "description": "Fully resolved padding"
         }
       },
       "additionalProperties": false
@@ -502,8 +644,8 @@
 
     "textFieldNode": {
       "type": "object",
-      "description": "A text input component",
-      "required": ["nodeType", "placeholder", "style"],
+      "description": "A text input component with fully flattened style properties",
+      "required": ["nodeType", "placeholder", "textColor", "fontSize", "backgroundColor", "cornerRadius", "padding"],
       "properties": {
         "nodeType": {
           "const": "textField"
@@ -518,12 +660,39 @@
           "type": "string",
           "description": "Original style ID from document (may have @ prefix for design system)"
         },
-        "style": {
-          "$ref": "#/$defs/style"
-        },
         "bindingPath": {
           "type": "string",
           "description": "State path to bind the input value to"
+        },
+        "textColor": {
+          "$ref": "#/$defs/color",
+          "description": "Text color"
+        },
+        "fontSize": {
+          "type": "number",
+          "description": "Font size in points"
+        },
+        "backgroundColor": {
+          "$ref": "#/$defs/color",
+          "description": "Background color"
+        },
+        "cornerRadius": {
+          "type": "number",
+          "description": "Corner radius in points"
+        },
+        "border": {
+          "$ref": "#/$defs/border",
+          "description": "Optional border effect"
+        },
+        "padding": {
+          "$ref": "#/$defs/directionalEdgeInsets",
+          "description": "Fully resolved padding"
+        },
+        "width": {
+          "$ref": "#/$defs/dimensionValue"
+        },
+        "height": {
+          "$ref": "#/$defs/dimensionValue"
         }
       },
       "additionalProperties": false
@@ -531,8 +700,8 @@
 
     "toggleNode": {
       "type": "object",
-      "description": "A toggle/switch component",
-      "required": ["nodeType", "style"],
+      "description": "A toggle/switch component with fully flattened style properties",
+      "required": ["nodeType", "padding"],
       "properties": {
         "nodeType": {
           "const": "toggle"
@@ -548,8 +717,19 @@
           "type": "string",
           "description": "State path to bind the boolean value to"
         },
-        "style": {
-          "$ref": "#/$defs/style"
+        "tintColor": {
+          "$ref": "#/$defs/color",
+          "description": "Tint color for the toggle"
+        },
+        "padding": {
+          "$ref": "#/$defs/directionalEdgeInsets",
+          "description": "Fully resolved padding"
+        },
+        "width": {
+          "$ref": "#/$defs/dimensionValue"
+        },
+        "height": {
+          "$ref": "#/$defs/dimensionValue"
         }
       },
       "additionalProperties": false
@@ -557,8 +737,8 @@
 
     "sliderNode": {
       "type": "object",
-      "description": "A slider component",
-      "required": ["nodeType", "minValue", "maxValue", "style"],
+      "description": "A slider component with fully flattened style properties",
+      "required": ["nodeType", "minValue", "maxValue", "padding"],
       "properties": {
         "nodeType": {
           "const": "slider"
@@ -582,8 +762,19 @@
           "type": "number",
           "description": "Maximum slider value"
         },
-        "style": {
-          "$ref": "#/$defs/style"
+        "tintColor": {
+          "$ref": "#/$defs/color",
+          "description": "Tint color for the slider"
+        },
+        "padding": {
+          "$ref": "#/$defs/directionalEdgeInsets",
+          "description": "Fully resolved padding"
+        },
+        "width": {
+          "$ref": "#/$defs/dimensionValue"
+        },
+        "height": {
+          "$ref": "#/$defs/dimensionValue"
         }
       },
       "additionalProperties": false
@@ -591,8 +782,8 @@
 
     "imageNode": {
       "type": "object",
-      "description": "An image component",
-      "required": ["nodeType", "source", "style"],
+      "description": "An image component with fully flattened style properties",
+      "required": ["nodeType", "source", "backgroundColor", "cornerRadius", "padding"],
       "properties": {
         "nodeType": {
           "const": "image"
@@ -607,8 +798,47 @@
           "type": "string",
           "description": "Original style ID from document (may have @ prefix for design system)"
         },
-        "style": {
-          "$ref": "#/$defs/style"
+        "tintColor": {
+          "$ref": "#/$defs/color",
+          "description": "Tint color for template images"
+        },
+        "backgroundColor": {
+          "$ref": "#/$defs/color",
+          "description": "Background color"
+        },
+        "cornerRadius": {
+          "type": "number",
+          "description": "Corner radius in points"
+        },
+        "border": {
+          "$ref": "#/$defs/border",
+          "description": "Optional border effect"
+        },
+        "shadow": {
+          "$ref": "#/$defs/shadow",
+          "description": "Optional shadow effect"
+        },
+        "padding": {
+          "$ref": "#/$defs/directionalEdgeInsets",
+          "description": "Fully resolved padding"
+        },
+        "width": {
+          "$ref": "#/$defs/dimensionValue"
+        },
+        "height": {
+          "$ref": "#/$defs/dimensionValue"
+        },
+        "minWidth": {
+          "$ref": "#/$defs/dimensionValue"
+        },
+        "minHeight": {
+          "$ref": "#/$defs/dimensionValue"
+        },
+        "maxWidth": {
+          "$ref": "#/$defs/dimensionValue"
+        },
+        "maxHeight": {
+          "$ref": "#/$defs/dimensionValue"
         },
         "onTap": {
           "$ref": "#/$defs/actionBinding"
@@ -678,8 +908,8 @@
 
     "gradientNode": {
       "type": "object",
-      "description": "A gradient overlay component",
-      "required": ["nodeType", "gradientType", "colors", "startPoint", "endPoint", "style"],
+      "description": "A gradient overlay component with fully flattened style properties",
+      "required": ["nodeType", "gradientType", "colors", "startPoint", "endPoint", "cornerRadius", "padding"],
       "properties": {
         "nodeType": {
           "const": "gradient"
@@ -704,8 +934,19 @@
         "endPoint": {
           "$ref": "#/$defs/unitPoint"
         },
-        "style": {
-          "$ref": "#/$defs/style"
+        "cornerRadius": {
+          "type": "number",
+          "description": "Corner radius in points"
+        },
+        "padding": {
+          "$ref": "#/$defs/directionalEdgeInsets",
+          "description": "Fully resolved padding"
+        },
+        "width": {
+          "$ref": "#/$defs/dimensionValue"
+        },
+        "height": {
+          "$ref": "#/$defs/dimensionValue"
         }
       },
       "additionalProperties": false
@@ -797,8 +1038,8 @@
 
     "dividerNode": {
       "type": "object",
-      "description": "A divider/separator component",
-      "required": ["nodeType", "style"],
+      "description": "A divider/separator component with fully flattened style properties",
+      "required": ["nodeType", "color", "thickness", "padding"],
       "properties": {
         "nodeType": {
           "const": "divider"
@@ -806,8 +1047,17 @@
         "id": {
           "type": "string"
         },
-        "style": {
-          "$ref": "#/$defs/style"
+        "color": {
+          "$ref": "#/$defs/color",
+          "description": "Divider color"
+        },
+        "thickness": {
+          "type": "number",
+          "description": "Divider thickness in points"
+        },
+        "padding": {
+          "$ref": "#/$defs/directionalEdgeInsets",
+          "description": "Fully resolved padding"
         }
       },
       "additionalProperties": false
@@ -829,91 +1079,43 @@
       "additionalProperties": true
     },
 
-    "style": {
+    "shadow": {
       "type": "object",
-      "description": "A fully resolved style with all inherited values merged",
+      "description": "Platform-agnostic shadow specification - all properties combined into one resolved value",
+      "required": ["color", "radius", "x", "y"],
       "properties": {
-        "fontFamily": {
-          "type": "string",
-          "description": "Font family name"
-        },
-        "fontSize": {
-          "type": "number",
-          "description": "Font size in points"
-        },
-        "fontWeight": {
-          "type": "string",
-          "enum": ["ultraLight", "thin", "light", "regular", "medium", "semibold", "bold", "heavy", "black"],
-          "description": "Font weight"
-        },
-        "textColor": {
+        "color": {
           "$ref": "#/$defs/color",
-          "description": "Text color"
+          "description": "Shadow color"
         },
-        "textAlignment": {
-          "type": "string",
-          "enum": ["leading", "center", "trailing"],
-          "description": "Text alignment. For buttons, also controls content positioning within the button frame"
-        },
-        "backgroundColor": {
-          "$ref": "#/$defs/color",
-          "description": "Background color"
-        },
-        "cornerRadius": {
+        "radius": {
           "type": "number",
-          "description": "Corner radius in points"
+          "description": "Shadow blur radius in points"
         },
-        "borderWidth": {
+        "x": {
           "type": "number",
-          "description": "Border width in points"
+          "description": "Horizontal shadow offset in points"
         },
-        "borderColor": {
+        "y": {
+          "type": "number",
+          "description": "Vertical shadow offset in points"
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "border": {
+      "type": "object",
+      "description": "Platform-agnostic border specification - color and width combined into one resolved value",
+      "required": ["color", "width"],
+      "properties": {
+        "color": {
           "$ref": "#/$defs/color",
           "description": "Border color"
         },
-        "tintColor": {
-          "$ref": "#/$defs/color",
-          "description": "Tint color for images"
-        },
         "width": {
           "type": "number",
-          "description": "Fixed width in points"
-        },
-        "height": {
-          "type": "number",
-          "description": "Fixed height in points"
-        },
-        "minWidth": {
-          "type": "number",
-          "description": "Minimum width in points"
-        },
-        "minHeight": {
-          "type": "number",
-          "description": "Minimum height in points"
-        },
-        "maxWidth": {
-          "type": "number",
-          "description": "Maximum width in points"
-        },
-        "maxHeight": {
-          "type": "number",
-          "description": "Maximum height in points"
-        },
-        "paddingTop": {
-          "type": "number",
-          "description": "Top padding in points"
-        },
-        "paddingBottom": {
-          "type": "number",
-          "description": "Bottom padding in points"
-        },
-        "paddingLeading": {
-          "type": "number",
-          "description": "Leading (start) padding in points"
-        },
-        "paddingTrailing": {
-          "type": "number",
-          "description": "Trailing (end) padding in points"
+          "description": "Border width in points"
         }
       },
       "additionalProperties": false
@@ -954,7 +1156,7 @@
 
     "directionalEdgeInsets": {
       "type": "object",
-      "description": "Edge insets with leading/trailing (LTR/RTL aware)",
+      "description": "Edge insets with leading/trailing (LTR/RTL aware) - fully resolved with all sources merged",
       "required": ["top", "leading", "bottom", "trailing"],
       "properties": {
         "top": {

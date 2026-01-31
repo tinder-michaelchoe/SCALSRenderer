@@ -17,7 +17,8 @@ public struct ImageComponentResolver: ComponentResolving {
 
     @MainActor
     public func resolve(_ component: Document.Component, context: ResolutionContext) throws -> ComponentResolutionResult {
-        let style = context.styleResolver.resolve(component.styleId)
+        // Resolve style to get flattened properties
+        let resolvedStyle = context.styleResolver.resolve(component.styleId)
         let nodeId = component.id ?? UUID().uuidString
         let source = resolveImageSource(component, context: context)
         let placeholder = resolvePlaceholder(component)
@@ -28,7 +29,7 @@ public struct ImageComponentResolver: ComponentResolving {
         if context.isTracking {
             viewNode = ViewNode(
                 id: nodeId,
-                nodeType: .image(ImageNodeData(source: source, placeholder: placeholder, loading: loading, style: style))
+                nodeType: .image(ImageNodeData(source: source, placeholder: placeholder, loading: loading))
             )
             viewNode?.parent = context.parentViewNode
         } else {
@@ -40,14 +41,35 @@ public struct ImageComponentResolver: ComponentResolving {
             initializeLocalState(on: viewNode, from: localState)
         }
 
+        // Resolve padding by merging node-level padding with style padding
+        let padding = IR.EdgeInsets(
+            from: component.padding,
+            mergingTop: resolvedStyle.paddingTop ?? 0,
+            mergingBottom: resolvedStyle.paddingBottom ?? 0,
+            mergingLeading: resolvedStyle.paddingLeading ?? 0,
+            mergingTrailing: resolvedStyle.paddingTrailing ?? 0
+        )
+
+        // Create ImageNode with flattened properties (no .style)
         let renderNode = RenderNode.image(ImageNode(
             id: component.id,
             source: source,
             placeholder: placeholder,
             loading: loading,
             styleId: component.styleId,
-            style: style,
-            onTap: component.actions?.onTap
+            onTap: component.actions?.onTap,
+            tintColor: resolvedStyle.tintColor,
+            backgroundColor: resolvedStyle.backgroundColor ?? .clear,
+            cornerRadius: resolvedStyle.cornerRadius ?? 0,
+            border: IR.Border(from: resolvedStyle),
+            shadow: IR.Shadow(from: resolvedStyle),
+            padding: padding,
+            width: resolvedStyle.width,
+            height: resolvedStyle.height,
+            minWidth: resolvedStyle.minWidth,
+            minHeight: resolvedStyle.minHeight,
+            maxWidth: resolvedStyle.maxWidth,
+            maxHeight: resolvedStyle.maxHeight
         ))
 
         return ComponentResolutionResult(renderNode: renderNode, viewNode: viewNode)

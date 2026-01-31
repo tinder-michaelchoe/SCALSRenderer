@@ -26,11 +26,35 @@ public struct ImageNodeRenderer: UIKitNodeRendering {
             activityIndicator.translatesAutoresizingMaskIntoConstraints = false
             activityIndicator.startAnimating()
 
-            if let width = imageNode.style.width {
-                activityIndicator.widthAnchor.constraint(equalToConstant: width).isActive = true
+            if let width = imageNode.width {
+                switch width {
+                case .absolute(let value):
+                    activityIndicator.widthAnchor.constraint(equalToConstant: value).isActive = true
+                case .fractional(let fraction):
+                    if let superview = activityIndicator.superview {
+                        activityIndicator.widthAnchor.constraint(
+                            equalTo: superview.widthAnchor,
+                            multiplier: fraction
+                        ).isActive = true
+                    } else {
+                        print("Warning: Cannot apply fractional width - view has no superview")
+                    }
+                }
             }
-            if let height = imageNode.style.height {
-                activityIndicator.heightAnchor.constraint(equalToConstant: height).isActive = true
+            if let height = imageNode.height {
+                switch height {
+                case .absolute(let value):
+                    activityIndicator.heightAnchor.constraint(equalToConstant: value).isActive = true
+                case .fractional(let fraction):
+                    if let superview = activityIndicator.superview {
+                        activityIndicator.heightAnchor.constraint(
+                            equalTo: superview.heightAnchor,
+                            multiplier: fraction
+                        ).isActive = true
+                    } else {
+                        print("Warning: Cannot apply fractional height - view has no superview")
+                    }
+                }
             }
 
             return activityIndicator
@@ -71,11 +95,35 @@ public struct ImageNodeRenderer: UIKitNodeRendering {
             break
         }
 
-        if let width = imageNode.style.width {
-            imageView.widthAnchor.constraint(equalToConstant: width).isActive = true
+        if let width = imageNode.width {
+            switch width {
+            case .absolute(let value):
+                imageView.widthAnchor.constraint(equalToConstant: value).isActive = true
+            case .fractional(let fraction):
+                if let superview = imageView.superview {
+                    imageView.widthAnchor.constraint(
+                        equalTo: superview.widthAnchor,
+                        multiplier: fraction
+                    ).isActive = true
+                } else {
+                    print("Warning: Cannot apply fractional width - view has no superview")
+                }
+            }
         }
-        if let height = imageNode.style.height {
-            imageView.heightAnchor.constraint(equalToConstant: height).isActive = true
+        if let height = imageNode.height {
+            switch height {
+            case .absolute(let value):
+                imageView.heightAnchor.constraint(equalToConstant: value).isActive = true
+            case .fractional(let fraction):
+                if let superview = imageView.superview {
+                    imageView.heightAnchor.constraint(
+                        equalTo: superview.heightAnchor,
+                        multiplier: fraction
+                    ).isActive = true
+                } else {
+                    print("Warning: Cannot apply fractional height - view has no superview")
+                }
+            }
         }
 
         return imageView

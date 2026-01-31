@@ -184,9 +184,9 @@ public struct Resolver {
 
     @MainActor
     private func resolveRoot(_ root: Document.RootComponent, context: ResolutionContext) throws -> RootNode {
-        let backgroundColor: IR.Color? = root.backgroundColor.map { IR.Color(hex: $0) }
+        let backgroundColor = root.backgroundColor.map { IR.Color(hex: $0) } ?? .clear
         let colorScheme = ColorSchemeConverter.convert(root.colorScheme)
-        let style = context.styleResolver.resolve(root.styleId)
+        let resolvedStyle = context.styleResolver.resolve(root.styleId)
 
         let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
         let children = try root.children.map { child -> RenderNode in
@@ -197,9 +197,18 @@ public struct Resolver {
             backgroundColor: backgroundColor,
             edgeInsets: EdgeInsetsConverter.convert(root.edgeInsets),
             colorScheme: colorScheme,
-            style: style,
             actions: LifecycleActions(from: root.actions),
-            children: children
+            children: children,
+            padding: IR.EdgeInsets(
+                from: nil,
+                mergingTop: resolvedStyle.paddingTop ?? 0,
+                mergingBottom: resolvedStyle.paddingBottom ?? 0,
+                mergingLeading: resolvedStyle.paddingLeading ?? 0,
+                mergingTrailing: resolvedStyle.paddingTrailing ?? 0
+            ),
+            cornerRadius: resolvedStyle.cornerRadius ?? 0,
+            shadow: IR.Shadow(from: resolvedStyle),
+            border: IR.Border(from: resolvedStyle)
         )
     }
 
@@ -208,17 +217,16 @@ public struct Resolver {
         _ root: Document.RootComponent,
         context: ResolutionContext
     ) throws -> (RootNode, ViewNode) {
-        let backgroundColor: IR.Color? = root.backgroundColor.map { IR.Color(hex: $0) }
+        let backgroundColor = root.backgroundColor.map { IR.Color(hex: $0) } ?? .clear
         let colorScheme = ColorSchemeConverter.convert(root.colorScheme)
-        let style = context.styleResolver.resolve(root.styleId)
+        let resolvedStyle = context.styleResolver.resolve(root.styleId)
 
         // Create view node for root
         let viewNode = ViewNode(
             id: "root",
             nodeType: .root(RootNodeData(
                 backgroundColor: root.backgroundColor,
-                colorScheme: colorScheme,
-                style: style
+                colorScheme: colorScheme
             ))
         )
 
@@ -244,9 +252,18 @@ public struct Resolver {
             backgroundColor: backgroundColor,
             edgeInsets: EdgeInsetsConverter.convert(root.edgeInsets),
             colorScheme: colorScheme,
-            style: style,
             actions: LifecycleActions(from: root.actions),
-            children: renderChildren
+            children: renderChildren,
+            padding: IR.EdgeInsets(
+                from: nil,
+                mergingTop: resolvedStyle.paddingTop ?? 0,
+                mergingBottom: resolvedStyle.paddingBottom ?? 0,
+                mergingLeading: resolvedStyle.paddingLeading ?? 0,
+                mergingTrailing: resolvedStyle.paddingTrailing ?? 0
+            ),
+            cornerRadius: resolvedStyle.cornerRadius ?? 0,
+            shadow: IR.Shadow(from: resolvedStyle),
+            border: IR.Border(from: resolvedStyle)
         )
 
         return (rootRenderNode, viewNode)

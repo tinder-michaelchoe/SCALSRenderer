@@ -15,7 +15,7 @@ import Foundation
 
 /// Platform-agnostic protocol for design system style resolution.
 ///
-/// A `DesignSystemProvider` resolves `@`-prefixed style references to `IR.Style` tokens.
+/// A `DesignSystemProvider` resolves `@`-prefixed style references to `ResolvedStyle` tokens.
 /// This protocol is platform-agnostic and can be used across different renderers.
 ///
 /// For SwiftUI-specific component rendering, see `SwiftUIDesignSystemRenderer` in the renderer layer.
@@ -25,8 +25,8 @@ import Foundation
 /// struct LightspeedStyleProvider: DesignSystemProvider {
 ///     static let identifier = "lightspeed"
 ///
-///     func resolveStyle(_ reference: String) -> IR.Style? {
-///         // Map "button.primary" -> IR.Style with colors, padding, etc.
+///     func resolveStyle(_ reference: String) -> ResolvedStyle? {
+///         // Map "button.primary" -> ResolvedStyle with colors, padding, etc.
 ///     }
 /// }
 /// ```
@@ -36,13 +36,13 @@ public protocol DesignSystemProvider {
 
     // MARK: - Style Token Resolution
 
-    /// Resolve a style reference to `IR.Style` for rendering.
+    /// Resolve a style reference to `ResolvedStyle` for rendering.
     ///
     /// Called when a component has an `@`-prefixed styleId.
     ///
     /// - Parameter reference: Style path without "@" prefix (e.g., "button.primary")
-    /// - Returns: Resolved `IR.Style` or nil if not found
-    func resolveStyle(_ reference: String) -> IR.Style?
+    /// - Returns: Resolved `ResolvedStyle` or nil if not found
+    func resolveStyle(_ reference: String) -> ResolvedStyle?
     
     // MARK: - Component Rendering Support (Platform-Agnostic)
     

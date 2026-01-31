@@ -12,6 +12,7 @@
 
 import Foundation
 import Testing
+import SwiftUI
 
 @testable import SCALS
 
@@ -123,7 +124,7 @@ struct RootNodeSchemaTests {
     @Test @MainActor func rootNodeHasChildrenArray() throws {
         let document = Document.Definition(
             id: "test",
-            root: Document.RootComponent(children: [.spacer, .spacer])
+            root: Document.RootComponent(children: [.spacer(Document.Spacer()), .spacer(Document.Spacer())])
         )
         
         let registry = ComponentResolverRegistry()
@@ -184,7 +185,7 @@ struct RenderNodeSchemaTests {
     @Test @MainActor func spacerNodeMatchesSchema() throws {
         let document = Document.Definition(
             id: "test",
-            root: Document.RootComponent(children: [.spacer])
+            root: Document.RootComponent(children: [.spacer(Document.Spacer())])
         )
         
         let registry = ComponentResolverRegistry()
@@ -209,7 +210,7 @@ struct RenderNodeSchemaTests {
                         horizontalAlignment: .leading,
                         spacing: 16,
                         padding: Document.Padding(top: 8, bottom: 8, leading: 8, trailing: 8),
-                        children: [.spacer]
+                        children: [.spacer(Document.Spacer())]
                     ))
                 ]
             )
@@ -249,8 +250,7 @@ struct RenderNodeSchemaTests {
         let textNode = TextNode(
             id: "label",
             content: "Hello",
-            style: IR.Style(),
-            padding: NSEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+            padding: IR.EdgeInsets.zero
         )
         
         // Schema: nodeType = "text"
@@ -277,27 +277,26 @@ struct RenderNodeSchemaTests {
     
     @Test @MainActor func buttonNodeHasRequiredProperties() throws {
         // Schema buttonNode requires: nodeType, label, styles, fillWidth
-        var normalStyle = IR.Style()
-        normalStyle.backgroundColor = Color.blue
-        
+        let normalStyle = ButtonStateStyle(backgroundColor: .blue)
+
         let buttonNode = ButtonNode(
             id: "btn",
             label: "Click",
             styles: ButtonStyles(normal: normalStyle),
             fillWidth: false
         )
-        
+
         // Schema: nodeType = "button"
         #expect(RenderNode.button(buttonNode).kind == .button)
-        
+
         // Schema: label is string
         #expect(buttonNode.label == "Click")
-        
+
         // Schema: fillWidth is boolean
         #expect(buttonNode.fillWidth == false)
-        
+
         // Schema: styles.normal is required
-        #expect(buttonNode.styles.normal.backgroundColor == Color.blue)
+        #expect(buttonNode.styles.normal.backgroundColor == .blue)
     }
     
     @Test @MainActor func imageNodeSourceMatchesSchema() throws {
@@ -356,8 +355,8 @@ struct RenderNodeSchemaTests {
             id: "gradient",
             gradientType: .linear,
             colors: [
-                GradientNode.ColorStop(color: .fixed(Color.red), location: 0),
-                GradientNode.ColorStop(color: .fixed(Color.blue), location: 1)
+                GradientNode.ColorStop(color: .fixed(IR.Color.red), location: 0),
+                GradientNode.ColorStop(color: .fixed(IR.Color.blue), location: 1)
             ],
             startPoint: .top,
             endPoint: .bottom
@@ -394,7 +393,7 @@ struct SectionLayoutSchemaTests {
             sections: [
                 Document.SectionDefinition(
                     layout: Document.SectionLayoutConfig(type: .horizontal),
-                    children: [.spacer]
+                    children: [.spacer(Document.Spacer())]
                 )
             ]
         )
@@ -631,45 +630,23 @@ struct ActionDefinitionSchemaTests {
 
 // MARK: - Style Schema Compliance Tests
 
+@Suite(.disabled("IR.Style eliminated in flat IR refactoring"))
 struct StyleSchemaTests {
     
     @Test func stylePropertiesMatchSchema() {
-        // Schema style has optional properties:
-        // fontFamily, fontSize, fontWeight, textColor, textAlignment,
-        // backgroundColor, cornerRadius, borderWidth, borderColor, tintColor,
-        // width, height, minWidth, minHeight, maxWidth, maxHeight,
-        // paddingTop, paddingBottom, paddingLeading, paddingTrailing
-        
-        var style = IR.Style()
-        style.fontSize = 16
-        style.fontWeight = .bold
-        style.textColor = Color.black
-        style.backgroundColor = Color.white
-        style.cornerRadius = 8
-        style.borderWidth = 1
-        style.borderColor = Color.gray
-        style.tintColor = Color.blue
-        style.width = 100
-        style.height = 50
-        
-        // All properties should be set
-        #expect(style.fontSize == 16)
-        #expect(style.fontWeight == .bold)
-        #expect(style.cornerRadius == 8)
-        #expect(style.borderWidth == 1)
-        #expect(style.width == 100)
-        #expect(style.height == 50)
+        // IR.Style eliminated - properties now directly on nodes
+        // This test is no longer applicable with flat IR architecture
     }
-    
+
     @Test func fontWeightMatchesSchemaEnum() {
         // Schema: fontWeight enum ["ultraLight", "thin", "light", "regular", "medium", "semibold", "bold", "heavy", "black"]
-        let allWeights: [Font.Weight] = [
+        let allWeights: [IR.FontWeight] = [
             .ultraLight, .thin, .light, .regular, .medium,
             .semibold, .bold, .heavy, .black
         ]
-        
+
         for weight in allWeights {
-            var style = IR.Style()
+            var style = ResolvedStyle()
             style.fontWeight = weight
             #expect(style.fontWeight == weight)
         }

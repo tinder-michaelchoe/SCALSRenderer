@@ -28,7 +28,6 @@ public struct ButtonComponentResolver: ComponentResolving {
                 id: nodeId,
                 nodeType: .button(ButtonNodeData(
                     label: component.text ?? "",
-                    style: buttonStyles.normal,
                     fillWidth: component.fillWidth ?? false,
                     onTapAction: component.actions?.onTap
                 ))
@@ -96,9 +95,18 @@ public struct ButtonComponentResolver: ComponentResolving {
     private func resolveButtonStyles(_ component: Document.Component, context: ResolutionContext) -> ButtonStyles {
         // If component has styles dictionary, resolve each state
         if let componentStyles = component.styles {
-            let normalStyle = context.styleResolver.resolve(componentStyles.normal ?? component.styleId)
-            let selectedStyle = componentStyles.selected.map { context.styleResolver.resolve($0) }
-            let disabledStyle = componentStyles.disabled.map { context.styleResolver.resolve($0) }
+            let normalResolved = context.styleResolver.resolve(componentStyles.normal ?? component.styleId)
+            let normalStyle = buttonStateStyle(from: normalResolved, padding: component.padding)
+
+            let selectedStyle: ButtonStateStyle? = componentStyles.selected.map {
+                let resolved = context.styleResolver.resolve($0)
+                return buttonStateStyle(from: resolved, padding: component.padding)
+            }
+
+            let disabledStyle: ButtonStateStyle? = componentStyles.disabled.map {
+                let resolved = context.styleResolver.resolve($0)
+                return buttonStateStyle(from: resolved, padding: component.padding)
+            }
 
             return ButtonStyles(
                 normal: normalStyle,
@@ -108,8 +116,37 @@ public struct ButtonComponentResolver: ComponentResolving {
         }
 
         // Fall back to single styleId
-        let style = context.styleResolver.resolve(component.styleId)
-        return ButtonStyles(normal: style)
+        let resolved = context.styleResolver.resolve(component.styleId)
+        return ButtonStyles(normal: buttonStateStyle(from: resolved, padding: component.padding))
+    }
+
+    /// Convert ResolvedStyle to ButtonStateStyle
+    private func buttonStateStyle(from resolved: ResolvedStyle, padding: Document.Padding?) -> ButtonStateStyle {
+        let resolvedPadding = IR.EdgeInsets(
+            from: padding,
+            mergingTop: resolved.paddingTop ?? 0,
+            mergingBottom: resolved.paddingBottom ?? 0,
+            mergingLeading: resolved.paddingLeading ?? 0,
+            mergingTrailing: resolved.paddingTrailing ?? 0
+        )
+
+        return ButtonStateStyle(
+            textColor: resolved.textColor ?? .black,
+            fontSize: resolved.fontSize ?? 17,
+            fontWeight: resolved.fontWeight ?? .regular,
+            backgroundColor: resolved.backgroundColor ?? .clear,
+            cornerRadius: resolved.cornerRadius ?? 0,
+            border: IR.Border(from: resolved),
+            shadow: IR.Shadow(from: resolved),
+            tintColor: resolved.tintColor,
+            width: resolved.width,
+            height: resolved.height,
+            minWidth: resolved.minWidth,
+            minHeight: resolved.minHeight,
+            maxWidth: resolved.maxWidth,
+            maxHeight: resolved.maxHeight,
+            padding: resolvedPadding
+        )
     }
 
     @MainActor

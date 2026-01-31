@@ -28,7 +28,7 @@ public struct TextFieldNodeRenderer: UIKitNodeRendering {
         field.placeholder = textFieldNode.placeholder
         field.translatesAutoresizingMaskIntoConstraints = false
         field.borderStyle = .roundedRect
-        field.applyStyle(textFieldNode.style)
+        field.applyStyle(from: textFieldNode)
 
         return field
     }

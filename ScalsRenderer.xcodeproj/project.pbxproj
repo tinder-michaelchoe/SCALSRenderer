@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		6C4255372F1423800065764C /* ScalsExamples.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 806245042F048FE60055EA41 /* ScalsExamples.framework */; };
 		6C4255382F1423800065764C /* ScalsExamples.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 806245042F048FE60055EA41 /* ScalsExamples.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		6C8473362F2855AF00E8B44B /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 6C8473352F2855AF00E8B44B /* SnapshotTesting */; };
 		803AE5532F09FC7600E3F1E8 /* ScalsModules.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 803AE5482F09FC7600E3F1E8 /* ScalsModules.framework */; };
 		803AE55D2F09FC7600E3F1E8 /* ScalsModules.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 803AE5482F09FC7600E3F1E8 /* ScalsModules.framework */; };
 		803AE55E2F09FC7600E3F1E8 /* ScalsModules.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 803AE5482F09FC7600E3F1E8 /* ScalsModules.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -205,7 +204,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				803AE55D2F09FC7600E3F1E8 /* ScalsModules.framework in Frameworks */,
-				6C8473362F2855AF00E8B44B /* SnapshotTesting in Frameworks */,
 				6C4255372F1423800065764C /* ScalsExamples.framework in Frameworks */,
 				806245412F0490560055EA41 /* SCALS.framework in Frameworks */,
 			);
@@ -356,7 +354,6 @@
 			);
 			name = ScalsRenderer;
 			packageProductDependencies = (
-				6C8473352F2855AF00E8B44B /* SnapshotTesting */,
 			);
 			productName = ScalsRenderer;
 			productReference = 800AE78D2EFE26C900F18C75 /* ScalsRenderer.app */;
@@ -579,7 +576,6 @@
 			mainGroup = 800AE7842EFE26C900F18C75;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				6C8473342F2855AF00E8B44B /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 800AE78E2EFE26C900F18C75 /* Products */;
@@ -838,7 +834,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -896,7 +892,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -982,7 +978,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = L2JNG48FS5;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.straussmade.ScalsRendererTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1004,7 +1000,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = L2JNG48FS5;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 26.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.straussmade.ScalsRendererTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1453,25 +1449,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		6C8473342F2855AF00E8B44B /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.18.7;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		6C8473352F2855AF00E8B44B /* SnapshotTesting */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 6C8473342F2855AF00E8B44B /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
-			productName = SnapshotTesting;
-		};
-/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 800AE7852EFE26C900F18C75 /* Project object */;
 }

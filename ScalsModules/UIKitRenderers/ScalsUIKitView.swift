@@ -226,12 +226,8 @@ public final class ScalsUIKitView: UIView {
     // MARK: - Setup
 
     private func setupView() {
-        // Background color
-        if let bg = renderTree.root.backgroundColor {
-            backgroundColor = bg.toUIKit
-        } else {
-            backgroundColor = .systemBackground
-        }
+        // Background color (non-optional in flattened IR)
+        backgroundColor = renderTree.root.backgroundColor.uiColor
 
         // Content container
         let contentStack = UIStackView()
@@ -481,7 +477,7 @@ public final class ScalsUIKitView: UIView {
         label.text = text.content
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
-        label.applyStyle(text.style)
+        label.applyStyle(from: text)
         return label
     }
 
@@ -499,7 +495,17 @@ public final class ScalsUIKitView: UIView {
         }
 
         if let height = button.style.height {
-            uiButton.heightAnchor.constraint(equalToConstant: height).isActive = true
+            switch height {
+            case .absolute(let value):
+                uiButton.heightAnchor.constraint(equalToConstant: value).isActive = true
+            case .fractional(let fraction):
+                if let superview = uiButton.superview {
+                    uiButton.heightAnchor.constraint(
+                        equalTo: superview.heightAnchor,
+                        multiplier: fraction
+                    ).isActive = true
+                }
+            }
         }
 
         return uiButton
@@ -513,7 +519,7 @@ public final class ScalsUIKitView: UIView {
         field.placeholder = textField.placeholder
         field.translatesAutoresizingMaskIntoConstraints = false
         field.borderStyle = .roundedRect
-        field.applyStyle(textField.style)
+        field.applyStyle(from: textField)
         return field
     }
 
@@ -523,8 +529,8 @@ public final class ScalsUIKitView: UIView {
             stateStore: stateStore
         )
         uiSwitch.translatesAutoresizingMaskIntoConstraints = false
-        if let tintColor = toggle.style.tintColor {
-            uiSwitch.onTintColor = tintColor.toUIKit
+        if let tintColor = toggle.tintColor {
+            uiSwitch.onTintColor = tintColor.uiColor
         }
         return uiSwitch
     }
@@ -537,8 +543,8 @@ public final class ScalsUIKitView: UIView {
             stateStore: stateStore
         )
         uiSlider.translatesAutoresizingMaskIntoConstraints = false
-        if let tintColor = slider.style.tintColor {
-            uiSlider.minimumTrackTintColor = tintColor.toUIKit
+        if let tintColor = slider.tintColor {
+            uiSlider.minimumTrackTintColor = tintColor.uiColor
         }
         return uiSlider
     }
@@ -550,11 +556,31 @@ public final class ScalsUIKitView: UIView {
             activityIndicator.translatesAutoresizingMaskIntoConstraints = false
             activityIndicator.startAnimating()
 
-            if let width = image.style.width {
-                activityIndicator.widthAnchor.constraint(equalToConstant: width).isActive = true
+            if let width = image.width {
+                switch width {
+                case .absolute(let value):
+                    activityIndicator.widthAnchor.constraint(equalToConstant: value).isActive = true
+                case .fractional(let fraction):
+                    if let superview = activityIndicator.superview {
+                        activityIndicator.widthAnchor.constraint(
+                            equalTo: superview.widthAnchor,
+                            multiplier: fraction
+                        ).isActive = true
+                    }
+                }
             }
-            if let height = image.style.height {
-                activityIndicator.heightAnchor.constraint(equalToConstant: height).isActive = true
+            if let height = image.height {
+                switch height {
+                case .absolute(let value):
+                    activityIndicator.heightAnchor.constraint(equalToConstant: value).isActive = true
+                case .fractional(let fraction):
+                    if let superview = activityIndicator.superview {
+                        activityIndicator.heightAnchor.constraint(
+                            equalTo: superview.heightAnchor,
+                            multiplier: fraction
+                        ).isActive = true
+                    }
+                }
             }
 
             return activityIndicator
@@ -580,11 +606,31 @@ public final class ScalsUIKitView: UIView {
             break
         }
 
-        if let width = image.style.width {
-            imageView.widthAnchor.constraint(equalToConstant: width).isActive = true
+        if let width = image.width {
+            switch width {
+            case .absolute(let value):
+                imageView.widthAnchor.constraint(equalToConstant: value).isActive = true
+            case .fractional(let fraction):
+                if let superview = imageView.superview {
+                    imageView.widthAnchor.constraint(
+                        equalTo: superview.widthAnchor,
+                        multiplier: fraction
+                    ).isActive = true
+                }
+            }
         }
-        if let height = image.style.height {
-            imageView.heightAnchor.constraint(equalToConstant: height).isActive = true
+        if let height = image.height {
+            switch height {
+            case .absolute(let value):
+                imageView.heightAnchor.constraint(equalToConstant: value).isActive = true
+            case .fractional(let fraction):
+                if let superview = imageView.superview {
+                    imageView.heightAnchor.constraint(
+                        equalTo: superview.heightAnchor,
+                        multiplier: fraction
+                    ).isActive = true
+                }
+            }
         }
 
         return imageView
@@ -619,16 +665,11 @@ public final class ScalsUIKitView: UIView {
         let dividerView = UIView()
         dividerView.translatesAutoresizingMaskIntoConstraints = false
 
-        // Set background color
-        if let color = divider.style.backgroundColor {
-            dividerView.backgroundColor = color.toUIKit
-        } else {
-            dividerView.backgroundColor = .separator
-        }
+        // Set background color (non-optional in flattened IR)
+        dividerView.backgroundColor = divider.color.uiColor
 
-        // Set height constraint
-        let height = divider.style.height ?? 1
-        dividerView.heightAnchor.constraint(equalToConstant: height).isActive = true
+        // Set height constraint using thickness
+        dividerView.heightAnchor.constraint(equalToConstant: divider.thickness).isActive = true
 
         return dividerView
     }
@@ -640,11 +681,31 @@ public final class ScalsUIKitView: UIView {
         )
         gradientView.translatesAutoresizingMaskIntoConstraints = false
 
-        if let width = gradient.style.width {
-            gradientView.widthAnchor.constraint(equalToConstant: width).isActive = true
+        if let width = gradient.width {
+            switch width {
+            case .absolute(let value):
+                gradientView.widthAnchor.constraint(equalToConstant: value).isActive = true
+            case .fractional(let fraction):
+                if let superview = gradientView.superview {
+                    gradientView.widthAnchor.constraint(
+                        equalTo: superview.widthAnchor,
+                        multiplier: fraction
+                    ).isActive = true
+                }
+            }
         }
-        if let height = gradient.style.height {
-            gradientView.heightAnchor.constraint(equalToConstant: height).isActive = true
+        if let height = gradient.height {
+            switch height {
+            case .absolute(let value):
+                gradientView.heightAnchor.constraint(equalToConstant: value).isActive = true
+            case .fractional(let fraction):
+                if let superview = gradientView.superview {
+                    gradientView.heightAnchor.constraint(
+                        equalTo: superview.heightAnchor,
+                        multiplier: fraction
+                    ).isActive = true
+                }
+            }
         }
 
         return gradientView

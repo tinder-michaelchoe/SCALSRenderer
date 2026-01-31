@@ -24,7 +24,7 @@ public struct TextNodeRenderer: UIKitNodeRendering {
         label.text = textNode.content
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
-        label.applyStyle(textNode.style)
+        label.applyStyle(from: textNode)
 
         return label
     }
