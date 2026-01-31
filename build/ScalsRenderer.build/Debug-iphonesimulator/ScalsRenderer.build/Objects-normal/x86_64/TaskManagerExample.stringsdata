@@ -1,0 +1,24 @@
+{
+  "source": "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Examples/Complex/TaskManagerExample.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Failed to parse Task Manager JSON",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 80
+        }
+      },
+      {
+        "comment": "",
+        "key": "Dismiss",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 82
+        }
+      }
+    ]
+  },
+  "version": 1
+}

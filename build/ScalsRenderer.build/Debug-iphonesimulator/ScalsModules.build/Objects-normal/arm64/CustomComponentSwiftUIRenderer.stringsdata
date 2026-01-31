@@ -1,0 +1,24 @@
+{
+  "source": "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsModules/Extensibility/CustomComponentSwiftUIRenderer.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Unknown custom component: %@",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 39
+        }
+      },
+      {
+        "comment": "",
+        "key": "Invalid custom component node",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 31
+        }
+      }
+    ]
+  },
+  "version": 1
+}

@@ -1,0 +1,16 @@
+{
+  "source": "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Examples/CustomComponents/FeedbackSurveyExample.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Failed to load view",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 270
+        }
+      }
+    ]
+  },
+  "version": 1
+}

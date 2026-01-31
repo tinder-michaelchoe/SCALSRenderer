@@ -1,0 +1,23 @@
+{
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/IR/Resolution/ComponentResolving.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/SCALS.build/Objects-normal/arm64/ComponentResolving.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/SCALS.build/Objects-normal/arm64/ComponentResolving.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/SCALS.build/Objects-normal/arm64/ComponentResolving.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/SCALS.build/Objects-normal/arm64/ComponentResolving.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/SCALS.build/Objects-normal/arm64/ComponentResolving.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/IR/Resolution/ContentResolver.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/SCALS.build/Objects-normal/arm64/ContentResolver.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/SCALS.build/Objects-normal/arm64/ContentResolver.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/SCALS.build/Objects-normal/arm64/ContentResolver.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/SCALS.build/Objects-normal/arm64/ContentResolver.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/SCALS.build/Objects-normal/arm64/ContentResolver.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/SCALS/IR/Resolution/Converters.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/SCALS.build/Objects-normal/arm64/Converters.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/SCALS.build/Objects-normal/arm64/Converters.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/SCALS.build/Objects-normal/arm64/Converters.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/SCALS.build/Objects-normal/arm64/Converters.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/SCALS.build/Objects-normal/arm64/Converters.swiftdeps"
+  }
+}

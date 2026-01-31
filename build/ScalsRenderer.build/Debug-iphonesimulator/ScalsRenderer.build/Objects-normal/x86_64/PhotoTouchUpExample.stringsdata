@@ -1,0 +1,40 @@
+{
+  "source": "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Examples/CustomComponents/PhotoTouchUpExample.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Failed to load view",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 197
+        }
+      },
+      {
+        "comment": "",
+        "key": "Learn More",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 191
+        }
+      },
+      {
+        "comment": "",
+        "key": "OK",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 192
+        }
+      },
+      {
+        "comment": "",
+        "key": "This would open the learn more page about photo touch ups.",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 194
+        }
+      }
+    ]
+  },
+  "version": 1
+}

@@ -1,0 +1,30 @@
+{
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Examples/Actions/HTTPRequestExample.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/x86_64/HTTPRequestExample.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/x86_64/HTTPRequestExample.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/x86_64/HTTPRequestExample.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/x86_64/HTTPRequestExample.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/x86_64/HTTPRequestExample.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Examples/Actions/NavigateExample.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/x86_64/NavigateExample.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/x86_64/NavigateExample.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/x86_64/NavigateExample.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/x86_64/NavigateExample.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/x86_64/NavigateExample.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Examples/Actions/SequenceExample.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/x86_64/SequenceExample.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/x86_64/SequenceExample.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/x86_64/SequenceExample.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/x86_64/SequenceExample.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/x86_64/SequenceExample.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Examples/Actions/SetStateExample.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/x86_64/SetStateExample.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/x86_64/SetStateExample.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/x86_64/SetStateExample.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/x86_64/SetStateExample.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/x86_64/SetStateExample.swiftdeps"
+  }
+}

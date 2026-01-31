@@ -1,0 +1,23 @@
+{
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Examples/Layouts/SectionHorizontalExample.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/SectionHorizontalExample.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/SectionHorizontalExample.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/SectionHorizontalExample.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/SectionHorizontalExample.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/SectionHorizontalExample.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Examples/Layouts/SectionLayoutExample.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/SectionLayoutExample.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/SectionLayoutExample.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/SectionLayoutExample.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/SectionLayoutExample.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/SectionLayoutExample.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Examples/Layouts/SectionListExample.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/SectionListExample.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/SectionListExample.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/SectionListExample.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/SectionListExample.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/SectionListExample.swiftdeps"
+  }
+}

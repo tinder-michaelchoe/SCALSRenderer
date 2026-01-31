@@ -1,0 +1,44 @@
+{
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsModules/Debug/DebugRenderer.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/DebugRenderer.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/DebugRenderer.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/DebugRenderer.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/DebugRenderer.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/DebugRenderer.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsModules/Extensibility/ComponentRegistration.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/ComponentRegistration.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/ComponentRegistration.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/ComponentRegistration.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/ComponentRegistration.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/ComponentRegistration.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsModules/Extensibility/CustomComponentSwiftUIRenderer.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/CustomComponentSwiftUIRenderer.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/CustomComponentSwiftUIRenderer.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/CustomComponentSwiftUIRenderer.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/CustomComponentSwiftUIRenderer.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/CustomComponentSwiftUIRenderer.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsModules/Extensibility/ScalsActionsModifier.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/ScalsActionsModifier.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/ScalsActionsModifier.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/ScalsActionsModifier.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/ScalsActionsModifier.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/ScalsActionsModifier.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsModules/Extensibility/ScalsStyleModifier.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/ScalsStyleModifier.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/ScalsStyleModifier.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/ScalsStyleModifier.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/ScalsStyleModifier.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/ScalsStyleModifier.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsModules/Extensions/ActionRegistry+Default.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/ActionRegistry+Default.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/ActionRegistry+Default.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/ActionRegistry+Default.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/ActionRegistry+Default.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/ActionRegistry+Default.swiftdeps"
+  }
+}

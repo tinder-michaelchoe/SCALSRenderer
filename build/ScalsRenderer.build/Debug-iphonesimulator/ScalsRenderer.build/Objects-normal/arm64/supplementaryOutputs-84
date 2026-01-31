@@ -1,0 +1,30 @@
+{
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Examples/CustomComponents/DoubleDateExample.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/DoubleDateExample.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/DoubleDateExample.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/DoubleDateExample.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/DoubleDateExample.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/DoubleDateExample.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Examples/CustomComponents/FeedbackSurveyExample.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/FeedbackSurveyExample.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/FeedbackSurveyExample.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/FeedbackSurveyExample.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/FeedbackSurveyExample.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/FeedbackSurveyExample.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Examples/CustomComponents/PhotoTouchUpExample.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/PhotoTouchUpExample.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/PhotoTouchUpExample.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/PhotoTouchUpExample.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/PhotoTouchUpExample.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/PhotoTouchUpExample.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Examples/Data/BindingDataExample.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/BindingDataExample.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/BindingDataExample.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/BindingDataExample.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/BindingDataExample.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsRenderer.build/Objects-normal/arm64/BindingDataExample.swiftdeps"
+  }
+}

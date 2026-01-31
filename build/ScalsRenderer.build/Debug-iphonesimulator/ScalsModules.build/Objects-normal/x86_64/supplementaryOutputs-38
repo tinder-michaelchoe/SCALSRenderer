@@ -1,0 +1,44 @@
+{
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsModules/Extensions/SwiftUISectionLayoutRendererRegistry+Default.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/SwiftUISectionLayoutRendererRegistry+Default.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/SwiftUISectionLayoutRendererRegistry+Default.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/SwiftUISectionLayoutRendererRegistry+Default.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/SwiftUISectionLayoutRendererRegistry+Default.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/SwiftUISectionLayoutRendererRegistry+Default.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsModules/Extensions/UIKitNodeRendererRegistry+Default.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/UIKitNodeRendererRegistry+Default.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/UIKitNodeRendererRegistry+Default.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/UIKitNodeRendererRegistry+Default.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/UIKitNodeRendererRegistry+Default.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/UIKitNodeRendererRegistry+Default.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsModules/HTMLRenderers/CSSGenerator.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/CSSGenerator.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/CSSGenerator.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/CSSGenerator.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/CSSGenerator.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/CSSGenerator.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsModules/HTMLRenderers/HTMLIRTypeConversions.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/HTMLIRTypeConversions.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/HTMLIRTypeConversions.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/HTMLIRTypeConversions.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/HTMLIRTypeConversions.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/HTMLIRTypeConversions.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsModules/HTMLRenderers/HTMLNodeRendering.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/HTMLNodeRendering.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/HTMLNodeRendering.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/HTMLNodeRendering.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/HTMLNodeRendering.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/HTMLNodeRendering.swiftdeps"
+  },
+  "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsModules/HTMLRenderers/HTMLRenderer.swift" : {
+    "const-values" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/HTMLRenderer-57cb76737fc0e07cbb303ab3f273411d.swiftconstvalues",
+    "dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/HTMLRenderer-57cb76737fc0e07cbb303ab3f273411d.d",
+    "diagnostics" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/HTMLRenderer-57cb76737fc0e07cbb303ab3f273411d.dia",
+    "object" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/HTMLRenderer-57cb76737fc0e07cbb303ab3f273411d.o",
+    "swift-dependencies" : "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/build/ScalsRenderer.build/Debug-iphonesimulator/ScalsModules.build/Objects-normal/x86_64/HTMLRenderer-57cb76737fc0e07cbb303ab3f273411d.swiftdeps"
+  }
+}

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>colors</key>
+	<array/>
+	<key>images</key>
+	<array>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameDoubleDateHero</string>
+			<key>relativePath</key>
+			<string>./DoubleDateHero.imageset</string>
+			<key>swiftSymbol</key>
+			<string>doubleDateHero</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameAstrology</string>
+			<key>relativePath</key>
+			<string>./astrology.imageset</string>
+			<key>swiftSymbol</key>
+			<string>astrology</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameTouchUpAfter</string>
+			<key>relativePath</key>
+			<string>./touchUpAfter.imageset</string>
+			<key>swiftSymbol</key>
+			<string>touchUpAfter</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameTouchUpBefore</string>
+			<key>relativePath</key>
+			<string>./touchUpBefore.imageset</string>
+			<key>swiftSymbol</key>
+			<string>touchUpBefore</string>
+		</dict>
+		<dict>
+			<key>catalogPath</key>
+			<string>/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Assets.xcassets</string>
+			<key>objcSymbol</key>
+			<string>ACImageNameWomanAligator</string>
+			<key>relativePath</key>
+			<string>./womanAligator.imageset</string>
+			<key>swiftSymbol</key>
+			<string>womanAligator</string>
+		</dict>
+	</array>
+	<key>symbols</key>
+	<array/>
+</dict>
+</plist>

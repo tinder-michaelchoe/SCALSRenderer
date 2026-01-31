@@ -324,14 +324,14 @@ public final class RequestActionHandler: CancellableActionHandler {
             }
 
             // Remove from active tasks
-            self.lock.lock()
-            self.activeTasks.removeValue(forKey: key)
-            self.lock.unlock()
+            _ = self.lock.withLock {
+                self.activeTasks.removeValue(forKey: key)
+            }
         }
 
-        lock.lock()
-        activeTasks[key] = task
-        lock.unlock()
+        lock.withLock {
+            activeTasks[key] = task
+        }
 
         // Wait for task completion
         await task.value

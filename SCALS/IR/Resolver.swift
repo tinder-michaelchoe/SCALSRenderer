@@ -71,6 +71,9 @@ public struct Resolver {
     /// Resolve the document into a render tree (without dependency tracking)
     ///
     /// Creates a new StateStore and initializes it from the document state.
+    ///
+    /// **Thread Safety**: Must be called from main thread as resolution interacts
+    /// with ViewNode creation and component resolvers (@MainActor).
     @MainActor
     public func resolve() throws -> RenderTree {
         let stateStore = StateStore()
@@ -82,6 +85,9 @@ public struct Resolver {
     ///
     /// This allows injecting a pre-configured StateStore for testing,
     /// or reusing an existing StateStore.
+    ///
+    /// **Thread Safety**: Must be called from main thread as resolution interacts
+    /// with ViewNode creation and component resolvers (@MainActor).
     ///
     /// - Parameter stateStore: The state store to use. Document state will be
     ///   merged into this store (existing values are preserved, document values added).
@@ -127,6 +133,9 @@ public struct Resolver {
     /// Resolve the document with full dependency tracking
     ///
     /// Creates a new StateStore and initializes it from the document state.
+    ///
+    /// **Thread Safety**: This method MUST be called from the main thread as it
+    /// builds the view tree and interacts with ViewTreeUpdater (which is @MainActor).
     @MainActor
     public func resolveWithTracking() throws -> ResolutionResult {
         let stateStore = StateStore()
@@ -137,6 +146,9 @@ public struct Resolver {
     /// Resolve the document with full dependency tracking using a provided StateStore.
     ///
     /// This allows injecting a pre-configured StateStore for testing.
+    ///
+    /// **Thread Safety**: This method MUST be called from the main thread as it
+    /// builds the view tree and interacts with ViewTreeUpdater (which is @MainActor).
     ///
     /// - Parameter stateStore: The state store to use.
     /// - Parameter initializeFromDocument: Whether to initialize state from the document.

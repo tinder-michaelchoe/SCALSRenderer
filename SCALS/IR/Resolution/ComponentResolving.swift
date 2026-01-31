@@ -73,6 +73,10 @@ public protocol ComponentResolving {
     static var componentKind: Document.ComponentKind { get }
 
     /// Resolves a component into render and view nodes
+    ///
+    /// **Thread Safety**: Must be called from main thread as component resolvers
+    /// interact with ViewNode and DependencyTracker (both @MainActor).
+    ///
     /// - Parameters:
     ///   - component: The component to resolve
     ///   - context: The shared resolution context
@@ -86,6 +90,8 @@ public protocol ComponentResolving {
 /// Protocol for resolvers that handle layout containers.
 public protocol LayoutResolving {
     /// Resolves a layout into render and view nodes
+    ///
+    /// **Thread Safety**: Must be called from main thread due to component resolution.
     @MainActor
     func resolve(_ layout: Document.Layout, context: ResolutionContext) throws -> NodeResolutionResult
 }
@@ -95,6 +101,8 @@ public protocol LayoutResolving {
 /// Protocol for resolvers that handle section layouts.
 public protocol SectionLayoutResolving {
     /// Resolves a section layout into render and view nodes
+    ///
+    /// **Thread Safety**: Must be called from main thread due to component resolution.
     @MainActor
     func resolve(_ sectionLayout: Document.SectionLayout, context: ResolutionContext) throws -> NodeResolutionResult
 }

@@ -1,0 +1,2533 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.2 effective-5.10 (swiftlang-6.2.0.19.9 clang-1700.3.19.1)
+// swift-module-flags: -target arm64-apple-ios26.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -module-name SCALS
+// swift-module-flags-ignorable:  -formal-cxx-interoperability-mode=off -interface-compiler-version 6.2
+import Dispatch
+import Foundation
+import Swift
+import SwiftUI
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+final public class ActionContext : SCALS.ActionExecutionContext {
+  final public let stateStore: any SCALS.StateStoring
+  final public let documentId: Swift.String
+  final public let actionRegistry: SCALS.ActionRegistry
+  weak final public var actionDelegate: (any SCALS.ScalsActionDelegate)?
+  final public var dismissHandler: (() -> Swift.Void)?
+  final public var alertHandler: ((SCALS.AlertConfiguration) -> Swift.Void)?
+  final public var navigationHandler: ((Swift.String, SCALS.Document.NavigationPresentation?) -> Swift.Void)?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(stateStore: any SCALS.StateStoring, actionDefinitions: [Swift.String : SCALS.Document.Action], registry: SCALS.ActionRegistry, documentId: Swift.String = UUID().uuidString, actionDelegate: (any SCALS.ScalsActionDelegate)? = nil, alertPresenter: (any SCALS.AlertPresenting)? = nil)
+  #endif
+  #if compiler(>=5.3) && $AsyncExecutionBehaviorAttributes
+  final nonisolated(nonsending) public func executeAction(id actionId: Swift.String) async
+  #endif
+  #if compiler(>=5.3) && $AsyncExecutionBehaviorAttributes
+  final nonisolated(nonsending) public func executeAction(_ action: SCALS.Document.Action) async
+  #endif
+  #if compiler(>=5.3) && $AsyncExecutionBehaviorAttributes
+  final nonisolated(nonsending) public func executeAction(type actionType: Swift.String, parameters: SCALS.ActionParameters) async
+  #endif
+  final public func dismiss()
+  final public func presentAlert(_ config: SCALS.AlertConfiguration)
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func navigate(to destination: Swift.String, presentation: SCALS.Document.NavigationPresentation?)
+  #endif
+  final public func execute(_ binding: SCALS.Document.Component.ActionBinding)
+  final public func execute(_ actionId: Swift.String)
+  @objc deinit
+}
+public struct AlertConfiguration {
+  public let title: Swift.String
+  public let message: Swift.String?
+  public let buttons: [SCALS.AlertConfiguration.Button]
+  public let onButtonTap: ((Swift.String?) -> Swift.Void)?
+  public struct Button {
+    public let label: Swift.String
+    public let style: SCALS.Document.AlertButtonStyle
+    public let action: Swift.String?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(label: Swift.String, style: SCALS.Document.AlertButtonStyle, action: Swift.String?)
+    #endif
+  }
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(title: Swift.String, message: Swift.String?, buttons: [SCALS.AlertConfiguration.Button], onButtonTap: ((Swift.String?) -> Swift.Void)? = nil)
+  #endif
+}
+public protocol AlertPresenting : AnyObject {
+  func present(_ config: SCALS.AlertConfiguration)
+}
+public typealias ActionClosure = @_Concurrency.MainActor @Sendable (SCALS.ActionParameters, any SCALS.ActionExecutionContext) async -> Swift.Void
+@_Concurrency.MainActor public protocol ScalsActionDelegate : AnyObject {
+  @_Concurrency.MainActor func cladsRenderer(handleAction actionId: Swift.String, parameters: SCALS.ActionParameters, context: any SCALS.ActionExecutionContext) async -> Swift.Bool
+}
+public protocol ActionHandler {
+  static var actionType: Swift.String { get }
+  @_Concurrency.MainActor func execute(parameters: SCALS.ActionParameters, context: any SCALS.ActionExecutionContext) async
+}
+public protocol CancellableActionHandler : SCALS.ActionHandler {
+  @_Concurrency.MainActor func cancel(requestId: Swift.String, documentId: Swift.String)
+  @_Concurrency.MainActor func cancelAll(documentId: Swift.String)
+}
+public struct ActionParameters {
+  public let raw: [Swift.String : Any]
+  public init(raw: [Swift.String : Any])
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func string(_ key: Swift.String) -> Swift.String?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func int(_ key: Swift.String) -> Swift.Int?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func bool(_ key: Swift.String) -> Swift.Bool?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func dictionary(_ key: Swift.String) -> [Swift.String : Any]?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func array(_ key: Swift.String) -> [[Swift.String : Any]]?
+  #endif
+}
+public protocol ActionExecutionContext : AnyObject {
+  var stateStore: any SCALS.StateStoring { get }
+  var documentId: Swift.String { get }
+  var actionRegistry: SCALS.ActionRegistry { get }
+  #if compiler(>=5.3) && $AsyncExecutionBehaviorAttributes
+  nonisolated(nonsending) func executeAction(id: Swift.String) async
+  #endif
+  #if compiler(>=5.3) && $AsyncExecutionBehaviorAttributes
+  nonisolated(nonsending) func executeAction(type: Swift.String, parameters: SCALS.ActionParameters) async
+  #endif
+  func dismiss()
+  func presentAlert(_ config: SCALS.AlertConfiguration)
+  #if compiler(>=5.3) && $NonescapableTypes
+  func navigate(to destination: Swift.String, presentation: SCALS.Document.NavigationPresentation?)
+  #endif
+}
+final public class ActionRegistry : @unchecked Swift.Sendable {
+  public init()
+  final public func merging(customActions: [Swift.String : SCALS.ActionClosure]) -> SCALS.ActionRegistry
+  final public func register(_ handler: any SCALS.ActionHandler)
+  final public func registerClosure(_ actionType: Swift.String, closure: @escaping SCALS.ActionClosure)
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func handler(for actionType: Swift.String) -> (any SCALS.ActionHandler)?
+  #endif
+  final public func hasHandler(for actionType: Swift.String) -> Swift.Bool
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func getCancellableHandler(for actionType: Swift.String) -> (any SCALS.CancellableActionHandler)?
+  #endif
+  @objc deinit
+}
+public struct ClosureActionHandler : SCALS.ActionHandler {
+  public let actionType: Swift.String
+  public static var actionType: Swift.String {
+    get
+  }
+  public init(actionType: Swift.String, closure: @escaping SCALS.ActionClosure)
+  @_Concurrency.MainActor public func execute(parameters: SCALS.ActionParameters, context: any SCALS.ActionExecutionContext) async
+}
+extension SCALS.Document.Definition : Swift.CustomDebugStringConvertible {
+  public var debugDescription: Swift.String {
+    get
+  }
+}
+extension SCALS.Document {
+  public enum Action : Swift.Codable, Swift.Sendable {
+    case dismiss
+    case setState(SCALS.Document.SetStateAction)
+    case toggleState(SCALS.Document.ToggleStateAction)
+    case showAlert(SCALS.Document.ShowAlertAction)
+    case navigate(SCALS.Document.NavigateAction)
+    case sequence(SCALS.Document.SequenceAction)
+    case custom(SCALS.Document.CustomAction)
+    public init(from decoder: any Swift.Decoder) throws
+    public func encode(to encoder: any Swift.Encoder) throws
+  }
+}
+extension SCALS.Document {
+  public struct SetStateAction : Swift.Codable, Swift.Sendable {
+    public let path: Swift.String
+    public let value: SCALS.Document.SetValue
+    public init(path: Swift.String, value: SCALS.Document.SetValue)
+    public init(from decoder: any Swift.Decoder) throws
+    public func encode(to encoder: any Swift.Encoder) throws
+  }
+}
+extension SCALS.Document {
+  public struct ToggleStateAction : Swift.Codable, Swift.Sendable {
+    public let path: Swift.String
+    public init(path: Swift.String)
+    public init(from decoder: any Swift.Decoder) throws
+    public func encode(to encoder: any Swift.Encoder) throws
+  }
+}
+extension SCALS.Document {
+  public enum SetValue : Swift.Codable, Swift.Sendable {
+    case literal(SCALS.Document.StateValue)
+    case expression(Swift.String)
+    public init(from decoder: any Swift.Decoder) throws
+    public func encode(to encoder: any Swift.Encoder) throws
+  }
+}
+extension SCALS.Document {
+  public struct ShowAlertAction : Swift.Codable, Swift.Sendable {
+    public let title: Swift.String
+    public let message: SCALS.Document.AlertMessageContent?
+    public let buttons: [SCALS.Document.AlertButton]?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(title: Swift.String, message: SCALS.Document.AlertMessageContent? = nil, buttons: [SCALS.Document.AlertButton]? = nil)
+    #endif
+    public init(from decoder: any Swift.Decoder) throws
+    public func encode(to encoder: any Swift.Encoder) throws
+  }
+}
+extension SCALS.Document {
+  public enum AlertMessageContent : Swift.Codable, Swift.Sendable {
+    case `static`(Swift.String)
+    case template(Swift.String)
+    public init(from decoder: any Swift.Decoder) throws
+    public func encode(to encoder: any Swift.Encoder) throws
+  }
+}
+extension SCALS.Document {
+  public struct AlertButton : Swift.Codable, Swift.Sendable {
+    public let label: Swift.String
+    public let style: SCALS.Document.AlertButtonStyle?
+    public let action: Swift.String?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(label: Swift.String, style: SCALS.Document.AlertButtonStyle? = nil, action: Swift.String? = nil)
+    #endif
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+extension SCALS.Document {
+  public struct NavigateAction : Swift.Codable, Swift.Sendable {
+    public let destination: Swift.String
+    public let presentation: SCALS.Document.NavigationPresentation?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(destination: Swift.String, presentation: SCALS.Document.NavigationPresentation? = nil)
+    #endif
+    public init(from decoder: any Swift.Decoder) throws
+    public func encode(to encoder: any Swift.Encoder) throws
+  }
+}
+extension SCALS.Document {
+  public struct SequenceAction : Swift.Codable, Swift.Sendable {
+    public let steps: [SCALS.Document.Action]
+    public init(steps: [SCALS.Document.Action])
+    public init(from decoder: any Swift.Decoder) throws
+    public func encode(to encoder: any Swift.Encoder) throws
+  }
+}
+extension SCALS.Document {
+  public struct CustomAction : Swift.Codable, Swift.Sendable {
+    public let type: Swift.String
+    public let parameters: [Swift.String : SCALS.Document.StateValue]
+    public init(type: Swift.String, parameters: [Swift.String : SCALS.Document.StateValue] = [:])
+    public init(from decoder: any Swift.Decoder) throws
+    public func encode(to encoder: any Swift.Encoder) throws
+  }
+}
+extension SCALS.Document {
+  public enum NavigationPresentation : Swift.String, Swift.Codable, Swift.Sendable {
+    case push
+    case present
+    case fullScreen
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init?(rawValue: Swift.String)
+    #endif
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+}
+extension SCALS.Document {
+  public enum AlertButtonStyle : Swift.String, Swift.Codable, Swift.Sendable {
+    case `default`
+    case cancel
+    case destructive
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init?(rawValue: Swift.String)
+    #endif
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+}
+extension SCALS.Document {
+  public struct ComponentKind : Swift.Hashable, Swift.Codable, Swift.Sendable, Swift.RawRepresentable {
+    public let rawValue: Swift.String
+    public init(rawValue: Swift.String)
+    public typealias RawValue = Swift.String
+  }
+}
+extension SCALS.Document {
+  public struct Component : Swift.Codable, Swift.Sendable {
+    @frozen public enum ActionBinding : Swift.Codable, Swift.Sendable {
+      case reference(Swift.String)
+      case inline(SCALS.Document.Action)
+      public init(from decoder: any Swift.Decoder) throws
+      public func encode(to encoder: any Swift.Encoder) throws
+    }
+    public struct Actions : Swift.Codable, Swift.Sendable {
+      public let onTap: SCALS.Document.Component.ActionBinding?
+      public let onValueChanged: SCALS.Document.Component.ActionBinding?
+      #if compiler(>=5.3) && $NonescapableTypes
+      public init(onTap: SCALS.Document.Component.ActionBinding? = nil, onValueChanged: SCALS.Document.Component.ActionBinding? = nil)
+      #endif
+      public func encode(to encoder: any Swift.Encoder) throws
+      public init(from decoder: any Swift.Decoder) throws
+    }
+    public struct ComponentStyles : Swift.Codable, Swift.Sendable {
+      public let normal: Swift.String?
+      public let selected: Swift.String?
+      public let disabled: Swift.String?
+      #if compiler(>=5.3) && $NonescapableTypes
+      public init(normal: Swift.String? = nil, selected: Swift.String? = nil, disabled: Swift.String? = nil)
+      #endif
+      public func encode(to encoder: any Swift.Encoder) throws
+      public init(from decoder: any Swift.Decoder) throws
+    }
+    public let type: SCALS.Document.ComponentKind
+    public let id: Swift.String?
+    public let styleId: Swift.String?
+    public let styles: SCALS.Document.Component.ComponentStyles?
+    public let padding: SCALS.Document.Padding?
+    public let isSelectedBinding: Swift.String?
+    public let dataSourceId: Swift.String?
+    public let text: Swift.String?
+    public let placeholder: Swift.String?
+    public let bind: Swift.String?
+    public let localBind: Swift.String?
+    public let fillWidth: Swift.Bool?
+    public let actions: SCALS.Document.Component.Actions?
+    public let data: [Swift.String : SCALS.Document.DataReference]?
+    public let state: SCALS.Document.LocalStateDeclaration?
+    public let minValue: Swift.Double?
+    public let maxValue: Swift.Double?
+    public let image: SCALS.Document.ImageSource?
+    public let imagePlacement: Swift.String?
+    public let imageSpacing: CoreFoundation.CGFloat?
+    public let buttonShape: Swift.String?
+    public let shapeType: Swift.String?
+    public let cornerRadius: Swift.Double?
+    public let gradientColors: [SCALS.Document.GradientColorConfig]?
+    public let gradientStart: Swift.String?
+    public let gradientEnd: Swift.String?
+    public let currentPage: Swift.String?
+    public let pageCount: Swift.Int?
+    public let dotSize: CoreFoundation.CGFloat?
+    public let dotSpacing: CoreFoundation.CGFloat?
+    public let dotColor: Swift.String?
+    public let currentDotColor: Swift.String?
+    public let additionalProperties: [Swift.String : SCALS.AnyCodableValue]?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(type: SCALS.Document.ComponentKind, id: Swift.String? = nil, styleId: Swift.String? = nil, styles: SCALS.Document.Component.ComponentStyles? = nil, padding: SCALS.Document.Padding? = nil, isSelectedBinding: Swift.String? = nil, dataSourceId: Swift.String? = nil, text: Swift.String? = nil, placeholder: Swift.String? = nil, bind: Swift.String? = nil, localBind: Swift.String? = nil, fillWidth: Swift.Bool? = nil, actions: SCALS.Document.Component.Actions? = nil, data: [Swift.String : SCALS.Document.DataReference]? = nil, state: SCALS.Document.LocalStateDeclaration? = nil, minValue: Swift.Double? = nil, maxValue: Swift.Double? = nil, image: SCALS.Document.ImageSource? = nil, imagePlacement: Swift.String? = nil, imageSpacing: CoreFoundation.CGFloat? = nil, buttonShape: Swift.String? = nil, shapeType: Swift.String? = nil, cornerRadius: Swift.Double? = nil, gradientColors: [SCALS.Document.GradientColorConfig]? = nil, gradientStart: Swift.String? = nil, gradientEnd: Swift.String? = nil, currentPage: Swift.String? = nil, pageCount: Swift.Int? = nil, dotSize: CoreFoundation.CGFloat? = nil, dotSpacing: CoreFoundation.CGFloat? = nil, dotColor: Swift.String? = nil, currentDotColor: Swift.String? = nil, additionalProperties: [Swift.String : SCALS.AnyCodableValue]? = nil)
+    #endif
+    public init(from decoder: any Swift.Decoder) throws
+    public func encode(to encoder: any Swift.Encoder) throws
+  }
+}
+extension SCALS.Document {
+  public struct GradientColorConfig : Swift.Codable, Swift.Sendable {
+    public let color: Swift.String?
+    public let lightColor: Swift.String?
+    public let darkColor: Swift.String?
+    public let location: CoreFoundation.CGFloat
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(color: Swift.String? = nil, lightColor: Swift.String? = nil, darkColor: Swift.String? = nil, location: CoreFoundation.CGFloat)
+    #endif
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+extension SCALS.Document {
+  public struct DataReference : Swift.Codable, Swift.Sendable {
+    public let type: SCALS.Document.DataReferenceType
+    public let value: Swift.String?
+    public let path: Swift.String?
+    public let template: Swift.String?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(type: SCALS.Document.DataReferenceType, value: Swift.String? = nil, path: Swift.String? = nil, template: Swift.String? = nil)
+    #endif
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+  public enum DataReferenceType : Swift.String, Swift.Codable, Swift.Sendable {
+    case `static`
+    case binding
+    case localBinding
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init?(rawValue: Swift.String)
+    #endif
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+}
+extension SCALS.Document {
+  public struct ImagePlaceholder : Swift.Codable, Swift.Equatable, Swift.Sendable {
+    public let sfsymbol: Swift.String?
+    public let url: Swift.String?
+    public let asset: Swift.String?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(sfsymbol: Swift.String? = nil, url: Swift.String? = nil, asset: Swift.String? = nil)
+    #endif
+    public static func == (a: SCALS.Document.ImagePlaceholder, b: SCALS.Document.ImagePlaceholder) -> Swift.Bool
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+  public struct ImageSource : Swift.Codable, Swift.Equatable, Swift.Sendable {
+    public let sfsymbol: Swift.String?
+    public let url: Swift.String?
+    public let asset: Swift.String?
+    public let activityIndicator: Swift.Bool?
+    public let placeholder: SCALS.Document.ImagePlaceholder?
+    public let loading: SCALS.Document.ImagePlaceholder?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(sfsymbol: Swift.String? = nil, url: Swift.String? = nil, asset: Swift.String? = nil, activityIndicator: Swift.Bool? = nil, placeholder: SCALS.Document.ImagePlaceholder? = nil, loading: SCALS.Document.ImagePlaceholder? = nil)
+    #endif
+    public static func == (a: SCALS.Document.ImageSource, b: SCALS.Document.ImageSource) -> Swift.Bool
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+public protocol ComponentProperties : Swift.Decodable, Swift.Encodable, Swift.Sendable {
+  static var kind: SCALS.Document.ComponentKind { get }
+}
+final public class ComponentPropertiesRegistry : @unchecked Swift.Sendable {
+  public init()
+  final public func register<T>(_ type: T.Type) where T : SCALS.ComponentProperties
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func decode(kind: SCALS.Document.ComponentKind, from decoder: any Swift.Decoder) throws -> (any SCALS.ComponentProperties)?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func decode(kind: SCALS.Document.ComponentKind, from dictionary: [Swift.String : SCALS.AnyCodableValue]) throws -> (any SCALS.ComponentProperties)?
+  #endif
+  final public func hasDecoder(for kind: SCALS.Document.ComponentKind) -> Swift.Bool
+  @objc deinit
+}
+public enum AnyCodableValue : Swift.Codable, Swift.Sendable, Swift.Hashable {
+  case null
+  case bool(Swift.Bool)
+  case int(Swift.Int)
+  case double(Swift.Double)
+  case string(Swift.String)
+  case array([SCALS.AnyCodableValue])
+  case object([Swift.String : SCALS.AnyCodableValue])
+  public init(from decoder: any Swift.Decoder) throws
+  public func encode(to encoder: any Swift.Encoder) throws
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var boolValue: Swift.Bool? {
+    get
+  }
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var intValue: Swift.Int? {
+    get
+  }
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var doubleValue: Swift.Double? {
+    get
+  }
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var stringValue: Swift.String? {
+    get
+  }
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var arrayValue: [SCALS.AnyCodableValue]? {
+    get
+  }
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var objectValue: [Swift.String : SCALS.AnyCodableValue]? {
+    get
+  }
+  #endif
+  public static func == (a: SCALS.AnyCodableValue, b: SCALS.AnyCodableValue) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension SCALS.Document {
+  public struct DataSource : Swift.Codable {
+    public enum Kind : Swift.String, Swift.Codable {
+      case `static`
+      case binding
+      #if compiler(>=5.3) && $NonescapableTypes
+      public init?(rawValue: Swift.String)
+      #endif
+      public typealias RawValue = Swift.String
+      public var rawValue: Swift.String {
+        get
+      }
+    }
+    public let type: SCALS.Document.DataSource.Kind
+    public let value: Swift.String?
+    public let path: Swift.String?
+    public let template: Swift.String?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(type: SCALS.Document.DataSource.Kind, value: Swift.String? = nil, path: Swift.String? = nil, template: Swift.String? = nil)
+    #endif
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+public enum Document {
+}
+extension SCALS.Document {
+  public struct Definition : Swift.Codable {
+    public let id: Swift.String
+    public let version: Swift.String?
+    public let designSystem: Swift.String?
+    public let state: [Swift.String : SCALS.Document.StateValue]?
+    public let styles: [Swift.String : SCALS.Document.Style]?
+    public let dataSources: [Swift.String : SCALS.Document.DataSource]?
+    public let actions: [Swift.String : SCALS.Document.Action]?
+    public let root: SCALS.Document.RootComponent
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(id: Swift.String, version: Swift.String? = nil, designSystem: Swift.String? = nil, state: [Swift.String : SCALS.Document.StateValue]? = nil, styles: [Swift.String : SCALS.Document.Style]? = nil, dataSources: [Swift.String : SCALS.Document.DataSource]? = nil, actions: [Swift.String : SCALS.Document.Action]? = nil, root: SCALS.Document.RootComponent)
+    #endif
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+extension SCALS.Document {
+  public enum StateValue : Swift.Codable, Swift.Equatable, Swift.Sendable {
+    case intValue(Swift.Int)
+    case doubleValue(Swift.Double)
+    case stringValue(Swift.String)
+    case boolValue(Swift.Bool)
+    case nullValue
+    case arrayValue([SCALS.Document.StateValue])
+    case objectValue([Swift.String : SCALS.Document.StateValue])
+    public init(from decoder: any Swift.Decoder) throws
+    public func encode(to encoder: any Swift.Encoder) throws
+    #if compiler(>=5.3) && $NonescapableTypes
+    public var intValue: Swift.Int? {
+      get
+    }
+    #endif
+    #if compiler(>=5.3) && $NonescapableTypes
+    public var doubleValue: Swift.Double? {
+      get
+    }
+    #endif
+    #if compiler(>=5.3) && $NonescapableTypes
+    public var stringValue: Swift.String? {
+      get
+    }
+    #endif
+    #if compiler(>=5.3) && $NonescapableTypes
+    public var boolValue: Swift.Bool? {
+      get
+    }
+    #endif
+    #if compiler(>=5.3) && $NonescapableTypes
+    public var arrayValue: [SCALS.Document.StateValue]? {
+      get
+    }
+    #endif
+    #if compiler(>=5.3) && $NonescapableTypes
+    public var objectValue: [Swift.String : SCALS.Document.StateValue]? {
+      get
+    }
+    #endif
+    public var isNull: Swift.Bool {
+      get
+    }
+    #if compiler(>=5.3) && $NonescapableTypes
+    public var count: Swift.Int? {
+      get
+    }
+    #endif
+    #if compiler(>=5.3) && $NonescapableTypes
+    public var isEmpty: Swift.Bool? {
+      get
+    }
+    #endif
+    public static func == (a: SCALS.Document.StateValue, b: SCALS.Document.StateValue) -> Swift.Bool
+  }
+}
+public enum DocumentParseError : Swift.Error, Foundation.LocalizedError {
+  case invalidEncoding
+  case decodingError(Swift.DecodingError)
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var errorDescription: Swift.String? {
+    get
+  }
+  #endif
+  public static func detailedDescription(error: any Swift.Error, jsonString: Swift.String) -> Swift.String
+}
+extension SCALS.Document.Definition {
+  public init(jsonString: Swift.String) throws
+  public init(jsonData: Foundation.Data) throws
+}
+extension SCALS.Document.Padding : SCALS.IRConvertible {
+  public typealias IRType = SCALS.IR.EdgeInsets
+  public func toIR() -> SCALS.IR.EdgeInsets
+}
+extension SCALS.Document.HorizontalAlignment : SCALS.IRConvertible {
+  public typealias IRType = SCALS.IR.HorizontalAlignment
+  public func toIR() -> SCALS.IR.HorizontalAlignment
+}
+extension SCALS.Document.VerticalAlignment : SCALS.IRConvertible {
+  public typealias IRType = SCALS.IR.VerticalAlignment
+  public func toIR() -> SCALS.IR.VerticalAlignment
+}
+extension SCALS.Document.Alignment : SCALS.IRConvertible {
+  public typealias IRType = SCALS.IR.Alignment
+  public func toIR() -> SCALS.IR.Alignment
+}
+extension SCALS.Document.DimensionValue : SCALS.IRConvertible {
+  public typealias IRType = SCALS.IR.DimensionValue
+  public func toIR() -> SCALS.IR.DimensionValue
+}
+extension SCALS.Document {
+  indirect public enum LayoutNode : Swift.Codable {
+    case layout(SCALS.Document.Layout)
+    case sectionLayout(SCALS.Document.SectionLayout)
+    case forEach(SCALS.Document.ForEach)
+    case component(SCALS.Document.Component)
+    case spacer(SCALS.Document.Spacer)
+    public init(from decoder: any Swift.Decoder) throws
+    public func encode(to encoder: any Swift.Encoder) throws
+  }
+}
+extension SCALS.Document {
+  public enum LayoutType : Swift.String, Swift.Codable {
+    case vstack
+    case hstack
+    case zstack
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init?(rawValue: Swift.String)
+    #endif
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+}
+extension SCALS.Document {
+  public enum HorizontalAlignment : Swift.String, Swift.Codable {
+    case leading
+    case center
+    case trailing
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init?(rawValue: Swift.String)
+    #endif
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  public enum VerticalAlignment : Swift.String, Swift.Codable {
+    case top
+    case center
+    case bottom
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init?(rawValue: Swift.String)
+    #endif
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  public struct Alignment : Swift.Codable {
+    public let horizontal: SCALS.Document.HorizontalAlignment?
+    public let vertical: SCALS.Document.VerticalAlignment?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(horizontal: SCALS.Document.HorizontalAlignment? = nil, vertical: SCALS.Document.VerticalAlignment? = nil)
+    #endif
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+extension SCALS.Document {
+  public struct Padding : Swift.Codable, Swift.Sendable {
+    public let top: CoreFoundation.CGFloat?
+    public let bottom: CoreFoundation.CGFloat?
+    public let leading: CoreFoundation.CGFloat?
+    public let trailing: CoreFoundation.CGFloat?
+    public let horizontal: CoreFoundation.CGFloat?
+    public let vertical: CoreFoundation.CGFloat?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(top: CoreFoundation.CGFloat? = nil, bottom: CoreFoundation.CGFloat? = nil, leading: CoreFoundation.CGFloat? = nil, trailing: CoreFoundation.CGFloat? = nil, horizontal: CoreFoundation.CGFloat? = nil, vertical: CoreFoundation.CGFloat? = nil)
+    #endif
+    public var resolvedTop: CoreFoundation.CGFloat {
+      get
+    }
+    public var resolvedBottom: CoreFoundation.CGFloat {
+      get
+    }
+    public var resolvedLeading: CoreFoundation.CGFloat {
+      get
+    }
+    public var resolvedTrailing: CoreFoundation.CGFloat {
+      get
+    }
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+extension SCALS.Document {
+  public struct LocalStateDeclaration : Swift.Codable, Swift.Sendable {
+    public let initialValues: [Swift.String : SCALS.Document.StateValue]
+    public init(initialValues: [Swift.String : SCALS.Document.StateValue] = [:])
+    public init(from decoder: any Swift.Decoder) throws
+    public func encode(to encoder: any Swift.Encoder) throws
+  }
+}
+extension SCALS.Document {
+  public struct Layout : Swift.Codable {
+    public let type: SCALS.Document.LayoutType
+    public let alignment: SCALS.Document.Alignment?
+    public let horizontalAlignment: SCALS.Document.HorizontalAlignment?
+    public let spacing: CoreFoundation.CGFloat?
+    public let padding: SCALS.Document.Padding?
+    public let children: [SCALS.Document.LayoutNode]
+    public let state: SCALS.Document.LocalStateDeclaration?
+    public let styleId: Swift.String?
+    public let style: SCALS.Document.Style?
+    public init(from decoder: any Swift.Decoder) throws
+    public func encode(to encoder: any Swift.Encoder) throws
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(type: SCALS.Document.LayoutType, alignment: SCALS.Document.Alignment? = nil, horizontalAlignment: SCALS.Document.HorizontalAlignment? = nil, spacing: CoreFoundation.CGFloat? = nil, padding: SCALS.Document.Padding? = nil, children: [SCALS.Document.LayoutNode], state: SCALS.Document.LocalStateDeclaration? = nil, styleId: Swift.String? = nil, style: SCALS.Document.Style? = nil)
+    #endif
+  }
+}
+extension SCALS.Document {
+  public struct ForEach : Swift.Codable {
+    public let type: Swift.String
+    public let items: Swift.String
+    public let itemVariable: Swift.String
+    public let indexVariable: Swift.String
+    public let layout: SCALS.Document.LayoutType
+    public let spacing: CoreFoundation.CGFloat?
+    public let alignment: SCALS.Document.HorizontalAlignment?
+    public let padding: SCALS.Document.Padding?
+    public let template: SCALS.Document.LayoutNode
+    public let emptyView: SCALS.Document.LayoutNode?
+    public init(from decoder: any Swift.Decoder) throws
+    public func encode(to encoder: any Swift.Encoder) throws
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(items: Swift.String, itemVariable: Swift.String = "item", indexVariable: Swift.String = "index", layout: SCALS.Document.LayoutType = .vstack, spacing: CoreFoundation.CGFloat? = nil, alignment: SCALS.Document.HorizontalAlignment? = nil, padding: SCALS.Document.Padding? = nil, template: SCALS.Document.LayoutNode, emptyView: SCALS.Document.LayoutNode? = nil)
+    #endif
+  }
+}
+extension SCALS.Document {
+  public struct Spacer : Swift.Codable {
+    public let minLength: CoreFoundation.CGFloat?
+    public let width: CoreFoundation.CGFloat?
+    public let height: CoreFoundation.CGFloat?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(minLength: CoreFoundation.CGFloat? = nil, width: CoreFoundation.CGFloat? = nil, height: CoreFoundation.CGFloat? = nil)
+    #endif
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+extension SCALS.Document {
+  public struct RootComponent : Swift.Codable {
+    public let backgroundColor: Swift.String?
+    public let edgeInsets: SCALS.Document.EdgeInsets?
+    public let styleId: Swift.String?
+    public let colorScheme: Swift.String?
+    public let actions: SCALS.Document.LifecycleActions?
+    public let children: [SCALS.Document.LayoutNode]
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(backgroundColor: Swift.String? = nil, edgeInsets: SCALS.Document.EdgeInsets? = nil, styleId: Swift.String? = nil, colorScheme: Swift.String? = nil, actions: SCALS.Document.LifecycleActions? = nil, children: [SCALS.Document.LayoutNode] = [])
+    #endif
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+  public struct LifecycleActions : Swift.Codable {
+    public let onAppear: SCALS.Document.Component.ActionBinding?
+    public let onDisappear: SCALS.Document.Component.ActionBinding?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(onAppear: SCALS.Document.Component.ActionBinding? = nil, onDisappear: SCALS.Document.Component.ActionBinding? = nil)
+    #endif
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+extension SCALS.Document {
+  public enum Positioning : Swift.String, Swift.Codable {
+    case safeArea
+    case absolute
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init?(rawValue: Swift.String)
+    #endif
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+}
+extension SCALS.Document {
+  public struct EdgeInset : Swift.Codable, Swift.Equatable {
+    public let positioning: SCALS.Document.Positioning
+    public let value: CoreFoundation.CGFloat
+    public init(positioning: SCALS.Document.Positioning = .safeArea, value: CoreFoundation.CGFloat)
+    public init(from decoder: any Swift.Decoder) throws
+    public func encode(to encoder: any Swift.Encoder) throws
+    public static func == (a: SCALS.Document.EdgeInset, b: SCALS.Document.EdgeInset) -> Swift.Bool
+  }
+}
+extension SCALS.Document {
+  public struct EdgeInsets : Swift.Codable {
+    public let top: SCALS.Document.EdgeInset?
+    public let bottom: SCALS.Document.EdgeInset?
+    public let leading: SCALS.Document.EdgeInset?
+    public let trailing: SCALS.Document.EdgeInset?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(top: SCALS.Document.EdgeInset? = nil, bottom: SCALS.Document.EdgeInset? = nil, leading: SCALS.Document.EdgeInset? = nil, trailing: SCALS.Document.EdgeInset? = nil)
+    #endif
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+extension SCALS.Document {
+  public struct SectionLayout : Swift.Codable {
+    public let id: Swift.String?
+    public let sectionSpacing: CoreFoundation.CGFloat?
+    public let sections: [SCALS.Document.SectionDefinition]
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(id: Swift.String? = nil, sectionSpacing: CoreFoundation.CGFloat? = nil, sections: [SCALS.Document.SectionDefinition])
+    #endif
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+extension SCALS.Document {
+  public struct SectionDefinition : Swift.Codable {
+    public let id: Swift.String?
+    public let layout: SCALS.Document.SectionLayoutConfig
+    public let header: SCALS.Document.LayoutNode?
+    public let footer: SCALS.Document.LayoutNode?
+    public let stickyHeader: Swift.Bool?
+    public let children: [SCALS.Document.LayoutNode]?
+    public let dataSource: Swift.String?
+    public let itemTemplate: SCALS.Document.LayoutNode?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(id: Swift.String? = nil, layout: SCALS.Document.SectionLayoutConfig, header: SCALS.Document.LayoutNode? = nil, footer: SCALS.Document.LayoutNode? = nil, stickyHeader: Swift.Bool? = nil, children: [SCALS.Document.LayoutNode]? = nil, dataSource: Swift.String? = nil, itemTemplate: SCALS.Document.LayoutNode? = nil)
+    #endif
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+extension SCALS.Document {
+  public struct SectionLayoutConfig : Swift.Codable {
+    public let type: SCALS.Document.SectionType
+    public let alignment: SCALS.Document.SectionAlignment?
+    public let itemSpacing: CoreFoundation.CGFloat?
+    public let lineSpacing: CoreFoundation.CGFloat?
+    public let contentInsets: SCALS.Document.Padding?
+    public let itemDimensions: SCALS.Document.ItemDimensions?
+    public let showsIndicators: Swift.Bool?
+    public let isPagingEnabled: Swift.Bool?
+    public let snapBehavior: SCALS.Document.SnapBehavior?
+    public let columns: SCALS.Document.ColumnConfig?
+    public let showsDividers: Swift.Bool?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(type: SCALS.Document.SectionType, alignment: SCALS.Document.SectionAlignment? = nil, itemSpacing: CoreFoundation.CGFloat? = nil, lineSpacing: CoreFoundation.CGFloat? = nil, contentInsets: SCALS.Document.Padding? = nil, itemDimensions: SCALS.Document.ItemDimensions? = nil, showsIndicators: Swift.Bool? = nil, isPagingEnabled: Swift.Bool? = nil, snapBehavior: SCALS.Document.SnapBehavior? = nil, columns: SCALS.Document.ColumnConfig? = nil, showsDividers: Swift.Bool? = nil)
+    #endif
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+extension SCALS.Document {
+  public enum SectionAlignment : Swift.String, Swift.Codable {
+    case leading
+    case center
+    case trailing
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init?(rawValue: Swift.String)
+    #endif
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+}
+extension SCALS.Document {
+  public enum SectionType : Swift.String, Swift.Codable {
+    case horizontal
+    case list
+    case grid
+    case flow
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init?(rawValue: Swift.String)
+    #endif
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+}
+extension SCALS.Document {
+  public enum ColumnConfig : Swift.Codable, Swift.Equatable {
+    case fixed(Swift.Int)
+    case adaptive(minWidth: CoreFoundation.CGFloat)
+    public init(from decoder: any Swift.Decoder) throws
+    public func encode(to encoder: any Swift.Encoder) throws
+    public static func == (a: SCALS.Document.ColumnConfig, b: SCALS.Document.ColumnConfig) -> Swift.Bool
+  }
+}
+extension SCALS.Document {
+  public struct ItemDimensions : Swift.Codable {
+    public let width: SCALS.Document.DimensionValue?
+    public let height: SCALS.Document.DimensionValue?
+    public let aspectRatio: CoreFoundation.CGFloat?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(width: SCALS.Document.DimensionValue? = nil, height: SCALS.Document.DimensionValue? = nil, aspectRatio: CoreFoundation.CGFloat? = nil)
+    #endif
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+extension SCALS.Document {
+  public enum DimensionValue : Swift.Codable, Swift.Equatable {
+    case absolute(CoreFoundation.CGFloat)
+    case fractional(CoreFoundation.CGFloat)
+    public init(from decoder: any Swift.Decoder) throws
+    public func encode(to encoder: any Swift.Encoder) throws
+    public static func == (a: SCALS.Document.DimensionValue, b: SCALS.Document.DimensionValue) -> Swift.Bool
+  }
+}
+extension SCALS.Document {
+  public enum SnapBehavior : Swift.String, Swift.Codable {
+    case none
+    case viewAligned
+    case paging
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init?(rawValue: Swift.String)
+    #endif
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+}
+extension SCALS.Document {
+  public struct Style : Swift.Codable {
+    public let inherits: Swift.String?
+    public let fontFamily: Swift.String?
+    public let fontSize: CoreFoundation.CGFloat?
+    public let fontWeight: SCALS.Document.FontWeight?
+    public let textColor: Swift.String?
+    public let textAlignment: SCALS.Document.TextAlignment?
+    public let backgroundColor: Swift.String?
+    public let cornerRadius: CoreFoundation.CGFloat?
+    public let borderWidth: CoreFoundation.CGFloat?
+    public let borderColor: Swift.String?
+    public let shadow: SCALS.Document.Shadow?
+    public let tintColor: Swift.String?
+    public let width: SCALS.Document.DimensionValue?
+    public let height: SCALS.Document.DimensionValue?
+    public let minWidth: SCALS.Document.DimensionValue?
+    public let minHeight: SCALS.Document.DimensionValue?
+    public let maxWidth: SCALS.Document.DimensionValue?
+    public let maxHeight: SCALS.Document.DimensionValue?
+    public let padding: SCALS.Document.Padding?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(inherits: Swift.String? = nil, fontFamily: Swift.String? = nil, fontSize: CoreFoundation.CGFloat? = nil, fontWeight: SCALS.Document.FontWeight? = nil, textColor: Swift.String? = nil, textAlignment: SCALS.Document.TextAlignment? = nil, backgroundColor: Swift.String? = nil, cornerRadius: CoreFoundation.CGFloat? = nil, borderWidth: CoreFoundation.CGFloat? = nil, borderColor: Swift.String? = nil, shadow: SCALS.Document.Shadow? = nil, tintColor: Swift.String? = nil, width: SCALS.Document.DimensionValue? = nil, height: SCALS.Document.DimensionValue? = nil, minWidth: SCALS.Document.DimensionValue? = nil, minHeight: SCALS.Document.DimensionValue? = nil, maxWidth: SCALS.Document.DimensionValue? = nil, maxHeight: SCALS.Document.DimensionValue? = nil, padding: SCALS.Document.Padding? = nil)
+    #endif
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+extension SCALS.Document {
+  public struct Shadow : Swift.Codable {
+    public let color: Swift.String?
+    public let radius: CoreFoundation.CGFloat?
+    public let x: CoreFoundation.CGFloat?
+    public let y: CoreFoundation.CGFloat?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(color: Swift.String? = nil, radius: CoreFoundation.CGFloat? = nil, x: CoreFoundation.CGFloat? = nil, y: CoreFoundation.CGFloat? = nil)
+    #endif
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+}
+extension SCALS.Document {
+  public enum FontWeight : Swift.String, Swift.Codable, Swift.Sendable {
+    case ultraLight
+    case thin
+    case light
+    case regular
+    case medium
+    case semibold
+    case bold
+    case heavy
+    case black
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init?(rawValue: Swift.String)
+    #endif
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+}
+extension SCALS.Document {
+  public enum TextAlignment : Swift.String, Swift.Codable, Swift.Sendable {
+    case leading
+    case center
+    case trailing
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init?(rawValue: Swift.String)
+    #endif
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+}
+public protocol CustomComponent {
+  static var typeName: Swift.String { get }
+  @_Concurrency.MainActor static func makeView(context: SCALS.CustomComponentContext) -> SwiftUICore.AnyView
+}
+@_Concurrency.MainActor public struct CustomComponentContext {
+  @_Concurrency.MainActor public let resolvedStyle: SCALS.ResolvedStyle
+  @_Concurrency.MainActor public let stateStore: any SCALS.StateStoring
+  @_Concurrency.MainActor public let actionContext: SCALS.ActionContext
+  @_Concurrency.MainActor public let tree: SCALS.RenderTree
+  @_Concurrency.MainActor public let component: SCALS.Document.Component
+  @_Concurrency.MainActor public init(resolvedStyle: SCALS.ResolvedStyle, stateStore: any SCALS.StateStoring, actionContext: SCALS.ActionContext, tree: SCALS.RenderTree, component: SCALS.Document.Component)
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor public func resolveData(_ ref: SCALS.Document.DataReference?) -> Any?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor public func resolveString(_ ref: SCALS.Document.DataReference?) -> Swift.String?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor public func resolveDouble(_ ref: SCALS.Document.DataReference?) -> Swift.Double?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor public func resolveInt(_ ref: SCALS.Document.DataReference?) -> Swift.Int?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor public func resolveBool(_ ref: SCALS.Document.DataReference?) -> Swift.Bool?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor public func dataRef(forKey key: Swift.String) -> SCALS.Document.DataReference?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor public func resolveData(forKey key: Swift.String) -> Any?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor public func resolveString(forKey key: Swift.String) -> Swift.String?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor public func resolveDouble(forKey key: Swift.String) -> Swift.Double?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor public func resolveInt(forKey key: Swift.String) -> Swift.Int?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor public func resolveBool(forKey key: Swift.String) -> Swift.Bool?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor public func executeAction(_ actionBinding: SCALS.Document.Component.ActionBinding?) async
+  #endif
+}
+final public class CustomComponentRegistry : @unchecked Swift.Sendable {
+  public init()
+  final public func register<T>(_ componentType: T.Type) where T : SCALS.CustomComponent
+  final public func register(_ componentTypes: [any SCALS.CustomComponent.Type])
+  final public func isRegistered(_ typeName: Swift.String) -> Swift.Bool
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func componentType(for typeName: Swift.String) -> (any SCALS.CustomComponent.Type)?
+  #endif
+  final public var registeredTypeNames: [Swift.String] {
+    get
+  }
+  @objc deinit
+}
+public struct CustomComponentRenderNode : SCALS.CustomRenderNode {
+  public static let kind: SCALS.RenderNodeKind
+  public let typeName: Swift.String
+  public let component: SCALS.Document.Component
+  public let resolvedStyle: SCALS.ResolvedStyle
+  public init(typeName: Swift.String, component: SCALS.Document.Component, resolvedStyle: SCALS.ResolvedStyle)
+}
+extension SCALS.RenderNodeKind {
+  public static let customComponent: SCALS.RenderNodeKind
+}
+public struct CustomComponentResolver {
+  public init(registry: SCALS.CustomComponentRegistry)
+  public func canResolve(_ componentKind: SCALS.Document.ComponentKind) -> Swift.Bool
+  @_Concurrency.MainActor public func resolve(_ component: SCALS.Document.Component, context: SCALS.ResolutionContext) throws -> SCALS.ComponentResolutionResult
+}
+public enum CustomComponentResolutionError : Swift.Error, Foundation.LocalizedError {
+  case notRegistered(Swift.String)
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var errorDescription: Swift.String? {
+    get
+  }
+  #endif
+}
+public struct ActionResolver {
+  public init()
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func resolveAll(_ actions: [Swift.String : SCALS.Document.Action]?) -> [Swift.String : SCALS.ActionDefinition]
+  #endif
+  public func resolve(_ action: SCALS.Document.Action) -> SCALS.ActionDefinition
+}
+final public class ComponentResolverRegistry {
+  public init()
+  final public func setCustomComponentRegistry(_ registry: SCALS.CustomComponentRegistry)
+  final public func register<T>(_ resolver: T) where T : SCALS.ComponentResolving
+  final public func unregister(_ kind: SCALS.Document.ComponentKind)
+  @_Concurrency.MainActor final public func resolve(_ component: SCALS.Document.Component, context: SCALS.ResolutionContext) throws -> SCALS.ComponentResolutionResult
+  final public func hasResolver(for kind: SCALS.Document.ComponentKind) -> Swift.Bool
+  final public var registeredKinds: [SCALS.Document.ComponentKind] {
+    get
+  }
+  @objc deinit
+}
+public enum ComponentResolutionError : Swift.Error, Foundation.LocalizedError {
+  case unknownKind(SCALS.Document.ComponentKind)
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var errorDescription: Swift.String? {
+    get
+  }
+  #endif
+}
+public struct ComponentResolutionResult {
+  public let renderNode: SCALS.RenderNode
+  public let viewNode: SCALS.ViewNode?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(renderNode: SCALS.RenderNode, viewNode: SCALS.ViewNode? = nil)
+  #endif
+  public static func renderOnly(_ node: SCALS.RenderNode) -> SCALS.ComponentResolutionResult
+  public static func withTracking(_ renderNode: SCALS.RenderNode, viewNode: SCALS.ViewNode) -> SCALS.ComponentResolutionResult
+}
+public struct NodeResolutionResult {
+  public let renderNode: SCALS.RenderNode
+  public let viewNode: SCALS.ViewNode?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(renderNode: SCALS.RenderNode, viewNode: SCALS.ViewNode? = nil)
+  #endif
+}
+public protocol ComponentResolving {
+  static var componentKind: SCALS.Document.ComponentKind { get }
+  @_Concurrency.MainActor func resolve(_ component: SCALS.Document.Component, context: SCALS.ResolutionContext) throws -> SCALS.ComponentResolutionResult
+}
+public protocol LayoutResolving {
+  @_Concurrency.MainActor func resolve(_ layout: SCALS.Document.Layout, context: SCALS.ResolutionContext) throws -> SCALS.NodeResolutionResult
+}
+public protocol SectionLayoutResolving {
+  @_Concurrency.MainActor func resolve(_ sectionLayout: SCALS.Document.SectionLayout, context: SCALS.ResolutionContext) throws -> SCALS.NodeResolutionResult
+}
+public struct ContentResolutionResult {
+  public let content: Swift.String
+  public let bindingPath: Swift.String?
+  public let bindingTemplate: Swift.String?
+  public var isDynamic: Swift.Bool {
+    get
+  }
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(content: Swift.String, bindingPath: Swift.String? = nil, bindingTemplate: Swift.String? = nil)
+  #endif
+  public static func `static`(_ content: Swift.String) -> SCALS.ContentResolutionResult
+}
+public struct ContentResolver {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor public static func resolve(_ component: SCALS.Document.Component, context: SCALS.ResolutionContext, viewNode: SCALS.ViewNode? = nil) -> SCALS.ContentResolutionResult
+  #endif
+}
+public enum AlignmentConverter {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func forVStack(_ alignment: SCALS.Document.HorizontalAlignment?) -> SCALS.IR.Alignment
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func forHStack(_ alignment: SCALS.Document.VerticalAlignment?) -> SCALS.IR.Alignment
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func forZStack(_ alignment: SCALS.Document.Alignment?) -> SCALS.IR.Alignment
+  #endif
+}
+public enum GradientPointConverter {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func convert(_ point: Swift.String?) -> SCALS.IR.UnitPoint
+  #endif
+}
+public enum PaddingConverter {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func convert(_ padding: SCALS.Document.Padding?) -> SCALS.IR.EdgeInsets
+  #endif
+}
+public enum ColorSchemeConverter {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func convert(_ scheme: Swift.String?) -> SCALS.IR.ColorScheme
+  #endif
+}
+public enum StateValueConverter {
+  public static func unwrap(_ value: SCALS.Document.StateValue) -> Any
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func toSetValue(_ value: Any?) -> SCALS.StateSetValue
+  #endif
+  public static func anyToStateValue(_ value: Any) -> SCALS.Document.StateValue
+}
+public struct LayoutResolver : SCALS.LayoutResolving {
+  public init(componentRegistry: SCALS.ComponentResolverRegistry)
+  @_Concurrency.MainActor public func resolve(_ layout: SCALS.Document.Layout, context: SCALS.ResolutionContext) throws -> SCALS.NodeResolutionResult
+  @_Concurrency.MainActor public func resolveNode(_ node: SCALS.Document.LayoutNode, context: SCALS.ResolutionContext) throws -> SCALS.NodeResolutionResult
+}
+final public class ResolutionContext {
+  final public let document: SCALS.Document.Definition
+  final public let styleResolver: SCALS.StyleResolver
+  final public let stateStore: SCALS.StateStore
+  final public let iterationVariables: [Swift.String : Any]
+  final public let tracker: SCALS.DependencyTracker?
+  final public var isTracking: Swift.Bool {
+    get
+  }
+  weak final public var parentViewNode: SCALS.ViewNode?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(document: SCALS.Document.Definition, styleResolver: SCALS.StyleResolver, stateStore: SCALS.StateStore, tracker: SCALS.DependencyTracker? = nil, parentViewNode: SCALS.ViewNode? = nil, iterationVariables: [Swift.String : Any] = [:])
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func withoutTracking(document: SCALS.Document.Definition, stateStore: SCALS.StateStore, designSystemProvider: (any SCALS.DesignSystemProvider)? = nil) -> SCALS.ResolutionContext
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func withTracking(document: SCALS.Document.Definition, stateStore: SCALS.StateStore, tracker: SCALS.DependencyTracker, designSystemProvider: (any SCALS.DesignSystemProvider)? = nil) -> SCALS.ResolutionContext
+  #endif
+  final public func withParent(_ viewNode: SCALS.ViewNode) -> SCALS.ResolutionContext
+  final public func withIterationVariables(_ variables: [Swift.String : Any]) -> SCALS.ResolutionContext
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor final public func getValue(_ keypath: Swift.String) -> Any?
+  #endif
+  @_Concurrency.MainActor final public func interpolate(_ template: Swift.String) -> Swift.String
+  @objc deinit
+}
+public struct ResolvedStyle : Swift.Sendable {
+  public var fontFamily: Swift.String?
+  public var fontSize: CoreFoundation.CGFloat?
+  public var fontWeight: SCALS.IR.FontWeight?
+  public var textColor: SCALS.IR.Color?
+  public var textAlignment: SCALS.IR.TextAlignment?
+  public var backgroundColor: SCALS.IR.Color?
+  public var cornerRadius: CoreFoundation.CGFloat?
+  public var borderWidth: CoreFoundation.CGFloat?
+  public var borderColor: SCALS.IR.Color?
+  public var shadowColor: SCALS.IR.Color?
+  public var shadowRadius: CoreFoundation.CGFloat?
+  public var shadowX: CoreFoundation.CGFloat?
+  public var shadowY: CoreFoundation.CGFloat?
+  public var tintColor: SCALS.IR.Color?
+  public var width: SCALS.IR.DimensionValue?
+  public var height: SCALS.IR.DimensionValue?
+  public var minWidth: SCALS.IR.DimensionValue?
+  public var minHeight: SCALS.IR.DimensionValue?
+  public var maxWidth: SCALS.IR.DimensionValue?
+  public var maxHeight: SCALS.IR.DimensionValue?
+  public var paddingTop: CoreFoundation.CGFloat?
+  public var paddingBottom: CoreFoundation.CGFloat?
+  public var paddingLeading: CoreFoundation.CGFloat?
+  public var paddingTrailing: CoreFoundation.CGFloat?
+  public init()
+  public mutating func merge(from style: SCALS.Document.Style)
+  public var hasShadow: Swift.Bool {
+    get
+  }
+  public var hasBorder: Swift.Bool {
+    get
+  }
+}
+public protocol SectionLayoutConfigResolving {
+  static var layoutType: SCALS.Document.SectionType { get }
+  func resolve(config: SCALS.Document.SectionLayoutConfig) -> SCALS.SectionLayoutConfigResult
+}
+public struct SectionLayoutConfigResult {
+  public let sectionType: SCALS.IR.SectionType
+  public let sectionConfig: SCALS.IR.SectionConfig
+  public init(sectionType: SCALS.IR.SectionType, sectionConfig: SCALS.IR.SectionConfig)
+}
+final public class SectionLayoutConfigResolverRegistry : @unchecked Swift.Sendable {
+  public init()
+  final public func register<R>(_ resolver: R) where R : SCALS.SectionLayoutConfigResolving
+  final public func hasResolver(for type: SCALS.Document.SectionType) -> Swift.Bool
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func resolve(config: SCALS.Document.SectionLayoutConfig) -> SCALS.SectionLayoutConfigResult?
+  #endif
+  @objc deinit
+}
+public struct SectionLayoutResolver : SCALS.SectionLayoutResolving {
+  public init(componentRegistry: SCALS.ComponentResolverRegistry)
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(componentRegistry: SCALS.ComponentResolverRegistry, layoutConfigRegistry: SCALS.SectionLayoutConfigResolverRegistry?)
+  #endif
+  @_Concurrency.MainActor public func resolve(_ sectionLayout: SCALS.Document.SectionLayout, context: SCALS.ResolutionContext) throws -> SCALS.NodeResolutionResult
+}
+public protocol IRConvertible {
+  associatedtype IRType
+  func toIR() -> Self.IRType
+}
+public enum IR {
+}
+extension SCALS.IR {
+  public struct Color : Swift.Codable, Swift.Equatable, Swift.Sendable {
+    public let red: Swift.Double
+    public let green: Swift.Double
+    public let blue: Swift.Double
+    public let alpha: Swift.Double
+    public init(red: Swift.Double, green: Swift.Double, blue: Swift.Double, alpha: Swift.Double = 1.0)
+    public init(hex: Swift.String)
+    public static let clear: SCALS.IR.Color
+    public static let black: SCALS.IR.Color
+    public static let white: SCALS.IR.Color
+    public static let red: SCALS.IR.Color
+    public static let green: SCALS.IR.Color
+    public static let blue: SCALS.IR.Color
+    public static func == (a: SCALS.IR.Color, b: SCALS.IR.Color) -> Swift.Bool
+    public func encode(to encoder: any Swift.Encoder) throws
+    public init(from decoder: any Swift.Decoder) throws
+  }
+  public struct EdgeInsets : Swift.Equatable, Swift.Sendable {
+    public let top: CoreFoundation.CGFloat
+    public let leading: CoreFoundation.CGFloat
+    public let bottom: CoreFoundation.CGFloat
+    public let trailing: CoreFoundation.CGFloat
+    public init(top: CoreFoundation.CGFloat = 0, leading: CoreFoundation.CGFloat = 0, bottom: CoreFoundation.CGFloat = 0, trailing: CoreFoundation.CGFloat = 0)
+    public static let zero: SCALS.IR.EdgeInsets
+    public var isEmpty: Swift.Bool {
+      get
+    }
+    public static func == (a: SCALS.IR.EdgeInsets, b: SCALS.IR.EdgeInsets) -> Swift.Bool
+  }
+  public struct Alignment : Swift.Equatable, Swift.Sendable {
+    public let horizontal: SCALS.IR.HorizontalAlignment
+    public let vertical: SCALS.IR.VerticalAlignment
+    public init(horizontal: SCALS.IR.HorizontalAlignment, vertical: SCALS.IR.VerticalAlignment)
+    public static let center: SCALS.IR.Alignment
+    public static let leading: SCALS.IR.Alignment
+    public static let trailing: SCALS.IR.Alignment
+    public static let top: SCALS.IR.Alignment
+    public static let bottom: SCALS.IR.Alignment
+    public static let topLeading: SCALS.IR.Alignment
+    public static let topTrailing: SCALS.IR.Alignment
+    public static let bottomLeading: SCALS.IR.Alignment
+    public static let bottomTrailing: SCALS.IR.Alignment
+    public static func == (a: SCALS.IR.Alignment, b: SCALS.IR.Alignment) -> Swift.Bool
+  }
+  public enum HorizontalAlignment : Swift.String, Swift.Codable, Swift.Sendable {
+    case leading
+    case center
+    case trailing
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init?(rawValue: Swift.String)
+    #endif
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  public enum VerticalAlignment : Swift.String, Swift.Codable, Swift.Sendable {
+    case top
+    case center
+    case bottom
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init?(rawValue: Swift.String)
+    #endif
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  public struct UnitPoint : Swift.Equatable, Swift.Sendable {
+    public let x: Swift.Double
+    public let y: Swift.Double
+    public init(x: Swift.Double, y: Swift.Double)
+    public static let zero: SCALS.IR.UnitPoint
+    public static let center: SCALS.IR.UnitPoint
+    public static let leading: SCALS.IR.UnitPoint
+    public static let trailing: SCALS.IR.UnitPoint
+    public static let top: SCALS.IR.UnitPoint
+    public static let bottom: SCALS.IR.UnitPoint
+    public static let topLeading: SCALS.IR.UnitPoint
+    public static let topTrailing: SCALS.IR.UnitPoint
+    public static let bottomLeading: SCALS.IR.UnitPoint
+    public static let bottomTrailing: SCALS.IR.UnitPoint
+    public static func == (a: SCALS.IR.UnitPoint, b: SCALS.IR.UnitPoint) -> Swift.Bool
+  }
+  public enum ColorScheme : Swift.String, Swift.Codable, Swift.Sendable {
+    case light
+    case dark
+    case system
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init?(rawValue: Swift.String)
+    #endif
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  public typealias FontWeight = SCALS.Document.FontWeight
+  public typealias TextAlignment = SCALS.Document.TextAlignment
+}
+extension SCALS.IR {
+  public struct Shadow : Swift.Equatable, Swift.Sendable {
+    public let color: SCALS.IR.Color
+    public let radius: CoreFoundation.CGFloat
+    public let x: CoreFoundation.CGFloat
+    public let y: CoreFoundation.CGFloat
+    public init(color: SCALS.IR.Color, radius: CoreFoundation.CGFloat, x: CoreFoundation.CGFloat, y: CoreFoundation.CGFloat)
+    public static let none: SCALS.IR.Shadow
+    public static func == (a: SCALS.IR.Shadow, b: SCALS.IR.Shadow) -> Swift.Bool
+  }
+}
+extension SCALS.IR {
+  public struct Border : Swift.Equatable, Swift.Sendable {
+    public let color: SCALS.IR.Color
+    public let width: CoreFoundation.CGFloat
+    public init(color: SCALS.IR.Color, width: CoreFoundation.CGFloat)
+    public static func == (a: SCALS.IR.Border, b: SCALS.IR.Border) -> Swift.Bool
+  }
+}
+extension SCALS.IR {
+  public struct Style : Swift.Sendable {
+    public var fontFamily: Swift.String?
+    public var fontSize: CoreFoundation.CGFloat?
+    public var fontWeight: SCALS.IR.FontWeight?
+    public var textColor: SCALS.IR.Color?
+    public var textAlignment: SCALS.IR.TextAlignment?
+    public var backgroundColor: SCALS.IR.Color?
+    public var cornerRadius: CoreFoundation.CGFloat?
+    public var borderWidth: CoreFoundation.CGFloat?
+    public var borderColor: SCALS.IR.Color?
+    public var shadowColor: SCALS.IR.Color?
+    public var shadowRadius: CoreFoundation.CGFloat?
+    public var shadowX: CoreFoundation.CGFloat?
+    public var shadowY: CoreFoundation.CGFloat?
+    public var tintColor: SCALS.IR.Color?
+    public var width: SCALS.IR.DimensionValue?
+    public var height: SCALS.IR.DimensionValue?
+    public var minWidth: SCALS.IR.DimensionValue?
+    public var minHeight: SCALS.IR.DimensionValue?
+    public var maxWidth: SCALS.IR.DimensionValue?
+    public var maxHeight: SCALS.IR.DimensionValue?
+    public var paddingTop: CoreFoundation.CGFloat?
+    public var paddingBottom: CoreFoundation.CGFloat?
+    public var paddingLeading: CoreFoundation.CGFloat?
+    public var paddingTrailing: CoreFoundation.CGFloat?
+    public init()
+  }
+}
+extension SCALS.IR {
+  public struct Section {
+    public let id: Swift.String?
+    public let layoutType: SCALS.IR.SectionType
+    public let header: SCALS.RenderNode?
+    public let footer: SCALS.RenderNode?
+    public let stickyHeader: Swift.Bool
+    public let config: SCALS.IR.SectionConfig
+    public let children: [SCALS.RenderNode]
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(id: Swift.String? = nil, layoutType: SCALS.IR.SectionType, header: SCALS.RenderNode? = nil, footer: SCALS.RenderNode? = nil, stickyHeader: Swift.Bool = false, config: SCALS.IR.SectionConfig = SectionConfig(), children: [SCALS.RenderNode] = [])
+    #endif
+  }
+}
+extension SCALS.IR {
+  public enum SectionType {
+    case horizontal
+    case list
+    case grid(columns: SCALS.IR.ColumnConfig)
+    case flow
+  }
+}
+extension SCALS.IR {
+  public enum ColumnConfig : Swift.Equatable {
+    case fixed(Swift.Int)
+    case adaptive(minWidth: CoreFoundation.CGFloat)
+    public static func == (a: SCALS.IR.ColumnConfig, b: SCALS.IR.ColumnConfig) -> Swift.Bool
+  }
+}
+extension SCALS.IR {
+  public struct SectionConfig {
+    public let alignment: SCALS.IR.HorizontalAlignment
+    public let itemSpacing: CoreFoundation.CGFloat
+    public let lineSpacing: CoreFoundation.CGFloat
+    public let contentInsets: SCALS.IR.EdgeInsets
+    public let itemDimensions: SCALS.IR.ItemDimensions?
+    public let showsIndicators: Swift.Bool
+    public let isPagingEnabled: Swift.Bool
+    public let snapBehavior: SCALS.IR.SnapBehavior
+    public let showsDividers: Swift.Bool
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(alignment: SCALS.IR.HorizontalAlignment = .leading, itemSpacing: CoreFoundation.CGFloat = 8, lineSpacing: CoreFoundation.CGFloat = 8, contentInsets: SCALS.IR.EdgeInsets = .zero, itemDimensions: SCALS.IR.ItemDimensions? = nil, showsIndicators: Swift.Bool = false, isPagingEnabled: Swift.Bool = false, snapBehavior: SCALS.IR.SnapBehavior = .none, showsDividers: Swift.Bool = true)
+    #endif
+  }
+}
+extension SCALS.IR {
+  public struct ItemDimensions {
+    public let width: SCALS.IR.DimensionValue?
+    public let height: SCALS.IR.DimensionValue?
+    public let aspectRatio: CoreFoundation.CGFloat?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(width: SCALS.IR.DimensionValue? = nil, height: SCALS.IR.DimensionValue? = nil, aspectRatio: CoreFoundation.CGFloat? = nil)
+    #endif
+  }
+}
+extension SCALS.IR {
+  @frozen public enum DimensionValue : Swift.Equatable {
+    case absolute(CoreFoundation.CGFloat)
+    case fractional(CoreFoundation.CGFloat)
+    public func resolve(in containerSize: CoreFoundation.CGFloat) -> CoreFoundation.CGFloat
+    #if compiler(>=5.3) && $NonescapableTypes
+    public var resolvedAbsolute: CoreFoundation.CGFloat? {
+      get
+    }
+    #endif
+    public static func == (a: SCALS.IR.DimensionValue, b: SCALS.IR.DimensionValue) -> Swift.Bool
+  }
+}
+extension SCALS.IR {
+  public enum SnapBehavior {
+    case none
+    case viewAligned
+    case paging
+    public static func == (a: SCALS.IR.SnapBehavior, b: SCALS.IR.SnapBehavior) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension SCALS.IR {
+  public enum Positioning {
+    case safeArea
+    case absolute
+    public static func == (a: SCALS.IR.Positioning, b: SCALS.IR.Positioning) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension SCALS.IR {
+  public struct PositionedEdgeInset {
+    public let positioning: SCALS.IR.Positioning
+    public let value: CoreFoundation.CGFloat
+    public init(positioning: SCALS.IR.Positioning, value: CoreFoundation.CGFloat)
+  }
+}
+extension SCALS.IR {
+  public struct PositionedEdgeInsets {
+    public let top: SCALS.IR.PositionedEdgeInset?
+    public let bottom: SCALS.IR.PositionedEdgeInset?
+    public let leading: SCALS.IR.PositionedEdgeInset?
+    public let trailing: SCALS.IR.PositionedEdgeInset?
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init(top: SCALS.IR.PositionedEdgeInset? = nil, bottom: SCALS.IR.PositionedEdgeInset? = nil, leading: SCALS.IR.PositionedEdgeInset? = nil, trailing: SCALS.IR.PositionedEdgeInset? = nil)
+    #endif
+  }
+}
+extension SCALS.IR.EdgeInsets {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(from padding: SCALS.Document.Padding?, mergingTop: CoreFoundation.CGFloat = 0, mergingBottom: CoreFoundation.CGFloat = 0, mergingLeading: CoreFoundation.CGFloat = 0, mergingTrailing: CoreFoundation.CGFloat = 0)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(from padding: SCALS.Document.Padding?)
+  #endif
+}
+extension SCALS.IR.Shadow {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(from resolvedStyle: SCALS.ResolvedStyle)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(color: SCALS.IR.Color?, radius: CoreFoundation.CGFloat?, x: CoreFoundation.CGFloat?, y: CoreFoundation.CGFloat?)
+  #endif
+}
+extension SCALS.IR.Border {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(from resolvedStyle: SCALS.ResolvedStyle)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(color: SCALS.IR.Color?, width: CoreFoundation.CGFloat?)
+  #endif
+}
+extension SCALS.IR.Alignment {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(forVStack horizontalAlignment: SCALS.Document.HorizontalAlignment?)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(forHStack verticalAlignment: SCALS.Document.VerticalAlignment?)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(forZStack alignment: SCALS.Document.Alignment?)
+  #endif
+}
+public struct RenderTree {
+  public let root: SCALS.RootNode
+  public let stateStore: SCALS.StateStore
+  public let actions: [Swift.String : SCALS.ActionDefinition]
+  public init(root: SCALS.RootNode, stateStore: SCALS.StateStore, actions: [Swift.String : SCALS.ActionDefinition])
+}
+public typealias RenderColorScheme = SCALS.IR.ColorScheme
+public struct RootNode {
+  public let backgroundColor: SCALS.IR.Color
+  public let edgeInsets: SCALS.IR.PositionedEdgeInsets?
+  public let colorScheme: SCALS.IR.ColorScheme
+  public let actions: SCALS.LifecycleActions
+  public let children: [SCALS.RenderNode]
+  public let padding: SCALS.IR.EdgeInsets
+  public let cornerRadius: CoreFoundation.CGFloat
+  public let shadow: SCALS.IR.Shadow?
+  public let border: SCALS.IR.Border?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(backgroundColor: SCALS.IR.Color = .clear, edgeInsets: SCALS.IR.PositionedEdgeInsets? = nil, colorScheme: SCALS.IR.ColorScheme = .system, actions: SCALS.LifecycleActions = LifecycleActions(), children: [SCALS.RenderNode] = [], padding: SCALS.IR.EdgeInsets = .zero, cornerRadius: CoreFoundation.CGFloat = 0, shadow: SCALS.IR.Shadow? = nil, border: SCALS.IR.Border? = nil)
+  #endif
+}
+public struct RenderNodeKind : Swift.Hashable, Swift.Sendable {
+  public let rawValue: Swift.String
+  public init(rawValue: Swift.String)
+  public static func == (a: SCALS.RenderNodeKind, b: SCALS.RenderNodeKind) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension SCALS.RenderNodeKind {
+  public static let container: SCALS.RenderNodeKind
+  public static let sectionLayout: SCALS.RenderNodeKind
+  public static let text: SCALS.RenderNodeKind
+  public static let button: SCALS.RenderNodeKind
+  public static let textField: SCALS.RenderNodeKind
+  public static let toggle: SCALS.RenderNodeKind
+  public static let slider: SCALS.RenderNodeKind
+  public static let image: SCALS.RenderNodeKind
+  public static let gradient: SCALS.RenderNodeKind
+  public static let shape: SCALS.RenderNodeKind
+  public static let pageIndicator: SCALS.RenderNodeKind
+  public static let spacer: SCALS.RenderNodeKind
+  public static let divider: SCALS.RenderNodeKind
+  public static let custom: SCALS.RenderNodeKind
+}
+public protocol CustomRenderNode : Swift.Sendable {
+  static var kind: SCALS.RenderNodeKind { get }
+}
+public enum RenderNode {
+  case container(SCALS.ContainerNode)
+  case sectionLayout(SCALS.SectionLayoutNode)
+  case text(SCALS.TextNode)
+  case button(SCALS.ButtonNode)
+  case textField(SCALS.TextFieldNode)
+  case toggle(SCALS.ToggleNode)
+  case slider(SCALS.SliderNode)
+  case image(SCALS.ImageNode)
+  case gradient(SCALS.GradientNode)
+  case shape(SCALS.ShapeNode)
+  case pageIndicator(SCALS.PageIndicatorNode)
+  case spacer(SCALS.SpacerNode)
+  case divider(SCALS.DividerNode)
+  case custom(kind: SCALS.RenderNodeKind, node: any SCALS.CustomRenderNode)
+  public var kind: SCALS.RenderNodeKind {
+    get
+  }
+}
+public struct ContainerNode {
+  public enum LayoutType {
+    case vstack
+    case hstack
+    case zstack
+    public static func == (a: SCALS.ContainerNode.LayoutType, b: SCALS.ContainerNode.LayoutType) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public let id: Swift.String?
+  public let layoutType: SCALS.ContainerNode.LayoutType
+  public let alignment: SCALS.IR.Alignment
+  public let spacing: CoreFoundation.CGFloat
+  public let children: [SCALS.RenderNode]
+  public let padding: SCALS.IR.EdgeInsets
+  public let backgroundColor: SCALS.IR.Color
+  public let cornerRadius: CoreFoundation.CGFloat
+  public let shadow: SCALS.IR.Shadow?
+  public let border: SCALS.IR.Border?
+  public let width: SCALS.IR.DimensionValue?
+  public let height: SCALS.IR.DimensionValue?
+  public let minWidth: SCALS.IR.DimensionValue?
+  public let minHeight: SCALS.IR.DimensionValue?
+  public let maxWidth: SCALS.IR.DimensionValue?
+  public let maxHeight: SCALS.IR.DimensionValue?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(id: Swift.String? = nil, layoutType: SCALS.ContainerNode.LayoutType = .vstack, alignment: SCALS.IR.Alignment = .center, spacing: CoreFoundation.CGFloat = 0, children: [SCALS.RenderNode] = [], padding: SCALS.IR.EdgeInsets = .zero, backgroundColor: SCALS.IR.Color = .clear, cornerRadius: CoreFoundation.CGFloat = 0, shadow: SCALS.IR.Shadow? = nil, border: SCALS.IR.Border? = nil, width: SCALS.IR.DimensionValue? = nil, height: SCALS.IR.DimensionValue? = nil, minWidth: SCALS.IR.DimensionValue? = nil, minHeight: SCALS.IR.DimensionValue? = nil, maxWidth: SCALS.IR.DimensionValue? = nil, maxHeight: SCALS.IR.DimensionValue? = nil)
+  #endif
+}
+public struct SectionLayoutNode {
+  public let id: Swift.String?
+  public let sectionSpacing: CoreFoundation.CGFloat
+  public let sections: [SCALS.IR.Section]
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(id: Swift.String? = nil, sectionSpacing: CoreFoundation.CGFloat = 0, sections: [SCALS.IR.Section] = [])
+  #endif
+}
+public struct TextNode {
+  public let id: Swift.String?
+  public let content: Swift.String
+  public let styleId: Swift.String?
+  public let bindingPath: Swift.String?
+  public let bindingTemplate: Swift.String?
+  public let padding: SCALS.IR.EdgeInsets
+  public let textColor: SCALS.IR.Color
+  public let fontSize: CoreFoundation.CGFloat
+  public let fontWeight: SCALS.IR.FontWeight
+  public let textAlignment: SCALS.IR.TextAlignment
+  public let backgroundColor: SCALS.IR.Color
+  public let cornerRadius: CoreFoundation.CGFloat
+  public let shadow: SCALS.IR.Shadow?
+  public let border: SCALS.IR.Border?
+  public let width: SCALS.IR.DimensionValue?
+  public let height: SCALS.IR.DimensionValue?
+  public var isDynamic: Swift.Bool {
+    get
+  }
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(id: Swift.String? = nil, content: Swift.String, styleId: Swift.String? = nil, bindingPath: Swift.String? = nil, bindingTemplate: Swift.String? = nil, padding: SCALS.IR.EdgeInsets = .zero, textColor: SCALS.IR.Color = .black, fontSize: CoreFoundation.CGFloat = 17, fontWeight: SCALS.IR.FontWeight = .regular, textAlignment: SCALS.IR.TextAlignment = .leading, backgroundColor: SCALS.IR.Color = .clear, cornerRadius: CoreFoundation.CGFloat = 0, shadow: SCALS.IR.Shadow? = nil, border: SCALS.IR.Border? = nil, width: SCALS.IR.DimensionValue? = nil, height: SCALS.IR.DimensionValue? = nil)
+  #endif
+}
+public struct ButtonStateStyle : Swift.Sendable {
+  public let textColor: SCALS.IR.Color
+  public let fontSize: CoreFoundation.CGFloat
+  public let fontWeight: SCALS.IR.FontWeight
+  public let backgroundColor: SCALS.IR.Color
+  public let cornerRadius: CoreFoundation.CGFloat
+  public let border: SCALS.IR.Border?
+  public let shadow: SCALS.IR.Shadow?
+  public let tintColor: SCALS.IR.Color?
+  public let width: SCALS.IR.DimensionValue?
+  public let height: SCALS.IR.DimensionValue?
+  public let minWidth: SCALS.IR.DimensionValue?
+  public let minHeight: SCALS.IR.DimensionValue?
+  public let maxWidth: SCALS.IR.DimensionValue?
+  public let maxHeight: SCALS.IR.DimensionValue?
+  public let padding: SCALS.IR.EdgeInsets
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(textColor: SCALS.IR.Color = .black, fontSize: CoreFoundation.CGFloat = 17, fontWeight: SCALS.IR.FontWeight = .regular, backgroundColor: SCALS.IR.Color = .clear, cornerRadius: CoreFoundation.CGFloat = 0, border: SCALS.IR.Border? = nil, shadow: SCALS.IR.Shadow? = nil, tintColor: SCALS.IR.Color? = nil, width: SCALS.IR.DimensionValue? = nil, height: SCALS.IR.DimensionValue? = nil, minWidth: SCALS.IR.DimensionValue? = nil, minHeight: SCALS.IR.DimensionValue? = nil, maxWidth: SCALS.IR.DimensionValue? = nil, maxHeight: SCALS.IR.DimensionValue? = nil, padding: SCALS.IR.EdgeInsets = .zero)
+  #endif
+}
+public struct ButtonStyles : Swift.Sendable {
+  public let normal: SCALS.ButtonStateStyle
+  public let selected: SCALS.ButtonStateStyle?
+  public let disabled: SCALS.ButtonStateStyle?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(normal: SCALS.ButtonStateStyle = ButtonStateStyle(), selected: SCALS.ButtonStateStyle? = nil, disabled: SCALS.ButtonStateStyle? = nil)
+  #endif
+  public func style(isSelected: Swift.Bool, isDisabled: Swift.Bool = false) -> SCALS.ButtonStateStyle
+}
+public struct ButtonNode {
+  public enum ImagePlacement : Swift.String, Swift.Codable {
+    case leading
+    case trailing
+    case top
+    case bottom
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init?(rawValue: Swift.String)
+    #endif
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  public enum ButtonShape : Swift.String, Swift.Codable {
+    case circle
+    case capsule
+    case roundedSquare
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init?(rawValue: Swift.String)
+    #endif
+    public typealias RawValue = Swift.String
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  public let id: Swift.String?
+  public let label: Swift.String
+  public let styleId: Swift.String?
+  public let styles: SCALS.ButtonStyles
+  public let isSelectedBinding: Swift.String?
+  public let fillWidth: Swift.Bool
+  public let onTap: SCALS.Document.Component.ActionBinding?
+  public let image: SCALS.ImageNode.Source?
+  public let imagePlacement: SCALS.ButtonNode.ImagePlacement
+  public let imageSpacing: CoreFoundation.CGFloat
+  public let buttonShape: SCALS.ButtonNode.ButtonShape?
+  public var style: SCALS.ButtonStateStyle {
+    get
+  }
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(id: Swift.String? = nil, label: Swift.String, styleId: Swift.String? = nil, styles: SCALS.ButtonStyles = ButtonStyles(), isSelectedBinding: Swift.String? = nil, fillWidth: Swift.Bool = false, onTap: SCALS.Document.Component.ActionBinding? = nil, image: SCALS.ImageNode.Source? = nil, imagePlacement: SCALS.ButtonNode.ImagePlacement = .leading, imageSpacing: CoreFoundation.CGFloat = 8, buttonShape: SCALS.ButtonNode.ButtonShape? = nil)
+  #endif
+}
+public struct TextFieldNode {
+  public let id: Swift.String?
+  public let placeholder: Swift.String
+  public let styleId: Swift.String?
+  public let bindingPath: Swift.String?
+  public let textColor: SCALS.IR.Color
+  public let fontSize: CoreFoundation.CGFloat
+  public let backgroundColor: SCALS.IR.Color
+  public let cornerRadius: CoreFoundation.CGFloat
+  public let border: SCALS.IR.Border?
+  public let padding: SCALS.IR.EdgeInsets
+  public let width: SCALS.IR.DimensionValue?
+  public let height: SCALS.IR.DimensionValue?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(id: Swift.String? = nil, placeholder: Swift.String = "", styleId: Swift.String? = nil, bindingPath: Swift.String? = nil, textColor: SCALS.IR.Color = .black, fontSize: CoreFoundation.CGFloat = 17, backgroundColor: SCALS.IR.Color = .clear, cornerRadius: CoreFoundation.CGFloat = 0, border: SCALS.IR.Border? = nil, padding: SCALS.IR.EdgeInsets = .zero, width: SCALS.IR.DimensionValue? = nil, height: SCALS.IR.DimensionValue? = nil)
+  #endif
+}
+public struct ToggleNode {
+  public let id: Swift.String?
+  public let styleId: Swift.String?
+  public let bindingPath: Swift.String?
+  public let tintColor: SCALS.IR.Color?
+  public let padding: SCALS.IR.EdgeInsets
+  public let width: SCALS.IR.DimensionValue?
+  public let height: SCALS.IR.DimensionValue?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(id: Swift.String? = nil, styleId: Swift.String? = nil, bindingPath: Swift.String? = nil, tintColor: SCALS.IR.Color? = nil, padding: SCALS.IR.EdgeInsets = .zero, width: SCALS.IR.DimensionValue? = nil, height: SCALS.IR.DimensionValue? = nil)
+  #endif
+}
+public struct SliderNode {
+  public let id: Swift.String?
+  public let styleId: Swift.String?
+  public let bindingPath: Swift.String?
+  public let minValue: Swift.Double
+  public let maxValue: Swift.Double
+  public let tintColor: SCALS.IR.Color?
+  public let padding: SCALS.IR.EdgeInsets
+  public let width: SCALS.IR.DimensionValue?
+  public let height: SCALS.IR.DimensionValue?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(id: Swift.String? = nil, styleId: Swift.String? = nil, bindingPath: Swift.String? = nil, minValue: Swift.Double = 0.0, maxValue: Swift.Double = 1.0, tintColor: SCALS.IR.Color? = nil, padding: SCALS.IR.EdgeInsets = .zero, width: SCALS.IR.DimensionValue? = nil, height: SCALS.IR.DimensionValue? = nil)
+  #endif
+}
+public struct ImageNode {
+  public enum Source {
+    case sfsymbol(name: Swift.String)
+    case asset(name: Swift.String)
+    case url(Foundation.URL)
+    case statePath(Swift.String)
+    case activityIndicator
+  }
+  public let id: Swift.String?
+  public let source: SCALS.ImageNode.Source
+  public let placeholder: SCALS.ImageNode.Source?
+  public let loading: SCALS.ImageNode.Source?
+  public let styleId: Swift.String?
+  public let onTap: SCALS.Document.Component.ActionBinding?
+  public let tintColor: SCALS.IR.Color?
+  public let backgroundColor: SCALS.IR.Color
+  public let cornerRadius: CoreFoundation.CGFloat
+  public let border: SCALS.IR.Border?
+  public let shadow: SCALS.IR.Shadow?
+  public let padding: SCALS.IR.EdgeInsets
+  public let width: SCALS.IR.DimensionValue?
+  public let height: SCALS.IR.DimensionValue?
+  public let minWidth: SCALS.IR.DimensionValue?
+  public let minHeight: SCALS.IR.DimensionValue?
+  public let maxWidth: SCALS.IR.DimensionValue?
+  public let maxHeight: SCALS.IR.DimensionValue?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(id: Swift.String? = nil, source: SCALS.ImageNode.Source, placeholder: SCALS.ImageNode.Source? = nil, loading: SCALS.ImageNode.Source? = nil, styleId: Swift.String? = nil, onTap: SCALS.Document.Component.ActionBinding? = nil, tintColor: SCALS.IR.Color? = nil, backgroundColor: SCALS.IR.Color = .clear, cornerRadius: CoreFoundation.CGFloat = 0, border: SCALS.IR.Border? = nil, shadow: SCALS.IR.Shadow? = nil, padding: SCALS.IR.EdgeInsets = .zero, width: SCALS.IR.DimensionValue? = nil, height: SCALS.IR.DimensionValue? = nil, minWidth: SCALS.IR.DimensionValue? = nil, minHeight: SCALS.IR.DimensionValue? = nil, maxWidth: SCALS.IR.DimensionValue? = nil, maxHeight: SCALS.IR.DimensionValue? = nil)
+  #endif
+}
+public struct GradientNode {
+  public enum GradientType {
+    case linear
+    case radial
+    public static func == (a: SCALS.GradientNode.GradientType, b: SCALS.GradientNode.GradientType) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public let id: Swift.String?
+  public let gradientType: SCALS.GradientNode.GradientType
+  public let colors: [SCALS.GradientNode.ColorStop]
+  public let startPoint: SCALS.IR.UnitPoint
+  public let endPoint: SCALS.IR.UnitPoint
+  public let cornerRadius: CoreFoundation.CGFloat
+  public let padding: SCALS.IR.EdgeInsets
+  public let width: SCALS.IR.DimensionValue?
+  public let height: SCALS.IR.DimensionValue?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(id: Swift.String? = nil, gradientType: SCALS.GradientNode.GradientType = .linear, colors: [SCALS.GradientNode.ColorStop], startPoint: SCALS.IR.UnitPoint = .bottom, endPoint: SCALS.IR.UnitPoint = .top, cornerRadius: CoreFoundation.CGFloat = 0, padding: SCALS.IR.EdgeInsets = .zero, width: SCALS.IR.DimensionValue? = nil, height: SCALS.IR.DimensionValue? = nil)
+  #endif
+}
+public struct ShapeNode {
+  public enum ShapeType : Swift.Hashable, Swift.Sendable {
+    case rectangle
+    case circle
+    case roundedRectangle(cornerRadius: CoreFoundation.CGFloat)
+    case capsule
+    case ellipse
+    public static func == (a: SCALS.ShapeNode.ShapeType, b: SCALS.ShapeNode.ShapeType) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public let id: Swift.String?
+  public let shapeType: SCALS.ShapeNode.ShapeType
+  public let fillColor: SCALS.IR.Color
+  public let strokeColor: SCALS.IR.Color?
+  public let strokeWidth: CoreFoundation.CGFloat
+  public let padding: SCALS.IR.EdgeInsets
+  public let width: SCALS.IR.DimensionValue?
+  public let height: SCALS.IR.DimensionValue?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(id: Swift.String? = nil, shapeType: SCALS.ShapeNode.ShapeType, fillColor: SCALS.IR.Color = .clear, strokeColor: SCALS.IR.Color? = nil, strokeWidth: CoreFoundation.CGFloat = 0, padding: SCALS.IR.EdgeInsets = .zero, width: SCALS.IR.DimensionValue? = nil, height: SCALS.IR.DimensionValue? = nil)
+  #endif
+}
+public struct PageIndicatorNode {
+  public let id: Swift.String?
+  public let currentPagePath: Swift.String
+  public let pageCountPath: Swift.String?
+  public let pageCountStatic: Swift.Int?
+  public let dotSize: CoreFoundation.CGFloat
+  public let dotSpacing: CoreFoundation.CGFloat
+  public let dotColor: SCALS.IR.Color
+  public let currentDotColor: SCALS.IR.Color
+  public let padding: SCALS.IR.EdgeInsets
+  public let width: SCALS.IR.DimensionValue?
+  public let height: SCALS.IR.DimensionValue?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(id: Swift.String? = nil, currentPagePath: Swift.String, pageCountPath: Swift.String? = nil, pageCountStatic: Swift.Int? = nil, dotSize: CoreFoundation.CGFloat = 8, dotSpacing: CoreFoundation.CGFloat = 8, dotColor: SCALS.IR.Color = IR.Color(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0), currentDotColor: SCALS.IR.Color = IR.Color(red: 0.0, green: 0.478, blue: 1.0, alpha: 1.0), padding: SCALS.IR.EdgeInsets = .zero, width: SCALS.IR.DimensionValue? = nil, height: SCALS.IR.DimensionValue? = nil)
+  #endif
+}
+public struct SpacerNode {
+  public let minLength: CoreFoundation.CGFloat?
+  public let width: CoreFoundation.CGFloat?
+  public let height: CoreFoundation.CGFloat?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(minLength: CoreFoundation.CGFloat? = nil, width: CoreFoundation.CGFloat? = nil, height: CoreFoundation.CGFloat? = nil)
+  #endif
+}
+extension SCALS.GradientNode {
+  public struct ColorStop {
+    public let color: SCALS.GradientColor
+    public let location: CoreFoundation.CGFloat
+    public init(color: SCALS.GradientColor, location: CoreFoundation.CGFloat)
+  }
+}
+public enum GradientColor {
+  case fixed(SCALS.IR.Color)
+  case adaptive(light: SCALS.IR.Color, dark: SCALS.IR.Color)
+  public func resolved(for scheme: SCALS.IR.ColorScheme, isSystemDark: Swift.Bool) -> SCALS.IR.Color
+}
+public struct DividerNode {
+  public let id: Swift.String?
+  public let color: SCALS.IR.Color
+  public let thickness: CoreFoundation.CGFloat
+  public let padding: SCALS.IR.EdgeInsets
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(id: Swift.String? = nil, color: SCALS.IR.Color = IR.Color(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0), thickness: CoreFoundation.CGFloat = 1, padding: SCALS.IR.EdgeInsets = .zero)
+  #endif
+}
+public enum ActionDefinition : Swift.Codable {
+  case dismiss
+  case setState(path: Swift.String, value: SCALS.StateSetValue)
+  case toggleState(path: Swift.String)
+  case showAlert(config: SCALS.AlertActionConfig)
+  case sequence(steps: [SCALS.ActionDefinition])
+  case navigate(destination: Swift.String, presentation: SCALS.Document.NavigationPresentation)
+  case custom(type: Swift.String, parameters: [Swift.String : SCALS.Document.StateValue])
+  public init(from decoder: any Swift.Decoder) throws
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+public enum StateSetValue : Swift.Codable {
+  case literal(SCALS.Document.StateValue)
+  case expression(Swift.String)
+  public init(from decoder: any Swift.Decoder) throws
+  public func encode(to encoder: any Swift.Encoder) throws
+  public func toAny() -> Any
+}
+public struct AlertActionConfig : Swift.Codable {
+  public let title: Swift.String
+  public let message: SCALS.AlertMessage?
+  public let buttons: [SCALS.AlertButtonConfig]
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(title: Swift.String, message: SCALS.AlertMessage? = nil, buttons: [SCALS.AlertButtonConfig] = [])
+  #endif
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public enum AlertMessage : Swift.Codable {
+  case `static`(Swift.String)
+  case template(Swift.String)
+  public init(from decoder: any Swift.Decoder) throws
+  public func encode(to encoder: any Swift.Encoder) throws
+}
+public struct AlertButtonConfig : Swift.Codable {
+  public let label: Swift.String
+  public let style: SCALS.Document.AlertButtonStyle
+  public let action: Swift.String?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(label: Swift.String, style: SCALS.Document.AlertButtonStyle = .default, action: Swift.String? = nil)
+  #endif
+  public func encode(to encoder: any Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+}
+public struct ResolutionResult {
+  public let renderTree: SCALS.RenderTree
+  public let viewTreeRoot: SCALS.ViewNode
+  public let treeUpdater: SCALS.ViewTreeUpdater
+  public init(renderTree: SCALS.RenderTree, viewTreeRoot: SCALS.ViewNode, treeUpdater: SCALS.ViewTreeUpdater)
+}
+public struct Resolver {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(document: SCALS.Document.Definition, componentRegistry: SCALS.ComponentResolverRegistry, designSystemProvider: (any SCALS.DesignSystemProvider)? = nil)
+  #endif
+  @_Concurrency.MainActor public func resolve() throws -> SCALS.RenderTree
+  @_Concurrency.MainActor public func resolve(into stateStore: SCALS.StateStore, initializeFromDocument: Swift.Bool = true) throws -> SCALS.RenderTree
+  @_Concurrency.MainActor public func resolveWithTracking() throws -> SCALS.ResolutionResult
+  @_Concurrency.MainActor public func resolveWithTracking(into stateStore: SCALS.StateStore, initializeFromDocument: Swift.Bool = true) throws -> SCALS.ResolutionResult
+}
+public enum ResolutionError : Swift.Error, Foundation.LocalizedError {
+  case unknownStyle(Swift.String)
+  case unknownDataSource(Swift.String)
+  case unknownAction(Swift.String)
+  case invalidAction(Swift.String)
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var errorDescription: Swift.String? {
+    get
+  }
+  #endif
+}
+public struct LifecycleActions {
+  public enum LifecycleEvent : Swift.String, Swift.CaseIterable {
+    case onAppear
+    case onDisappear
+    #if compiler(>=5.3) && $NonescapableTypes
+    public init?(rawValue: Swift.String)
+    #endif
+    public typealias AllCases = [SCALS.LifecycleActions.LifecycleEvent]
+    public typealias RawValue = Swift.String
+    nonisolated public static var allCases: [SCALS.LifecycleActions.LifecycleEvent] {
+      get
+    }
+    public var rawValue: Swift.String {
+      get
+    }
+  }
+  public init()
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(from documentActions: SCALS.Document.LifecycleActions?)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func action(for event: SCALS.LifecycleActions.LifecycleEvent) -> SCALS.Document.Component.ActionBinding?
+  #endif
+  public var isEmpty: Swift.Bool {
+    get
+  }
+  public var definedEvents: [SCALS.LifecycleActions.LifecycleEvent] {
+    get
+  }
+}
+extension SwiftUICore.View {
+  @_Concurrency.MainActor @preconcurrency public func lifecycleActions(_ actions: SCALS.LifecycleActions, context: SCALS.ActionContext) -> some SwiftUICore.View
+  
+}
+public protocol Renderer {
+  associatedtype Output
+  func render(_ tree: SCALS.RenderTree) -> Self.Output
+}
+public enum SCALSValidationError : Swift.Error, Swift.CustomStringConvertible {
+  case missingRequiredField(field: Swift.String, path: Swift.String)
+  case invalidType(expected: Swift.String, actual: Swift.String, path: Swift.String)
+  case invalidEnumValue(value: Swift.String, allowed: [Swift.String], path: Swift.String)
+  case invalidFormat(message: Swift.String, path: Swift.String)
+  case unknownComponentType(type: Swift.String, path: Swift.String)
+  case unknownActionType(type: Swift.String, path: Swift.String)
+  case mutuallyExclusiveFields(fields: [Swift.String], path: Swift.String)
+  case invalidRange(value: Swift.Double, min: Swift.Double?, max: Swift.Double?, path: Swift.String)
+  case decodingFailed(underlying: any Swift.Error)
+  case multipleErrors([SCALS.SCALSValidationError])
+  public var description: Swift.String {
+    get
+  }
+}
+public struct SCALSValidationResult {
+  public let isValid: Swift.Bool
+  public let errors: [SCALS.SCALSValidationError]
+  public let warnings: [Swift.String]
+  public let document: SCALS.Document.Definition?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(isValid: Swift.Bool, errors: [SCALS.SCALSValidationError] = [], warnings: [Swift.String] = [], document: SCALS.Document.Definition? = nil)
+  #endif
+}
+public struct SCALSValidator {
+  public var knownComponentTypes: Swift.Set<Swift.String>
+  public let layoutTypes: Swift.Set<Swift.String>
+  public let sectionTypes: Swift.Set<Swift.String>
+  public let actionTypes: Swift.Set<Swift.String>
+  public var allowUnknownComponents: Swift.Bool
+  public var allowUnknownActions: Swift.Bool
+  public init()
+  public func validate(jsonString: Swift.String) -> SCALS.SCALSValidationResult
+  public func validate(jsonData: Foundation.Data) -> SCALS.SCALSValidationResult
+}
+extension SCALS.SCALSValidator {
+  public func validateAndDecode(jsonString: Swift.String) throws -> SCALS.Document.Definition
+  public mutating func registerComponentType(_ type: Swift.String)
+  public mutating func registerComponentTypes(_ types: [Swift.String])
+}
+public protocol StateValueReading {
+  #if compiler(>=5.3) && $NonescapableTypes
+  func getValue(_ keypath: Swift.String) -> Any?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  func getArray(_ keypath: Swift.String) -> [Any]?
+  #endif
+  func arrayContains(_ keypath: Swift.String, value: Any) -> Swift.Bool
+  func getArrayCount(_ keypath: Swift.String) -> Swift.Int
+}
+public struct ExpressionEvaluator {
+  public init()
+  public func evaluate(_ expression: Swift.String, using stateReader: any SCALS.StateValueReading) -> Any
+  public func interpolate(_ template: Swift.String, using stateReader: any SCALS.StateValueReading) -> Swift.String
+}
+extension SCALS.ExpressionEvaluator {
+  public func containsExpression(_ string: Swift.String) -> Swift.Bool
+  public func isPureExpression(_ string: Swift.String) -> Swift.Bool
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func unwrapExpression(_ string: Swift.String) -> Swift.String?
+  #endif
+}
+public struct KeypathAccessor {
+  public init()
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func get(_ keypath: Swift.String, from values: [Swift.String : Any]) -> Any?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func set(_ keypath: Swift.String, value: Any?, in values: inout [Swift.String : Any])
+  #endif
+}
+extension SCALS.KeypathAccessor {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func get<T>(_ keypath: Swift.String, from values: [Swift.String : Any], as type: T.Type = T.self) -> T?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func getArray(_ keypath: Swift.String, from values: [Swift.String : Any]) -> [Any]?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func rootKey(of keypath: Swift.String) -> Swift.String?
+  #endif
+  public func parentPaths(of keypath: Swift.String) -> [Swift.String]
+}
+public typealias StateChangeCallback = (_ path: Swift.String, _ oldValue: Any?, _ newValue: Any?) -> Swift.Void
+public protocol StateStoring : AnyObject {
+  #if compiler(>=5.3) && $NonescapableTypes
+  func get(_ keypath: Swift.String) -> Any?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  func get<T>(_ keypath: Swift.String, as type: T.Type) -> T?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  func getArray(_ keypath: Swift.String) -> [Any]?
+  #endif
+  func getArrayCount(_ keypath: Swift.String) -> Swift.Int
+  func arrayContains(_ keypath: Swift.String, value: Any) -> Swift.Bool
+  #if compiler(>=5.3) && $NonescapableTypes
+  func set(_ keypath: Swift.String, value: Any?)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  func initialize(from state: [Swift.String : SCALS.Document.StateValue]?)
+  #endif
+  func appendToArray(_ keypath: Swift.String, value: Any)
+  func removeFromArray(_ keypath: Swift.String, value: Any)
+  func removeFromArray(_ keypath: Swift.String, at index: Swift.Int)
+  func toggleInArray(_ keypath: Swift.String, value: Any)
+  var hasDirtyPaths: Swift.Bool { get }
+  func consumeDirtyPaths() -> Swift.Set<Swift.String>
+  func isDirty(_ path: Swift.String) -> Swift.Bool
+  func clearDirtyPaths()
+  @discardableResult
+  func onStateChange(_ callback: @escaping SCALS.StateChangeCallback) -> Foundation.UUID
+  func removeStateChangeCallback(_ id: Foundation.UUID)
+  func removeAllCallbacks()
+  #if compiler(>=5.3) && $NonescapableTypes
+  @discardableResult
+  func observe<T>(_ keypath: Swift.String, as type: T.Type, callback: @escaping (T?) -> Swift.Void) -> Foundation.UUID where T : Swift.Decodable
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @discardableResult
+  func observe<T>(_ keypath: Swift.String, as type: T.Type, onChange: @escaping (_ old: T?, _ new: T?) -> Swift.Void) -> Foundation.UUID where T : Swift.Decodable
+  #endif
+  func snapshot() -> [Swift.String : Any]
+  func restore(from snapshot: [Swift.String : Any])
+  func evaluate(expression: Swift.String) -> Any
+  func interpolate(_ template: Swift.String) -> Swift.String
+}
+final public class StateStore : SCALS.StateStoring {
+  final public var hasDirtyPaths: Swift.Bool {
+    get
+  }
+  public init()
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func initialize(from state: [Swift.String : SCALS.Document.StateValue]?)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func get(_ keypath: Swift.String) -> Any?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func get<T>(_ keypath: Swift.String, as type: T.Type = T.self) -> T?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func getArray(_ keypath: Swift.String) -> [Any]?
+  #endif
+  final public func getArrayCount(_ keypath: Swift.String) -> Swift.Int
+  final public func arrayContains(_ keypath: Swift.String, value: Any) -> Swift.Bool
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func set(_ keypath: Swift.String, value: Any?)
+  #endif
+  final public func appendToArray(_ keypath: Swift.String, value: Any)
+  final public func removeFromArray(_ keypath: Swift.String, value: Any)
+  final public func removeFromArray(_ keypath: Swift.String, at index: Swift.Int)
+  final public func toggleInArray(_ keypath: Swift.String, value: Any)
+  final public func consumeDirtyPaths() -> Swift.Set<Swift.String>
+  final public func isDirty(_ path: Swift.String) -> Swift.Bool
+  final public func clearDirtyPaths()
+  @discardableResult
+  final public func onStateChange(_ callback: @escaping SCALS.StateChangeCallback) -> Foundation.UUID
+  final public func removeStateChangeCallback(_ id: Foundation.UUID)
+  final public func removeAllCallbacks()
+  #if compiler(>=5.3) && $NonescapableTypes
+  @discardableResult
+  final public func observe<T>(_ keypath: Swift.String, as type: T.Type, callback: @escaping (T?) -> Swift.Void) -> Foundation.UUID where T : Swift.Decodable
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @discardableResult
+  final public func observe<T>(_ keypath: Swift.String, as type: T.Type, onChange: @escaping (_ old: T?, _ new: T?) -> Swift.Void) -> Foundation.UUID where T : Swift.Decodable
+  #endif
+  final public func snapshot() -> [Swift.String : Any]
+  final public func restore(from snapshot: [Swift.String : Any])
+  final public func evaluate(expression: Swift.String) -> Any
+  final public func interpolate(_ template: Swift.String) -> Swift.String
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func getTyped<T>(_ type: T.Type = T.self) -> T? where T : Swift.Decodable
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func getTyped<T>(_ keypath: Swift.String, as type: T.Type = T.self) -> T? where T : Swift.Decodable
+  #endif
+  final public func setTyped<T>(_ value: T) where T : Swift.Encodable
+  final public func setTyped<T>(_ keypath: Swift.String, value: T) where T : Swift.Encodable
+  @objc deinit
+}
+extension SCALS.StateStore : SCALS.StateValueReading {
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func getValue(_ keypath: Swift.String) -> Any?
+  #endif
+}
+public protocol DesignSystemProvider {
+  static var identifier: Swift.String { get }
+  #if compiler(>=5.3) && $NonescapableTypes
+  func resolveStyle(_ reference: Swift.String) -> SCALS.ResolvedStyle?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  func canRender(_ node: SCALS.RenderNode, styleId: Swift.String?) -> Swift.Bool
+  #endif
+}
+extension SCALS.DesignSystemProvider {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func canRender(_ node: SCALS.RenderNode, styleId: Swift.String?) -> Swift.Bool
+  #endif
+}
+extension SCALS.RenderNode {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var styleId: Swift.String? {
+    get
+  }
+  #endif
+}
+public struct StyleResolver {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(styles: [Swift.String : SCALS.Document.Style]?, designSystemProvider: (any SCALS.DesignSystemProvider)? = nil)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func resolve(_ styleId: Swift.String?) -> SCALS.ResolvedStyle
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func resolve(_ styleId: Swift.String?, inline: SCALS.Document.Style?) -> SCALS.ResolvedStyle
+  #endif
+}
+@_Concurrency.MainActor public class DependencyTracker {
+  @_Concurrency.MainActor public init()
+  @_Concurrency.MainActor public func beginTracking(for node: SCALS.ViewNode)
+  @_Concurrency.MainActor public func endTracking()
+  @_Concurrency.MainActor public func recordRead(_ path: Swift.String)
+  @_Concurrency.MainActor public func recordWrite(_ path: Swift.String)
+  @_Concurrency.MainActor public func recordLocalRead(_ path: Swift.String)
+  @_Concurrency.MainActor public func recordLocalWrite(_ path: Swift.String)
+  @_Concurrency.MainActor public func track(for node: SCALS.ViewNode, _ block: () -> Swift.Void)
+  @objc deinit
+}
+@_Concurrency.MainActor public class DependencyIndex {
+  @_Concurrency.MainActor public init()
+  @_Concurrency.MainActor public func register(_ node: SCALS.ViewNode)
+  @_Concurrency.MainActor public func unregister(_ node: SCALS.ViewNode)
+  @_Concurrency.MainActor public func updateRegistration(_ node: SCALS.ViewNode)
+  @_Concurrency.MainActor public func nodesReading(_ path: Swift.String) -> [SCALS.ViewNode]
+  @_Concurrency.MainActor public func nodesWriting(_ path: Swift.String) -> [SCALS.ViewNode]
+  @_Concurrency.MainActor public func nodesAffectedBy(paths: Swift.Set<Swift.String>) -> Swift.Set<SCALS.ViewNode>
+  @_Concurrency.MainActor public func pruneStaleEntries()
+  @_Concurrency.MainActor public func clear()
+  @_Concurrency.MainActor public var debugDescription: Swift.String {
+    get
+  }
+  @objc deinit
+}
+extension SCALS.ViewNode : Swift.Hashable {
+  public static func == (lhs: SCALS.ViewNode, rhs: SCALS.ViewNode) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+public class ViewNode : Swift.Identifiable {
+  final public let id: Swift.String
+  final public let nodeType: SCALS.ViewNodeType
+  weak public var parent: SCALS.ViewNode?
+  public var children: [SCALS.ViewNode]
+  public var readPaths: Swift.Set<Swift.String>
+  public var writePaths: Swift.Set<Swift.String>
+  public var localState: [Swift.String : Any]?
+  public var needsUpdate: Swift.Bool
+  public var lastUpdateTimestamp: Foundation.Date?
+  public init(id: Swift.String, nodeType: SCALS.ViewNodeType, children: [SCALS.ViewNode] = [])
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func findNode(id: Swift.String) -> SCALS.ViewNode?
+  #endif
+  public func allDescendants() -> [SCALS.ViewNode]
+  public func pathFromRoot() -> [SCALS.ViewNode]
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func nearestLocalStateScope() -> SCALS.ViewNode?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public func getLocalState(_ path: Swift.String) -> Any?
+  #endif
+  public func setLocalState(_ path: Swift.String, value: Any)
+  public typealias ID = Swift.String
+  @objc deinit
+}
+public enum ViewNodeType {
+  case root(SCALS.RootNodeData)
+  case container(SCALS.ContainerNodeData)
+  case sectionLayout(SCALS.SectionLayoutNodeData)
+  case section(SCALS.SectionNodeData)
+  case text(SCALS.TextNodeData)
+  case button(SCALS.ButtonNodeData)
+  case textField(SCALS.TextFieldNodeData)
+  case toggle(SCALS.ToggleNodeData)
+  case slider(SCALS.SliderNodeData)
+  case image(SCALS.ImageNodeData)
+  case gradient(SCALS.GradientNodeData)
+  case shape(SCALS.ShapeNodeData)
+  case spacer
+  case customComponent(SCALS.CustomComponentNodeData)
+}
+public struct RootNodeData {
+  public var backgroundColor: Swift.String?
+  public var colorScheme: SCALS.IR.ColorScheme
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(backgroundColor: Swift.String? = nil, colorScheme: SCALS.IR.ColorScheme = .system)
+  #endif
+}
+public struct ContainerNodeData {
+  public var layoutType: SCALS.ContainerNode.LayoutType
+  public var alignment: SCALS.IR.Alignment
+  public var spacing: CoreFoundation.CGFloat
+  public var padding: SCALS.IR.EdgeInsets
+  public init(layoutType: SCALS.ContainerNode.LayoutType = .vstack, alignment: SCALS.IR.Alignment = .center, spacing: CoreFoundation.CGFloat = 0, padding: SCALS.IR.EdgeInsets = .zero)
+}
+public struct SectionLayoutNodeData {
+  public var sectionSpacing: CoreFoundation.CGFloat
+  public init(sectionSpacing: CoreFoundation.CGFloat = 0)
+}
+public struct SectionNodeData {
+  public var layoutType: SCALS.IR.SectionType
+  public var stickyHeader: Swift.Bool
+  public var config: SCALS.IR.SectionConfig
+  public init(layoutType: SCALS.IR.SectionType = .list, stickyHeader: Swift.Bool = false, config: SCALS.IR.SectionConfig = IR.SectionConfig())
+}
+public struct TextNodeData {
+  public var content: Swift.String
+  public init(content: Swift.String = "")
+}
+public struct ButtonNodeData {
+  public var label: Swift.String
+  public var fillWidth: Swift.Bool
+  public var onTapAction: SCALS.Document.Component.ActionBinding?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(label: Swift.String = "", fillWidth: Swift.Bool = false, onTapAction: SCALS.Document.Component.ActionBinding? = nil)
+  #endif
+}
+public struct TextFieldNodeData {
+  public var placeholder: Swift.String
+  public var bindingPath: Swift.String?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(placeholder: Swift.String = "", bindingPath: Swift.String? = nil)
+  #endif
+}
+public struct ToggleNodeData {
+  public var bindingPath: Swift.String?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(bindingPath: Swift.String? = nil)
+  #endif
+}
+public struct SliderNodeData {
+  public var bindingPath: Swift.String?
+  public var minValue: Swift.Double
+  public var maxValue: Swift.Double
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(bindingPath: Swift.String? = nil, minValue: Swift.Double = 0.0, maxValue: Swift.Double = 1.0)
+  #endif
+}
+public struct ImageNodeData {
+  public var source: SCALS.ImageNode.Source
+  public var placeholder: SCALS.ImageNode.Source?
+  public var loading: SCALS.ImageNode.Source?
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(source: SCALS.ImageNode.Source = .sfsymbol(name: "questionmark"), placeholder: SCALS.ImageNode.Source? = nil, loading: SCALS.ImageNode.Source? = nil)
+  #endif
+}
+public struct GradientNodeData {
+  public var gradientType: SCALS.GradientNode.GradientType
+  public var colors: [SCALS.GradientNode.ColorStop]
+  public var startPoint: SCALS.IR.UnitPoint
+  public var endPoint: SCALS.IR.UnitPoint
+  public init(gradientType: SCALS.GradientNode.GradientType = .linear, colors: [SCALS.GradientNode.ColorStop] = [], startPoint: SCALS.IR.UnitPoint = .top, endPoint: SCALS.IR.UnitPoint = .bottom)
+}
+public struct ShapeNodeData {
+  public var shapeType: SCALS.ShapeNode.ShapeType
+  public init(shapeType: SCALS.ShapeNode.ShapeType)
+}
+public struct CustomComponentNodeData {
+  public var typeName: Swift.String
+  public init(typeName: Swift.String)
+}
+public enum StatePathResolver {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func getValue(from dict: [Swift.String : Any], path: Swift.String) -> Any?
+  #endif
+  public static func setValue(in dict: inout [Swift.String : Any], path: Swift.String, value: Any)
+}
+@_Concurrency.MainActor public class ViewTreeUpdater {
+  @_Concurrency.MainActor public var root: SCALS.ViewNode?
+  @_Concurrency.MainActor final public let dependencyIndex: SCALS.DependencyIndex
+  @_Concurrency.MainActor final public let dependencyTracker: SCALS.DependencyTracker
+  @_Concurrency.MainActor public var onNodesNeedUpdate: ((_ nodes: Swift.Set<SCALS.ViewNode>) -> Swift.Void)?
+  @_Concurrency.MainActor public init()
+  @_Concurrency.MainActor public func attach(to stateStore: SCALS.StateStore)
+  @_Concurrency.MainActor public func detach()
+  @_Concurrency.MainActor public func setRoot(_ node: SCALS.ViewNode)
+  @_Concurrency.MainActor public func registerSubtree(_ node: SCALS.ViewNode)
+  @_Concurrency.MainActor public func unregisterSubtree(_ node: SCALS.ViewNode)
+  @_Concurrency.MainActor public func updateNodeDependencies(_ node: SCALS.ViewNode)
+  @_Concurrency.MainActor public func processDirtyPaths()
+  @_Concurrency.MainActor public func getNodesNeedingUpdate() -> Swift.Set<SCALS.ViewNode>
+  @_Concurrency.MainActor public func markNodeUpdated(_ node: SCALS.ViewNode)
+  @_Concurrency.MainActor public func clearPendingUpdates()
+  @_Concurrency.MainActor public var hasUpdates: Swift.Bool {
+    get
+  }
+  @_Concurrency.MainActor public func getMinimalUpdateSet() -> Swift.Set<SCALS.ViewNode>
+  @_Concurrency.MainActor public func getUpdatesByDepth() -> [[SCALS.ViewNode]]
+  @_Concurrency.MainActor public func handleLocalStateChange(node: SCALS.ViewNode, path: Swift.String)
+  @_Concurrency.MainActor public var debugDescription: Swift.String {
+    get
+  }
+  @objc deinit
+}
+public struct UpdateBatch {
+  public let nodes: [SCALS.ViewNode]
+  public let triggeringPaths: Swift.Set<Swift.String>
+  public let timestamp: Foundation.Date
+  public init(nodes: [SCALS.ViewNode], triggeringPaths: Swift.Set<Swift.String>)
+}
+extension SCALS.Document.NavigationPresentation : Swift.Equatable {}
+extension SCALS.Document.NavigationPresentation : Swift.Hashable {}
+extension SCALS.Document.NavigationPresentation : Swift.RawRepresentable {}
+extension SCALS.Document.AlertButtonStyle : Swift.Equatable {}
+extension SCALS.Document.AlertButtonStyle : Swift.Hashable {}
+extension SCALS.Document.AlertButtonStyle : Swift.RawRepresentable {}
+extension SCALS.Document.DataReferenceType : Swift.Equatable {}
+extension SCALS.Document.DataReferenceType : Swift.Hashable {}
+extension SCALS.Document.DataReferenceType : Swift.RawRepresentable {}
+extension SCALS.Document.DataSource.Kind : Swift.Equatable {}
+extension SCALS.Document.DataSource.Kind : Swift.Hashable {}
+extension SCALS.Document.DataSource.Kind : Swift.RawRepresentable {}
+extension SCALS.Document.HorizontalAlignment : Swift.Equatable {}
+extension SCALS.Document.HorizontalAlignment : Swift.Hashable {}
+extension SCALS.Document.HorizontalAlignment : Swift.RawRepresentable {}
+extension SCALS.Document.VerticalAlignment : Swift.Equatable {}
+extension SCALS.Document.VerticalAlignment : Swift.Hashable {}
+extension SCALS.Document.VerticalAlignment : Swift.RawRepresentable {}
+extension SCALS.Document.LayoutType : Swift.Equatable {}
+extension SCALS.Document.LayoutType : Swift.Hashable {}
+extension SCALS.Document.LayoutType : Swift.RawRepresentable {}
+extension SCALS.Document.Positioning : Swift.Equatable {}
+extension SCALS.Document.Positioning : Swift.Hashable {}
+extension SCALS.Document.Positioning : Swift.RawRepresentable {}
+extension SCALS.Document.SectionAlignment : Swift.Equatable {}
+extension SCALS.Document.SectionAlignment : Swift.Hashable {}
+extension SCALS.Document.SectionAlignment : Swift.RawRepresentable {}
+extension SCALS.Document.SectionType : Swift.Equatable {}
+extension SCALS.Document.SectionType : Swift.Hashable {}
+extension SCALS.Document.SectionType : Swift.RawRepresentable {}
+extension SCALS.Document.SnapBehavior : Swift.Equatable {}
+extension SCALS.Document.SnapBehavior : Swift.Hashable {}
+extension SCALS.Document.SnapBehavior : Swift.RawRepresentable {}
+extension SCALS.Document.FontWeight : Swift.Equatable {}
+extension SCALS.Document.FontWeight : Swift.Hashable {}
+extension SCALS.Document.FontWeight : Swift.RawRepresentable {}
+extension SCALS.Document.TextAlignment : Swift.Equatable {}
+extension SCALS.Document.TextAlignment : Swift.Hashable {}
+extension SCALS.Document.TextAlignment : Swift.RawRepresentable {}
+extension SCALS.CustomComponentContext : Swift.Sendable {}
+extension SCALS.IR.HorizontalAlignment : Swift.Equatable {}
+extension SCALS.IR.HorizontalAlignment : Swift.Hashable {}
+extension SCALS.IR.HorizontalAlignment : Swift.RawRepresentable {}
+extension SCALS.IR.VerticalAlignment : Swift.Equatable {}
+extension SCALS.IR.VerticalAlignment : Swift.Hashable {}
+extension SCALS.IR.VerticalAlignment : Swift.RawRepresentable {}
+extension SCALS.IR.ColorScheme : Swift.Equatable {}
+extension SCALS.IR.ColorScheme : Swift.Hashable {}
+extension SCALS.IR.ColorScheme : Swift.RawRepresentable {}
+extension SCALS.IR.DimensionValue : Swift.Sendable {}
+extension SCALS.IR.DimensionValue : Swift.BitwiseCopyable {}
+extension SCALS.IR.SnapBehavior : Swift.Equatable {}
+extension SCALS.IR.SnapBehavior : Swift.Hashable {}
+extension SCALS.IR.Positioning : Swift.Equatable {}
+extension SCALS.IR.Positioning : Swift.Hashable {}
+extension SCALS.ContainerNode.LayoutType : Swift.Equatable {}
+extension SCALS.ContainerNode.LayoutType : Swift.Hashable {}
+extension SCALS.ButtonNode.ImagePlacement : Swift.Equatable {}
+extension SCALS.ButtonNode.ImagePlacement : Swift.Hashable {}
+extension SCALS.ButtonNode.ImagePlacement : Swift.RawRepresentable {}
+extension SCALS.ButtonNode.ButtonShape : Swift.Equatable {}
+extension SCALS.ButtonNode.ButtonShape : Swift.Hashable {}
+extension SCALS.ButtonNode.ButtonShape : Swift.RawRepresentable {}
+extension SCALS.GradientNode.GradientType : Swift.Equatable {}
+extension SCALS.GradientNode.GradientType : Swift.Hashable {}
+extension SCALS.LifecycleActions.LifecycleEvent : Swift.Equatable {}
+extension SCALS.LifecycleActions.LifecycleEvent : Swift.Hashable {}
+extension SCALS.LifecycleActions.LifecycleEvent : Swift.RawRepresentable {}
+extension SCALS.DependencyTracker : Swift.Sendable {}
+extension SCALS.DependencyIndex : Swift.Sendable {}
+extension SCALS.ViewTreeUpdater : Swift.Sendable {}

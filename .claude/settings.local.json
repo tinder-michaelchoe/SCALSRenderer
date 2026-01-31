@@ -43,7 +43,21 @@
       "Bash(gem list:*)",
       "Bash(test:*)",
       "Bash(swift -frontend -typecheck:*)",
-      "Bash(xargs basename:*)"
+      "Bash(xargs basename:*)",
+      "Bash(swift -typecheck:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:konstaui.com)",
+      "Bash(xcrun simctl list devices available:*)",
+      "Bash(tee:*)",
+      "Bash(xcrun swift-test:*)",
+      "Bash(xcrun xctest:*)",
+      "Bash(plutil:*)",
+      "Bash(DYLD_FRAMEWORK_PATH=. xcrun simctl spawn E4FE2CCB-6707-4EF1-B83B-712F3988E3F4 xctest:*)",
+      "Bash(xcrun xcresulttool:*)",
+      "Bash(python3:*)",
+      "Bash(git restore:*)",
+      "Bash(xcrun swiftc:*)",
+      "Bash(do echo \"File: $file\")"
     ]
   }
 }

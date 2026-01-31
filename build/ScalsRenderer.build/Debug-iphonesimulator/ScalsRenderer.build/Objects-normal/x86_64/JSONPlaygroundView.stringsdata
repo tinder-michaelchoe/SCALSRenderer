@@ -1,0 +1,120 @@
+{
+  "source": "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/JSONPlaygroundView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "JSON Playground",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 67
+        }
+      },
+      {
+        "comment": "",
+        "key": "Renderer",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 72
+        }
+      },
+      {
+        "comment": "",
+        "key": "Sheet Detent",
+        "location": {
+          "startingColumn": 35,
+          "startingLine": 98
+        }
+      },
+      {
+        "comment": "",
+        "key": "Load Sample",
+        "location": {
+          "startingColumn": 35,
+          "startingLine": 106
+        }
+      },
+      {
+        "comment": "",
+        "key": "Copy JSON",
+        "location": {
+          "startingColumn": 35,
+          "startingLine": 112
+        }
+      },
+      {
+        "comment": "",
+        "key": "Paste from Clipboard",
+        "location": {
+          "startingColumn": 35,
+          "startingLine": 120
+        }
+      },
+      {
+        "comment": "",
+        "key": "Clear",
+        "location": {
+          "startingColumn": 35,
+          "startingLine": 128
+        }
+      },
+      {
+        "comment": "",
+        "key": "Paste or type your SCALS JSON here...",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 167
+        }
+      },
+      {
+        "comment": "",
+        "key": "Render with %@",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 198
+        }
+      },
+      {
+        "comment": "",
+        "key": "Failed to Render",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 346
+        }
+      },
+      {
+        "comment": "",
+        "key": "The JSON could not be parsed into a valid SCALS document.",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 349
+        }
+      },
+      {
+        "comment": "",
+        "key": "HTML Source",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 438
+        }
+      },
+      {
+        "comment": "",
+        "key": "Done",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 442
+        }
+      },
+      {
+        "comment": "",
+        "key": "Copy",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 451
+        }
+      }
+    ]
+  },
+  "version": 1
+}
