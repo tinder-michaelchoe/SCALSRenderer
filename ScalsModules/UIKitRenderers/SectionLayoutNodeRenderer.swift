@@ -247,7 +247,8 @@ public struct SectionLayoutNodeRenderer: UIKitNodeRendering {
                 let divider = UIView()
                 divider.backgroundColor = .separator
                 divider.translatesAutoresizingMaskIntoConstraints = false
-                divider.heightAnchor.constraint(equalToConstant: 1 / UIScreen.main.scale).isActive = true
+                // Use a standard 1pt divider height (modern displays handle pixel-perfect rendering)
+                divider.heightAnchor.constraint(equalToConstant: 1).isActive = true
                 stackView.addArrangedSubview(divider)
             }
         }
@@ -388,8 +389,9 @@ final class CompositionalHorizontalSectionView: UIView {
             case .absolute(let widthValue):
                 return widthValue / aspectRatio
             case .fractional(let fraction):
-                // Estimate based on screen width
-                let estimatedWidth = UIScreen.main.bounds.width * fraction
+                // Estimate based on container width (or use a reasonable default)
+                // Using a standard width estimate since we don't have window context yet
+                let estimatedWidth = 400.0 * fraction
                 return estimatedWidth / aspectRatio
             }
         }

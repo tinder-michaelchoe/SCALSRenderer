@@ -141,6 +141,7 @@ extension Document {
 
 extension Document {
     /// Horizontal alignment option for section content
+    @frozen
     public enum SectionAlignment: String, Codable {
         case leading
         case center
@@ -152,6 +153,7 @@ extension Document {
 
 extension Document {
     /// The layout type for a section
+    @frozen
     public enum SectionType: String, Codable {
         case horizontal  // Horizontally scrolling row
         case list        // Vertical list (table-like)
@@ -164,6 +166,7 @@ extension Document {
 
 extension Document {
     /// Configuration for grid columns - either fixed count or adaptive
+    @frozen
     public enum ColumnConfig: Codable, Equatable {
         case fixed(Int)
         case adaptive(minWidth: CGFloat)
@@ -250,6 +253,7 @@ extension Document {
     /// { "absolute": 200 }    // Fixed 200pt
     /// 200                    // Shorthand for absolute
     /// ```
+    @frozen
     public enum DimensionValue: Codable, Equatable {
         case absolute(CGFloat)
         case fractional(CGFloat)
@@ -304,6 +308,7 @@ extension Document {
 
 extension Document {
     /// Scroll snap behavior for horizontal sections
+    @frozen
     public enum SnapBehavior: String, Codable {
         /// No snapping, free scroll
         case none

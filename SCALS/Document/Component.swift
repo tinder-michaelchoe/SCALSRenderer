@@ -398,6 +398,7 @@ extension Document {
         }
     }
 
+    @frozen
     public enum DataReferenceType: String, Codable, Sendable {
         case `static`
         case binding

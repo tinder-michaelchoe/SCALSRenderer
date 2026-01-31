@@ -460,7 +460,7 @@ struct iOS26HTMLNodeRenderer {
 
     mutating func renderShape(_ node: ShapeNode) -> String {
         var classes: [String] = []
-        var styles: [String] = []
+        let styles: [String] = []
 
         // Fill color
         if node.fillColor != .clear {
@@ -564,7 +564,7 @@ struct iOS26HTMLNodeRenderer {
             classes.append("overflow-x-auto")
             classes.append("gap-[\(formatPx(section.config.itemSpacing))]")
 
-        case .grid(let columnConfig):
+        case .grid(_):
             let columns = 2  // Default to 2 columns, could extract from columnConfig if needed
             classes.append("grid")
             classes.append("grid-cols-\(columns)")

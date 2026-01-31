@@ -113,6 +113,7 @@ extension Document {
 // MARK: - Font Weight
 
 extension Document {
+    @frozen
     public enum FontWeight: String, Codable, Sendable {
         case ultraLight
         case thin
@@ -129,6 +130,7 @@ extension Document {
 // MARK: - Text Alignment
 
 extension Document {
+    @frozen
     public enum TextAlignment: String, Codable, Sendable {
         case leading
         case center

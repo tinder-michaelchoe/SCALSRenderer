@@ -149,6 +149,7 @@ public protocol CustomRenderNode: Sendable {
 // MARK: - Render Node
 
 /// A node in the render tree - either a container or a leaf component
+@frozen
 public enum RenderNode {
     case container(ContainerNode)
     case sectionLayout(SectionLayoutNode)
@@ -192,6 +193,7 @@ public enum RenderNode {
 /// A layout container (VStack, HStack, ZStack)
 public struct ContainerNode {
     /// Layout type for containers
+    @frozen
     public enum LayoutType {
         case vstack
         case hstack
@@ -476,6 +478,7 @@ public struct ButtonStyles: Sendable {
 /// A button component
 public struct ButtonNode {
     /// Image placement relative to text
+    @frozen
     public enum ImagePlacement: String, Codable {
         case leading
         case trailing
@@ -484,6 +487,7 @@ public struct ButtonNode {
     }
 
     /// Button shape affecting corner radius
+    @frozen
     public enum ButtonShape: String, Codable {
         case circle        // cornerRadius = min(width, height) / 2
         case capsule       // cornerRadius = height / 2
@@ -664,6 +668,7 @@ public struct SliderNode {
 /// An image component
 public struct ImageNode {
     /// Image source type
+    @frozen
     public enum Source {
         case sfsymbol(name: String)
         case asset(name: String)
@@ -744,6 +749,7 @@ public struct ImageNode {
 /// A gradient overlay component
 public struct GradientNode {
     /// Gradient type
+    @frozen
     public enum GradientType {
         case linear
         case radial
@@ -790,6 +796,7 @@ public struct GradientNode {
 /// A shape component (rectangle, circle, roundedRectangle, capsule, ellipse)
 public struct ShapeNode {
     /// Shape type with associated values for parameters like cornerRadius
+    @frozen
     public enum ShapeType: Hashable, Sendable {
         case rectangle
         case circle
@@ -911,6 +918,7 @@ extension GradientNode {
 }
 
 /// Color for gradient - can be static or adapt to color scheme
+@frozen
 public enum GradientColor {
     case fixed(IR.Color)
     case adaptive(light: IR.Color, dark: IR.Color)
@@ -967,6 +975,7 @@ public struct DividerNode {
 ///
 /// This is the IR representation of an action, used during execution.
 /// Codable for serialization/debugging purposes.
+@frozen
 public enum ActionDefinition: Codable {
     case dismiss
     case setState(path: String, value: StateSetValue)
@@ -1050,6 +1059,7 @@ public enum ActionDefinition: Codable {
 /// Value to set in state.
 ///
 /// Uses `Document.StateValue` for type-safe, Codable storage.
+@frozen
 public enum StateSetValue: Codable {
     case literal(Document.StateValue)
     case expression(String)

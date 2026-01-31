@@ -9,6 +9,7 @@ import Foundation
 
 extension Document {
     /// Presentation style for navigation
+    @frozen
     public enum NavigationPresentation: String, Codable, Sendable {
         case push
         case present
@@ -20,6 +21,7 @@ extension Document {
 
 extension Document {
     /// Button style for alerts
+    @frozen
     public enum AlertButtonStyle: String, Codable, Sendable {
         case `default`
         case cancel

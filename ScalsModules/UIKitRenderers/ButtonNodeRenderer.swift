@@ -142,10 +142,10 @@ public struct ButtonNodeRenderer: UIKitNodeRendering {
             return UIImage(systemName: name)
         case .asset(let name):
             return UIImage(named: name)
-        case .url(let url):
+        case .url(_):
             // For URLs, we'd need async loading - return placeholder for now
             return UIImage(systemName: "photo")
-        case .statePath(let template):
+        case .statePath(_):
             // For dynamic templates, we'd need to resolve from state - return placeholder for now
             return UIImage(systemName: "photo")
 

@@ -168,6 +168,7 @@ extension IR {
     }
     
     /// Platform-agnostic horizontal alignment.
+    @frozen
     public enum HorizontalAlignment: String, Codable, Sendable {
         case leading
         case center
@@ -175,6 +176,7 @@ extension IR {
     }
     
     /// Platform-agnostic vertical alignment.
+    @frozen
     public enum VerticalAlignment: String, Codable, Sendable {
         case top
         case center
@@ -211,6 +213,7 @@ extension IR {
     /// Platform-agnostic color scheme (light/dark mode).
     ///
     /// Replaces `SwiftUI.ColorScheme` in the IR layer.
+    @frozen
     public enum ColorScheme: String, Codable, Sendable {
         case light
         case dark
@@ -429,6 +432,7 @@ extension IR {
 
 extension IR {
     /// Section type for rendering
+    @frozen
     public enum SectionType {
         case horizontal  // Horizontally scrolling row
         case list        // Vertical list (table-like)
@@ -441,6 +445,7 @@ extension IR {
 
 extension IR {
     /// Resolved column configuration for grids
+    @frozen
     public enum ColumnConfig: Equatable {
         case fixed(Int)
         case adaptive(minWidth: CGFloat)
@@ -548,6 +553,7 @@ extension IR {
 
 extension IR {
     /// Resolved snap behavior for horizontal sections
+    @frozen
     public enum SnapBehavior {
         case none
         case viewAligned
@@ -559,6 +565,7 @@ extension IR {
 
 extension IR {
     /// Positioning reference for edge insets
+    @frozen
     public enum Positioning {
         /// Position relative to safe area boundaries
         case safeArea
