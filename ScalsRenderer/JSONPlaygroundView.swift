@@ -248,23 +248,22 @@ struct JSONPlaygroundView: View {
             document: definition,
             componentRegistry: componentRegistry
         )
-        
+
         // Resolve to render tree
         do {
             let renderTree = try resolver.resolve()
-            
-            // Use HTML renderer
-            let htmlRenderer = HTMLRenderer()
+
+            // Use iOS 26 HTML renderer (pure HTML + Tailwind CSS)
+            let htmlRenderer = iOS26HTMLRenderer()
             let output = htmlRenderer.render(renderTree)
-            
+
             print("=== HTML Generated Successfully ===")
-            print("HTML length: \(output.html.count) chars")
-            print("CSS length: \(output.css.count) chars")
-            
-            return output.fullDocument
+            print("HTML length: \(output.count) chars")
+
+            return output
         } catch {
             print("=== HTML Generation Error: \(error) ===")
-            
+
             // Return error HTML if resolution fails
             return """
             <!DOCTYPE html>
@@ -273,16 +272,16 @@ struct JSONPlaygroundView: View {
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <style>
-                    body { 
-                        font-family: -apple-system, system-ui; 
+                    body {
+                        font-family: -apple-system, system-ui;
                         padding: 20px;
                         background: #1a1a2e;
                         color: #e8e8e8;
                     }
                     .error { color: #FF6B6B; }
-                    pre { 
-                        background: rgba(255,255,255,0.1); 
-                        padding: 16px; 
+                    pre {
+                        background: rgba(255,255,255,0.1);
+                        padding: 16px;
                         border-radius: 8px;
                         overflow-x: auto;
                     }
@@ -290,7 +289,7 @@ struct JSONPlaygroundView: View {
             </head>
             <body>
                 <h1 class="error">Resolution Error</h1>
-                <pre>\(error.localizedDescription.htmlEscaped)</pre>
+                <pre>\(error.localizedDescription)</pre>
             </body>
             </html>
             """
