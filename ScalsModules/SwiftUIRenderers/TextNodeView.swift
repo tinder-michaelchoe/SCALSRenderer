@@ -41,7 +41,7 @@ struct TextNodeView: View {
             .padding(.bottom, node.padding.bottom)
             .padding(.leading, node.padding.leading)
             .padding(.trailing, node.padding.trailing)
-            .background(node.style.backgroundColor?.swiftUI ?? Color.clear)
+            .background(node.backgroundColor.swiftUI)
     }
 
     /// Compute the content to display, reading from StateStore if dynamic

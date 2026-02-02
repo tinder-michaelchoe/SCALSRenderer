@@ -27,15 +27,13 @@ public struct TextNodeRenderer: UIKitNodeRendering {
         label.applyStyle(from: textNode)
 
         // If there's padding or background color, wrap in a container
-        if textNode.padding != .zero || textNode.style.backgroundColor != nil {
+        if textNode.padding != .zero || textNode.backgroundColor != .clear {
             let container = UIView()
             container.translatesAutoresizingMaskIntoConstraints = false
             container.addSubview(label)
 
             // Apply background color
-            if let bgColor = textNode.style.backgroundColor {
-                container.backgroundColor = bgColor.uiColor
-            }
+            container.backgroundColor = textNode.backgroundColor.uiColor
 
             // Apply padding constraints
             NSLayoutConstraint.activate([

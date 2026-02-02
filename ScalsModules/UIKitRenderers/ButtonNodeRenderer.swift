@@ -30,23 +30,17 @@ public struct ButtonNodeRenderer: UIKitNodeRendering {
         var config = UIButton.Configuration.plain()
 
         // Apply attributed title with font styling
-        if let font = buttonNode.style.uiFont {
-            var attributes = AttributeContainer()
-            attributes.font = font
-            config.attributedTitle = AttributedString(buttonNode.label, attributes: attributes)
-        } else {
-            config.title = buttonNode.label
-        }
+        let normalStyle = buttonNode.styles.normal
+        let font = UIFont.systemFont(ofSize: normalStyle.fontSize, weight: normalStyle.fontWeight.uiKit)
+        var attributes = AttributeContainer()
+        attributes.font = font
+        config.attributedTitle = AttributedString(buttonNode.label, attributes: attributes)
 
-        // Apply text color from style
-        if let textColor = buttonNode.style.textColor {
-            config.baseForegroundColor = textColor.uiColor
-        }
+        // Apply text color from normal style
+        config.baseForegroundColor = normalStyle.textColor.uiColor
 
-        // Apply background color from style
-        if let bgColor = buttonNode.style.backgroundColor {
-            config.background.backgroundColor = bgColor.uiColor
-        }
+        // Apply background color from normal style
+        config.background.backgroundColor = normalStyle.backgroundColor.uiColor
 
         // Configure image if present
         if let imageSource = buttonNode.image {
@@ -56,24 +50,18 @@ public struct ButtonNodeRenderer: UIKitNodeRendering {
         }
 
         // Apply corner radius to configuration background
-        if let cornerRadius = buttonNode.style.cornerRadius {
-            config.background.cornerRadius = cornerRadius
-        }
+        config.background.cornerRadius = normalStyle.cornerRadius
 
         button.configuration = config
 
-        // Apply corner radius from style or button shape to layer as well
-        if let cornerRadius = buttonNode.style.cornerRadius {
-            button.layer.cornerRadius = cornerRadius
-            button.clipsToBounds = true
-        }
+        // Apply corner radius to layer as well
+        button.layer.cornerRadius = normalStyle.cornerRadius
+        button.clipsToBounds = true
 
-        // Apply border from style
-        if let borderWidth = buttonNode.style.borderWidth, borderWidth > 0 {
-            button.layer.borderWidth = borderWidth
-            if let borderColor = buttonNode.style.borderColor {
-                button.layer.borderColor = borderColor.uiColor.cgColor
-            }
+        // Apply border from normal style
+        if let border = normalStyle.border {
+            button.layer.borderWidth = border.width
+            button.layer.borderColor = border.color.uiColor.cgColor
         }
 
         // Apply button shape if specified (overrides style corner radius)
@@ -83,7 +71,7 @@ public struct ButtonNodeRenderer: UIKitNodeRendering {
             button.setContentHuggingPriority(.defaultLow, for: .horizontal)
         }
 
-        if let width = buttonNode.style.width {
+        if let width = normalStyle.width {
             switch width {
             case .absolute(let value):
                 button.widthAnchor.constraint(equalToConstant: value).isActive = true
@@ -99,7 +87,7 @@ public struct ButtonNodeRenderer: UIKitNodeRendering {
             }
         }
 
-        if let height = buttonNode.style.height {
+        if let height = normalStyle.height {
             switch height {
             case .absolute(let value):
                 button.heightAnchor.constraint(equalToConstant: value).isActive = true
@@ -119,9 +107,11 @@ public struct ButtonNodeRenderer: UIKitNodeRendering {
     }
 
     private func applyButtonShape(_ button: UIButton, node: ButtonNode) {
+        let normalStyle = node.styles.normal
+
         guard let shape = node.buttonShape else {
             // No shape specified, use style's cornerRadius
-            let cornerRadius = node.style.cornerRadius
+            let cornerRadius = normalStyle.cornerRadius
             if cornerRadius > 0 {
                 button.layer.cornerRadius = cornerRadius
                 button.clipsToBounds = true
@@ -133,13 +123,13 @@ public struct ButtonNodeRenderer: UIKitNodeRendering {
         switch shape {
         case .circle:
             let width: CGFloat
-            if case .absolute(let value) = node.style.width {
+            if case .absolute(let value) = normalStyle.width {
                 width = value
             } else {
                 width = 44
             }
             let height: CGFloat
-            if case .absolute(let value) = node.style.height {
+            if case .absolute(let value) = normalStyle.height {
                 height = value
             } else {
                 height = 44
@@ -148,7 +138,7 @@ public struct ButtonNodeRenderer: UIKitNodeRendering {
 
         case .capsule:
             let height: CGFloat
-            if case .absolute(let value) = node.style.height {
+            if case .absolute(let value) = normalStyle.height {
                 height = value
             } else {
                 height = 44

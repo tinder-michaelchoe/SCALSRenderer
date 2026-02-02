@@ -106,13 +106,9 @@ struct ButtonNodeView: View {
                 .cornerRadius(effectiveCornerRadius)
                 .overlay(
                     Group {
-                        if
-                            let borderWidth = currentStyle.borderWidth,
-                            let borderColor = currentStyle.borderColor,
-                            borderWidth > 0
-                        {
+                        if let border = currentStyle.border, border.width > 0 {
                             RoundedRectangle(cornerRadius: effectiveCornerRadius)
-                                .strokeBorder(borderColor.swiftUI, lineWidth: borderWidth)
+                                .strokeBorder(border.color.swiftUI, lineWidth: border.width)
                         }
                     }
                 )
