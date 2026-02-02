@@ -34,10 +34,10 @@ public struct StyleResolver {
     /// For local styleIds, looks up in the document's styles dictionary.
     ///
     /// - Parameter styleId: Style identifier (may have `@` prefix for design system)
-    /// - Returns: Resolved IR.Style
-    public func resolve(_ styleId: String?) -> IR.Style {
+    /// - Returns: Resolved ResolvedStyle
+    public func resolve(_ styleId: String?) -> ResolvedStyle {
         guard let styleId = styleId else {
-            return IR.Style()
+            return ResolvedStyle()
         }
 
         // Check for design system reference (@-prefixed)
@@ -47,12 +47,12 @@ public struct StyleResolver {
                 return dsStyle
             }
             // Design system style not found, return empty style
-            return IR.Style()
+            return ResolvedStyle()
         }
 
         // Local document style
         guard let style = styles[styleId] else {
-            return IR.Style()
+            return ResolvedStyle()
         }
         return resolve(style: style, visited: [])
     }
@@ -64,8 +64,8 @@ public struct StyleResolver {
     /// - Parameters:
     ///   - styleId: Style identifier (may have `@` prefix for design system)
     ///   - inline: Inline style overrides
-    /// - Returns: Resolved IR.Style with inline overrides merged
-    public func resolve(_ styleId: String?, inline: Document.Style?) -> IR.Style {
+    /// - Returns: Resolved ResolvedStyle with inline overrides merged
+    public func resolve(_ styleId: String?, inline: Document.Style?) -> ResolvedStyle {
         var resolved = resolve(styleId)
 
         // Merge inline overrides (inline wins)
@@ -76,9 +76,9 @@ public struct StyleResolver {
         return resolved
     }
 
-    private func resolve(style: Document.Style, visited: Set<String>) -> IR.Style {
+    private func resolve(style: Document.Style, visited: Set<String>) -> ResolvedStyle {
         // Start with parent style if inheriting
-        var resolved: IR.Style
+        var resolved: ResolvedStyle
         if let parentId = style.inherits,
            !visited.contains(parentId),
            let parentStyle = styles[parentId] {
@@ -86,7 +86,7 @@ public struct StyleResolver {
             newVisited.insert(parentId)
             resolved = resolve(style: parentStyle, visited: newVisited)
         } else {
-            resolved = IR.Style()
+            resolved = ResolvedStyle()
         }
 
         // Override with current style values

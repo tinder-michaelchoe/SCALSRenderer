@@ -1044,7 +1044,7 @@ Actions can be referenced by ID or defined inline:
 ## Schema Validation
 
 The full JSON Schema is available at:
-- Document Schema: `SCALS/Schema/scals-schema.json`
-- IR Schema: `SCALS/Schema/scals-ir-schema.json`
+- Document Schema: `SCALS/Schema/scals-document-latest.json` (or versioned: `scals-document-v0.1.0.json`)
+- IR Schema: `SCALS/Schema/scals-ir-latest.json` (or versioned: `scals-ir-v0.1.0.json`)
 
 Use these schemas with your IDE or validation tools to get autocomplete and error checking while authoring SCALS documents.

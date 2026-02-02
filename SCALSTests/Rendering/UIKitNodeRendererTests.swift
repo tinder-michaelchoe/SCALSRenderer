@@ -11,6 +11,7 @@ import Testing
 import UIKit
 import SwiftUI
 @testable import SCALS
+@testable import ScalsModules
 
 // MARK: - Mock Renderers for Testing
 
@@ -181,9 +182,7 @@ struct TextNodeRenderingTests {
         
         let node = RenderNode.text(TextNode(
             content: "Hello World",
-            style: IR.Style(),
-            padding: .zero
-        ))
+                    ))
         
         let view = context.render(node)
         
@@ -196,9 +195,7 @@ struct TextNodeRenderingTests {
         
         let node = RenderNode.text(TextNode(
             content: "Test",
-            style: IR.Style(),
-            padding: .zero
-        ))
+                    ))
         
         let view = context.render(node)
         
@@ -233,8 +230,8 @@ struct ButtonNodeRenderingTests {
         
         let view = context.render(node)
         let button = view as? UIButton
-        
-        #expect(button?.title(for: .normal) == "Click Here")
+
+        #expect(button?.title(for: UIControl.State.normal) == "Click Here")
     }
 }
 
@@ -299,8 +296,8 @@ struct ContainerNodeRenderingTests {
             alignment: .center,
             spacing: 8,
             children: [
-                .text(TextNode(content: "Child 1", style: IR.Style(), padding: .zero)),
-                .text(TextNode(content: "Child 2", style: IR.Style(), padding: .zero))
+                .text(TextNode(content: "Child 1")),
+                .text(TextNode(content: "Child 2"))
             ]
         ))
         
@@ -320,9 +317,7 @@ struct TextFieldNodeRenderingTests {
         
         let node = RenderNode.textField(TextFieldNode(
             placeholder: "Enter text",
-            style: IR.Style(),
-            bindingPath: nil
-        ))
+                    ))
         
         let view = context.render(node)
         
@@ -334,9 +329,7 @@ struct TextFieldNodeRenderingTests {
         
         let node = RenderNode.textField(TextFieldNode(
             placeholder: "Type here...",
-            style: IR.Style(),
-            bindingPath: nil
-        ))
+                    ))
         
         let view = context.render(node)
         let textField = view as? UITextField
@@ -354,9 +347,7 @@ struct ImageNodeRenderingTests {
         let context = createMockUIKitContext()
         
         let node = RenderNode.image(ImageNode(
-            source: .sfsymbol(name: "star"),
-            style: IR.Style()
-        ))
+            source: .sfsymbol(name: "star")        ))
         
         let view = context.render(node)
         
@@ -372,7 +363,7 @@ struct SpacerNodeRenderingTests {
     @Test @MainActor func rendersSpacerToUIView() {
         let context = createMockUIKitContext()
         
-        let view = context.render(RenderNode.spacer)
+        let view = context.render(RenderNode.spacer(SpacerNode()))
         
         // Spacer renders to a basic UIView (not a subclass)
         #expect(view.accessibilityIdentifier == "mock_spacer")
@@ -381,10 +372,10 @@ struct SpacerNodeRenderingTests {
     @Test @MainActor func spacerHasLowContentHuggingPriority() {
         let context = createMockUIKitContext()
         
-        let view = context.render(RenderNode.spacer)
-        
-        #expect(view.contentHuggingPriority(for: .vertical) == .defaultLow)
-        #expect(view.contentHuggingPriority(for: .horizontal) == .defaultLow)
+        let view = context.render(RenderNode.spacer(SpacerNode()))
+
+        #expect(view.contentHuggingPriority(for: NSLayoutConstraint.Axis.vertical) == UILayoutPriority.defaultLow)
+        #expect(view.contentHuggingPriority(for: NSLayoutConstraint.Axis.horizontal) == UILayoutPriority.defaultLow)
     }
 }
 
@@ -398,12 +389,11 @@ struct GradientNodeRenderingTests {
         
         let node = RenderNode.gradient(GradientNode(
             colors: [
-                GradientNode.ColorStop(color: .fixed(Color.red), location: 0),
-                GradientNode.ColorStop(color: .fixed(Color.blue), location: 1)
+                GradientNode.ColorStop(color: .fixed(IR.Color.red), location: 0),
+                GradientNode.ColorStop(color: .fixed(IR.Color.blue), location: 1)
             ],
-            startPoint: UnitPoint.top,
-            endPoint: UnitPoint.bottom,
-            style: IR.Style()
+            startPoint: IR.UnitPoint.top,
+            endPoint: IR.UnitPoint.bottom
         ))
         
         let view = context.render(node)
@@ -449,7 +439,7 @@ struct UIKitMockRenderersProtocolTests {
         let context = createMockUIKitContext()
         
         // Each node type should dispatch to its corresponding mock renderer
-        let textView = context.render(RenderNode.text(TextNode(content: "Test", style: IR.Style(), padding: .zero)))
+        let textView = context.render(RenderNode.text(TextNode(content: "Test")))
         #expect(textView.accessibilityIdentifier == "mock_text")
         
         let buttonView = context.render(RenderNode.button(ButtonNode(label: "Test", styles: ButtonStyles())))
@@ -458,13 +448,13 @@ struct UIKitMockRenderersProtocolTests {
         let containerView = context.render(RenderNode.container(ContainerNode(layoutType: .vstack, children: [])))
         #expect(containerView.accessibilityIdentifier == "mock_container")
         
-        let textFieldView = context.render(RenderNode.textField(TextFieldNode(placeholder: "Test", style: IR.Style(), bindingPath: nil)))
+        let textFieldView = context.render(RenderNode.textField(TextFieldNode(placeholder: "Test")))
         #expect(textFieldView.accessibilityIdentifier == "mock_textfield")
         
-        let imageView = context.render(RenderNode.image(ImageNode(source: .sfsymbol(name: "star"), style: IR.Style())))
+        let imageView = context.render(RenderNode.image(ImageNode(source: .sfsymbol(name: "star"))))
         #expect(imageView.accessibilityIdentifier == "mock_image")
         
-        let spacerView = context.render(RenderNode.spacer)
+        let spacerView = context.render(RenderNode.spacer(SpacerNode()))
         #expect(spacerView.accessibilityIdentifier == "mock_spacer")
     }
 }
@@ -483,7 +473,7 @@ struct NestedRenderingTests {
                 .container(ContainerNode(
                     layoutType: .hstack,
                     children: [
-                        .text(TextNode(content: "Nested", style: IR.Style(), padding: .zero))
+                        .text(TextNode(content: "Nested"))
                     ]
                 ))
             ]
@@ -507,9 +497,9 @@ struct NestedRenderingTests {
         let node = RenderNode.container(ContainerNode(
             layoutType: .vstack,
             children: [
-                .text(TextNode(content: "Text", style: IR.Style(), padding: .zero)),
+                .text(TextNode(content: "Text")),
                 .button(ButtonNode(label: "Button", styles: ButtonStyles())),
-                .spacer
+                .spacer(SpacerNode())
             ]
         ))
         

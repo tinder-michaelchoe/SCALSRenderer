@@ -173,8 +173,14 @@ extension Document {
         /// Local state for this layout scope
         public let state: LocalStateDeclaration?
 
+        /// Style reference (for named styles)
+        public let styleId: String?
+
+        /// Inline style overrides
+        public let style: Style?
+
         enum CodingKeys: String, CodingKey {
-            case type, alignment, spacing, padding, children, state
+            case type, alignment, spacing, padding, children, state, styleId, style
         }
 
         public init(from decoder: Decoder) throws {
@@ -184,6 +190,8 @@ extension Document {
             padding = try container.decodeIfPresent(Padding.self, forKey: .padding)
             children = try container.decodeIfPresent([LayoutNode].self, forKey: .children) ?? []
             state = try container.decodeIfPresent(LocalStateDeclaration.self, forKey: .state)
+            styleId = try container.decodeIfPresent(String.self, forKey: .styleId)
+            style = try container.decodeIfPresent(Style.self, forKey: .style)
 
             // Try to decode alignment as Alignment first (for zstack)
             if let alignmentObj = try? container.decodeIfPresent(Alignment.self, forKey: .alignment) {
@@ -206,6 +214,8 @@ extension Document {
             try container.encodeIfPresent(padding, forKey: .padding)
             try container.encode(children, forKey: .children)
             try container.encodeIfPresent(state, forKey: .state)
+            try container.encodeIfPresent(styleId, forKey: .styleId)
+            try container.encodeIfPresent(style, forKey: .style)
             if let alignment = alignment {
                 try container.encode(alignment, forKey: .alignment)
             } else if let horizontalAlignment = horizontalAlignment {
@@ -220,7 +230,9 @@ extension Document {
             spacing: CGFloat? = nil,
             padding: Padding? = nil,
             children: [LayoutNode],
-            state: LocalStateDeclaration? = nil
+            state: LocalStateDeclaration? = nil,
+            styleId: String? = nil,
+            style: Style? = nil
         ) {
             self.type = type
             self.alignment = alignment
@@ -229,6 +241,8 @@ extension Document {
             self.padding = padding
             self.children = children
             self.state = state
+            self.styleId = styleId
+            self.style = style
         }
     }
 }

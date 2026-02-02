@@ -1,0 +1,14 @@
+Target dependency graph (5 targets)
+Target 'SCALSTests' in project 'ScalsRenderer'
+➜ Explicit dependency on target 'SCALS' in project 'ScalsRenderer'
+➜ Explicit dependency on target 'ScalsRenderer' in project 'ScalsRenderer'
+Target 'ScalsRenderer' in project 'ScalsRenderer'
+➜ Explicit dependency on target 'SCALS' in project 'ScalsRenderer'
+➜ Explicit dependency on target 'ScalsModules' in project 'ScalsRenderer'
+➜ Explicit dependency on target 'ScalsExamples' in project 'ScalsRenderer'
+Target 'ScalsExamples' in project 'ScalsRenderer'
+➜ Explicit dependency on target 'SCALS' in project 'ScalsRenderer'
+➜ Explicit dependency on target 'ScalsModules' in project 'ScalsRenderer'
+Target 'ScalsModules' in project 'ScalsRenderer'
+➜ Explicit dependency on target 'SCALS' in project 'ScalsRenderer'
+Target 'SCALS' in project 'ScalsRenderer' (no dependencies)

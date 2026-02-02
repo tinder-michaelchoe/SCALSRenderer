@@ -24,7 +24,7 @@ public struct TextNodeRenderer: UIKitNodeRendering {
         label.text = textNode.content
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
-        label.applyStyle(textNode.style)
+        label.applyStyle(from: textNode)
 
         // If there's padding or background color, wrap in a container
         if textNode.padding != .zero || textNode.style.backgroundColor != nil {

@@ -39,6 +39,10 @@ public struct ContentResolutionResult {
 public struct ContentResolver {
 
     /// Resolves content for a component, tracking dependencies if enabled.
+    ///
+    /// **Thread Safety**: Must be called from main thread when tracking is enabled
+    /// (context.tracker is non-nil), as it interacts with DependencyTracker.
+    ///
     /// - Parameters:
     ///   - component: The component to resolve content for
     ///   - context: The resolution context

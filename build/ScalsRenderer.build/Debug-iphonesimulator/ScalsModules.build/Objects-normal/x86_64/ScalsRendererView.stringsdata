@@ -1,0 +1,16 @@
+{
+  "source": "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsModules/ScalsRendererView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Loading...",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 297
+        }
+      }
+    ]
+  },
+  "version": 1
+}

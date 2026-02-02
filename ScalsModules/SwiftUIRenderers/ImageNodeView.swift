@@ -74,17 +74,17 @@ struct ImageNodeView: View {
                 Image(systemName: name)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .modifier(TintModifier(tintColor: node.style.tintColor))
+                    .modifier(TintModifier(tintColor: node.tintColor))
 
             case .asset(let name):
                 Image(name)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .modifier(TintModifier(tintColor: node.style.tintColor))
+                    .modifier(TintModifier(tintColor: node.tintColor))
 
             case .url(let url):
                 asyncImageView(url: url)
-                
+
             case .statePath(let template):
                 // Compute URL from state and reload when it changes
                 if let url = computeURL(from: template) {
@@ -100,9 +100,15 @@ struct ImageNodeView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-        .frame(width: node.style.width, height: node.style.height)
-        .frame(maxWidth: node.style.width == nil ? .infinity : nil)
-        .clipShape(RoundedRectangle(cornerRadius: node.style.cornerRadius ?? 0))
+        .modifier(DimensionFrameModifier(
+            width: node.width,
+            height: node.height,
+            minWidth: node.minWidth,
+            minHeight: node.minHeight,
+            maxWidth: node.width == nil ? .absolute(.infinity) : node.maxWidth,
+            maxHeight: node.maxHeight
+        ))
+        .clipShape(RoundedRectangle(cornerRadius: node.cornerRadius))
     }
     
     @ViewBuilder

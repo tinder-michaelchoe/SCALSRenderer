@@ -153,7 +153,7 @@ public struct SectionLayoutResolver: SectionLayoutResolving {
             alignment: resolveAlignment(layout.alignment),
             itemSpacing: layout.itemSpacing ?? 8,
             lineSpacing: layout.lineSpacing ?? 8,
-            contentInsets: PaddingConverter.convert(layout.contentInsets),
+            contentInsets: IR.EdgeInsets(from: layout.contentInsets),
             itemDimensions: resolveItemDimensions(layout.itemDimensions),
             showsIndicators: layout.showsIndicators ?? false,
             isPagingEnabled: layout.isPagingEnabled ?? false,

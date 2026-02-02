@@ -38,9 +38,9 @@ public struct LightspeedProvider: SwiftUIDesignSystemRenderer {
 
     // MARK: - Style Token Resolution (fallback)
 
-    /// Resolves @-prefixed style references to IR.Style.
+    /// Resolves @-prefixed style references to ResolvedStyle.
     /// Called when canRender() returns false or provider.render() returns nil.
-    public func resolveStyle(_ reference: String) -> IR.Style? {
+    public func resolveStyle(_ reference: String) -> ResolvedStyle? {
         print("🎨 LightspeedProvider.resolveStyle: '\(reference)'")
         let parts = reference.split(separator: ".").map(String.init)
         guard let category = parts.first else {
@@ -48,7 +48,7 @@ public struct LightspeedProvider: SwiftUIDesignSystemRenderer {
             return nil
         }
 
-        let result: IR.Style?
+        let result: ResolvedStyle?
         switch category {
         case "button": result = resolveButtonStyle(parts)
         case "text": result = resolveTextStyle(parts)
@@ -64,9 +64,9 @@ public struct LightspeedProvider: SwiftUIDesignSystemRenderer {
         return result
     }
 
-    private func resolveButtonStyle(_ parts: [String]) -> IR.Style? {
+    private func resolveButtonStyle(_ parts: [String]) -> ResolvedStyle? {
         guard parts.count >= 2 else { return nil }
-        var style = IR.Style()
+        var style = ResolvedStyle()
 
         switch parts[1] {
         case "primary":
@@ -105,9 +105,9 @@ public struct LightspeedProvider: SwiftUIDesignSystemRenderer {
         return style
     }
 
-    private func resolveTextStyle(_ parts: [String]) -> IR.Style? {
+    private func resolveTextStyle(_ parts: [String]) -> ResolvedStyle? {
         guard parts.count >= 2 else { return nil }
-        var style = IR.Style()
+        var style = ResolvedStyle()
 
         switch parts[1] {
         case "heading1":
@@ -165,8 +165,8 @@ public struct LightspeedProvider: SwiftUIDesignSystemRenderer {
         return style
     }
 
-    private func resolveTextFieldStyle(_ parts: [String]) -> IR.Style? {
-        var style = IR.Style()
+    private func resolveTextFieldStyle(_ parts: [String]) -> ResolvedStyle? {
+        var style = ResolvedStyle()
         style.backgroundColor = IR.Color(hex: "#F9FAFB")
         style.cornerRadius = 8
         style.borderWidth = 1

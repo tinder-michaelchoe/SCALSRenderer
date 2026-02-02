@@ -24,16 +24,11 @@ public struct DividerNodeRenderer: UIKitNodeRendering {
         let divider = UIView()
         divider.translatesAutoresizingMaskIntoConstraints = false
 
-        // Set background color
-        if let color = dividerNode.style.backgroundColor {
-            divider.backgroundColor = color.toUIKit
-        } else {
-            divider.backgroundColor = .separator
-        }
+        // Set background color - directly on node
+        divider.backgroundColor = dividerNode.color.toUIKit
 
-        // Set height constraint
-        let height = dividerNode.style.height ?? 1
-        divider.heightAnchor.constraint(equalToConstant: height).isActive = true
+        // Set height constraint - directly on node
+        divider.heightAnchor.constraint(equalToConstant: dividerNode.thickness).isActive = true
 
         return divider
     }

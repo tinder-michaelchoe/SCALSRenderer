@@ -9,6 +9,7 @@ import Foundation
 import Testing
 import UIKit
 @testable import SCALS
+@testable import ScalsModules
 
 // MARK: - Test Mock Renderers
 
@@ -180,11 +181,7 @@ struct UIKitNodeRendererRegistryRenderingTests {
         registry.register(MockTextNodeRenderer())
         
         let context = createTestContext(registry: registry)
-        let textNode = RenderNode.text(TextNode(
-            content: "Test",
-            style: IR.Style(),
-            padding: .zero
-        ))
+        let textNode = RenderNode.text(TextNode(content: "Test"))
         
         let view = registry.render(textNode, context: context)
         
@@ -233,7 +230,7 @@ struct UIKitNodeRendererRegistryRenderingTests {
         let context = createTestContext(registry: registry)
         
         // Test text node goes to text renderer
-        let textNode = RenderNode.text(TextNode(content: "Test", style: IR.Style(), padding: .zero))
+        let textNode = RenderNode.text(TextNode(content: "Test"))
         let textView = registry.render(textNode, context: context)
         #expect(textView.accessibilityIdentifier == "mock_text_renderer")
         

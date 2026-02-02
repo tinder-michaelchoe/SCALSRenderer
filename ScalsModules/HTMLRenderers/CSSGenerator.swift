@@ -27,9 +27,9 @@ public struct CSSGenerator {
     private var dividerCounter = 0
     private var sectionLayoutCounter = 0
     private var generatedClasses: [String: String] = [:]
-    
+
     public init() {}
-    
+
     /// Generate CSS from a render tree.
     /// - Parameter tree: The render tree to generate CSS for
     /// - Returns: CSS string containing all generated classes
@@ -47,32 +47,31 @@ public struct CSSGenerator {
         dividerCounter = 0
         sectionLayoutCounter = 0
         generatedClasses = [:]
-        
+
         var css = "/* Generated SCALS Styles */\n\n"
-        
+
         // Generate root styles
         css += generateRootStyles(tree.root)
-        
+
         // Walk all nodes and generate styles
         for child in tree.root.children {
             css += generateNodeStyles(child)
         }
-        
+
         return css
     }
-    
+
     // MARK: - Root Styles
-    
+
     private func generateRootStyles(_ root: RootNode) -> String {
         var css = ""
-        
+
         // Root container style
         var rootRules: [String] = []
-        
-        if let bg = root.backgroundColor {
-            rootRules.append("background-color: \(bg.cssRGBA)")
-        }
-        
+
+        // backgroundColor is now non-optional
+        rootRules.append("background-color: \(root.backgroundColor.cssRGBA)")
+
         // Edge insets as padding
         if let insets = root.edgeInsets {
             if let top = insets.top {
@@ -88,55 +87,63 @@ public struct CSSGenerator {
                 rootRules.append("padding-right: \(Int(trailing.value))px")
             }
         }
-        
-        // Root style properties
-        let styleRules = root.style.cssRuleString()
-        if !styleRules.isEmpty {
-            rootRules.append(styleRules)
+
+        // Root flattened style properties
+        if root.cornerRadius > 0 {
+            rootRules.append("border-radius: \(Int(root.cornerRadius))px")
         }
-        
+        if let shadow = root.shadow {
+            rootRules.append("box-shadow: \(shadow.cssBoxShadow)")
+        }
+        if let border = root.border {
+            rootRules.append("border: \(border.cssBorder)")
+        }
+        if !root.padding.isEmpty {
+            rootRules.append("padding: \(root.padding.cssPadding)")
+        }
+
         if !rootRules.isEmpty {
             css += ".scals-root {\n"
             css += "    \(rootRules.joined(separator: ";\n    "));\n"
             css += "}\n\n"
         }
-        
+
         return css
     }
-    
+
     // MARK: - Node Styles
-    
+
     private mutating func generateNodeStyles(_ node: RenderNode) -> String {
         var css = ""
-        
+
         switch node {
         case .container(let container):
             css += generateContainerStyles(container)
             for child in container.children {
                 css += generateNodeStyles(child)
             }
-            
+
         case .sectionLayout(let sectionLayout):
             css += generateSectionLayoutStyles(sectionLayout)
-            
+
         case .text(let text):
             css += generateTextStyles(text)
-            
+
         case .button(let button):
             css += generateButtonStyles(button)
-            
+
         case .textField(let textField):
             css += generateTextFieldStyles(textField)
-            
+
         case .toggle(let toggle):
             css += generateToggleStyles(toggle)
-            
+
         case .slider(let slider):
             css += generateSliderStyles(slider)
-            
+
         case .image(let image):
             css += generateImageStyles(image)
-            
+
         case .gradient(let gradient):
             css += generateGradientStyles(gradient)
 
@@ -152,21 +159,21 @@ public struct CSSGenerator {
         case .spacer:
             // Spacer uses base class, no custom CSS needed
             break
-            
+
         case .custom(_, let customNode):
             // Custom nodes can implement their own CSS generation
             css += generateCustomNodeStyles(customNode)
         }
-        
+
         return css
     }
-    
+
     // MARK: - Container Styles
-    
+
     private mutating func generateContainerStyles(_ container: ContainerNode) -> String {
         let className = generateContainerClassName(for: container.id)
         var rules: [String] = []
-        
+
         // Layout type
         switch container.layoutType {
         case .vstack:
@@ -179,64 +186,90 @@ public struct CSSGenerator {
             rules.append("display: grid")
             rules.append("grid-template-areas: \"stack\"")
         }
-        
+
         // Alignment
         let (alignItems, justifyContent) = container.alignment.cssFlexAlignment
         if container.layoutType != .zstack {
             rules.append("align-items: \(alignItems)")
             rules.append("justify-content: \(justifyContent)")
         }
-        
+
         // Spacing (gap)
         if container.spacing > 0 {
             rules.append("gap: \(Int(container.spacing))px")
         }
-        
-        // Padding
+
+        // Padding - already resolved, directly on node
         if !container.padding.isEmpty {
             rules.append("padding: \(container.padding.cssPadding)")
         }
-        
-        // Style properties
-        let styleRules = container.style.cssRuleString()
-        if !styleRules.isEmpty {
-            rules.append(styleRules)
+
+        // Flattened style properties - directly on node
+        rules.append("background-color: \(container.backgroundColor.cssRGBA)")
+        if container.cornerRadius > 0 {
+            rules.append("border-radius: \(Int(container.cornerRadius))px")
         }
-        
+        if let shadow = container.shadow {
+            rules.append("box-shadow: \(shadow.cssBoxShadow)")
+        }
+        if let border = container.border {
+            rules.append("border: \(border.cssBorder)")
+        }
+
+        // Sizing
+        if let width = container.width {
+            rules.append("width: \(width.cssValue)")
+        }
+        if let height = container.height {
+            rules.append("height: \(height.cssValue)")
+        }
+        if let minWidth = container.minWidth {
+            rules.append("min-width: \(minWidth.cssValue)")
+        }
+        if let minHeight = container.minHeight {
+            rules.append("min-height: \(minHeight.cssValue)")
+        }
+        if let maxWidth = container.maxWidth {
+            rules.append("max-width: \(maxWidth.cssValue)")
+        }
+        if let maxHeight = container.maxHeight {
+            rules.append("max-height: \(maxHeight.cssValue)")
+        }
+
         if !rules.isEmpty {
             return ".\(className) {\n    \(rules.joined(separator: ";\n    "));\n}\n\n"
         }
         return ""
     }
-    
+
     // MARK: - Section Layout Styles
-    
+
     private mutating func generateSectionLayoutStyles(_ sectionLayout: SectionLayoutNode) -> String {
         var css = ""
         let className = generateSectionLayoutClassName(for: sectionLayout.id)
-        
+
         // Container styles
         var rules = ["display: flex", "flex-direction: column"]
         if sectionLayout.sectionSpacing > 0 {
             rules.append("gap: \(Int(sectionLayout.sectionSpacing))px")
         }
-        
+
         css += ".\(className) {\n    \(rules.joined(separator: ";\n    "));\n}\n\n"
-        
+
         // Generate styles for each section
         for (index, section) in sectionLayout.sections.enumerated() {
             css += generateSectionStyles(section, index: index, parentClass: className)
         }
-        
+
         return css
     }
-    
+
     private mutating func generateSectionStyles(_ section: IR.Section, index: Int, parentClass: String) -> String {
         var css = ""
         let sectionClass = "\(parentClass)-section-\(index)"
-        
+
         var rules: [String] = []
-        
+
         switch section.layoutType {
         case .horizontal:
             rules.append("display: flex")
@@ -246,11 +279,11 @@ public struct CSSGenerator {
             if !section.config.showsIndicators {
                 rules.append("scrollbar-width: none")
             }
-            
+
         case .list:
             rules.append("display: flex")
             rules.append("flex-direction: column")
-            
+
         case .grid(let columns):
             rules.append("display: grid")
             switch columns {
@@ -259,36 +292,36 @@ public struct CSSGenerator {
             case .adaptive(let minWidth):
                 rules.append("grid-template-columns: repeat(auto-fill, minmax(\(Int(minWidth))px, 1fr))")
             }
-            
+
         case .flow:
             rules.append("display: flex")
             rules.append("flex-wrap: wrap")
         }
-        
+
         // Spacing
         if section.config.itemSpacing > 0 || section.config.lineSpacing > 0 {
             let rowGap = section.config.lineSpacing > 0 ? Int(section.config.lineSpacing) : Int(section.config.itemSpacing)
             let colGap = Int(section.config.itemSpacing)
             rules.append("gap: \(rowGap)px \(colGap)px")
         }
-        
+
         // Content insets
         if !section.config.contentInsets.isEmpty {
             rules.append("padding: \(section.config.contentInsets.cssPadding)")
         }
-        
+
         css += ".\(sectionClass) {\n    \(rules.joined(separator: ";\n    "));\n}\n\n"
-        
+
         // Hide scrollbar for horizontal sections
         if case .horizontal = section.layoutType, !section.config.showsIndicators {
             css += ".\(sectionClass)::-webkit-scrollbar {\n    display: none;\n}\n\n"
         }
-        
+
         // Generate styles for children
         for child in section.children {
             css += generateNodeStyles(child)
         }
-        
+
         // Header and footer styles
         if let header = section.header {
             css += generateNodeStyles(header)
@@ -296,65 +329,55 @@ public struct CSSGenerator {
         if let footer = section.footer {
             css += generateNodeStyles(footer)
         }
-        
+
         return css
     }
-    
+
     // MARK: - Component Styles
-    
+
     private mutating func generateTextStyles(_ text: TextNode) -> String {
-        // Always increment counter to stay in sync with HTMLNodeRenderer
         let className = generateTextClassName(for: text.id)
+        var rules: [String] = []
 
-        var ruleParts: [String] = []
+        // Flattened text style properties - directly on node
+        rules.append("color: \(text.textColor.cssRGBA)")
+        rules.append("font-size: \(Int(text.fontSize))px")
+        rules.append("font-weight: \(text.fontWeight.cssValue)")
+        rules.append("text-align: \(text.textAlignment.cssValue)")
+        rules.append("background-color: \(text.backgroundColor.cssRGBA)")
 
-        // Add style rules
-        let styleRules = text.style.cssRuleString()
-        if !styleRules.isEmpty {
-            ruleParts.append(styleRules)
+        if text.cornerRadius > 0 {
+            rules.append("border-radius: \(Int(text.cornerRadius))px")
+        }
+        if let shadow = text.shadow {
+            rules.append("box-shadow: \(shadow.cssBoxShadow)")
+        }
+        if let border = text.border {
+            rules.append("border: \(border.cssBorder)")
+        }
+        if !text.padding.isEmpty {
+            rules.append("padding: \(text.padding.cssPadding)")
+        }
+        if let width = text.width {
+            rules.append("width: \(width.cssValue)")
+        }
+        if let height = text.height {
+            rules.append("height: \(height.cssValue)")
         }
 
-        // Add padding rules if present
-        if text.padding != .zero {
-            var paddingRules: [String] = []
-            if text.padding.top > 0 {
-                paddingRules.append("padding-top: \(Int(text.padding.top))px")
-            }
-            if text.padding.bottom > 0 {
-                paddingRules.append("padding-bottom: \(Int(text.padding.bottom))px")
-            }
-            if text.padding.leading > 0 {
-                paddingRules.append("padding-left: \(Int(text.padding.leading))px")
-            }
-            if text.padding.trailing > 0 {
-                paddingRules.append("padding-right: \(Int(text.padding.trailing))px")
-            }
-            ruleParts.append(contentsOf: paddingRules)
-        }
-
-        // Add display: inline-block if there's padding (so padding is visible on inline elements)
-        if text.padding != .zero || text.style.backgroundColor != nil {
-            ruleParts.append("display: inline-block")
-        }
-
-        guard !ruleParts.isEmpty else {
-            return ""
-        }
-
-        let rules = ruleParts.joined(separator: ";\n    ")
-        return ".\(className) {\n    \(rules);\n}\n\n"
+        return ".\(className) {\n    \(rules.joined(separator: ";\n    "));\n}\n\n"
     }
-    
+
     private mutating func generateButtonStyles(_ button: ButtonNode) -> String {
         let className = generateButtonClassName(for: button.id)
         var css = ""
-        
-        // Normal state
+
+        // Normal state - using ButtonStateStyle.cssRuleString()
         let normalRules = button.styles.normal.cssRuleString()
         if !normalRules.isEmpty {
             css += ".\(className) {\n    \(normalRules);\n}\n\n"
         }
-        
+
         // Selected state
         if let selected = button.styles.selected {
             let selectedRules = selected.cssRuleString()
@@ -362,7 +385,7 @@ public struct CSSGenerator {
                 css += ".\(className).selected {\n    \(selectedRules);\n}\n\n"
             }
         }
-        
+
         // Disabled state
         if let disabled = button.styles.disabled {
             let disabledRules = disabled.cssRuleString()
@@ -370,71 +393,128 @@ public struct CSSGenerator {
                 css += ".\(className):disabled {\n    \(disabledRules);\n}\n\n"
             }
         }
-        
+
         return css
     }
-    
+
     private mutating func generateTextFieldStyles(_ textField: TextFieldNode) -> String {
-        // Always increment counter to stay in sync with HTMLNodeRenderer
         let className = generateTextFieldClassName(for: textField.id)
-        
-        guard !textField.style.cssRuleString().isEmpty || textField.id != nil else {
-            return ""
+        var rules: [String] = []
+
+        // Flattened properties - directly on node
+        rules.append("color: \(textField.textColor.cssRGBA)")
+        rules.append("font-size: \(Int(textField.fontSize))px")
+        rules.append("background-color: \(textField.backgroundColor.cssRGBA)")
+        if textField.cornerRadius > 0 {
+            rules.append("border-radius: \(Int(textField.cornerRadius))px")
         }
-        let rules = textField.style.cssRuleString()
-        
-        if !rules.isEmpty {
-            return ".\(className) {\n    \(rules);\n}\n\n"
+        if let border = textField.border {
+            rules.append("border: \(border.cssBorder)")
         }
-        return ""
+        if !textField.padding.isEmpty {
+            rules.append("padding: \(textField.padding.cssPadding)")
+        }
+        if let width = textField.width {
+            rules.append("width: \(width.cssValue)")
+        }
+        if let height = textField.height {
+            rules.append("height: \(height.cssValue)")
+        }
+
+        return ".\(className) {\n    \(rules.joined(separator: ";\n    "));\n}\n\n"
     }
-    
+
     private mutating func generateToggleStyles(_ toggle: ToggleNode) -> String {
-        // Always increment counter to stay in sync with HTMLNodeRenderer
         let className = generateToggleClassName(for: toggle.id)
-        
-        guard !toggle.style.cssRuleString().isEmpty || toggle.id != nil else {
+        var rules: [String] = []
+
+        // Flattened properties - directly on node
+        if let tintColor = toggle.tintColor {
+            rules.append("--toggle-tint: \(tintColor.cssRGBA)")
+        }
+        if !toggle.padding.isEmpty {
+            rules.append("padding: \(toggle.padding.cssPadding)")
+        }
+        if let width = toggle.width {
+            rules.append("width: \(width.cssValue)")
+        }
+        if let height = toggle.height {
+            rules.append("height: \(height.cssValue)")
+        }
+
+        guard !rules.isEmpty else {
             return ""
         }
-        let rules = toggle.style.cssRuleString()
-        
-        if !rules.isEmpty {
-            return ".\(className) {\n    \(rules);\n}\n\n"
-        }
-        return ""
+        return ".\(className) {\n    \(rules.joined(separator: ";\n    "));\n}\n\n"
     }
-    
+
     private mutating func generateSliderStyles(_ slider: SliderNode) -> String {
-        // Always increment counter to stay in sync with HTMLNodeRenderer
         let className = generateSliderClassName(for: slider.id)
-        
-        guard !slider.style.cssRuleString().isEmpty || slider.id != nil else {
+        var rules: [String] = []
+
+        // Flattened properties - directly on node
+        if let tintColor = slider.tintColor {
+            rules.append("--slider-tint: \(tintColor.cssRGBA)")
+        }
+        if !slider.padding.isEmpty {
+            rules.append("padding: \(slider.padding.cssPadding)")
+        }
+        if let width = slider.width {
+            rules.append("width: \(width.cssValue)")
+        }
+        if let height = slider.height {
+            rules.append("height: \(height.cssValue)")
+        }
+
+        guard !rules.isEmpty else {
             return ""
         }
-        let rules = slider.style.cssRuleString()
-        
-        if !rules.isEmpty {
-            return ".\(className) {\n    \(rules);\n}\n\n"
-        }
-        return ""
+        return ".\(className) {\n    \(rules.joined(separator: ";\n    "));\n}\n\n"
     }
-    
+
     private mutating func generateImageStyles(_ image: ImageNode) -> String {
         let className = generateImageClassName(for: image.id)
         var rules: [String] = []
-        
-        // Base image rules from style
-        let styleRules = image.style.cssRuleString()
-        if !styleRules.isEmpty {
-            rules.append(styleRules)
+
+        // Flattened properties - directly on node
+        if let tintColor = image.tintColor {
+            rules.append("color: \(tintColor.cssRGBA)")
         }
-        
-        if !rules.isEmpty {
-            return ".\(className) {\n    \(rules.joined(separator: ";\n    "));\n}\n\n"
+        rules.append("background-color: \(image.backgroundColor.cssRGBA)")
+        if image.cornerRadius > 0 {
+            rules.append("border-radius: \(Int(image.cornerRadius))px")
         }
-        return ""
+        if let shadow = image.shadow {
+            rules.append("box-shadow: \(shadow.cssBoxShadow)")
+        }
+        if let border = image.border {
+            rules.append("border: \(border.cssBorder)")
+        }
+        if !image.padding.isEmpty {
+            rules.append("padding: \(image.padding.cssPadding)")
+        }
+        if let width = image.width {
+            rules.append("width: \(width.cssValue)")
+        }
+        if let height = image.height {
+            rules.append("height: \(height.cssValue)")
+        }
+        if let minWidth = image.minWidth {
+            rules.append("min-width: \(minWidth.cssValue)")
+        }
+        if let minHeight = image.minHeight {
+            rules.append("min-height: \(minHeight.cssValue)")
+        }
+        if let maxWidth = image.maxWidth {
+            rules.append("max-width: \(maxWidth.cssValue)")
+        }
+        if let maxHeight = image.maxHeight {
+            rules.append("max-height: \(maxHeight.cssValue)")
+        }
+
+        return ".\(className) {\n    \(rules.joined(separator: ";\n    "));\n}\n\n"
     }
-    
+
     private mutating func generateGradientStyles(_ gradient: GradientNode) -> String {
         let className = generateGradientClassName(for: gradient.id)
         var rules: [String] = []
@@ -442,10 +522,18 @@ public struct CSSGenerator {
         // Gradient background
         rules.append("background: \(gradient.cssGradient)")
 
-        // Style rules
-        let styleRules = gradient.style.cssRuleString()
-        if !styleRules.isEmpty {
-            rules.append(styleRules)
+        // Flattened properties - directly on node
+        if gradient.cornerRadius > 0 {
+            rules.append("border-radius: \(Int(gradient.cornerRadius))px")
+        }
+        if !gradient.padding.isEmpty {
+            rules.append("padding: \(gradient.padding.cssPadding)")
+        }
+        if let width = gradient.width {
+            rules.append("width: \(width.cssValue)")
+        }
+        if let height = gradient.height {
+            rules.append("height: \(height.cssValue)")
         }
 
         return ".\(className) {\n    \(rules.joined(separator: ";\n    "));\n}\n\n"
@@ -455,10 +543,34 @@ public struct CSSGenerator {
         let className = generateShapeClassName(for: shape.id)
         var rules: [String] = []
 
-        // Style rules
-        let styleRules = shape.style.cssRuleString()
-        if !styleRules.isEmpty {
-            rules.append(styleRules)
+        // Flattened properties - directly on node
+        rules.append("background-color: \(shape.fillColor.cssRGBA)")
+        if let strokeColor = shape.strokeColor {
+            rules.append("border-color: \(strokeColor.cssRGBA)")
+        }
+        if shape.strokeWidth > 0 {
+            rules.append("border-width: \(Int(shape.strokeWidth))px")
+            rules.append("border-style: solid")
+        }
+
+        // Corner radius based on shape type
+        switch shape.shapeType {
+        case .roundedRectangle(let cornerRadius):
+            rules.append("border-radius: \(Int(cornerRadius))px")
+        case .circle, .capsule:
+            rules.append("border-radius: 50%")
+        case .rectangle, .ellipse:
+            break
+        }
+
+        if !shape.padding.isEmpty {
+            rules.append("padding: \(shape.padding.cssPadding)")
+        }
+        if let width = shape.width {
+            rules.append("width: \(width.cssValue)")
+        }
+        if let height = shape.height {
+            rules.append("height: \(height.cssValue)")
         }
 
         return ".\(className) {\n    \(rules.joined(separator: ";\n    "));\n}\n\n"
@@ -468,10 +580,15 @@ public struct CSSGenerator {
         let className = generatePageIndicatorClassName(for: pageIndicator.id)
         var rules: [String] = []
 
-        // Style rules
-        let styleRules = pageIndicator.style.cssRuleString()
-        if !styleRules.isEmpty {
-            rules.append(styleRules)
+        // Flattened properties - directly on node
+        if !pageIndicator.padding.isEmpty {
+            rules.append("padding: \(pageIndicator.padding.cssPadding)")
+        }
+        if let width = pageIndicator.width {
+            rules.append("width: \(width.cssValue)")
+        }
+        if let height = pageIndicator.height {
+            rules.append("height: \(height.cssValue)")
         }
 
         guard !rules.isEmpty else {
@@ -482,20 +599,19 @@ public struct CSSGenerator {
     }
 
     private mutating func generateDividerStyles(_ divider: DividerNode) -> String {
-        // Always increment counter to stay in sync with HTMLNodeRenderer
         let className = generateDividerClassName(for: divider.id)
-        
-        guard !divider.style.cssRuleString().isEmpty || divider.id != nil else {
-            return ""
+        var rules: [String] = []
+
+        // Flattened properties - directly on node
+        rules.append("background-color: \(divider.color.cssRGBA)")
+        rules.append("height: \(Int(divider.thickness))px")
+        if !divider.padding.isEmpty {
+            rules.append("margin: \(divider.padding.cssPadding)")
         }
-        let rules = divider.style.cssRuleString()
-        
-        if !rules.isEmpty {
-            return ".\(className) {\n    \(rules);\n}\n\n"
-        }
-        return ""
+
+        return ".\(className) {\n    \(rules.joined(separator: ";\n    "));\n}\n\n"
     }
-    
+
     private func generateCustomNodeStyles(_ node: any CustomRenderNode) -> String {
         // Custom nodes can implement CSSGenerating protocol for their own styles
         if let cssGenerating = node as? CSSGenerating {
@@ -503,9 +619,9 @@ public struct CSSGenerator {
         }
         return ""
     }
-    
+
     // MARK: - Helpers
-    
+
     private mutating func generateContainerClassName(for id: String?) -> String {
         containerCounter += 1
         if let id = id {
@@ -513,7 +629,7 @@ public struct CSSGenerator {
         }
         return "scals-container-\(containerCounter)"
     }
-    
+
     private mutating func generateTextClassName(for id: String?) -> String {
         textCounter += 1
         if let id = id {
@@ -521,7 +637,7 @@ public struct CSSGenerator {
         }
         return "scals-text-\(textCounter)"
     }
-    
+
     private mutating func generateButtonClassName(for id: String?) -> String {
         buttonCounter += 1
         if let id = id {
@@ -529,7 +645,7 @@ public struct CSSGenerator {
         }
         return "scals-button-\(buttonCounter)"
     }
-    
+
     private mutating func generateImageClassName(for id: String?) -> String {
         imageCounter += 1
         if let id = id {
@@ -537,7 +653,7 @@ public struct CSSGenerator {
         }
         return "scals-image-\(imageCounter)"
     }
-    
+
     private mutating func generateTextFieldClassName(for id: String?) -> String {
         textFieldCounter += 1
         if let id = id {
@@ -545,7 +661,7 @@ public struct CSSGenerator {
         }
         return "scals-textfield-\(textFieldCounter)"
     }
-    
+
     private mutating func generateToggleClassName(for id: String?) -> String {
         toggleCounter += 1
         if let id = id {
@@ -553,7 +669,7 @@ public struct CSSGenerator {
         }
         return "scals-toggle-\(toggleCounter)"
     }
-    
+
     private mutating func generateSliderClassName(for id: String?) -> String {
         sliderCounter += 1
         if let id = id {
@@ -561,7 +677,7 @@ public struct CSSGenerator {
         }
         return "scals-slider-\(sliderCounter)"
     }
-    
+
     private mutating func generateGradientClassName(for id: String?) -> String {
         gradientCounter += 1
         if let id = id {
@@ -593,7 +709,7 @@ public struct CSSGenerator {
         }
         return "scals-divider-\(dividerCounter)"
     }
-    
+
     private mutating func generateSectionLayoutClassName(for id: String?) -> String {
         sectionLayoutCounter += 1
         if let id = id {

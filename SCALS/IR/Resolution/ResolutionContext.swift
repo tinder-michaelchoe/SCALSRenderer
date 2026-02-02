@@ -127,7 +127,8 @@ public final class ResolutionContext {
     }
 
     /// Get a value, checking iteration variables first, then state store
-    @MainActor
+    ///
+    /// **Thread Safety**: Safe to call from any thread. StateStore access is protected by NSLock.
     public func getValue(_ keypath: String) -> Any? {
         // Check iteration variables first
         if let value = iterationVariables[keypath] {
@@ -138,7 +139,8 @@ public final class ResolutionContext {
     }
 
     /// Interpolate a template string, using iteration variables and state
-    @MainActor
+    ///
+    /// **Thread Safety**: Safe to call from any thread. StateStore access is protected by NSLock.
     public func interpolate(_ template: String) -> String {
         var result = template
         let pattern = #"\$\{([^}]+)\}"#

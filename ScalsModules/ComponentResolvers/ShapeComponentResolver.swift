@@ -46,15 +46,29 @@ public struct ShapeComponentResolver: ComponentResolving {
             throw ShapeResolutionError.invalidShapeType(shapeTypeStr)
         }
 
-        // Resolve style
-        let style = context.styleResolver.resolve(component.styleId)
+        // Resolve style to get flattened properties
+        let resolvedStyle = context.styleResolver.resolve(component.styleId)
         let nodeId = component.id ?? UUID().uuidString
 
-        // Build ShapeNode
+        // Resolve padding by merging node-level padding with style padding
+        let padding = IR.EdgeInsets(
+            from: component.padding,
+            mergingTop: resolvedStyle.paddingTop ?? 0,
+            mergingBottom: resolvedStyle.paddingBottom ?? 0,
+            mergingLeading: resolvedStyle.paddingLeading ?? 0,
+            mergingTrailing: resolvedStyle.paddingTrailing ?? 0
+        )
+
+        // Build ShapeNode with flattened properties (no .style)
         let shapeNode = ShapeNode(
             id: nodeId,
             shapeType: shapeType,
-            style: style
+            fillColor: resolvedStyle.backgroundColor ?? .clear,
+            strokeColor: resolvedStyle.borderColor,
+            strokeWidth: resolvedStyle.borderWidth ?? 0,
+            padding: padding,
+            width: resolvedStyle.width,
+            height: resolvedStyle.height
         )
 
         // Create view node if tracking
@@ -63,8 +77,7 @@ public struct ShapeComponentResolver: ComponentResolving {
             viewNode = ViewNode(
                 id: nodeId,
                 nodeType: .shape(ShapeNodeData(
-                    shapeType: shapeType,
-                    style: style
+                    shapeType: shapeType
                 ))
             )
             viewNode?.parent = context.parentViewNode

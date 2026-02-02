@@ -1,0 +1,24 @@
+{
+  "source": "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/ContentView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Examples",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 17
+        }
+      },
+      {
+        "comment": "",
+        "key": "Playground",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 23
+        }
+      }
+    ]
+  },
+  "version": 1
+}

@@ -123,8 +123,9 @@ struct ResolverRootNodeTests {
         let resolver = Resolver(document: document, componentRegistry: registry)
         
         let renderTree = try resolver.resolve()
-        
-        #expect(renderTree.root.backgroundColor != nil)
+
+        // backgroundColor is non-optional, verify it's set to clear
+        #expect(renderTree.root.backgroundColor == IR.Color.clear)
     }
     
     @Test @MainActor func resolvesRootColorSchemeLight() throws {
@@ -265,7 +266,7 @@ struct ResolverChildResolutionTests {
         let document = Document.Definition(
             id: "test-doc",
             root: Document.RootComponent(
-                children: [.spacer]
+                children: [.spacer(Document.Spacer())]
             )
         )
         
@@ -289,7 +290,7 @@ struct ResolverChildResolutionTests {
                 children: [
                     .layout(Document.Layout(
                         type: .vstack,
-                        children: [.spacer]
+                        children: [.spacer(Document.Spacer())]
                     ))
                 ]
             )
@@ -319,7 +320,7 @@ struct ResolverChildResolutionTests {
                         children: [
                             .layout(Document.Layout(
                                 type: .hstack,
-                                children: [.spacer, .spacer]
+                                children: [.spacer(Document.Spacer()), .spacer(Document.Spacer())]
                             ))
                         ]
                     ))
@@ -353,7 +354,7 @@ struct ResolverTrackingTests {
     @Test @MainActor func resolveWithTrackingReturnsViewTree() throws {
         let document = Document.Definition(
             id: "test-doc",
-            root: Document.RootComponent(children: [.spacer])
+            root: Document.RootComponent(children: [.spacer(Document.Spacer())])
         )
         
         let registry = ComponentResolverRegistry()

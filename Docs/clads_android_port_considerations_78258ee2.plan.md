@@ -42,7 +42,7 @@ The rendering pipeline is platform-agnostic and should be central to the prompt:
 
 ### 2. JSON Schema Definition (Essential)
 
-- Include [scals-schema.json](ScalsRenderer/SCALS/Schema/scals-schema.json) - identical schema ensures cross-platform compatibility
+- Include [scals-document-latest.json](ScalsRenderer/SCALS/Schema/scals-document-latest.json) - identical schema ensures cross-platform compatibility
 - Document structure: `id`, `version`, `state`, `styles`, `dataSources`, `actions`, `root`
 - This is the contract between server and client
 
@@ -488,7 +488,7 @@ object Document {
 
 | Documentation | `README.md`, `Docs/*.md` (all 9 docs) |
 
-| Schema | `scals-schema.json`, `scals-ir-schema.json` |
+| Schema | `scals-document-latest.json`, `scals-ir-latest.json` |
 
 | AST Types | `Document/*.swift` (11 files) |
 

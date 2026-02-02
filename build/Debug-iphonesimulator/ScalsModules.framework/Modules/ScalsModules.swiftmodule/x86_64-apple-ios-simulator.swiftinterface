@@ -1,0 +1,1228 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.2 effective-5.10 (swiftlang-6.2.0.19.9 clang-1700.3.19.1)
+// swift-module-flags: -target x86_64-apple-ios26.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -enable-upcoming-feature DisableOutwardActorInference -enable-upcoming-feature InferSendableFromCaptures -enable-upcoming-feature GlobalActorIsolatedTypesUsability -enable-upcoming-feature MemberImportVisibility -enable-upcoming-feature InferIsolatedConformances -enable-upcoming-feature NonisolatedNonsendingByDefault -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -module-name ScalsModules
+// swift-module-flags-ignorable:  -formal-cxx-interoperability-mode=off -interface-compiler-version 6.2
+import Combine
+import Foundation
+import SCALS
+import Swift
+import SwiftUI
+import UIKit
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+public struct AppendToArrayActionHandler : SCALS.ActionHandler {
+  public static let actionType: Swift.String
+  public init()
+  @_Concurrency.MainActor public func execute(parameters: SCALS.ActionParameters, context: any SCALS.ActionExecutionContext) async
+}
+public struct RemoveFromArrayActionHandler : SCALS.ActionHandler {
+  public static let actionType: Swift.String
+  public init()
+  @_Concurrency.MainActor public func execute(parameters: SCALS.ActionParameters, context: any SCALS.ActionExecutionContext) async
+}
+public struct ToggleInArrayActionHandler : SCALS.ActionHandler {
+  public static let actionType: Swift.String
+  public init()
+  @_Concurrency.MainActor public func execute(parameters: SCALS.ActionParameters, context: any SCALS.ActionExecutionContext) async
+}
+public struct SetArrayItemActionHandler : SCALS.ActionHandler {
+  public static let actionType: Swift.String
+  public init()
+  @_Concurrency.MainActor public func execute(parameters: SCALS.ActionParameters, context: any SCALS.ActionExecutionContext) async
+}
+public struct ClearArrayActionHandler : SCALS.ActionHandler {
+  public static let actionType: Swift.String
+  public init()
+  @_Concurrency.MainActor public func execute(parameters: SCALS.ActionParameters, context: any SCALS.ActionExecutionContext) async
+}
+public struct CancelRequestActionHandler : SCALS.ActionHandler {
+  public static let actionType: Swift.String
+  public init()
+  @_Concurrency.MainActor public func execute(parameters: SCALS.ActionParameters, context: any SCALS.ActionExecutionContext) async
+}
+public struct DismissActionHandler : SCALS.ActionHandler {
+  public static let actionType: Swift.String
+  public init()
+  @_Concurrency.MainActor public func execute(parameters: SCALS.ActionParameters, context: any SCALS.ActionExecutionContext) async
+}
+public struct NavigateActionHandler : SCALS.ActionHandler {
+  public static let actionType: Swift.String
+  public init()
+  @_Concurrency.MainActor public func execute(parameters: SCALS.ActionParameters, context: any SCALS.ActionExecutionContext) async
+}
+final public class RequestActionHandler : SCALS.CancellableActionHandler {
+  public static let actionType: Swift.String
+  public init(session: Foundation.URLSession = .shared)
+  @_Concurrency.MainActor final public func cancel(requestId: Swift.String, documentId: Swift.String)
+  @_Concurrency.MainActor final public func cancelAll(documentId: Swift.String)
+  @_Concurrency.MainActor final public func execute(parameters: SCALS.ActionParameters, context: any SCALS.ActionExecutionContext) async
+  @objc deinit
+}
+public struct SequenceActionHandler : SCALS.ActionHandler {
+  public static let actionType: Swift.String
+  public init()
+  @_Concurrency.MainActor public func execute(parameters: SCALS.ActionParameters, context: any SCALS.ActionExecutionContext) async
+}
+public struct SetStateActionHandler : SCALS.ActionHandler {
+  public static let actionType: Swift.String
+  public init()
+  @_Concurrency.MainActor public func execute(parameters: SCALS.ActionParameters, context: any SCALS.ActionExecutionContext) async
+}
+public struct ShowAlertActionHandler : SCALS.ActionHandler {
+  public static let actionType: Swift.String
+  public init()
+  @_Concurrency.MainActor public func execute(parameters: SCALS.ActionParameters, context: any SCALS.ActionExecutionContext) async
+}
+public struct ButtonComponentResolver : SCALS.ComponentResolving {
+  public static let componentKind: SCALS.Document.ComponentKind
+  public init()
+  @_Concurrency.MainActor public func resolve(_ component: SCALS.Document.Component, context: SCALS.ResolutionContext) throws -> SCALS.ComponentResolutionResult
+}
+public struct DividerComponentResolver : SCALS.ComponentResolving {
+  public static let componentKind: SCALS.Document.ComponentKind
+  public init()
+  @_Concurrency.MainActor public func resolve(_ component: SCALS.Document.Component, context: SCALS.ResolutionContext) throws -> SCALS.ComponentResolutionResult
+}
+public struct GradientComponentResolver : SCALS.ComponentResolving {
+  public static let componentKind: SCALS.Document.ComponentKind
+  public init()
+  @_Concurrency.MainActor public func resolve(_ component: SCALS.Document.Component, context: SCALS.ResolutionContext) throws -> SCALS.ComponentResolutionResult
+}
+public struct ImageComponentResolver : SCALS.ComponentResolving {
+  public static let componentKind: SCALS.Document.ComponentKind
+  public init()
+  @_Concurrency.MainActor public func resolve(_ component: SCALS.Document.Component, context: SCALS.ResolutionContext) throws -> SCALS.ComponentResolutionResult
+}
+public struct PageIndicatorComponentResolver : SCALS.ComponentResolving {
+  public static let componentKind: SCALS.Document.ComponentKind
+  public init()
+  @_Concurrency.MainActor public func resolve(_ component: SCALS.Document.Component, context: SCALS.ResolutionContext) throws -> SCALS.ComponentResolutionResult
+}
+public struct ShapeComponentResolver : SCALS.ComponentResolving {
+  public static let componentKind: SCALS.Document.ComponentKind
+  public init()
+  @_Concurrency.MainActor public func resolve(_ component: SCALS.Document.Component, context: SCALS.ResolutionContext) throws -> SCALS.ComponentResolutionResult
+}
+public struct SliderComponentResolver : SCALS.ComponentResolving {
+  public static let componentKind: SCALS.Document.ComponentKind
+  public init()
+  @_Concurrency.MainActor public func resolve(_ component: SCALS.Document.Component, context: SCALS.ResolutionContext) throws -> SCALS.ComponentResolutionResult
+}
+public struct TextComponentResolver : SCALS.ComponentResolving {
+  public static let componentKind: SCALS.Document.ComponentKind
+  public init()
+  @_Concurrency.MainActor public func resolve(_ component: SCALS.Document.Component, context: SCALS.ResolutionContext) throws -> SCALS.ComponentResolutionResult
+}
+public struct TextFieldComponentResolver : SCALS.ComponentResolving {
+  public static let componentKind: SCALS.Document.ComponentKind
+  public init()
+  @_Concurrency.MainActor public func resolve(_ component: SCALS.Document.Component, context: SCALS.ResolutionContext) throws -> SCALS.ComponentResolutionResult
+}
+public struct ToggleComponentResolver : SCALS.ComponentResolving {
+  public static let componentKind: SCALS.Document.ComponentKind
+  public init()
+  @_Concurrency.MainActor public func resolve(_ component: SCALS.Document.Component, context: SCALS.ResolutionContext) throws -> SCALS.ComponentResolutionResult
+}
+public struct DebugRenderer : SCALS.Renderer {
+  public init()
+  public func render(_ tree: SCALS.RenderTree) -> Swift.String
+  public typealias Output = Swift.String
+}
+final public class ScalsRegistry : @unchecked Swift.Sendable {
+  convenience public init()
+  public init(propertiesRegistry: SCALS.ComponentPropertiesRegistry, componentRegistry: SCALS.ComponentResolverRegistry, uikitRegistry: ScalsModules.UIKitNodeRendererRegistry, swiftuiRegistry: ScalsModules.SwiftUINodeRendererRegistry, actionRegistry: SCALS.ActionRegistry)
+  final public func registerComponent<P, R, U, S>(propertiesType: P.Type, resolver: R, uikitRenderer: U, swiftuiRenderer: S) where P : SCALS.ComponentProperties, R : SCALS.ComponentResolving, U : ScalsModules.UIKitNodeRendering, S : ScalsModules.SwiftUINodeRendering
+  final public func registerComponent<P, R, S>(propertiesType: P.Type, resolver: R, swiftuiRenderer: S) where P : SCALS.ComponentProperties, R : SCALS.ComponentResolving, S : ScalsModules.SwiftUINodeRendering
+  final public func registerComponent<P, R, U>(propertiesType: P.Type, resolver: R, uikitRenderer: U) where P : SCALS.ComponentProperties, R : SCALS.ComponentResolving, U : ScalsModules.UIKitNodeRendering
+  final public func registerComponent<P, R>(propertiesType: P.Type, resolver: R) where P : SCALS.ComponentProperties, R : SCALS.ComponentResolving
+  final public func registerProperties<P>(_ type: P.Type) where P : SCALS.ComponentProperties
+  final public func registerResolver<R>(_ resolver: R) where R : SCALS.ComponentResolving
+  final public func registerUIKitRenderer<U>(_ renderer: U) where U : ScalsModules.UIKitNodeRendering
+  final public func registerSwiftUIRenderer<S>(_ renderer: S) where S : ScalsModules.SwiftUINodeRendering
+  final public func registerAction<A>(_ handler: A) where A : SCALS.ActionHandler
+  @objc deinit
+}
+public protocol SCALSPlugin {
+  func register(with registry: ScalsModules.ScalsRegistry)
+}
+extension ScalsModules.ScalsRegistry {
+  final public func load(_ plugin: any ScalsModules.SCALSPlugin)
+  final public func load(_ plugins: [any ScalsModules.SCALSPlugin])
+}
+public struct CustomComponentSwiftUIRenderer : ScalsModules.SwiftUINodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init(customComponentRegistry: SCALS.CustomComponentRegistry)
+  @_Concurrency.MainActor public func render(_ node: SCALS.RenderNode, context: ScalsModules.SwiftUIRenderContext) -> SwiftUICore.AnyView
+}
+@_Concurrency.MainActor @preconcurrency public struct ScalsActionsModifier : SwiftUICore.ViewModifier {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency public init(actions: SCALS.Document.Component.Actions?, context: SCALS.CustomComponentContext)
+  #endif
+  @_Concurrency.MainActor @preconcurrency public func body(content: ScalsModules.ScalsActionsModifier.Content) -> some SwiftUICore.View
+  
+  public typealias Body = @_opaqueReturnTypeOf("$s12ScalsModules0A15ActionsModifierV4body7contentQr7SwiftUI05_ViewD8_ContentVyACG_tF", 0) __
+}
+extension SwiftUICore.View {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency public func applyScalsActions(_ actions: SCALS.Document.Component.Actions?, context: SCALS.CustomComponentContext) -> some SwiftUICore.View
+  
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor public func applyScalsOnTap(_ action: SCALS.Document.Component.ActionBinding?, context: SCALS.CustomComponentContext) -> some SwiftUICore.View
+  
+  #endif
+}
+@_Concurrency.MainActor @preconcurrency public struct ScalsStyleModifier : SwiftUICore.ViewModifier {
+  @_Concurrency.MainActor @preconcurrency public init(style: SCALS.IR.Style)
+  @_Concurrency.MainActor @preconcurrency public func body(content: ScalsModules.ScalsStyleModifier.Content) -> some SwiftUICore.View
+  
+  public typealias Body = @_opaqueReturnTypeOf("$s12ScalsModules0A13StyleModifierV4body7contentQr7SwiftUI05_ViewD8_ContentVyACG_tF", 0) __
+}
+extension SwiftUICore.View {
+  @_Concurrency.MainActor @preconcurrency public func applyScalsStyle(_ style: SCALS.IR.Style) -> some SwiftUICore.View
+  
+}
+extension SCALS.ActionRegistry {
+  public static var `default`: SCALS.ActionRegistry {
+    get
+  }
+  final public func registerBuiltInActions()
+}
+extension ScalsModules.ScalsRendererView {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency public init(document: SCALS.Document.Definition, customActions: [Swift.String : SCALS.ActionClosure] = [:], customComponents: [any SCALS.CustomComponent.Type] = [], actionDelegate: (any SCALS.ScalsActionDelegate)? = nil, designSystemProvider: (any SCALS.DesignSystemProvider)? = nil)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency public init?(jsonString: Swift.String, customActions: [Swift.String : SCALS.ActionClosure] = [:], customComponents: [any SCALS.CustomComponent.Type] = [], actionDelegate: (any SCALS.ScalsActionDelegate)? = nil, designSystemProvider: (any SCALS.DesignSystemProvider)? = nil, debugMode: Swift.Bool = false)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency public init(document: SCALS.Document.Definition, customActions: [Swift.String : SCALS.ActionClosure] = [:], customComponents: [any SCALS.CustomComponent.Type] = [], actionDelegate: (any SCALS.ScalsActionDelegate)? = nil, designSystemProvider: (any SCALS.DesignSystemProvider)? = nil, debugMode: Swift.Bool)
+  #endif
+}
+extension ScalsModules.ScalsRendererBindingConfiguration {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(initialState: State? = nil, onStateChange: ((_ path: Swift.String, _ oldValue: Any?, _ newValue: Any?) -> Swift.Void)? = nil, onAction: ((_ actionId: Swift.String, _ parameters: [Swift.String : Any]) -> Swift.Void)? = nil, customActions: [Swift.String : SCALS.ActionClosure] = [:], customComponents: [any SCALS.CustomComponent.Type] = [], actionDelegate: (any SCALS.ScalsActionDelegate)? = nil, debugMode: Swift.Bool = false)
+  #endif
+}
+extension ScalsModules.ScalsRendererBindingView {
+  @_Concurrency.MainActor @preconcurrency public init(document: SCALS.Document.Definition, state: SwiftUICore.Binding<State>)
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency public init?(jsonString: Swift.String, state: SwiftUICore.Binding<State>)
+  #endif
+}
+extension ScalsModules.ScalsUIKitView {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency convenience public init(document: SCALS.Document.Definition, customActions: [Swift.String : SCALS.ActionClosure] = [:], actionDelegate: (any SCALS.ScalsActionDelegate)? = nil)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency convenience public init?(jsonString: Swift.String, customActions: [Swift.String : SCALS.ActionClosure] = [:], actionDelegate: (any SCALS.ScalsActionDelegate)? = nil)
+  #endif
+}
+extension ScalsModules.ScalsViewController {
+  @_Concurrency.MainActor @preconcurrency convenience public init(document: SCALS.Document.Definition)
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency convenience public init?(jsonString: Swift.String)
+  #endif
+}
+extension SCALS.ComponentResolverRegistry {
+  public static var `default`: SCALS.ComponentResolverRegistry {
+    get
+  }
+  final public func registerBuiltInResolvers()
+}
+extension SCALS.Document.ComponentKind {
+  public static let label: SCALS.Document.ComponentKind
+  public static let button: SCALS.Document.ComponentKind
+  public static let textfield: SCALS.Document.ComponentKind
+  public static let image: SCALS.Document.ComponentKind
+  public static let gradient: SCALS.Document.ComponentKind
+  public static let toggle: SCALS.Document.ComponentKind
+  public static let slider: SCALS.Document.ComponentKind
+  public static let divider: SCALS.Document.ComponentKind
+  public static let shape: SCALS.Document.ComponentKind
+  public static let pageIndicator: SCALS.Document.ComponentKind
+}
+extension SCALS.SectionLayoutConfigResolverRegistry {
+  public static func withBuiltInResolvers() -> SCALS.SectionLayoutConfigResolverRegistry
+  final public func registerBuiltInResolvers()
+}
+extension ScalsModules.SwiftUINodeRendererRegistry {
+  public static var `default`: ScalsModules.SwiftUINodeRendererRegistry {
+    get
+  }
+  final public func registerBuiltInRenderers()
+}
+extension ScalsModules.SwiftUISectionLayoutRendererRegistry {
+  public static func withBuiltInRenderers() -> ScalsModules.SwiftUISectionLayoutRendererRegistry
+  final public func registerBuiltInRenderers()
+}
+extension ScalsModules.UIKitNodeRendererRegistry {
+  public static var `default`: ScalsModules.UIKitNodeRendererRegistry {
+    get
+  }
+  final public func registerBuiltInRenderers()
+}
+public struct CSSGenerator {
+  public init()
+  public mutating func generate(from tree: SCALS.RenderTree) -> Swift.String
+}
+public protocol CSSGenerating {
+  func generateCSS() -> Swift.String
+}
+extension SCALS.IR.Color {
+  public var cssRGBA: Swift.String {
+    get
+  }
+  public var cssHex: Swift.String {
+    get
+  }
+}
+extension SCALS.IR.EdgeInsets {
+  public var cssPadding: Swift.String {
+    get
+  }
+  public var cssProperties: [Swift.String : Swift.String] {
+    get
+  }
+}
+extension SCALS.IR.Alignment {
+  public var cssFlexAlignment: (alignItems: Swift.String, justifyContent: Swift.String) {
+    get
+  }
+  public var cssTextAlign: Swift.String {
+    get
+  }
+}
+extension SCALS.IR.HorizontalAlignment {
+  public var cssTextAlign: Swift.String {
+    get
+  }
+  public var cssJustifyContent: Swift.String {
+    get
+  }
+}
+extension SCALS.IR.VerticalAlignment {
+  public var cssAlignItems: Swift.String {
+    get
+  }
+}
+extension SCALS.Document.FontWeight {
+  public var cssValue: Swift.String {
+    get
+  }
+  public var cssNumericValue: Swift.Int {
+    get
+  }
+}
+extension SCALS.Document.TextAlignment {
+  public var cssValue: Swift.String {
+    get
+  }
+}
+extension SCALS.IR.UnitPoint {
+  public var cssPosition: Swift.String {
+    get
+  }
+  public var cssGradientPosition: Swift.String {
+    get
+  }
+}
+extension SCALS.IR.Style {
+  public func cssRules(excludePadding: Swift.Bool = false) -> [Swift.String : Swift.String]
+  public func cssRuleString(excludePadding: Swift.Bool = false) -> Swift.String
+  public func cssClass(named className: Swift.String) -> Swift.String
+}
+extension SCALS.ContainerNode.LayoutType {
+  public var cssClass: Swift.String {
+    get
+  }
+  public var cssFlexDirection: Swift.String {
+    get
+  }
+}
+extension SCALS.GradientNode {
+  public var cssGradient: Swift.String {
+    get
+  }
+}
+extension SCALS.GradientColor {
+  public var resolvedForCSS: Swift.String {
+    get
+  }
+}
+extension SCALS.ImageNode.Source {
+  public var htmlAttributes: (tag: Swift.String, attributes: [Swift.String : Swift.String]) {
+    get
+  }
+}
+extension SCALS.ButtonStateStyle {
+  public func cssRules() -> [Swift.String : Swift.String]
+  public func cssRuleString() -> Swift.String
+}
+extension SCALS.IR.Shadow {
+  public var cssBoxShadow: Swift.String {
+    get
+  }
+}
+extension SCALS.IR.Border {
+  public var cssBorder: Swift.String {
+    get
+  }
+}
+extension SCALS.IR.DimensionValue {
+  public var cssValue: Swift.String {
+    get
+  }
+}
+extension Swift.String {
+  public var htmlEscaped: Swift.String {
+    get
+  }
+  public var cssClassName: Swift.String {
+    get
+  }
+}
+public struct HTMLNodeRenderer {
+  public init()
+  public mutating func render(_ root: SCALS.RootNode) -> Swift.String
+  public mutating func renderNode(_ node: SCALS.RenderNode) -> Swift.String
+}
+public protocol HTMLRendering {
+  func renderHTML() -> Swift.String
+}
+public struct HTMLRenderer : SCALS.Renderer {
+  public typealias Output = ScalsModules.HTMLOutput
+  public init(includeBaseStylesheet: Swift.Bool = true)
+  public func render(_ tree: SCALS.RenderTree) -> ScalsModules.HTMLOutput
+}
+public struct HTMLOutput {
+  public let html: Swift.String
+  public let css: Swift.String
+  public let fullDocument: Swift.String
+  public init(html: Swift.String, css: Swift.String, fullDocument: Swift.String)
+}
+public enum iOSDesignTokens {
+  public enum Typography {
+    public static let largeTitle: ScalsModules.CSSFont
+    public static let title1: ScalsModules.CSSFont
+    public static let title2: ScalsModules.CSSFont
+    public static let title3: ScalsModules.CSSFont
+    public static let headline: ScalsModules.CSSFont
+    public static let body: ScalsModules.CSSFont
+    public static let callout: ScalsModules.CSSFont
+    public static let subheadline: ScalsModules.CSSFont
+    public static let footnote: ScalsModules.CSSFont
+    public static let caption1: ScalsModules.CSSFont
+    public static let caption2: ScalsModules.CSSFont
+    public static let fontStack: Swift.String
+    public static let monospaceFontStack: Swift.String
+  }
+  public enum LightColors {
+    public static let label: Swift.String
+    public static let secondaryLabel: Swift.String
+    public static let tertiaryLabel: Swift.String
+    public static let quaternaryLabel: Swift.String
+    public static let systemBackground: Swift.String
+    public static let secondarySystemBackground: Swift.String
+    public static let tertiarySystemBackground: Swift.String
+    public static let systemGroupedBackground: Swift.String
+    public static let secondarySystemGroupedBackground: Swift.String
+    public static let systemFill: Swift.String
+    public static let secondarySystemFill: Swift.String
+    public static let tertiarySystemFill: Swift.String
+    public static let quaternarySystemFill: Swift.String
+    public static let separator: Swift.String
+    public static let opaqueSeparator: Swift.String
+  }
+  public enum DarkColors {
+    public static let label: Swift.String
+    public static let secondaryLabel: Swift.String
+    public static let tertiaryLabel: Swift.String
+    public static let quaternaryLabel: Swift.String
+    public static let systemBackground: Swift.String
+    public static let secondarySystemBackground: Swift.String
+    public static let tertiarySystemBackground: Swift.String
+    public static let systemGroupedBackground: Swift.String
+    public static let secondarySystemGroupedBackground: Swift.String
+    public static let systemFill: Swift.String
+    public static let secondarySystemFill: Swift.String
+    public static let tertiarySystemFill: Swift.String
+    public static let quaternarySystemFill: Swift.String
+    public static let separator: Swift.String
+    public static let opaqueSeparator: Swift.String
+  }
+  public enum SystemColors {
+    public static let blue: Swift.String
+    public static let green: Swift.String
+    public static let indigo: Swift.String
+    public static let orange: Swift.String
+    public static let pink: Swift.String
+    public static let purple: Swift.String
+    public static let red: Swift.String
+    public static let teal: Swift.String
+    public static let yellow: Swift.String
+    public static let gray: Swift.String
+    public static let gray2: Swift.String
+    public static let gray3: Swift.String
+    public static let gray4: Swift.String
+    public static let gray5: Swift.String
+    public static let gray6: Swift.String
+  }
+  public enum Spacing {
+    public static let minTouchTarget: CoreFoundation.CGFloat
+    public static let listRowPadding: CoreFoundation.CGFloat
+    public static let cardPadding: CoreFoundation.CGFloat
+    public static let sectionHeaderPadding: CoreFoundation.CGFloat
+    public static let separatorInset: CoreFoundation.CGFloat
+    public static let navBarCompactHeight: CoreFoundation.CGFloat
+    public static let navBarLargeTitleHeight: CoreFoundation.CGFloat
+    public static let tabBarHeight: CoreFoundation.CGFloat
+  }
+  public enum CornerRadius {
+    public static let small: CoreFoundation.CGFloat
+    public static let medium: CoreFoundation.CGFloat
+    public static let large: CoreFoundation.CGFloat
+    public static let extraLarge: CoreFoundation.CGFloat
+  }
+  public static let baseStylesheet: Swift.String
+}
+public struct CSSFont {
+  public let size: Swift.Int
+  public let weight: Swift.Int
+  public init(size: Swift.Int, weight: Swift.Int)
+  public var css: Swift.String {
+    get
+  }
+}
+public struct FlowSectionLayoutRenderer : ScalsModules.SwiftUISectionLayoutRendering {
+  public static let layoutTypeIdentifier: ScalsModules.SectionLayoutTypeIdentifier
+  public init()
+  @_Concurrency.MainActor public func render(section: SCALS.IR.Section, context: ScalsModules.SwiftUISectionRenderContext) -> SwiftUICore.AnyView
+}
+public struct FlowLayout : SwiftUICore.Layout {
+  public var horizontalSpacing: CoreFoundation.CGFloat
+  public var verticalSpacing: CoreFoundation.CGFloat
+  public init(horizontalSpacing: CoreFoundation.CGFloat = 8, verticalSpacing: CoreFoundation.CGFloat = 8)
+  public func sizeThatFits(proposal: SwiftUICore.ProposedViewSize, subviews: ScalsModules.FlowLayout.Subviews, cache: inout ()) -> CoreFoundation.CGSize
+  public func placeSubviews(in bounds: CoreFoundation.CGRect, proposal: SwiftUICore.ProposedViewSize, subviews: ScalsModules.FlowLayout.Subviews, cache: inout ())
+  public typealias AnimatableData = SwiftUICore.EmptyAnimatableData
+  public typealias Cache = ()
+}
+public struct GridSectionLayoutRenderer : ScalsModules.SwiftUISectionLayoutRendering {
+  public static let layoutTypeIdentifier: ScalsModules.SectionLayoutTypeIdentifier
+  public init()
+  @_Concurrency.MainActor public func render(section: SCALS.IR.Section, context: ScalsModules.SwiftUISectionRenderContext) -> SwiftUICore.AnyView
+}
+public struct HorizontalSectionLayoutRenderer : ScalsModules.SwiftUISectionLayoutRendering {
+  public static let layoutTypeIdentifier: ScalsModules.SectionLayoutTypeIdentifier
+  public init()
+  @_Concurrency.MainActor public func render(section: SCALS.IR.Section, context: ScalsModules.SwiftUISectionRenderContext) -> SwiftUICore.AnyView
+}
+extension SwiftUICore.View {
+  @_Concurrency.MainActor @preconcurrency public func applySnapBehavior(_ behavior: SCALS.IR.SnapBehavior) -> some SwiftUICore.View
+  
+}
+public struct ListSectionLayoutRenderer : ScalsModules.SwiftUISectionLayoutRendering {
+  public static let layoutTypeIdentifier: ScalsModules.SectionLayoutTypeIdentifier
+  public init()
+  @_Concurrency.MainActor public func render(section: SCALS.IR.Section, context: ScalsModules.SwiftUISectionRenderContext) -> SwiftUICore.AnyView
+}
+public struct FlowLayoutConfigResolver : SCALS.SectionLayoutConfigResolving {
+  public static let layoutType: SCALS.Document.SectionType
+  public init()
+  public func resolve(config: SCALS.Document.SectionLayoutConfig) -> SCALS.SectionLayoutConfigResult
+}
+public struct GridLayoutConfigResolver : SCALS.SectionLayoutConfigResolving {
+  public static let layoutType: SCALS.Document.SectionType
+  public init()
+  public func resolve(config: SCALS.Document.SectionLayoutConfig) -> SCALS.SectionLayoutConfigResult
+}
+public struct HorizontalLayoutConfigResolver : SCALS.SectionLayoutConfigResolving {
+  public static let layoutType: SCALS.Document.SectionType
+  public init()
+  public func resolve(config: SCALS.Document.SectionLayoutConfig) -> SCALS.SectionLayoutConfigResult
+}
+public struct ListLayoutConfigResolver : SCALS.SectionLayoutConfigResolving {
+  public static let layoutType: SCALS.Document.SectionType
+  public init()
+  public func resolve(config: SCALS.Document.SectionLayoutConfig) -> SCALS.SectionLayoutConfigResult
+}
+public enum SectionLayoutConfigHelpers {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func resolveAlignment(_ alignment: SCALS.Document.SectionAlignment?) -> SCALS.IR.HorizontalAlignment
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func resolveItemDimensions(_ dimensions: SCALS.Document.ItemDimensions?) -> SCALS.IR.ItemDimensions?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func resolveDimensionValue(_ value: SCALS.Document.DimensionValue?) -> SCALS.IR.DimensionValue?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func resolveSnapBehavior(_ behavior: SCALS.Document.SnapBehavior?) -> SCALS.IR.SnapBehavior
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  public static func resolveColumns(_ columns: SCALS.Document.ColumnConfig?) -> SCALS.IR.ColumnConfig
+  #endif
+}
+@_Concurrency.MainActor final public class ObservableActionContext : Combine.ObservableObject {
+  @_Concurrency.MainActor final public let context: SCALS.ActionContext
+  @_Concurrency.MainActor public init(wrapping context: SCALS.ActionContext)
+  @_Concurrency.MainActor final public var stateStore: any SCALS.StateStoring {
+    get
+  }
+  @_Concurrency.MainActor final public var documentId: Swift.String {
+    get
+  }
+  @_Concurrency.MainActor final public var actionRegistry: SCALS.ActionRegistry {
+    get
+  }
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor final public var actionDelegate: (any SCALS.ScalsActionDelegate)? {
+    get
+    set
+  }
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor final public var dismissHandler: (() -> Swift.Void)? {
+    get
+    set
+  }
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor final public var alertHandler: ((SCALS.AlertConfiguration) -> Swift.Void)? {
+    get
+    set
+  }
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor final public var navigationHandler: ((Swift.String, SCALS.Document.NavigationPresentation?) -> Swift.Void)? {
+    get
+    set
+  }
+  #endif
+  @_Concurrency.MainActor final public func executeAction(id actionId: Swift.String) async
+  @_Concurrency.MainActor final public func executeAction(_ action: SCALS.Document.Action) async
+  @_Concurrency.MainActor final public func executeAction(type actionType: Swift.String, parameters: SCALS.ActionParameters) async
+  @_Concurrency.MainActor final public func dismiss()
+  @_Concurrency.MainActor final public func presentAlert(_ config: SCALS.AlertConfiguration)
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor final public func navigate(to destination: Swift.String, presentation: SCALS.Document.NavigationPresentation?)
+  #endif
+  @_Concurrency.MainActor final public func execute(_ binding: SCALS.Document.Component.ActionBinding)
+  @_Concurrency.MainActor final public func execute(_ actionId: Swift.String)
+  public typealias ObjectWillChangePublisher = Combine.ObservableObjectPublisher
+  @objc deinit
+}
+@_Concurrency.MainActor final public class ObservableStateStore : Combine.ObservableObject {
+  @_Concurrency.MainActor final public let store: any SCALS.StateStoring
+  @_Concurrency.MainActor public init()
+  @_Concurrency.MainActor public init(wrapping store: SCALS.StateStore)
+  @_Concurrency.MainActor public init(wrapping store: any SCALS.StateStoring)
+  @objc deinit
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor final public func get(_ keypath: Swift.String) -> Any?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor final public func get<T>(_ keypath: Swift.String, as type: T.Type = T.self) -> T?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor final public func getArray(_ keypath: Swift.String) -> [Any]?
+  #endif
+  @_Concurrency.MainActor final public func getArrayCount(_ keypath: Swift.String) -> Swift.Int
+  @_Concurrency.MainActor final public func arrayContains(_ keypath: Swift.String, value: Any) -> Swift.Bool
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor final public func set(_ keypath: Swift.String, value: Any?)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor final public func initialize(from state: [Swift.String : SCALS.Document.StateValue]?)
+  #endif
+  @_Concurrency.MainActor final public func appendToArray(_ keypath: Swift.String, value: Any)
+  @_Concurrency.MainActor final public func removeFromArray(_ keypath: Swift.String, value: Any)
+  @_Concurrency.MainActor final public func removeFromArray(_ keypath: Swift.String, at index: Swift.Int)
+  @_Concurrency.MainActor final public func toggleInArray(_ keypath: Swift.String, value: Any)
+  @_Concurrency.MainActor final public var hasDirtyPaths: Swift.Bool {
+    get
+  }
+  @_Concurrency.MainActor final public func consumeDirtyPaths() -> Swift.Set<Swift.String>
+  @_Concurrency.MainActor final public func isDirty(_ path: Swift.String) -> Swift.Bool
+  @_Concurrency.MainActor final public func clearDirtyPaths()
+  @discardableResult
+  @_Concurrency.MainActor final public func onStateChange(_ callback: @escaping SCALS.StateChangeCallback) -> Foundation.UUID
+  @_Concurrency.MainActor final public func removeStateChangeCallback(_ id: Foundation.UUID)
+  @_Concurrency.MainActor final public func removeAllCallbacks()
+  #if compiler(>=5.3) && $NonescapableTypes
+  @discardableResult
+  @_Concurrency.MainActor final public func observe<T>(_ keypath: Swift.String, as type: T.Type, callback: @escaping (T?) -> Swift.Void) -> Foundation.UUID where T : Swift.Decodable
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @discardableResult
+  @_Concurrency.MainActor final public func observe<T>(_ keypath: Swift.String, as type: T.Type, onChange: @escaping (_ old: T?, _ new: T?) -> Swift.Void) -> Foundation.UUID where T : Swift.Decodable
+  #endif
+  @_Concurrency.MainActor final public func snapshot() -> [Swift.String : Any]
+  @_Concurrency.MainActor final public func restore(from snapshot: [Swift.String : Any])
+  @_Concurrency.MainActor final public func evaluate(expression: Swift.String) -> Any
+  @_Concurrency.MainActor final public func interpolate(_ template: Swift.String) -> Swift.String
+  @_Concurrency.MainActor final public func binding(for keypath: Swift.String) -> SwiftUICore.Binding<Swift.String>
+  @_Concurrency.MainActor final public func boolBinding(for keypath: Swift.String) -> SwiftUICore.Binding<Swift.Bool>
+  @_Concurrency.MainActor final public func doubleBinding(for keypath: Swift.String) -> SwiftUICore.Binding<Swift.Double>
+  public typealias ObjectWillChangePublisher = Combine.ObservableObjectPublisher
+}
+extension SwiftUICore.View {
+  @_Concurrency.MainActor @preconcurrency public func measuringSize(_ size: SwiftUICore.Binding<CoreFoundation.CGSize>) -> some SwiftUICore.View
+  
+}
+extension SwiftUICore.View {
+  @_Concurrency.MainActor @preconcurrency public func applyTextStyle(from node: SCALS.TextNode) -> some SwiftUICore.View
+  
+  @_Concurrency.MainActor @preconcurrency public func applyTextStyle(from style: SCALS.ButtonStateStyle) -> some SwiftUICore.View
+  
+  @_Concurrency.MainActor @preconcurrency public func applyTextStyle(from node: SCALS.TextFieldNode) -> some SwiftUICore.View
+  
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency public func applyContainerStyle(padding: SCALS.IR.EdgeInsets, backgroundColor: SCALS.IR.Color, cornerRadius: CoreFoundation.CGFloat, border: SCALS.IR.Border?, shadow: SCALS.IR.Shadow?, width: SCALS.IR.DimensionValue? = nil, height: SCALS.IR.DimensionValue? = nil, minWidth: SCALS.IR.DimensionValue? = nil, minHeight: SCALS.IR.DimensionValue? = nil, maxWidth: SCALS.IR.DimensionValue? = nil, maxHeight: SCALS.IR.DimensionValue? = nil) -> some SwiftUICore.View
+  
+  #endif
+}
+@_Concurrency.MainActor @preconcurrency public struct DimensionFrameModifier : SwiftUICore.ViewModifier {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency public init(width: SCALS.IR.DimensionValue? = nil, height: SCALS.IR.DimensionValue? = nil, minWidth: SCALS.IR.DimensionValue? = nil, minHeight: SCALS.IR.DimensionValue? = nil, maxWidth: SCALS.IR.DimensionValue? = nil, maxHeight: SCALS.IR.DimensionValue? = nil)
+  #endif
+  @_Concurrency.MainActor @preconcurrency public func body(content: ScalsModules.DimensionFrameModifier.Content) -> some SwiftUICore.View
+  
+  public typealias Body = @_opaqueReturnTypeOf("$s12ScalsModules22DimensionFrameModifierV4body7contentQr7SwiftUI05_ViewE8_ContentVyACG_tF", 0) __
+}
+public protocol SwiftUIDesignSystemRenderer : SCALS.DesignSystemProvider {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor func render(_ node: SCALS.RenderNode, styleId: Swift.String?, context: ScalsModules.SwiftUIRenderContext) -> SwiftUICore.AnyView?
+  #endif
+}
+extension ScalsModules.SwiftUIDesignSystemRenderer {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor public func render(_ node: SCALS.RenderNode, styleId: Swift.String?, context: ScalsModules.SwiftUIRenderContext) -> SwiftUICore.AnyView?
+  #endif
+}
+extension SCALS.IR.Color {
+  public var swiftUI: SwiftUICore.Color {
+    get
+  }
+}
+extension SCALS.IR.EdgeInsets {
+  public var swiftUI: SwiftUICore.EdgeInsets {
+    get
+  }
+}
+extension SCALS.IR.Alignment {
+  public var swiftUI: SwiftUICore.Alignment {
+    get
+  }
+}
+extension SCALS.IR.HorizontalAlignment {
+  public var swiftUI: SwiftUICore.HorizontalAlignment {
+    get
+  }
+}
+extension SCALS.IR.VerticalAlignment {
+  public var swiftUI: SwiftUICore.VerticalAlignment {
+    get
+  }
+}
+extension SCALS.IR.UnitPoint {
+  public var swiftUI: SwiftUICore.UnitPoint {
+    get
+  }
+}
+extension SCALS.Document.FontWeight {
+  public var swiftUI: SwiftUICore.Font.Weight {
+    get
+  }
+}
+extension SCALS.Document.TextAlignment {
+  public var swiftUI: SwiftUICore.TextAlignment {
+    get
+  }
+}
+extension SCALS.IR.ColorScheme {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var swiftUI: SwiftUICore.ColorScheme? {
+    get
+  }
+  #endif
+}
+extension SCALS.IR.Style {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var swiftUIFont: SwiftUICore.Font? {
+    get
+  }
+  #endif
+}
+extension SCALS.Document.FontWeight {
+  public func toSwiftUI() -> SwiftUICore.Font.Weight
+}
+extension SCALS.Document.TextAlignment {
+  public func toSwiftUI() -> SwiftUICore.TextAlignment
+}
+extension SwiftUICore.Color {
+  public init(hex: Swift.String)
+}
+public struct SwiftUIRenderContext {
+  public let tree: SCALS.RenderTree
+  public let actionContext: SCALS.ActionContext
+  public let rendererRegistry: ScalsModules.SwiftUINodeRendererRegistry
+  public let designSystemProvider: (any SCALS.DesignSystemProvider)?
+  public let observableStateStore: ScalsModules.ObservableStateStore
+  public let observableActionContext: ScalsModules.ObservableActionContext
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor public init(tree: SCALS.RenderTree, actionContext: SCALS.ActionContext, rendererRegistry: ScalsModules.SwiftUINodeRendererRegistry, designSystemProvider: (any SCALS.DesignSystemProvider)? = nil, observableStateStore: ScalsModules.ObservableStateStore? = nil, observableActionContext: ScalsModules.ObservableActionContext? = nil)
+  #endif
+  @_Concurrency.MainActor public var stateStore: any SCALS.StateStoring {
+    get
+  }
+  @_Concurrency.MainActor public func render(_ node: SCALS.RenderNode) -> SwiftUICore.AnyView
+}
+public protocol SwiftUINodeRendering {
+  static var nodeKind: SCALS.RenderNodeKind { get }
+  @_Concurrency.MainActor func render(_ node: SCALS.RenderNode, context: ScalsModules.SwiftUIRenderContext) -> SwiftUICore.AnyView
+}
+final public class SwiftUINodeRendererRegistry : @unchecked Swift.Sendable {
+  public init()
+  final public func register<T>(_ renderer: T) where T : ScalsModules.SwiftUINodeRendering
+  final public func unregister(_ kind: SCALS.RenderNodeKind)
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func renderer(for kind: SCALS.RenderNodeKind) -> (any ScalsModules.SwiftUINodeRendering)?
+  #endif
+  final public func hasRenderer(for kind: SCALS.RenderNodeKind) -> Swift.Bool
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor final public func render(_ node: SCALS.RenderNode, context: ScalsModules.SwiftUIRenderContext) -> SwiftUICore.AnyView?
+  #endif
+  @objc deinit
+}
+public struct SwiftUIRenderer : SCALS.Renderer {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(actionContext: SCALS.ActionContext, rendererRegistry: ScalsModules.SwiftUINodeRendererRegistry, designSystemProvider: (any SCALS.DesignSystemProvider)? = nil)
+  #endif
+  public func render(_ tree: SCALS.RenderTree) -> some SwiftUICore.View
+  
+  public typealias Output = @_opaqueReturnTypeOf("$s12ScalsModules15SwiftUIRendererV6renderyQr5SCALS10RenderTreeVF", 0) __
+}
+public struct SectionLayoutTypeIdentifier : Swift.Hashable, Swift.Sendable {
+  public let rawValue: Swift.String
+  public init(rawValue: Swift.String)
+  public static func == (a: ScalsModules.SectionLayoutTypeIdentifier, b: ScalsModules.SectionLayoutTypeIdentifier) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
+    get
+  }
+}
+extension ScalsModules.SectionLayoutTypeIdentifier {
+  public static let list: ScalsModules.SectionLayoutTypeIdentifier
+  public static let grid: ScalsModules.SectionLayoutTypeIdentifier
+  public static let flow: ScalsModules.SectionLayoutTypeIdentifier
+  public static let horizontal: ScalsModules.SectionLayoutTypeIdentifier
+}
+public protocol SwiftUISectionLayoutRendering {
+  static var layoutTypeIdentifier: ScalsModules.SectionLayoutTypeIdentifier { get }
+  @_Concurrency.MainActor func render(section: SCALS.IR.Section, context: ScalsModules.SwiftUISectionRenderContext) -> SwiftUICore.AnyView
+}
+public struct SwiftUISectionRenderContext {
+  public let parentContext: ScalsModules.SwiftUIRenderContext
+  public init(parentContext: ScalsModules.SwiftUIRenderContext)
+  @_Concurrency.MainActor public func renderChild(_ node: SCALS.RenderNode) -> SwiftUICore.AnyView
+}
+final public class SwiftUISectionLayoutRendererRegistry : @unchecked Swift.Sendable {
+  public init()
+  final public func register<R>(_ renderer: R) where R : ScalsModules.SwiftUISectionLayoutRendering
+  final public func hasRenderer(for identifier: ScalsModules.SectionLayoutTypeIdentifier) -> Swift.Bool
+  #if compiler(>=5.3) && $NonescapableTypes
+  final public func renderer(for sectionType: SCALS.IR.SectionType) -> (any ScalsModules.SwiftUISectionLayoutRendering)?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor final public func render(section: SCALS.IR.Section, context: ScalsModules.SwiftUISectionRenderContext) -> SwiftUICore.AnyView?
+  #endif
+  @objc deinit
+}
+extension SCALS.IR.SectionType {
+  public var layoutTypeIdentifier: ScalsModules.SectionLayoutTypeIdentifier {
+    get
+  }
+}
+public struct ButtonNodeSwiftUIRenderer : ScalsModules.SwiftUINodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  @_Concurrency.MainActor public func render(_ node: SCALS.RenderNode, context: ScalsModules.SwiftUIRenderContext) -> SwiftUICore.AnyView
+}
+public struct ContainerNodeSwiftUIRenderer : ScalsModules.SwiftUINodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  @_Concurrency.MainActor public func render(_ node: SCALS.RenderNode, context: ScalsModules.SwiftUIRenderContext) -> SwiftUICore.AnyView
+}
+public struct DividerNodeSwiftUIRenderer : ScalsModules.SwiftUINodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  @_Concurrency.MainActor public func render(_ node: SCALS.RenderNode, context: ScalsModules.SwiftUIRenderContext) -> SwiftUICore.AnyView
+}
+public struct GradientNodeSwiftUIRenderer : ScalsModules.SwiftUINodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  @_Concurrency.MainActor public func render(_ node: SCALS.RenderNode, context: ScalsModules.SwiftUIRenderContext) -> SwiftUICore.AnyView
+}
+public struct ImageNodeSwiftUIRenderer : ScalsModules.SwiftUINodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  @_Concurrency.MainActor public func render(_ node: SCALS.RenderNode, context: ScalsModules.SwiftUIRenderContext) -> SwiftUICore.AnyView
+}
+public struct PageIndicatorNodeSwiftUIRenderer : ScalsModules.SwiftUINodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  @_Concurrency.MainActor public func render(_ node: SCALS.RenderNode, context: ScalsModules.SwiftUIRenderContext) -> SwiftUICore.AnyView
+}
+public struct SectionLayoutNodeSwiftUIRenderer : ScalsModules.SwiftUINodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(sectionLayoutRegistry: ScalsModules.SwiftUISectionLayoutRendererRegistry?)
+  #endif
+  @_Concurrency.MainActor public func render(_ node: SCALS.RenderNode, context: ScalsModules.SwiftUIRenderContext) -> SwiftUICore.AnyView
+}
+public struct ShapeNodeSwiftUIRenderer : ScalsModules.SwiftUINodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  @_Concurrency.MainActor public func render(_ node: SCALS.RenderNode, context: ScalsModules.SwiftUIRenderContext) -> SwiftUICore.AnyView
+}
+public struct SliderNodeSwiftUIRenderer : ScalsModules.SwiftUINodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  @_Concurrency.MainActor public func render(_ node: SCALS.RenderNode, context: ScalsModules.SwiftUIRenderContext) -> SwiftUICore.AnyView
+}
+public struct SpacerNodeSwiftUIRenderer : ScalsModules.SwiftUINodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  @_Concurrency.MainActor public func render(_ node: SCALS.RenderNode, context: ScalsModules.SwiftUIRenderContext) -> SwiftUICore.AnyView
+}
+public struct TextFieldNodeSwiftUIRenderer : ScalsModules.SwiftUINodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  @_Concurrency.MainActor public func render(_ node: SCALS.RenderNode, context: ScalsModules.SwiftUIRenderContext) -> SwiftUICore.AnyView
+}
+public struct TextNodeSwiftUIRenderer : ScalsModules.SwiftUINodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  @_Concurrency.MainActor public func render(_ node: SCALS.RenderNode, context: ScalsModules.SwiftUIRenderContext) -> SwiftUICore.AnyView
+}
+public struct ToggleNodeSwiftUIRenderer : ScalsModules.SwiftUINodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  @_Concurrency.MainActor public func render(_ node: SCALS.RenderNode, context: ScalsModules.SwiftUIRenderContext) -> SwiftUICore.AnyView
+}
+final public class UIKitAlertPresenter : SCALS.AlertPresenting {
+  public init()
+  final public func present(_ config: SCALS.AlertConfiguration)
+  @objc deinit
+}
+public enum AlertPresenter {
+  public static func present(_ config: SCALS.AlertConfiguration)
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency final public class BoundTextField : UIKit.UITextField, UIKit.UITextFieldDelegate {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency public init(bindingPath: Swift.String?, stateStore: SCALS.StateStore)
+  #endif
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency final public class BoundSwitch : UIKit.UISwitch {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency public init(bindingPath: Swift.String?, stateStore: SCALS.StateStore)
+  #endif
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency final public class BoundSlider : UIKit.UISlider {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency public init(bindingPath: Swift.String?, minValue: Swift.Double, maxValue: Swift.Double, stateStore: SCALS.StateStore)
+  #endif
+  @objc deinit
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency final public class GradientView : UIKit.UIView {
+  @_Concurrency.MainActor @preconcurrency @objc override final public class var layerClass: Swift.AnyClass {
+    @objc get
+  }
+  @_Concurrency.MainActor @preconcurrency public init(node: SCALS.GradientNode, colorScheme: SCALS.RenderColorScheme)
+  @objc deinit
+}
+extension SCALS.IR.Color {
+  public var uiColor: UIKit.UIColor {
+    get
+  }
+  public var toUIKit: UIKit.UIColor {
+    get
+  }
+}
+extension SCALS.IR.EdgeInsets {
+  public var uiKit: UIKit.NSDirectionalEdgeInsets {
+    get
+  }
+}
+extension SCALS.Document.FontWeight {
+  public var uiKit: UIKit.UIFont.Weight {
+    get
+  }
+}
+extension SCALS.Document.TextAlignment {
+  public var uiKit: UIKit.NSTextAlignment {
+    get
+  }
+}
+extension SCALS.IR.ColorScheme {
+  public var uiKit: UIKit.UIUserInterfaceStyle {
+    get
+  }
+}
+extension SCALS.IR.Alignment {
+  public func toUIKit(for layoutType: SCALS.ContainerNode.LayoutType) -> UIKit.UIStackView.Alignment
+}
+extension SCALS.IR.UnitPoint {
+  public var cgPoint: CoreFoundation.CGPoint {
+    get
+  }
+}
+extension SCALS.IR.Style {
+  #if compiler(>=5.3) && $NonescapableTypes
+  public var uiFont: UIKit.UIFont? {
+    get
+  }
+  #endif
+}
+extension SCALS.Document.FontWeight {
+  public func toUIKit() -> UIKit.UIFont.Weight
+}
+extension UIKit.UIColor {
+  convenience public init(hex: Swift.String)
+}
+final public class UIKitNodeRendererRegistry : @unchecked Swift.Sendable {
+  public init()
+  final public func register(_ renderer: any ScalsModules.UIKitNodeRendering)
+  final public func unregister(_ kind: SCALS.RenderNodeKind)
+  final public func render(_ node: SCALS.RenderNode, context: ScalsModules.UIKitRenderContext) -> UIKit.UIView
+  final public func hasRenderer(for kind: SCALS.RenderNodeKind) -> Swift.Bool
+  @objc deinit
+}
+final public class UIKitRenderContext : @unchecked Swift.Sendable {
+  final public let actionContext: SCALS.ActionContext
+  final public let stateStore: SCALS.StateStore
+  final public let colorScheme: SCALS.RenderColorScheme
+  public init(actionContext: SCALS.ActionContext, stateStore: SCALS.StateStore, colorScheme: SCALS.RenderColorScheme, registry: ScalsModules.UIKitNodeRendererRegistry)
+  final public func render(_ node: SCALS.RenderNode) -> UIKit.UIView
+  @objc deinit
+}
+public protocol UIKitNodeRendering {
+  static var nodeKind: SCALS.RenderNodeKind { get }
+  init()
+  func render(_ node: SCALS.RenderNode, context: ScalsModules.UIKitRenderContext) -> UIKit.UIView
+}
+public struct ButtonNodeRenderer : ScalsModules.UIKitNodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  public func render(_ node: SCALS.RenderNode, context: ScalsModules.UIKitRenderContext) -> UIKit.UIView
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency final public class ActionButton : UIKit.UIButton {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency public init(actionBinding: SCALS.Document.Component.ActionBinding?, actionContext: SCALS.ActionContext)
+  #endif
+  @objc deinit
+}
+public struct ContainerNodeRenderer : ScalsModules.UIKitNodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  public func render(_ node: SCALS.RenderNode, context: ScalsModules.UIKitRenderContext) -> UIKit.UIView
+}
+public struct DividerNodeRenderer : ScalsModules.UIKitNodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  public func render(_ node: SCALS.RenderNode, context: ScalsModules.UIKitRenderContext) -> UIKit.UIView
+}
+public struct GradientNodeRenderer : ScalsModules.UIKitNodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  public func render(_ node: SCALS.RenderNode, context: ScalsModules.UIKitRenderContext) -> UIKit.UIView
+}
+public struct ImageNodeRenderer : ScalsModules.UIKitNodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  public func render(_ node: SCALS.RenderNode, context: ScalsModules.UIKitRenderContext) -> UIKit.UIView
+}
+public struct PageIndicatorNodeRenderer : ScalsModules.UIKitNodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  public func render(_ node: SCALS.RenderNode, context: ScalsModules.UIKitRenderContext) -> UIKit.UIView
+}
+@_Concurrency.MainActor public protocol ScalsRendererDelegate : AnyObject {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor func cladsRenderer(_ view: ScalsModules.ScalsUIKitView, didChangeState path: Swift.String, from oldValue: Any?, to newValue: Any?)
+  #endif
+  @_Concurrency.MainActor func cladsRenderer(_ view: ScalsModules.ScalsUIKitView, willExecuteAction actionId: Swift.String)
+  @_Concurrency.MainActor func cladsRenderer(_ view: ScalsModules.ScalsUIKitView, didExecuteAction actionId: Swift.String)
+  @_Concurrency.MainActor func cladsRendererDidRequestDismiss(_ view: ScalsModules.ScalsUIKitView)
+  @_Concurrency.MainActor func cladsRenderer(_ view: ScalsModules.ScalsUIKitView, didRequestNavigation destination: Swift.String, presentation: SCALS.Document.NavigationPresentation)
+  @_Concurrency.MainActor func cladsRenderer(_ view: ScalsModules.ScalsUIKitView, didRequestAlert config: SCALS.AlertConfiguration)
+}
+extension ScalsModules.ScalsRendererDelegate {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor public func cladsRenderer(_ view: ScalsModules.ScalsUIKitView, didChangeState path: Swift.String, from oldValue: Any?, to newValue: Any?)
+  #endif
+  @_Concurrency.MainActor public func cladsRenderer(_ view: ScalsModules.ScalsUIKitView, willExecuteAction actionId: Swift.String)
+  @_Concurrency.MainActor public func cladsRenderer(_ view: ScalsModules.ScalsUIKitView, didExecuteAction actionId: Swift.String)
+  @_Concurrency.MainActor public func cladsRendererDidRequestDismiss(_ view: ScalsModules.ScalsUIKitView)
+  @_Concurrency.MainActor public func cladsRenderer(_ view: ScalsModules.ScalsUIKitView, didRequestNavigation destination: Swift.String, presentation: SCALS.Document.NavigationPresentation)
+  @_Concurrency.MainActor public func cladsRenderer(_ view: ScalsModules.ScalsUIKitView, didRequestAlert config: SCALS.AlertConfiguration)
+}
+@objc @_hasMissingDesignatedInitializers @_Concurrency.MainActor @preconcurrency final public class ScalsUIKitView : UIKit.UIView {
+  @_Concurrency.MainActor @preconcurrency weak final public var delegate: (any ScalsModules.ScalsRendererDelegate)?
+  @_Concurrency.MainActor @preconcurrency final public var stateSnapshot: [Swift.String : Any] {
+    get
+  }
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency final public func getTypedState<T>(_ type: T.Type = T.self) -> T? where T : Swift.Decodable
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency public init(document: SCALS.Document.Definition, actionRegistry: SCALS.ActionRegistry, componentRegistry: SCALS.ComponentResolverRegistry, rendererRegistry: ScalsModules.UIKitNodeRendererRegistry, actionDelegate: (any SCALS.ScalsActionDelegate)? = nil)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency convenience public init?(jsonString: Swift.String, actionRegistry: SCALS.ActionRegistry, componentRegistry: SCALS.ComponentResolverRegistry, rendererRegistry: ScalsModules.UIKitNodeRendererRegistry, actionDelegate: (any SCALS.ScalsActionDelegate)? = nil)
+  #endif
+  @objc deinit
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency final public func setState(_ path: Swift.String, value: Any?)
+  #endif
+  @_Concurrency.MainActor @preconcurrency final public func setTypedState<T>(_ value: T) where T : Swift.Encodable
+  @_Concurrency.MainActor @preconcurrency final public func setTypedState<T>(_ path: Swift.String, value: T) where T : Swift.Encodable
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency final public func getState(_ path: Swift.String) -> Any?
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency final public func getState<T>(_ path: Swift.String, as type: T.Type = T.self) -> T?
+  #endif
+  @_Concurrency.MainActor @preconcurrency final public func executeAction(_ actionId: Swift.String)
+  @_Concurrency.MainActor @preconcurrency final public func executeAction(_ binding: SCALS.Document.Component.ActionBinding)
+  @_Concurrency.MainActor @preconcurrency final public func rerender()
+}
+@objc @_Concurrency.MainActor @preconcurrency open class ScalsViewController : UIKit.UIViewController, ScalsModules.ScalsRendererDelegate {
+  @_Concurrency.MainActor @preconcurrency public var cladsView: ScalsModules.ScalsUIKitView! {
+    get
+  }
+  @_Concurrency.MainActor @preconcurrency public var stateSnapshot: [Swift.String : Any] {
+    get
+  }
+  @_Concurrency.MainActor @preconcurrency public init(document: SCALS.Document.Definition, actionRegistry: SCALS.ActionRegistry, componentRegistry: SCALS.ComponentResolverRegistry, rendererRegistry: ScalsModules.UIKitNodeRendererRegistry)
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency convenience public init?(jsonString: Swift.String, actionRegistry: SCALS.ActionRegistry, componentRegistry: SCALS.ComponentResolverRegistry, rendererRegistry: ScalsModules.UIKitNodeRendererRegistry)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency @objc required dynamic public init?(coder: Foundation.NSCoder)
+  #endif
+  @_Concurrency.MainActor @preconcurrency @objc override dynamic open func viewDidLoad()
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor open func cladsRenderer(_ view: ScalsModules.ScalsUIKitView, didChangeState path: Swift.String, from oldValue: Any?, to newValue: Any?)
+  #endif
+  @_Concurrency.MainActor open func cladsRenderer(_ view: ScalsModules.ScalsUIKitView, willExecuteAction actionId: Swift.String)
+  @_Concurrency.MainActor open func cladsRenderer(_ view: ScalsModules.ScalsUIKitView, didExecuteAction actionId: Swift.String)
+  @_Concurrency.MainActor open func cladsRendererDidRequestDismiss(_ view: ScalsModules.ScalsUIKitView)
+  @_Concurrency.MainActor open func cladsRenderer(_ view: ScalsModules.ScalsUIKitView, didRequestNavigation destination: Swift.String, presentation: SCALS.Document.NavigationPresentation)
+  @_Concurrency.MainActor open func cladsRenderer(_ view: ScalsModules.ScalsUIKitView, didRequestAlert config: SCALS.AlertConfiguration)
+  @objc deinit
+}
+public struct SectionLayoutNodeRenderer : ScalsModules.UIKitNodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  public func render(_ node: SCALS.RenderNode, context: ScalsModules.UIKitRenderContext) -> UIKit.UIView
+}
+public struct ShapeNodeRenderer : ScalsModules.UIKitNodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  public func render(_ node: SCALS.RenderNode, context: ScalsModules.UIKitRenderContext) -> UIKit.UIView
+}
+public struct SpacerNodeRenderer : ScalsModules.UIKitNodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  public func render(_ node: SCALS.RenderNode, context: ScalsModules.UIKitRenderContext) -> UIKit.UIView
+}
+public struct TextFieldNodeRenderer : ScalsModules.UIKitNodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  public func render(_ node: SCALS.RenderNode, context: ScalsModules.UIKitRenderContext) -> UIKit.UIView
+}
+public struct TextNodeRenderer : ScalsModules.UIKitNodeRendering {
+  public static let nodeKind: SCALS.RenderNodeKind
+  public init()
+  public func render(_ node: SCALS.RenderNode, context: ScalsModules.UIKitRenderContext) -> UIKit.UIView
+}
+public struct UIKitRenderer : SCALS.Renderer {
+  public init(actionContext: SCALS.ActionContext, registry: ScalsModules.UIKitNodeRendererRegistry)
+  public func render(_ tree: SCALS.RenderTree) -> UIKit.UIView
+  public typealias Output = UIKit.UIView
+}
+extension UIKit.UILabel {
+  @_Concurrency.MainActor @preconcurrency public func applyStyle(from node: SCALS.TextNode)
+}
+extension UIKit.UIButton {
+  @_Concurrency.MainActor @preconcurrency public func applyStyle(_ style: SCALS.ButtonStateStyle)
+}
+extension UIKit.UITextField {
+  @_Concurrency.MainActor @preconcurrency public func applyStyle(from node: SCALS.TextFieldNode)
+}
+@_Concurrency.MainActor @preconcurrency public struct ScalsRendererView : SwiftUICore.View {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency public init(document: SCALS.Document.Definition, actionRegistry: SCALS.ActionRegistry, componentRegistry: SCALS.ComponentResolverRegistry, swiftuiRendererRegistry: ScalsModules.SwiftUINodeRendererRegistry, customComponents: [any SCALS.CustomComponent.Type] = [], actionDelegate: (any SCALS.ScalsActionDelegate)? = nil, designSystemProvider: (any SCALS.DesignSystemProvider)? = nil)
+  #endif
+  @_Concurrency.MainActor @preconcurrency public var body: some SwiftUICore.View {
+    get
+  }
+  public typealias Body = @_opaqueReturnTypeOf("$s12ScalsModules0A12RendererViewV4bodyQrvp", 0) __
+}
+extension ScalsModules.ScalsRendererView {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency public init?(jsonString: Swift.String, actionRegistry: SCALS.ActionRegistry, componentRegistry: SCALS.ComponentResolverRegistry, swiftuiRendererRegistry: ScalsModules.SwiftUINodeRendererRegistry, customComponents: [any SCALS.CustomComponent.Type] = [], actionDelegate: (any SCALS.ScalsActionDelegate)? = nil, designSystemProvider: (any SCALS.DesignSystemProvider)? = nil, debugMode: Swift.Bool = false)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency public init(document: SCALS.Document.Definition, actionRegistry: SCALS.ActionRegistry, componentRegistry: SCALS.ComponentResolverRegistry, swiftuiRendererRegistry: ScalsModules.SwiftUINodeRendererRegistry, customComponents: [any SCALS.CustomComponent.Type] = [], actionDelegate: (any SCALS.ScalsActionDelegate)? = nil, designSystemProvider: (any SCALS.DesignSystemProvider)? = nil, debugMode: Swift.Bool)
+  #endif
+}
+public struct ScalsRendererBindingConfiguration<State> where State : Swift.Decodable, State : Swift.Encodable {
+  public var initialState: State?
+  public var onStateChange: ((_ path: Swift.String, _ oldValue: Any?, _ newValue: Any?) -> Swift.Void)?
+  public var onAction: ((_ actionId: Swift.String, _ parameters: [Swift.String : Any]) -> Swift.Void)?
+  public var actionRegistry: SCALS.ActionRegistry
+  public var componentRegistry: SCALS.ComponentResolverRegistry
+  public var swiftuiRendererRegistry: ScalsModules.SwiftUINodeRendererRegistry
+  public var customComponents: [any SCALS.CustomComponent.Type]
+  weak public var actionDelegate: (any SCALS.ScalsActionDelegate)?
+  public var debugMode: Swift.Bool
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init(initialState: State? = nil, onStateChange: ((_ path: Swift.String, _ oldValue: Any?, _ newValue: Any?) -> Swift.Void)? = nil, onAction: ((_ actionId: Swift.String, _ parameters: [Swift.String : Any]) -> Swift.Void)? = nil, actionRegistry: SCALS.ActionRegistry, componentRegistry: SCALS.ComponentResolverRegistry, swiftuiRendererRegistry: ScalsModules.SwiftUINodeRendererRegistry, customComponents: [any SCALS.CustomComponent.Type] = [], actionDelegate: (any SCALS.ScalsActionDelegate)? = nil, debugMode: Swift.Bool = false)
+  #endif
+}
+@_Concurrency.MainActor @preconcurrency public struct ScalsRendererBindingView<State> : SwiftUICore.View where State : Swift.Decodable, State : Swift.Encodable, State : Swift.Equatable {
+  @_Concurrency.MainActor @preconcurrency public init(document: SCALS.Document.Definition, state: SwiftUICore.Binding<State>, configuration: ScalsModules.ScalsRendererBindingConfiguration<State>)
+  @_Concurrency.MainActor @preconcurrency public var body: some SwiftUICore.View {
+    get
+  }
+  public typealias Body = @_opaqueReturnTypeOf("$s12ScalsModules0A19RendererBindingViewV4bodyQrvp", 0) __<State>
+}
+extension ScalsModules.ScalsRendererBindingView {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @_Concurrency.MainActor @preconcurrency public init?(jsonString: Swift.String, state: SwiftUICore.Binding<State>, configuration: ScalsModules.ScalsRendererBindingConfiguration<State>)
+  #endif
+}
+extension ScalsModules.ScalsRendererView {
+  @_Concurrency.MainActor @preconcurrency public var stateSnapshot: [Swift.String : Any] {
+    get
+  }
+}
+extension ScalsModules.ScalsRendererView {
+  @_Concurrency.MainActor @preconcurrency public func measuringSize(_ size: SwiftUICore.Binding<CoreFoundation.CGSize>) -> some SwiftUICore.View
+  
+}
+extension ScalsModules.ScalsActionsModifier : Swift.Sendable {}
+extension ScalsModules.ScalsStyleModifier : Swift.Sendable {}
+extension ScalsModules.ScalsRendererView : Swift.Sendable {}
+extension ScalsModules.ScalsRendererBindingView : Swift.Sendable {}
+extension ScalsModules.ObservableActionContext : Swift.Sendable {}
+extension ScalsModules.ObservableStateStore : Swift.Sendable {}
+extension ScalsModules.DimensionFrameModifier : Swift.Sendable {}

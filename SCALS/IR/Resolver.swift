@@ -71,6 +71,9 @@ public struct Resolver {
     /// Resolve the document into a render tree (without dependency tracking)
     ///
     /// Creates a new StateStore and initializes it from the document state.
+    ///
+    /// **Thread Safety**: Must be called from main thread as resolution interacts
+    /// with ViewNode creation and component resolvers (@MainActor).
     @MainActor
     public func resolve() throws -> RenderTree {
         let stateStore = StateStore()
@@ -82,6 +85,9 @@ public struct Resolver {
     ///
     /// This allows injecting a pre-configured StateStore for testing,
     /// or reusing an existing StateStore.
+    ///
+    /// **Thread Safety**: Must be called from main thread as resolution interacts
+    /// with ViewNode creation and component resolvers (@MainActor).
     ///
     /// - Parameter stateStore: The state store to use. Document state will be
     ///   merged into this store (existing values are preserved, document values added).
@@ -120,13 +126,17 @@ public struct Resolver {
         return RenderTree(
             root: rootNode,
             stateStore: stateStore,
-            actions: actions
+            actions: actions,
+            irVersion: .currentIR
         )
     }
 
     /// Resolve the document with full dependency tracking
     ///
     /// Creates a new StateStore and initializes it from the document state.
+    ///
+    /// **Thread Safety**: This method MUST be called from the main thread as it
+    /// builds the view tree and interacts with ViewTreeUpdater (which is @MainActor).
     @MainActor
     public func resolveWithTracking() throws -> ResolutionResult {
         let stateStore = StateStore()
@@ -137,6 +147,9 @@ public struct Resolver {
     /// Resolve the document with full dependency tracking using a provided StateStore.
     ///
     /// This allows injecting a pre-configured StateStore for testing.
+    ///
+    /// **Thread Safety**: This method MUST be called from the main thread as it
+    /// builds the view tree and interacts with ViewTreeUpdater (which is @MainActor).
     ///
     /// - Parameter stateStore: The state store to use.
     /// - Parameter initializeFromDocument: Whether to initialize state from the document.
@@ -166,7 +179,8 @@ public struct Resolver {
         let renderTree = RenderTree(
             root: rootNode,
             stateStore: stateStore,
-            actions: actions
+            actions: actions,
+            irVersion: .currentIR
         )
 
         // Set up the view tree and attach to state store
@@ -184,9 +198,9 @@ public struct Resolver {
 
     @MainActor
     private func resolveRoot(_ root: Document.RootComponent, context: ResolutionContext) throws -> RootNode {
-        let backgroundColor: IR.Color? = root.backgroundColor.map { IR.Color(hex: $0) }
+        let backgroundColor = root.backgroundColor.map { IR.Color(hex: $0) } ?? .clear
         let colorScheme = ColorSchemeConverter.convert(root.colorScheme)
-        let style = context.styleResolver.resolve(root.styleId)
+        let resolvedStyle = context.styleResolver.resolve(root.styleId)
 
         let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
         let children = try root.children.map { child -> RenderNode in
@@ -197,9 +211,18 @@ public struct Resolver {
             backgroundColor: backgroundColor,
             edgeInsets: EdgeInsetsConverter.convert(root.edgeInsets),
             colorScheme: colorScheme,
-            style: style,
             actions: LifecycleActions(from: root.actions),
-            children: children
+            children: children,
+            padding: IR.EdgeInsets(
+                from: nil,
+                mergingTop: resolvedStyle.paddingTop ?? 0,
+                mergingBottom: resolvedStyle.paddingBottom ?? 0,
+                mergingLeading: resolvedStyle.paddingLeading ?? 0,
+                mergingTrailing: resolvedStyle.paddingTrailing ?? 0
+            ),
+            cornerRadius: resolvedStyle.cornerRadius ?? 0,
+            shadow: IR.Shadow(from: resolvedStyle),
+            border: IR.Border(from: resolvedStyle)
         )
     }
 
@@ -208,17 +231,16 @@ public struct Resolver {
         _ root: Document.RootComponent,
         context: ResolutionContext
     ) throws -> (RootNode, ViewNode) {
-        let backgroundColor: IR.Color? = root.backgroundColor.map { IR.Color(hex: $0) }
+        let backgroundColor = root.backgroundColor.map { IR.Color(hex: $0) } ?? .clear
         let colorScheme = ColorSchemeConverter.convert(root.colorScheme)
-        let style = context.styleResolver.resolve(root.styleId)
+        let resolvedStyle = context.styleResolver.resolve(root.styleId)
 
         // Create view node for root
         let viewNode = ViewNode(
             id: "root",
             nodeType: .root(RootNodeData(
                 backgroundColor: root.backgroundColor,
-                colorScheme: colorScheme,
-                style: style
+                colorScheme: colorScheme
             ))
         )
 
@@ -244,9 +266,18 @@ public struct Resolver {
             backgroundColor: backgroundColor,
             edgeInsets: EdgeInsetsConverter.convert(root.edgeInsets),
             colorScheme: colorScheme,
-            style: style,
             actions: LifecycleActions(from: root.actions),
-            children: renderChildren
+            children: renderChildren,
+            padding: IR.EdgeInsets(
+                from: nil,
+                mergingTop: resolvedStyle.paddingTop ?? 0,
+                mergingBottom: resolvedStyle.paddingBottom ?? 0,
+                mergingLeading: resolvedStyle.paddingLeading ?? 0,
+                mergingTrailing: resolvedStyle.paddingTrailing ?? 0
+            ),
+            cornerRadius: resolvedStyle.cornerRadius ?? 0,
+            shadow: IR.Shadow(from: resolvedStyle),
+            border: IR.Border(from: resolvedStyle)
         )
 
         return (rootRenderNode, viewNode)

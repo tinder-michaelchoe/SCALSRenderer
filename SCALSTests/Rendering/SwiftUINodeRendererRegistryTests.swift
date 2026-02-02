@@ -9,6 +9,7 @@ import Foundation
 import Testing
 import SwiftUI
 @testable import SCALS
+@testable import ScalsModules
 
 // MARK: - Test Mock SwiftUI Renderers
 
@@ -172,9 +173,7 @@ struct SwiftUINodeRendererRegistryRenderingTests {
         
         let context = createSwiftUITestContext(registry: registry)
         let textNode = RenderNode.text(TextNode(
-            content: "Test",
-            style: IR.Style(),
-            padding: .zero
+            content: "Test"
         ))
         
         let view = registry.render(textNode, context: context)
@@ -218,9 +217,7 @@ struct SwiftUINodeRendererRegistryRenderingTests {
         
         let context = createSwiftUITestContext(registry: registry)
         let textNode = RenderNode.text(TextNode(
-            content: "Test",
-            style: IR.Style(),
-            padding: .zero
+            content: "Test"
         ))
         
         let view = registry.render(textNode, context: context)
@@ -246,9 +243,7 @@ struct SwiftUIMockRenderersProtocolTests {
         
         let context = createSwiftUITestContext(registry: registry)
         let textNode = RenderNode.text(TextNode(
-            content: "Test",
-            style: IR.Style(),
-            padding: .zero
+            content: "Test"
         ))
         
         let renderer = MockSwiftUITextRenderer()
@@ -304,9 +299,7 @@ struct SwiftUINodeRendererRegistryEdgeCaseTests {
         
         let context = createSwiftUITestContext(registry: registry)
         let textNode = RenderNode.text(TextNode(
-            content: "Test",
-            style: IR.Style(),
-            padding: .zero
+            content: "Test"
         ))
         
         // Context.render should delegate to registry

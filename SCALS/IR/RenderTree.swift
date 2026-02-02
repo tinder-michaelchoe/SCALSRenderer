@@ -17,6 +17,12 @@ import Foundation
 /// The root of the resolved render tree
 /// All styles resolved, data bound, references validated
 public struct RenderTree {
+    /// IR schema version used to create this tree.
+    ///
+    /// This version indicates the IR contract used for rendering.
+    /// Renderers can check this to ensure compatibility.
+    public let irVersion: DocumentVersion
+
     /// The root node containing all children
     public let root: RootNode
 
@@ -26,7 +32,13 @@ public struct RenderTree {
     /// Action definitions for execution
     public let actions: [String: ActionDefinition]
 
-    public init(root: RootNode, stateStore: StateStore, actions: [String: ActionDefinition]) {
+    public init(
+        root: RootNode,
+        stateStore: StateStore,
+        actions: [String: ActionDefinition],
+        irVersion: DocumentVersion = .currentIR
+    ) {
+        self.irVersion = irVersion
         self.root = root
         self.stateStore = stateStore
         self.actions = actions
@@ -43,27 +55,39 @@ public typealias RenderColorScheme = IR.ColorScheme
 
 /// The resolved root container
 public struct RootNode {
-    public let backgroundColor: IR.Color?
+    public let backgroundColor: IR.Color
     public let edgeInsets: IR.PositionedEdgeInsets?
     public let colorScheme: IR.ColorScheme
-    public let style: IR.Style
     public let actions: LifecycleActions
     public let children: [RenderNode]
 
+    // MARK: - Flattened Style Properties
+
+    public let padding: IR.EdgeInsets
+    public let cornerRadius: CGFloat
+    public let shadow: IR.Shadow?
+    public let border: IR.Border?
+
     public init(
-        backgroundColor: IR.Color? = nil,
+        backgroundColor: IR.Color = .clear,
         edgeInsets: IR.PositionedEdgeInsets? = nil,
         colorScheme: IR.ColorScheme = .system,
-        style: IR.Style = IR.Style(),
         actions: LifecycleActions = LifecycleActions(),
-        children: [RenderNode] = []
+        children: [RenderNode] = [],
+        padding: IR.EdgeInsets = .zero,
+        cornerRadius: CGFloat = 0,
+        shadow: IR.Shadow? = nil,
+        border: IR.Border? = nil
     ) {
         self.backgroundColor = backgroundColor
         self.edgeInsets = edgeInsets
         self.colorScheme = colorScheme
-        self.style = style
         self.actions = actions
         self.children = children
+        self.padding = padding
+        self.cornerRadius = cornerRadius
+        self.shadow = shadow
+        self.border = border
     }
 }
 
@@ -137,6 +161,7 @@ public protocol CustomRenderNode: Sendable {
 // MARK: - Render Node
 
 /// A node in the render tree - either a container or a leaf component
+@frozen
 public enum RenderNode {
     case container(ContainerNode)
     case sectionLayout(SectionLayoutNode)
@@ -180,6 +205,7 @@ public enum RenderNode {
 /// A layout container (VStack, HStack, ZStack)
 public struct ContainerNode {
     /// Layout type for containers
+    @frozen
     public enum LayoutType {
         case vstack
         case hstack
@@ -190,26 +216,68 @@ public struct ContainerNode {
     public let layoutType: LayoutType
     public let alignment: IR.Alignment
     public let spacing: CGFloat
-    public let padding: IR.EdgeInsets
-    public let style: IR.Style
     public let children: [RenderNode]
+
+    // MARK: - Flattened Style Properties (fully resolved)
+
+    /// Padding around the container content (fully resolved, no merging needed)
+    public let padding: IR.EdgeInsets
+
+    /// Background color (always present, use .clear for transparent)
+    public let backgroundColor: IR.Color
+
+    /// Corner radius for rounded corners
+    public let cornerRadius: CGFloat
+
+    /// Shadow effect (nil if no shadow)
+    public let shadow: IR.Shadow?
+
+    /// Border effect (nil if no border)
+    public let border: IR.Border?
+
+    // MARK: - Sizing
+
+    public let width: IR.DimensionValue?
+    public let height: IR.DimensionValue?
+    public let minWidth: IR.DimensionValue?
+    public let minHeight: IR.DimensionValue?
+    public let maxWidth: IR.DimensionValue?
+    public let maxHeight: IR.DimensionValue?
 
     public init(
         id: String? = nil,
         layoutType: LayoutType = .vstack,
         alignment: IR.Alignment = .center,
         spacing: CGFloat = 0,
+        children: [RenderNode] = [],
         padding: IR.EdgeInsets = .zero,
-        style: IR.Style = IR.Style(),
-        children: [RenderNode] = []
+        backgroundColor: IR.Color = .clear,
+        cornerRadius: CGFloat = 0,
+        shadow: IR.Shadow? = nil,
+        border: IR.Border? = nil,
+        width: IR.DimensionValue? = nil,
+        height: IR.DimensionValue? = nil,
+        minWidth: IR.DimensionValue? = nil,
+        minHeight: IR.DimensionValue? = nil,
+        maxWidth: IR.DimensionValue? = nil,
+        maxHeight: IR.DimensionValue? = nil
     ) {
         self.id = id
         self.layoutType = layoutType
         self.alignment = alignment
         self.spacing = spacing
-        self.padding = padding
-        self.style = style
         self.children = children
+        self.padding = padding
+        self.backgroundColor = backgroundColor
+        self.cornerRadius = cornerRadius
+        self.shadow = shadow
+        self.border = border
+        self.width = width
+        self.height = height
+        self.minWidth = minWidth
+        self.minHeight = minHeight
+        self.maxWidth = maxWidth
+        self.maxHeight = maxHeight
     }
 }
 
@@ -240,12 +308,45 @@ public struct TextNode {
     public let id: String?
     public let content: String
     public let styleId: String?
-    public let style: IR.Style
-    public let padding: IR.EdgeInsets
+
     /// If set, the content should be read dynamically from StateStore at this path
     public let bindingPath: String?
     /// If set, this template should be interpolated with StateStore values (e.g., "Hello ${name}")
     public let bindingTemplate: String?
+
+    // MARK: - Flattened Style Properties (fully resolved)
+
+    /// Padding around the text
+    public let padding: IR.EdgeInsets
+
+    /// Text color
+    public let textColor: IR.Color
+
+    /// Font size in points
+    public let fontSize: CGFloat
+
+    /// Font weight
+    public let fontWeight: IR.FontWeight
+
+    /// Text alignment
+    public let textAlignment: IR.TextAlignment
+
+    /// Background color
+    public let backgroundColor: IR.Color
+
+    /// Corner radius for background
+    public let cornerRadius: CGFloat
+
+    /// Shadow effect (nil if no shadow)
+    public let shadow: IR.Shadow?
+
+    /// Border effect (nil if no border)
+    public let border: IR.Border?
+
+    // MARK: - Sizing
+
+    public let width: IR.DimensionValue?
+    public let height: IR.DimensionValue?
 
     /// Whether this text node has dynamic content that should be observed
     public var isDynamic: Bool {
@@ -256,33 +357,118 @@ public struct TextNode {
         id: String? = nil,
         content: String,
         styleId: String? = nil,
-        style: IR.Style = IR.Style(),
-        padding: IR.EdgeInsets = .zero,
         bindingPath: String? = nil,
-        bindingTemplate: String? = nil
+        bindingTemplate: String? = nil,
+        padding: IR.EdgeInsets = .zero,
+        textColor: IR.Color = .black,
+        fontSize: CGFloat = 17,
+        fontWeight: IR.FontWeight = .regular,
+        textAlignment: IR.TextAlignment = .leading,
+        backgroundColor: IR.Color = .clear,
+        cornerRadius: CGFloat = 0,
+        shadow: IR.Shadow? = nil,
+        border: IR.Border? = nil,
+        width: IR.DimensionValue? = nil,
+        height: IR.DimensionValue? = nil
     ) {
         self.id = id
         self.content = content
         self.styleId = styleId
-        self.style = style
-        self.padding = padding
         self.bindingPath = bindingPath
         self.bindingTemplate = bindingTemplate
+        self.padding = padding
+        self.textColor = textColor
+        self.fontSize = fontSize
+        self.fontWeight = fontWeight
+        self.textAlignment = textAlignment
+        self.backgroundColor = backgroundColor
+        self.cornerRadius = cornerRadius
+        self.shadow = shadow
+        self.border = border
+        self.width = width
+        self.height = height
     }
 }
 
 // MARK: - Button Node
 
-/// Resolved styles for different button states
-public struct ButtonStyles {
-    public let normal: IR.Style
-    public let selected: IR.Style?
-    public let disabled: IR.Style?
+/// Fully resolved style for a single button state.
+///
+/// Contains all visual properties needed to render a button in a specific state.
+/// This replaces the old IR.Style-based ButtonStyles for flattened IR.
+public struct ButtonStateStyle: Sendable {
+    // Typography
+    public let textColor: IR.Color
+    public let fontSize: CGFloat
+    public let fontWeight: IR.FontWeight
+
+    // Background & Border
+    public let backgroundColor: IR.Color
+    public let cornerRadius: CGFloat
+    public let border: IR.Border?
+
+    // Shadow
+    public let shadow: IR.Shadow?
+
+    // Image
+    public let tintColor: IR.Color?
+
+    // Sizing
+    public let width: IR.DimensionValue?
+    public let height: IR.DimensionValue?
+    public let minWidth: IR.DimensionValue?
+    public let minHeight: IR.DimensionValue?
+    public let maxWidth: IR.DimensionValue?
+    public let maxHeight: IR.DimensionValue?
+
+    // Padding
+    public let padding: IR.EdgeInsets
 
     public init(
-        normal: IR.Style = IR.Style(),
-        selected: IR.Style? = nil,
-        disabled: IR.Style? = nil
+        textColor: IR.Color = .black,
+        fontSize: CGFloat = 17,
+        fontWeight: IR.FontWeight = .regular,
+        backgroundColor: IR.Color = .clear,
+        cornerRadius: CGFloat = 0,
+        border: IR.Border? = nil,
+        shadow: IR.Shadow? = nil,
+        tintColor: IR.Color? = nil,
+        width: IR.DimensionValue? = nil,
+        height: IR.DimensionValue? = nil,
+        minWidth: IR.DimensionValue? = nil,
+        minHeight: IR.DimensionValue? = nil,
+        maxWidth: IR.DimensionValue? = nil,
+        maxHeight: IR.DimensionValue? = nil,
+        padding: IR.EdgeInsets = .zero
+    ) {
+        self.textColor = textColor
+        self.fontSize = fontSize
+        self.fontWeight = fontWeight
+        self.backgroundColor = backgroundColor
+        self.cornerRadius = cornerRadius
+        self.border = border
+        self.shadow = shadow
+        self.tintColor = tintColor
+        self.width = width
+        self.height = height
+        self.minWidth = minWidth
+        self.minHeight = minHeight
+        self.maxWidth = maxWidth
+        self.maxHeight = maxHeight
+        self.padding = padding
+    }
+}
+
+/// Resolved styles for different button states
+public struct ButtonStyles: Sendable {
+    public let normal: ButtonStateStyle
+    public let selected: ButtonStateStyle?
+    public let disabled: ButtonStateStyle?
+
+    public init(
+        normal: ButtonStateStyle = ButtonStateStyle(),
+        selected: ButtonStateStyle? = nil,
+        disabled: ButtonStateStyle? = nil
     ) {
         self.normal = normal
         self.selected = selected
@@ -290,7 +476,7 @@ public struct ButtonStyles {
     }
 
     /// Get the appropriate style for the current state
-    public func style(isSelected: Bool, isDisabled: Bool = false) -> IR.Style {
+    public func style(isSelected: Bool, isDisabled: Bool = false) -> ButtonStateStyle {
         if isDisabled, let disabled = disabled {
             return disabled
         }
@@ -304,6 +490,7 @@ public struct ButtonStyles {
 /// A button component
 public struct ButtonNode {
     /// Image placement relative to text
+    @frozen
     public enum ImagePlacement: String, Codable {
         case leading
         case trailing
@@ -312,6 +499,7 @@ public struct ButtonNode {
     }
 
     /// Button shape affecting corner radius
+    @frozen
     public enum ButtonShape: String, Codable {
         case circle        // cornerRadius = min(width, height) / 2
         case capsule       // cornerRadius = height / 2
@@ -334,8 +522,8 @@ public struct ButtonNode {
     // Button shape
     public let buttonShape: ButtonShape?
 
-    /// Convenience accessor for backward compatibility
-    public var style: IR.Style { styles.normal }
+    /// Convenience accessor for the normal state style
+    public var style: ButtonStateStyle { styles.normal }
 
     public init(
         id: String? = nil,
@@ -371,21 +559,45 @@ public struct TextFieldNode {
     public let id: String?
     public let placeholder: String
     public let styleId: String?
-    public let style: IR.Style
     public let bindingPath: String?  // State path to bind to
+
+    // MARK: - Flattened Style Properties
+
+    public let textColor: IR.Color
+    public let fontSize: CGFloat
+    public let backgroundColor: IR.Color
+    public let cornerRadius: CGFloat
+    public let border: IR.Border?
+    public let padding: IR.EdgeInsets
+    public let width: IR.DimensionValue?
+    public let height: IR.DimensionValue?
 
     public init(
         id: String? = nil,
         placeholder: String = "",
         styleId: String? = nil,
-        style: IR.Style = IR.Style(),
-        bindingPath: String? = nil
+        bindingPath: String? = nil,
+        textColor: IR.Color = .black,
+        fontSize: CGFloat = 17,
+        backgroundColor: IR.Color = .clear,
+        cornerRadius: CGFloat = 0,
+        border: IR.Border? = nil,
+        padding: IR.EdgeInsets = .zero,
+        width: IR.DimensionValue? = nil,
+        height: IR.DimensionValue? = nil
     ) {
         self.id = id
         self.placeholder = placeholder
         self.styleId = styleId
-        self.style = style
         self.bindingPath = bindingPath
+        self.textColor = textColor
+        self.fontSize = fontSize
+        self.backgroundColor = backgroundColor
+        self.cornerRadius = cornerRadius
+        self.border = border
+        self.padding = padding
+        self.width = width
+        self.height = height
     }
 }
 
@@ -396,18 +608,30 @@ public struct ToggleNode {
     public let id: String?
     public let styleId: String?
     public let bindingPath: String?  // State path to bind to
-    public let style: IR.Style
+
+    // MARK: - Flattened Style Properties
+
+    public let tintColor: IR.Color?
+    public let padding: IR.EdgeInsets
+    public let width: IR.DimensionValue?
+    public let height: IR.DimensionValue?
 
     public init(
         id: String? = nil,
         styleId: String? = nil,
         bindingPath: String? = nil,
-        style: IR.Style = IR.Style()
+        tintColor: IR.Color? = nil,
+        padding: IR.EdgeInsets = .zero,
+        width: IR.DimensionValue? = nil,
+        height: IR.DimensionValue? = nil
     ) {
         self.id = id
         self.styleId = styleId
         self.bindingPath = bindingPath
-        self.style = style
+        self.tintColor = tintColor
+        self.padding = padding
+        self.width = width
+        self.height = height
     }
 }
 
@@ -420,7 +644,13 @@ public struct SliderNode {
     public let bindingPath: String?  // State path to bind to (Double value 0.0-1.0)
     public let minValue: Double
     public let maxValue: Double
-    public let style: IR.Style
+
+    // MARK: - Flattened Style Properties
+
+    public let tintColor: IR.Color?
+    public let padding: IR.EdgeInsets
+    public let width: IR.DimensionValue?
+    public let height: IR.DimensionValue?
 
     public init(
         id: String? = nil,
@@ -428,14 +658,20 @@ public struct SliderNode {
         bindingPath: String? = nil,
         minValue: Double = 0.0,
         maxValue: Double = 1.0,
-        style: IR.Style = IR.Style()
+        tintColor: IR.Color? = nil,
+        padding: IR.EdgeInsets = .zero,
+        width: IR.DimensionValue? = nil,
+        height: IR.DimensionValue? = nil
     ) {
         self.id = id
         self.styleId = styleId
         self.bindingPath = bindingPath
         self.minValue = minValue
         self.maxValue = maxValue
-        self.style = style
+        self.tintColor = tintColor
+        self.padding = padding
+        self.width = width
+        self.height = height
     }
 }
 
@@ -444,6 +680,7 @@ public struct SliderNode {
 /// An image component
 public struct ImageNode {
     /// Image source type
+    @frozen
     public enum Source {
         case sfsymbol(name: String)
         case asset(name: String)
@@ -461,8 +698,22 @@ public struct ImageNode {
     /// Loading indicator shown while image is being fetched (default: ProgressView spinner)
     public let loading: Source?
     public let styleId: String?
-    public let style: IR.Style
     public let onTap: Document.Component.ActionBinding?
+
+    // MARK: - Flattened Style Properties
+
+    public let tintColor: IR.Color?
+    public let backgroundColor: IR.Color
+    public let cornerRadius: CGFloat
+    public let border: IR.Border?
+    public let shadow: IR.Shadow?
+    public let padding: IR.EdgeInsets
+    public let width: IR.DimensionValue?
+    public let height: IR.DimensionValue?
+    public let minWidth: IR.DimensionValue?
+    public let minHeight: IR.DimensionValue?
+    public let maxWidth: IR.DimensionValue?
+    public let maxHeight: IR.DimensionValue?
 
     public init(
         id: String? = nil,
@@ -470,16 +721,38 @@ public struct ImageNode {
         placeholder: Source? = nil,
         loading: Source? = nil,
         styleId: String? = nil,
-        style: IR.Style = IR.Style(),
-        onTap: Document.Component.ActionBinding? = nil
+        onTap: Document.Component.ActionBinding? = nil,
+        tintColor: IR.Color? = nil,
+        backgroundColor: IR.Color = .clear,
+        cornerRadius: CGFloat = 0,
+        border: IR.Border? = nil,
+        shadow: IR.Shadow? = nil,
+        padding: IR.EdgeInsets = .zero,
+        width: IR.DimensionValue? = nil,
+        height: IR.DimensionValue? = nil,
+        minWidth: IR.DimensionValue? = nil,
+        minHeight: IR.DimensionValue? = nil,
+        maxWidth: IR.DimensionValue? = nil,
+        maxHeight: IR.DimensionValue? = nil
     ) {
         self.id = id
         self.source = source
         self.placeholder = placeholder
         self.loading = loading
         self.styleId = styleId
-        self.style = style
         self.onTap = onTap
+        self.tintColor = tintColor
+        self.backgroundColor = backgroundColor
+        self.cornerRadius = cornerRadius
+        self.border = border
+        self.shadow = shadow
+        self.padding = padding
+        self.width = width
+        self.height = height
+        self.minWidth = minWidth
+        self.minHeight = minHeight
+        self.maxWidth = maxWidth
+        self.maxHeight = maxHeight
     }
 }
 
@@ -488,6 +761,7 @@ public struct ImageNode {
 /// A gradient overlay component
 public struct GradientNode {
     /// Gradient type
+    @frozen
     public enum GradientType {
         case linear
         case radial
@@ -498,7 +772,13 @@ public struct GradientNode {
     public let colors: [ColorStop]
     public let startPoint: IR.UnitPoint
     public let endPoint: IR.UnitPoint
-    public let style: IR.Style
+
+    // MARK: - Flattened Style Properties
+
+    public let cornerRadius: CGFloat
+    public let padding: IR.EdgeInsets
+    public let width: IR.DimensionValue?
+    public let height: IR.DimensionValue?
 
     public init(
         id: String? = nil,
@@ -506,14 +786,20 @@ public struct GradientNode {
         colors: [ColorStop],
         startPoint: IR.UnitPoint = .bottom,
         endPoint: IR.UnitPoint = .top,
-        style: IR.Style = IR.Style()
+        cornerRadius: CGFloat = 0,
+        padding: IR.EdgeInsets = .zero,
+        width: IR.DimensionValue? = nil,
+        height: IR.DimensionValue? = nil
     ) {
         self.id = id
         self.gradientType = gradientType
         self.colors = colors
         self.startPoint = startPoint
         self.endPoint = endPoint
-        self.style = style
+        self.cornerRadius = cornerRadius
+        self.padding = padding
+        self.width = width
+        self.height = height
     }
 }
 
@@ -522,6 +808,7 @@ public struct GradientNode {
 /// A shape component (rectangle, circle, roundedRectangle, capsule, ellipse)
 public struct ShapeNode {
     /// Shape type with associated values for parameters like cornerRadius
+    @frozen
     public enum ShapeType: Hashable, Sendable {
         case rectangle
         case circle
@@ -532,16 +819,34 @@ public struct ShapeNode {
 
     public let id: String?
     public let shapeType: ShapeType
-    public let style: IR.Style
+
+    // MARK: - Flattened Style Properties
+
+    public let fillColor: IR.Color
+    public let strokeColor: IR.Color?
+    public let strokeWidth: CGFloat
+    public let padding: IR.EdgeInsets
+    public let width: IR.DimensionValue?
+    public let height: IR.DimensionValue?
 
     public init(
         id: String? = nil,
         shapeType: ShapeType,
-        style: IR.Style = IR.Style()
+        fillColor: IR.Color = .clear,
+        strokeColor: IR.Color? = nil,
+        strokeWidth: CGFloat = 0,
+        padding: IR.EdgeInsets = .zero,
+        width: IR.DimensionValue? = nil,
+        height: IR.DimensionValue? = nil
     ) {
         self.id = id
         self.shapeType = shapeType
-        self.style = style
+        self.fillColor = fillColor
+        self.strokeColor = strokeColor
+        self.strokeWidth = strokeWidth
+        self.padding = padding
+        self.width = width
+        self.height = height
     }
 }
 
@@ -557,7 +862,12 @@ public struct PageIndicatorNode {
     public let dotSpacing: CGFloat
     public let dotColor: IR.Color
     public let currentDotColor: IR.Color
-    public let style: IR.Style
+
+    // MARK: - Flattened Style Properties
+
+    public let padding: IR.EdgeInsets
+    public let width: IR.DimensionValue?
+    public let height: IR.DimensionValue?
 
     public init(
         id: String? = nil,
@@ -568,7 +878,9 @@ public struct PageIndicatorNode {
         dotSpacing: CGFloat = 8,
         dotColor: IR.Color = IR.Color(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0),
         currentDotColor: IR.Color = IR.Color(red: 0.0, green: 0.478, blue: 1.0, alpha: 1.0),
-        style: IR.Style = IR.Style()
+        padding: IR.EdgeInsets = .zero,
+        width: IR.DimensionValue? = nil,
+        height: IR.DimensionValue? = nil
     ) {
         self.id = id
         self.currentPagePath = currentPagePath
@@ -578,7 +890,9 @@ public struct PageIndicatorNode {
         self.dotSpacing = dotSpacing
         self.dotColor = dotColor
         self.currentDotColor = currentDotColor
-        self.style = style
+        self.padding = padding
+        self.width = width
+        self.height = height
     }
 }
 
@@ -616,6 +930,7 @@ extension GradientNode {
 }
 
 /// Color for gradient - can be static or adapt to color scheme
+@frozen
 public enum GradientColor {
     case fixed(IR.Color)
     case adaptive(light: IR.Color, dark: IR.Color)
@@ -646,14 +961,23 @@ public enum GradientColor {
 /// A divider/separator component
 public struct DividerNode {
     public let id: String?
-    public let style: IR.Style
+
+    // MARK: - Flattened Style Properties
+
+    public let color: IR.Color
+    public let thickness: CGFloat
+    public let padding: IR.EdgeInsets
 
     public init(
         id: String? = nil,
-        style: IR.Style = IR.Style()
+        color: IR.Color = IR.Color(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0),
+        thickness: CGFloat = 1,
+        padding: IR.EdgeInsets = .zero
     ) {
         self.id = id
-        self.style = style
+        self.color = color
+        self.thickness = thickness
+        self.padding = padding
     }
 }
 
@@ -663,6 +987,7 @@ public struct DividerNode {
 ///
 /// This is the IR representation of an action, used during execution.
 /// Codable for serialization/debugging purposes.
+@frozen
 public enum ActionDefinition: Codable {
     case dismiss
     case setState(path: String, value: StateSetValue)
@@ -746,6 +1071,7 @@ public enum ActionDefinition: Codable {
 /// Value to set in state.
 ///
 /// Uses `Document.StateValue` for type-safe, Codable storage.
+@frozen
 public enum StateSetValue: Codable {
     case literal(Document.StateValue)
     case expression(String)

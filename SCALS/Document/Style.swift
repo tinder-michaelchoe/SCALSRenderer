@@ -26,16 +26,19 @@ extension Document {
         public let borderWidth: CGFloat?
         public let borderColor: String?
 
+        // Shadow
+        public let shadow: Shadow?
+
         // Image
         public let tintColor: String?
 
         // Sizing
-        public let width: CGFloat?
-        public let height: CGFloat?
-        public let minWidth: CGFloat?
-        public let minHeight: CGFloat?
-        public let maxWidth: CGFloat?
-        public let maxHeight: CGFloat?
+        public let width: DimensionValue?
+        public let height: DimensionValue?
+        public let minWidth: DimensionValue?
+        public let minHeight: DimensionValue?
+        public let maxWidth: DimensionValue?
+        public let maxHeight: DimensionValue?
 
         // Padding (internal)
         public let padding: Padding?
@@ -51,13 +54,14 @@ extension Document {
             cornerRadius: CGFloat? = nil,
             borderWidth: CGFloat? = nil,
             borderColor: String? = nil,
+            shadow: Shadow? = nil,
             tintColor: String? = nil,
-            width: CGFloat? = nil,
-            height: CGFloat? = nil,
-            minWidth: CGFloat? = nil,
-            minHeight: CGFloat? = nil,
-            maxWidth: CGFloat? = nil,
-            maxHeight: CGFloat? = nil,
+            width: DimensionValue? = nil,
+            height: DimensionValue? = nil,
+            minWidth: DimensionValue? = nil,
+            minHeight: DimensionValue? = nil,
+            maxWidth: DimensionValue? = nil,
+            maxHeight: DimensionValue? = nil,
             padding: Padding? = nil
         ) {
             self.inherits = inherits
@@ -70,6 +74,7 @@ extension Document {
             self.cornerRadius = cornerRadius
             self.borderWidth = borderWidth
             self.borderColor = borderColor
+            self.shadow = shadow
             self.tintColor = tintColor
             self.width = width
             self.height = height
@@ -82,10 +87,34 @@ extension Document {
     }
 }
 
+// MARK: - Shadow
+
+extension Document {
+    public struct Shadow: Codable {
+        public let color: String?
+        public let radius: CGFloat?
+        public let x: CGFloat?
+        public let y: CGFloat?
+
+        public init(
+            color: String? = nil,
+            radius: CGFloat? = nil,
+            x: CGFloat? = nil,
+            y: CGFloat? = nil
+        ) {
+            self.color = color
+            self.radius = radius
+            self.x = x
+            self.y = y
+        }
+    }
+}
+
 // MARK: - Font Weight
 
 extension Document {
-    public enum FontWeight: String, Codable {
+    @frozen
+    public enum FontWeight: String, Codable, Sendable {
         case ultraLight
         case thin
         case light
@@ -101,7 +130,8 @@ extension Document {
 // MARK: - Text Alignment
 
 extension Document {
-    public enum TextAlignment: String, Codable {
+    @frozen
+    public enum TextAlignment: String, Codable, Sendable {
         case leading
         case center
         case trailing

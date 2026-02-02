@@ -23,7 +23,18 @@ public struct LayoutResolver: LayoutResolving {
     @MainActor
     public func resolve(_ layout: Document.Layout, context: ResolutionContext) throws -> NodeResolutionResult {
         let (layoutType, alignment) = resolveLayoutTypeAndAlignment(layout)
-        let padding = PaddingConverter.convert(layout.padding)
+
+        // Resolve style FIRST to get individual style values for merging
+        let resolvedStyle = context.styleResolver.resolve(layout.styleId, inline: layout.style)
+
+        // Resolve padding by merging node-level padding with style padding
+        let padding = IR.EdgeInsets(
+            from: layout.padding,
+            mergingTop: resolvedStyle.paddingTop ?? 0,
+            mergingBottom: resolvedStyle.paddingBottom ?? 0,
+            mergingLeading: resolvedStyle.paddingLeading ?? 0,
+            mergingTrailing: resolvedStyle.paddingTrailing ?? 0
+        )
 
         // Create view node if tracking
         let viewNode: ViewNode?
@@ -34,8 +45,7 @@ public struct LayoutResolver: LayoutResolving {
                     layoutType: layoutType,
                     alignment: alignment,
                     spacing: layout.spacing ?? 0,
-                    padding: padding,
-                    style: IR.Style()
+                    padding: padding
                 ))
             )
             viewNode?.parent = context.parentViewNode
@@ -57,14 +67,24 @@ public struct LayoutResolver: LayoutResolving {
             viewNode.children = viewChildren
         }
 
+        // Create ContainerNode with flattened properties (no .style)
         let containerNode = ContainerNode(
             id: nil,
             layoutType: layoutType,
             alignment: alignment,
             spacing: layout.spacing ?? 0,
+            children: renderChildren,
             padding: padding,
-            style: IR.Style(),
-            children: renderChildren
+            backgroundColor: resolvedStyle.backgroundColor ?? .clear,
+            cornerRadius: resolvedStyle.cornerRadius ?? 0,
+            shadow: IR.Shadow(from: resolvedStyle),
+            border: IR.Border(from: resolvedStyle),
+            width: resolvedStyle.width,
+            height: resolvedStyle.height,
+            minWidth: resolvedStyle.minWidth,
+            minHeight: resolvedStyle.minHeight,
+            maxWidth: resolvedStyle.maxWidth,
+            maxHeight: resolvedStyle.maxHeight
         )
 
         return NodeResolutionResult(
@@ -78,11 +98,11 @@ public struct LayoutResolver: LayoutResolving {
     private func resolveLayoutTypeAndAlignment(_ layout: Document.Layout) -> (ContainerNode.LayoutType, IR.Alignment) {
         switch layout.type {
         case .vstack:
-            return (.vstack, AlignmentConverter.forVStack(layout.horizontalAlignment))
+            return (.vstack, IR.Alignment(forVStack: layout.horizontalAlignment))
         case .hstack:
-            return (.hstack, AlignmentConverter.forHStack(layout.alignment?.vertical))
+            return (.hstack, IR.Alignment(forHStack: layout.alignment?.vertical))
         case .zstack:
-            return (.zstack, AlignmentConverter.forZStack(layout.alignment))
+            return (.zstack, IR.Alignment(forZStack: layout.alignment))
         }
     }
 
@@ -168,7 +188,7 @@ public struct LayoutResolver: LayoutResolving {
 
         // Resolve layout type and alignment
         let (layoutType, alignment) = resolveForEachLayoutType(forEach)
-        let padding = PaddingConverter.convert(forEach.padding)
+        let padding = IR.EdgeInsets(from: forEach.padding)
 
         // Create view node for the container
         let containerViewNode: ViewNode?
@@ -179,8 +199,7 @@ public struct LayoutResolver: LayoutResolving {
                     layoutType: layoutType,
                     alignment: alignment,
                     spacing: forEach.spacing ?? 0,
-                    padding: padding,
-                    style: IR.Style()
+                    padding: padding
                 ))
             )
             containerViewNode?.parent = context.parentViewNode
@@ -216,14 +235,14 @@ public struct LayoutResolver: LayoutResolving {
             containerViewNode.children = viewChildren
         }
 
+        // Create ContainerNode with flattened properties (no .style)
         let containerNode = ContainerNode(
             id: "forEach_\(forEach.items)",
             layoutType: layoutType,
             alignment: alignment,
             spacing: forEach.spacing ?? 0,
-            padding: padding,
-            style: IR.Style(),
-            children: renderChildren
+            children: renderChildren,
+            padding: padding
         )
 
         return NodeResolutionResult(
@@ -235,7 +254,7 @@ public struct LayoutResolver: LayoutResolving {
     private func resolveForEachLayoutType(_ forEach: Document.ForEach) -> (ContainerNode.LayoutType, IR.Alignment) {
         switch forEach.layout {
         case .vstack:
-            return (.vstack, AlignmentConverter.forVStack(forEach.alignment))
+            return (.vstack, IR.Alignment(forVStack: forEach.alignment))
         case .hstack:
             return (.hstack, .center)
         case .zstack:
@@ -245,7 +264,7 @@ public struct LayoutResolver: LayoutResolving {
 
     private func createEmptyContainer(forEach: Document.ForEach, context: ResolutionContext) -> NodeResolutionResult {
         let (layoutType, alignment) = resolveForEachLayoutType(forEach)
-        let padding = PaddingConverter.convert(forEach.padding)
+        let padding = IR.EdgeInsets(from: forEach.padding)
 
         let viewNode: ViewNode?
         if context.isTracking {
@@ -255,8 +274,7 @@ public struct LayoutResolver: LayoutResolving {
                     layoutType: layoutType,
                     alignment: alignment,
                     spacing: forEach.spacing ?? 0,
-                    padding: padding,
-                    style: IR.Style()
+                    padding: padding
                 ))
             )
             viewNode?.parent = context.parentViewNode
@@ -264,14 +282,14 @@ public struct LayoutResolver: LayoutResolving {
             viewNode = nil
         }
 
+        // Create ContainerNode with flattened properties (no .style)
         let containerNode = ContainerNode(
             id: "forEach_\(forEach.items)_empty",
             layoutType: layoutType,
             alignment: alignment,
             spacing: forEach.spacing ?? 0,
-            padding: padding,
-            style: IR.Style(),
-            children: []
+            children: [],
+            padding: padding
         )
 
         return NodeResolutionResult(

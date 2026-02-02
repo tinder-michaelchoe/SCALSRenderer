@@ -36,7 +36,7 @@ struct TextNodeView: View {
 
     var body: some View {
         Text(displayContent)
-            .applyTextStyle(node.style)
+            .applyTextStyle(from: node)
             .padding(.top, node.padding.top)
             .padding(.bottom, node.padding.bottom)
             .padding(.leading, node.padding.leading)

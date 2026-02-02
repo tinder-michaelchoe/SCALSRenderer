@@ -84,11 +84,35 @@ public struct ButtonNodeRenderer: UIKitNodeRendering {
         }
 
         if let width = buttonNode.style.width {
-            button.widthAnchor.constraint(equalToConstant: width).isActive = true
+            switch width {
+            case .absolute(let value):
+                button.widthAnchor.constraint(equalToConstant: value).isActive = true
+            case .fractional(let fraction):
+                if let superview = button.superview {
+                    button.widthAnchor.constraint(
+                        equalTo: superview.widthAnchor,
+                        multiplier: fraction
+                    ).isActive = true
+                } else {
+                    print("Warning: Cannot apply fractional width - view has no superview")
+                }
+            }
         }
 
         if let height = buttonNode.style.height {
-            button.heightAnchor.constraint(equalToConstant: height).isActive = true
+            switch height {
+            case .absolute(let value):
+                button.heightAnchor.constraint(equalToConstant: value).isActive = true
+            case .fractional(let fraction):
+                if let superview = button.superview {
+                    button.heightAnchor.constraint(
+                        equalTo: superview.heightAnchor,
+                        multiplier: fraction
+                    ).isActive = true
+                } else {
+                    print("Warning: Cannot apply fractional height - view has no superview")
+                }
+            }
         }
 
         return button
@@ -96,8 +120,9 @@ public struct ButtonNodeRenderer: UIKitNodeRendering {
 
     private func applyButtonShape(_ button: UIButton, node: ButtonNode) {
         guard let shape = node.buttonShape else {
-            // No shape specified, use style's cornerRadius if present
-            if let cornerRadius = node.style.cornerRadius {
+            // No shape specified, use style's cornerRadius
+            let cornerRadius = node.style.cornerRadius
+            if cornerRadius > 0 {
                 button.layer.cornerRadius = cornerRadius
                 button.clipsToBounds = true
             }
@@ -107,12 +132,27 @@ public struct ButtonNodeRenderer: UIKitNodeRendering {
         // Calculate corner radius based on shape
         switch shape {
         case .circle:
-            let width = node.style.width ?? 44
-            let height = node.style.height ?? 44
+            let width: CGFloat
+            if case .absolute(let value) = node.style.width {
+                width = value
+            } else {
+                width = 44
+            }
+            let height: CGFloat
+            if case .absolute(let value) = node.style.height {
+                height = value
+            } else {
+                height = 44
+            }
             button.layer.cornerRadius = min(width, height) / 2
 
         case .capsule:
-            let height = node.style.height ?? 44
+            let height: CGFloat
+            if case .absolute(let value) = node.style.height {
+                height = value
+            } else {
+                height = 44
+            }
             button.layer.cornerRadius = height / 2
 
         case .roundedSquare:
@@ -138,10 +178,10 @@ public struct ButtonNodeRenderer: UIKitNodeRendering {
             return UIImage(systemName: name)
         case .asset(let name):
             return UIImage(named: name)
-        case .url(let url):
+        case .url(_):
             // For URLs, we'd need async loading - return placeholder for now
             return UIImage(systemName: "photo")
-        case .statePath(let template):
+        case .statePath(_):
             // For dynamic templates, we'd need to resolve from state - return placeholder for now
             return UIImage(systemName: "photo")
 

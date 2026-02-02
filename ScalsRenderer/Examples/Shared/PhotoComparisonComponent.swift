@@ -28,9 +28,19 @@ public struct PhotoComparisonComponent: CustomComponent {
         let beforeImage = context.resolveString(forKey: "beforeImage") ?? ""
         let afterImage = context.resolveString(forKey: "afterImage") ?? ""
 
-        // Get size from style
-        let width = context.style.width ?? 200
-        let height = context.style.height ?? 300
+        // Get size from resolved style
+        let width: CGFloat
+        if case .absolute(let value) = context.resolvedStyle.width {
+            width = value
+        } else {
+            width = 200
+        }
+        let height: CGFloat
+        if case .absolute(let value) = context.resolvedStyle.height {
+            height = value
+        } else {
+            height = 300
+        }
 
         return AnyView(
             PhotoComparisonView(

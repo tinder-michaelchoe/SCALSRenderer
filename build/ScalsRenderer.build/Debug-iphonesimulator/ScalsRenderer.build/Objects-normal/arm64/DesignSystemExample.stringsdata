@@ -1,0 +1,16 @@
+{
+  "source": "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Examples/Complex/DesignSystemExample.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Failed to parse design system example JSON",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 371
+        }
+      }
+    ]
+  },
+  "version": 1
+}

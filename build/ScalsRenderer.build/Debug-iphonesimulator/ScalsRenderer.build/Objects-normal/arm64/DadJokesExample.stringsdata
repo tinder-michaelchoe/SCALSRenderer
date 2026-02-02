@@ -1,0 +1,16 @@
+{
+  "source": "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Examples/Complex/DadJokesExample.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "Failed to parse JSON",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 250
+        }
+      }
+    ]
+  },
+  "version": 1
+}

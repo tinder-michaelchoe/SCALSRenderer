@@ -73,7 +73,7 @@ public protocol CustomComponent {
 @MainActor
 public struct CustomComponentContext {
     /// Resolved style for this component
-    public let style: IR.Style
+    public let resolvedStyle: ResolvedStyle
 
     /// State store for reading/writing state
     public let stateStore: StateStoring
@@ -90,13 +90,13 @@ public struct CustomComponentContext {
     // MARK: - Initialization
 
     public init(
-        style: IR.Style,
+        resolvedStyle: ResolvedStyle,
         stateStore: StateStoring,
         actionContext: ActionContext,
         tree: RenderTree,
         component: Document.Component
     ) {
-        self.style = style
+        self.resolvedStyle = resolvedStyle
         self.stateStore = stateStore
         self.actionContext = actionContext
         self.tree = tree

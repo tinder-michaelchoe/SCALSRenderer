@@ -8,6 +8,7 @@
 import Testing
 import SwiftUI
 @testable import SCALS
+@testable import ScalsModules
 
 // MARK: - Mock Design System Provider
 
@@ -15,10 +16,10 @@ import SwiftUI
 struct MockDesignSystemProvider: DesignSystemProvider {
     static let identifier = "mock"
     
-    var styleMapping: [String: IR.Style] = [:]
+    var styleMapping: [String: ResolvedStyle] = [:]
     var canRenderCallback: ((RenderNode, String?) -> Bool)?
     
-    func resolveStyle(_ reference: String) -> IR.Style? {
+    func resolveStyle(_ reference: String) -> ResolvedStyle? {
         return styleMapping[reference]
     }
     
@@ -31,11 +32,11 @@ struct MockDesignSystemProvider: DesignSystemProvider {
 struct MockSwiftUIDesignSystemRenderer: SwiftUIDesignSystemRenderer {
     static let identifier = "mockSwiftUI"
     
-    var styleMapping: [String: IR.Style] = [:]
+    var styleMapping: [String: ResolvedStyle] = [:]
     var canRenderCallback: ((RenderNode, String?) -> Bool)?
     var renderCallback: ((RenderNode, String?, SwiftUIRenderContext) -> AnyView?)?
     
-    func resolveStyle(_ reference: String) -> IR.Style? {
+    func resolveStyle(_ reference: String) -> ResolvedStyle? {
         return styleMapping[reference]
     }
     
@@ -56,7 +57,7 @@ struct MockSwiftUIDesignSystemRenderer: SwiftUIDesignSystemRenderer {
     @Test func resolveAtPrefixedStyleDelegatestoProvider() {
         // Given
         var mockProvider = MockDesignSystemProvider()
-        var expectedStyle = IR.Style()
+        var expectedStyle = ResolvedStyle()
         expectedStyle.cornerRadius = 12
         expectedStyle.backgroundColor = IR.Color(hex: "#6366F1")
         mockProvider.styleMapping["button.primary"] = expectedStyle
@@ -87,7 +88,7 @@ struct MockSwiftUIDesignSystemRenderer: SwiftUIDesignSystemRenderer {
     @Test func resolveLocalStyleIgnoresProvider() {
         // Given
         var mockProvider = MockDesignSystemProvider()
-        var dsStyle = IR.Style()
+        var dsStyle = ResolvedStyle()
         dsStyle.cornerRadius = 999  // Should NOT be used
         mockProvider.styleMapping["localStyle"] = dsStyle
         
@@ -106,7 +107,7 @@ struct MockSwiftUIDesignSystemRenderer: SwiftUIDesignSystemRenderer {
     @Test func resolveWithInlineOverride() {
         // Given
         var mockProvider = MockDesignSystemProvider()
-        var dsStyle = IR.Style()
+        var dsStyle = ResolvedStyle()
         dsStyle.cornerRadius = 12
         dsStyle.backgroundColor = IR.Color(hex: "#6366F1")
         mockProvider.styleMapping["button.primary"] = dsStyle
@@ -183,7 +184,7 @@ struct MockSwiftUIDesignSystemRenderer: SwiftUIDesignSystemRenderer {
     }
     
     @Test func spacerHasNilStyleId() {
-        let node = RenderNode.spacer
+        let node = RenderNode.spacer(SpacerNode())
         
         #expect(node.styleId == nil)
     }
@@ -197,9 +198,9 @@ struct MockSwiftUIDesignSystemRenderer: SwiftUIDesignSystemRenderer {
     struct TokenOnlyProvider: DesignSystemProvider {
         static let identifier = "tokenOnly"
         
-        func resolveStyle(_ reference: String) -> IR.Style? {
+        func resolveStyle(_ reference: String) -> ResolvedStyle? {
             if reference == "test" {
-                var style = IR.Style()
+                var style = ResolvedStyle()
                 style.cornerRadius = 42
                 return style
             }
@@ -211,9 +212,9 @@ struct MockSwiftUIDesignSystemRenderer: SwiftUIDesignSystemRenderer {
     struct SwiftUITokenOnlyProvider: SwiftUIDesignSystemRenderer {
         static let identifier = "swiftUITokenOnly"
         
-        func resolveStyle(_ reference: String) -> IR.Style? {
+        func resolveStyle(_ reference: String) -> ResolvedStyle? {
             if reference == "test" {
-                var style = IR.Style()
+                var style = ResolvedStyle()
                 style.cornerRadius = 42
                 return style
             }

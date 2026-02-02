@@ -43,7 +43,6 @@ struct ContainerNodeView: View {
                         renderChild(child)
                     }
                 }
-                .frame(maxWidth: .infinity)
             case .hstack:
                 HStack(alignment: verticalAlignment, spacing: node.spacing) {
                     ForEach(Array(node.children.enumerated()), id: \.offset) { _, child in
@@ -58,18 +57,34 @@ struct ContainerNodeView: View {
                 }
             }
         }
+        // Padding already resolved - use directly
         .padding(.top, node.padding.top)
         .padding(.bottom, node.padding.bottom)
         .padding(.leading, node.padding.leading)
         .padding(.trailing, node.padding.trailing)
-        .background(node.style.backgroundColor?.swiftUI ?? Color.clear)
-        .cornerRadius(node.style.cornerRadius ?? 0)
+        // Background and corner radius (non-optional in flattened IR)
+        .background(node.backgroundColor.swiftUI)
+        .cornerRadius(node.cornerRadius)
+        // Border (optional)
         .overlay(
-            RoundedRectangle(cornerRadius: node.style.cornerRadius ?? 0)
-                .stroke(node.style.borderColor?.swiftUI ?? Color.clear,
-                       lineWidth: node.style.borderWidth ?? 0)
+            Group {
+                if let border = node.border {
+                    RoundedRectangle(cornerRadius: node.cornerRadius)
+                        .stroke(border.color.swiftUI, lineWidth: border.width)
+                }
+            }
         )
-        .frame(width: node.style.width, height: node.style.height)
+        // Shadow (optional - apply if present)
+        .shadow(
+            color: node.shadow?.color.swiftUI ?? .clear,
+            radius: node.shadow?.radius ?? 0,
+            x: node.shadow?.x ?? 0,
+            y: node.shadow?.y ?? 0
+        )
+        .modifier(DimensionFrameModifier(
+            width: node.width,
+            height: node.height
+        ))
     }
 
     @ViewBuilder

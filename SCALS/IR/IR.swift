@@ -168,6 +168,7 @@ extension IR {
     }
     
     /// Platform-agnostic horizontal alignment.
+    @frozen
     public enum HorizontalAlignment: String, Codable, Sendable {
         case leading
         case center
@@ -175,6 +176,7 @@ extension IR {
     }
     
     /// Platform-agnostic vertical alignment.
+    @frozen
     public enum VerticalAlignment: String, Codable, Sendable {
         case top
         case center
@@ -211,6 +213,7 @@ extension IR {
     /// Platform-agnostic color scheme (light/dark mode).
     ///
     /// Replaces `SwiftUI.ColorScheme` in the IR layer.
+    @frozen
     public enum ColorScheme: String, Codable, Sendable {
         case light
         case dark
@@ -226,6 +229,49 @@ extension IR {
     ///
     /// Reuses Document.TextAlignment since it's already platform-agnostic.
     public typealias TextAlignment = Document.TextAlignment
+}
+
+// MARK: - IR.Shadow
+
+extension IR {
+    /// Platform-agnostic shadow specification.
+    ///
+    /// Combines all shadow properties into a single, resolved value.
+    /// This type is used directly on IR nodes instead of separate optional properties.
+    public struct Shadow: Equatable, Sendable {
+        public let color: Color
+        public let radius: CGFloat
+        public let x: CGFloat
+        public let y: CGFloat
+
+        public init(color: Color, radius: CGFloat, x: CGFloat, y: CGFloat) {
+            self.color = color
+            self.radius = radius
+            self.x = x
+            self.y = y
+        }
+
+        /// A shadow with no visual effect (clear color, zero radius/offset)
+        public static let none = Shadow(color: .clear, radius: 0, x: 0, y: 0)
+    }
+}
+
+// MARK: - IR.Border
+
+extension IR {
+    /// Platform-agnostic border specification.
+    ///
+    /// Combines border color and width into a single, resolved value.
+    /// This type is used directly on IR nodes instead of separate optional properties.
+    public struct Border: Equatable, Sendable {
+        public let color: Color
+        public let width: CGFloat
+
+        public init(color: Color, width: CGFloat) {
+            self.color = color
+            self.width = width
+        }
+    }
 }
 
 // MARK: - IR.Style
@@ -249,16 +295,22 @@ extension IR {
         public var borderWidth: CGFloat?
         public var borderColor: IR.Color?
 
+        // Shadow
+        public var shadowColor: IR.Color?
+        public var shadowRadius: CGFloat?
+        public var shadowX: CGFloat?
+        public var shadowY: CGFloat?
+
         // Image
         public var tintColor: IR.Color?
 
         // Sizing
-        public var width: CGFloat?
-        public var height: CGFloat?
-        public var minWidth: CGFloat?
-        public var minHeight: CGFloat?
-        public var maxWidth: CGFloat?
-        public var maxHeight: CGFloat?
+        public var width: DimensionValue?
+        public var height: DimensionValue?
+        public var minWidth: DimensionValue?
+        public var minHeight: DimensionValue?
+        public var maxWidth: DimensionValue?
+        public var maxHeight: DimensionValue?
 
         // Padding
         public var paddingTop: CGFloat?
@@ -278,32 +330,70 @@ extension IR {
             if let v = style.cornerRadius { cornerRadius = v }
             if let v = style.borderWidth { borderWidth = v }
             if let v = style.borderColor { borderColor = IR.Color(hex: v) }
+
+            // Shadow resolution from Document.Shadow
+            if let shadow = style.shadow {
+                // Check if this is an explicit shadow clear (all properties nil)
+                let isExplicitClear = shadow.color == nil && shadow.radius == nil && shadow.x == nil && shadow.y == nil
+
+                if isExplicitClear {
+                    // Clear inherited shadow properties
+                    shadowColor = nil
+                    shadowRadius = nil
+                    shadowX = nil
+                    shadowY = nil
+                } else {
+                    // Merge shadow properties
+                    if let v = shadow.color { shadowColor = IR.Color(hex: v) }
+                    if let v = shadow.radius { shadowRadius = v }
+                    if let v = shadow.x { shadowX = v }
+                    if let v = shadow.y { shadowY = v }
+                }
+            }
+
             if let v = style.tintColor { tintColor = IR.Color(hex: v) }
-            if let v = style.width { width = v }
-            if let v = style.height { height = v }
-            if let v = style.minWidth { minWidth = v }
-            if let v = style.minHeight { minHeight = v }
-            if let v = style.maxWidth { maxWidth = v }
-            if let v = style.maxHeight { maxHeight = v }
+            if let v = style.width { width = v.toIR() }
+            if let v = style.height { height = v.toIR() }
+            if let v = style.minWidth { minWidth = v.toIR() }
+            if let v = style.minHeight { minHeight = v.toIR() }
+            if let v = style.maxWidth { maxWidth = v.toIR() }
+            if let v = style.maxHeight { maxHeight = v.toIR() }
 
             // Padding resolution using Padding struct
             if let padding = style.padding {
-                if padding.top != nil || padding.vertical != nil {
-                    paddingTop = padding.resolvedTop
-                }
-                if padding.bottom != nil || padding.vertical != nil {
-                    paddingBottom = padding.resolvedBottom
-                }
-                if padding.leading != nil || padding.horizontal != nil {
-                    paddingLeading = padding.resolvedLeading
-                }
-                if padding.trailing != nil || padding.horizontal != nil {
-                    paddingTrailing = padding.resolvedTrailing
+                // Check if this is an explicit padding clear (all properties nil)
+                let isExplicitClear = padding.top == nil && padding.bottom == nil &&
+                                     padding.leading == nil && padding.trailing == nil &&
+                                     padding.horizontal == nil && padding.vertical == nil
+
+                if isExplicitClear {
+                    // Clear inherited padding properties
+                    paddingTop = nil
+                    paddingBottom = nil
+                    paddingLeading = nil
+                    paddingTrailing = nil
+                } else {
+                    // Merge padding properties
+                    if padding.top != nil || padding.vertical != nil {
+                        paddingTop = padding.resolvedTop
+                    }
+                    if padding.bottom != nil || padding.vertical != nil {
+                        paddingBottom = padding.resolvedBottom
+                    }
+                    if padding.leading != nil || padding.horizontal != nil {
+                        paddingLeading = padding.resolvedLeading
+                    }
+                    if padding.trailing != nil || padding.horizontal != nil {
+                        paddingTrailing = padding.resolvedTrailing
+                    }
                 }
             }
         }
     }
 }
+
+// Note: Document.DimensionValue → IR.DimensionValue conversion is now in
+// SCALS/Document/IRConversions.swift with IRConvertible conformance
 
 // MARK: - IR.Section
 
@@ -342,6 +432,7 @@ extension IR {
 
 extension IR {
     /// Section type for rendering
+    @frozen
     public enum SectionType {
         case horizontal  // Horizontally scrolling row
         case list        // Vertical list (table-like)
@@ -354,6 +445,7 @@ extension IR {
 
 extension IR {
     /// Resolved column configuration for grids
+    @frozen
     public enum ColumnConfig: Equatable {
         case fixed(Int)
         case adaptive(minWidth: CGFloat)
@@ -444,6 +536,16 @@ extension IR {
                 return containerSize * fraction
             }
         }
+
+        /// Get the absolute value (returns nil for fractional values)
+        public var resolvedAbsolute: CGFloat? {
+            switch self {
+            case .absolute(let value):
+                return value
+            case .fractional:
+                return nil
+            }
+        }
     }
 }
 
@@ -451,6 +553,7 @@ extension IR {
 
 extension IR {
     /// Resolved snap behavior for horizontal sections
+    @frozen
     public enum SnapBehavior {
         case none
         case viewAligned
@@ -462,6 +565,7 @@ extension IR {
 
 extension IR {
     /// Positioning reference for edge insets
+    @frozen
     public enum Positioning {
         /// Position relative to safe area boundaries
         case safeArea

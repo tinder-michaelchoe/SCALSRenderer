@@ -27,7 +27,8 @@ public struct PageIndicatorComponentResolver: ComponentResolving {
             throw PageIndicatorResolutionError.missingCurrentPage
         }
 
-        let style = context.styleResolver.resolve(component.styleId)
+        // Resolve style to get flattened properties
+        let resolvedStyle = context.styleResolver.resolve(component.styleId)
 
         // currentPage is always a state path (non-optional)
         let currentPagePath = currentPageStr
@@ -62,6 +63,15 @@ public struct PageIndicatorComponentResolver: ComponentResolving {
             pageCountStatic = 5
         }
 
+        // Resolve padding by merging node-level padding with style padding
+        let padding = IR.EdgeInsets(
+            from: component.padding,
+            mergingTop: resolvedStyle.paddingTop ?? 0,
+            mergingBottom: resolvedStyle.paddingBottom ?? 0,
+            mergingLeading: resolvedStyle.paddingLeading ?? 0,
+            mergingTrailing: resolvedStyle.paddingTrailing ?? 0
+        )
+
         let node = PageIndicatorNode(
             id: component.id,
             currentPagePath: currentPagePath,
@@ -71,7 +81,9 @@ public struct PageIndicatorComponentResolver: ComponentResolving {
             dotSpacing: component.dotSpacing ?? 8,
             dotColor: IR.Color(hex: component.dotColor ?? "#CCCCCC"),
             currentDotColor: IR.Color(hex: component.currentDotColor ?? "#007AFF"),
-            style: style
+            padding: padding,
+            width: resolvedStyle.width,
+            height: resolvedStyle.height
         )
 
         // Track state dependencies

@@ -256,14 +256,9 @@ public struct HTMLNodeRenderer {
             dataAttrs += " data-has-action=\"true\""
         }
         
-        // Inline style for custom button color
-        var inlineStyle = ""
-        if let bg = button.style.backgroundColor {
-            inlineStyle = " style=\"background-color: \(bg.cssRGBA)\""
-        } else if let fg = button.style.textColor {
-            // Secondary button style (transparent bg, colored text)
-            inlineStyle = " style=\"background-color: transparent; color: \(fg.cssRGBA)\""
-        }
+        // Inline style for custom button color (ButtonStateStyle has non-optional properties)
+        let style = button.style
+        let inlineStyle = " style=\"background-color: \(style.backgroundColor.cssRGBA); color: \(style.textColor.cssRGBA)\""
         
         return """
         <button\(id) class="\(className)" type="button"\(dataAttrs)\(inlineStyle)>
@@ -368,18 +363,18 @@ public struct HTMLNodeRenderer {
             )
         }
         
-        // Inline styles from IR.Style
+        // Inline styles from flattened ImageNode properties
         var inlineStyles: [String] = []
-        if let width = image.style.width {
-            inlineStyles.append("width: \(Int(width))px")
+        if let width = image.width {
+            inlineStyles.append("width: \(dimensionToCSS(width))")
         }
-        if let height = image.style.height {
-            inlineStyles.append("height: \(Int(height))px")
+        if let height = image.height {
+            inlineStyles.append("height: \(dimensionToCSS(height))")
         }
-        if let radius = image.style.cornerRadius {
-            inlineStyles.append("border-radius: \(Int(radius))px")
+        if image.cornerRadius > 0 {
+            inlineStyles.append("border-radius: \(Int(image.cornerRadius))px")
         }
-        if let tint = image.style.tintColor {
+        if let tint = image.tintColor {
             // For SF Symbols / icons
             inlineStyles.append("color: \(tint.cssRGBA)")
         }
@@ -461,13 +456,13 @@ public struct HTMLNodeRenderer {
         // Inline gradient style
         let gradientCSS = gradient.cssGradient
         var inlineStyle = "background: \(gradientCSS)"
-        
-        // Add sizing from style
-        if let width = gradient.style.width {
-            inlineStyle += "; width: \(Int(width))px"
+
+        // Add sizing from flattened GradientNode properties
+        if let width = gradient.width {
+            inlineStyle += "; width: \(dimensionToCSS(width))"
         }
-        if let height = gradient.style.height {
-            inlineStyle += "; height: \(Int(height))px"
+        if let height = gradient.height {
+            inlineStyle += "; height: \(dimensionToCSS(height))"
         }
         
         return "<div\(id) class=\"\(className)\" style=\"\(inlineStyle)\"></div>"
@@ -486,17 +481,15 @@ public struct HTMLNodeRenderer {
         let id = shape.id.map { " id=\"\($0.htmlEscaped)\"" } ?? ""
         let className = classes.joined(separator: " ")
 
-        // Build inline style
+        // Build inline style from flattened ShapeNode properties
         var inlineStyles: [String] = []
 
-        // Background color
-        if let bgColor = shape.style.backgroundColor {
-            inlineStyles.append("background-color: \(bgColor.cssRGBA)")
-        }
+        // Fill color (non-optional)
+        inlineStyles.append("background-color: \(shape.fillColor.cssRGBA)")
 
-        // Border
-        if let borderColor = shape.style.borderColor, let borderWidth = shape.style.borderWidth {
-            inlineStyles.append("border: \(Int(borderWidth))px solid \(borderColor.cssRGBA)")
+        // Border (using strokeColor and strokeWidth)
+        if let strokeColor = shape.strokeColor, shape.strokeWidth > 0 {
+            inlineStyles.append("border: \(Int(shape.strokeWidth))px solid \(strokeColor.cssRGBA)")
         }
 
         // Border radius (for roundedRectangle, capsule, circle)
@@ -507,14 +500,16 @@ public struct HTMLNodeRenderer {
             inlineStyles.append("border-radius: 50%")
         case .rectangle, .ellipse:
             break
+        @unknown default:
+            break
         }
 
         // Dimensions
-        if let width = shape.style.width {
-            inlineStyles.append("width: \(Int(width))px")
+        if let width = shape.width {
+            inlineStyles.append("width: \(dimensionToCSS(width))")
         }
-        if let height = shape.style.height {
-            inlineStyles.append("height: \(Int(height))px")
+        if let height = shape.height {
+            inlineStyles.append("height: \(dimensionToCSS(height))")
         }
 
         let inlineStyle = inlineStyles.isEmpty ? "" : " style=\"\(inlineStyles.joined(separator: "; "))\""
@@ -534,21 +529,22 @@ public struct HTMLNodeRenderer {
         let id = pageIndicator.id.map { " id=\"\($0.htmlEscaped)\"" } ?? ""
         let className = classes.joined(separator: " ")
 
-        // Build container inline style
+        // Build container inline style from flattened PageIndicatorNode properties
         var containerStyles: [String] = []
 
-        // Padding
-        if let paddingTop = pageIndicator.style.paddingTop {
-            containerStyles.append("padding-top: \(Int(paddingTop))px")
+        // Padding (using flattened padding property)
+        let padding = pageIndicator.padding
+        if padding.top > 0 {
+            containerStyles.append("padding-top: \(Int(padding.top))px")
         }
-        if let paddingBottom = pageIndicator.style.paddingBottom {
-            containerStyles.append("padding-bottom: \(Int(paddingBottom))px")
+        if padding.bottom > 0 {
+            containerStyles.append("padding-bottom: \(Int(padding.bottom))px")
         }
-        if let paddingLeading = pageIndicator.style.paddingLeading {
-            containerStyles.append("padding-left: \(Int(paddingLeading))px")
+        if padding.leading > 0 {
+            containerStyles.append("padding-left: \(Int(padding.leading))px")
         }
-        if let paddingTrailing = pageIndicator.style.paddingTrailing {
-            containerStyles.append("padding-right: \(Int(paddingTrailing))px")
+        if padding.trailing > 0 {
+            containerStyles.append("padding-right: \(Int(padding.trailing))px")
         }
 
         containerStyles.append("display: flex")
@@ -597,19 +593,31 @@ public struct HTMLNodeRenderer {
     }
     
     // MARK: - Custom Node Rendering
-    
+
     private mutating func renderCustomNode(kind: RenderNodeKind, node: any CustomRenderNode) -> String {
         // Check if the custom node implements HTMLRendering
         if let htmlRendering = node as? HTMLRendering {
             return htmlRendering.renderHTML()
         }
-        
+
         // Fallback: render as a placeholder div
         return """
         <div class="scals-custom scals-custom-\(kind.rawValue.cssClassName)" data-node-kind="\(kind.rawValue.htmlEscaped)">
             <!-- Custom component: \(kind.rawValue) -->
         </div>
         """
+    }
+
+    // MARK: - Dimension Helper
+
+    /// Convert a DimensionValue to CSS string (e.g., "150px" or "80%")
+    private func dimensionToCSS(_ dimension: IR.DimensionValue) -> String {
+        switch dimension {
+        case .absolute(let value):
+            return "\(Int(value))px"
+        case .fractional(let fraction):
+            return "\(Int(fraction * 100))%"
+        }
     }
 }
 

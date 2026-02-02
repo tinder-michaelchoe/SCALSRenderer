@@ -1,0 +1,144 @@
+{
+  "source": "/Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer/ScalsRenderer/Examples/ExampleCatalog.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "SCALS Examples",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 136
+        }
+      },
+      {
+        "comment": "",
+        "key": "C - Components",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 59
+        }
+      },
+      {
+        "comment": "",
+        "key": "L - Layouts",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 70
+        }
+      },
+      {
+        "comment": "",
+        "key": "A - Actions",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 81
+        }
+      },
+      {
+        "comment": "",
+        "key": "D - Data",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 92
+        }
+      },
+      {
+        "comment": "",
+        "key": "S - Styles",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 103
+        }
+      },
+      {
+        "comment": "",
+        "key": "Complex Examples",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 114
+        }
+      },
+      {
+        "comment": "",
+        "key": "Tinder",
+        "location": {
+          "startingColumn": 25,
+          "startingLine": 125
+        }
+      },
+      {
+        "comment": "",
+        "key": "File Size:",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 189
+        }
+      },
+      {
+        "comment": "",
+        "key": "No JSON available for this example",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 211
+        }
+      },
+      {
+        "comment": "",
+        "key": "Done",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 221
+        }
+      },
+      {
+        "comment": "",
+        "key": "Detent",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 312
+        }
+      },
+      {
+        "comment": "",
+        "key": "View JSON",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 320
+        }
+      },
+      {
+        "comment": "",
+        "key": "Copy JSON",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 328
+        }
+      },
+      {
+        "comment": "",
+        "key": "Failed to parse JSON",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 880
+        }
+      },
+      {
+        "comment": "",
+        "key": "Dismiss",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 901
+        }
+      },
+      {
+        "comment": "",
+        "key": "Copy Error",
+        "location": {
+          "startingColumn": 31,
+          "startingLine": 897
+        }
+      }
+    ]
+  },
+  "version": 1
+}

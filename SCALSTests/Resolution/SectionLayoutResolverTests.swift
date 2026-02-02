@@ -102,7 +102,7 @@ struct SectionLayoutResolverTypeTests {
             sections: [
                 Document.SectionDefinition(
                     layout: Document.SectionLayoutConfig(type: .horizontal),
-                    children: [.spacer]
+                    children: [.spacer(Document.Spacer())]
                 )
             ]
         )
@@ -130,7 +130,7 @@ struct SectionLayoutResolverTypeTests {
             sections: [
                 Document.SectionDefinition(
                     layout: Document.SectionLayoutConfig(type: .list),
-                    children: [.spacer]
+                    children: [.spacer(Document.Spacer())]
                 )
             ]
         )
@@ -160,7 +160,7 @@ struct SectionLayoutResolverTypeTests {
                         type: .grid,
                         columns: .fixed(3)
                     ),
-                    children: [.spacer]
+                    children: [.spacer(Document.Spacer())]
                 )
             ]
         )
@@ -194,7 +194,7 @@ struct SectionLayoutResolverTypeTests {
                         type: .grid,
                         columns: .adaptive(minWidth: 120)
                     ),
-                    children: [.spacer]
+                    children: [.spacer(Document.Spacer())]
                 )
             ]
         )
@@ -225,7 +225,7 @@ struct SectionLayoutResolverTypeTests {
             sections: [
                 Document.SectionDefinition(
                     layout: Document.SectionLayoutConfig(type: .grid),
-                    children: [.spacer]
+                    children: [.spacer(Document.Spacer())]
                 )
             ]
         )
@@ -256,7 +256,7 @@ struct SectionLayoutResolverTypeTests {
             sections: [
                 Document.SectionDefinition(
                     layout: Document.SectionLayoutConfig(type: .flow),
-                    children: [.spacer]
+                    children: [.spacer(Document.Spacer())]
                 )
             ]
         )
@@ -544,7 +544,7 @@ struct SectionLayoutResolverHeaderFooterTests {
             sections: [
                 Document.SectionDefinition(
                     layout: Document.SectionLayoutConfig(type: .list),
-                    header: .spacer,
+                    header: .spacer(Document.Spacer()),
                     children: []
                 )
             ]
@@ -573,7 +573,7 @@ struct SectionLayoutResolverHeaderFooterTests {
             sections: [
                 Document.SectionDefinition(
                     layout: Document.SectionLayoutConfig(type: .list),
-                    footer: .spacer,
+                    footer: .spacer(Document.Spacer()),
                     children: []
                 )
             ]
@@ -597,7 +597,7 @@ struct SectionLayoutResolverHeaderFooterTests {
             sections: [
                 Document.SectionDefinition(
                     layout: Document.SectionLayoutConfig(type: .list),
-                    header: .spacer,
+                    header: .spacer(Document.Spacer()),
                     stickyHeader: true,
                     children: []
                 )
@@ -622,7 +622,7 @@ struct SectionLayoutResolverHeaderFooterTests {
             sections: [
                 Document.SectionDefinition(
                     layout: Document.SectionLayoutConfig(type: .list),
-                    header: .spacer,
+                    header: .spacer(Document.Spacer()),
                     children: []
                 )
             ]
@@ -652,17 +652,17 @@ struct SectionLayoutResolverMultipleSectionsTests {
                 Document.SectionDefinition(
                     id: "section1",
                     layout: Document.SectionLayoutConfig(type: .horizontal),
-                    children: [.spacer]
+                    children: [.spacer(Document.Spacer())]
                 ),
                 Document.SectionDefinition(
                     id: "section2",
                     layout: Document.SectionLayoutConfig(type: .grid),
-                    children: [.spacer, .spacer]
+                    children: [.spacer(Document.Spacer()), .spacer(Document.Spacer())]
                 ),
                 Document.SectionDefinition(
                     id: "section3",
                     layout: Document.SectionLayoutConfig(type: .list),
-                    children: [.spacer]
+                    children: [.spacer(Document.Spacer())]
                 )
             ]
         )
@@ -726,7 +726,7 @@ struct SectionLayoutResolverChildrenTests {
             sections: [
                 Document.SectionDefinition(
                     layout: Document.SectionLayoutConfig(type: .list),
-                    children: [.spacer, .spacer, .spacer]
+                    children: [.spacer(Document.Spacer()), .spacer(Document.Spacer()), .spacer(Document.Spacer())]
                 )
             ]
         )
@@ -773,7 +773,7 @@ struct SectionLayoutResolverChildrenTests {
                 Document.SectionDefinition(
                     layout: Document.SectionLayoutConfig(type: .list),
                     children: [
-                        .layout(Document.Layout(type: .hstack, children: [.spacer]))
+                        .layout(Document.Layout(type: .hstack, children: [.spacer(Document.Spacer())]))
                     ]
                 )
             ]

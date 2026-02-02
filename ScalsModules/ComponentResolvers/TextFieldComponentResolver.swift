@@ -17,7 +17,8 @@ public struct TextFieldComponentResolver: ComponentResolving {
 
     @MainActor
     public func resolve(_ component: Document.Component, context: ResolutionContext) throws -> ComponentResolutionResult {
-        let style = context.styleResolver.resolve(component.styleId)
+        // Resolve style to get flattened properties
+        let resolvedStyle = context.styleResolver.resolve(component.styleId)
         let nodeId = component.id ?? UUID().uuidString
 
         // Resolve binding path (global or local)
@@ -30,7 +31,6 @@ public struct TextFieldComponentResolver: ComponentResolving {
                 id: nodeId,
                 nodeType: .textField(TextFieldNodeData(
                     placeholder: component.placeholder ?? "",
-                    style: style,
                     bindingPath: bindingPath
                 ))
             )
@@ -54,12 +54,29 @@ public struct TextFieldComponentResolver: ComponentResolving {
             initializeLocalState(on: viewNode, from: localState)
         }
 
+        // Resolve padding by merging node-level padding with style padding
+        let padding = IR.EdgeInsets(
+            from: component.padding,
+            mergingTop: resolvedStyle.paddingTop ?? 0,
+            mergingBottom: resolvedStyle.paddingBottom ?? 0,
+            mergingLeading: resolvedStyle.paddingLeading ?? 0,
+            mergingTrailing: resolvedStyle.paddingTrailing ?? 0
+        )
+
+        // Create TextFieldNode with flattened properties (no .style)
         let renderNode = RenderNode.textField(TextFieldNode(
             id: component.id,
             placeholder: component.placeholder ?? "",
             styleId: component.styleId,
-            style: style,
-            bindingPath: component.bind
+            bindingPath: component.bind,
+            textColor: resolvedStyle.textColor ?? .black,
+            fontSize: resolvedStyle.fontSize ?? 17,
+            backgroundColor: resolvedStyle.backgroundColor ?? .clear,
+            cornerRadius: resolvedStyle.cornerRadius ?? 0,
+            border: IR.Border(from: resolvedStyle),
+            padding: padding,
+            width: resolvedStyle.width,
+            height: resolvedStyle.height
         ))
 
         return ComponentResolutionResult(renderNode: renderNode, viewNode: viewNode)

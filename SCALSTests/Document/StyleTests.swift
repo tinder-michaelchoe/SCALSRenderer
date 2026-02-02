@@ -219,7 +219,7 @@ struct StyleSizingTests {
         """
         let data = json.data(using: .utf8)!
         let style = try JSONDecoder().decode(Document.Style.self, from: data)
-        #expect(style.width == 100)
+        #expect(style.width == .absolute(100))
     }
     
     @Test func decodesHeight() throws {
@@ -228,7 +228,7 @@ struct StyleSizingTests {
         """
         let data = json.data(using: .utf8)!
         let style = try JSONDecoder().decode(Document.Style.self, from: data)
-        #expect(style.height == 50)
+        #expect(style.height == .absolute(50))
     }
     
     @Test func decodesMinWidth() throws {
@@ -237,34 +237,34 @@ struct StyleSizingTests {
         """
         let data = json.data(using: .utf8)!
         let style = try JSONDecoder().decode(Document.Style.self, from: data)
-        #expect(style.minWidth == 80)
+        #expect(style.minWidth == .absolute(80))
     }
-    
+
     @Test func decodesMinHeight() throws {
         let json = """
         { "minHeight": 40 }
         """
         let data = json.data(using: .utf8)!
         let style = try JSONDecoder().decode(Document.Style.self, from: data)
-        #expect(style.minHeight == 40)
+        #expect(style.minHeight == .absolute(40))
     }
-    
+
     @Test func decodesMaxWidth() throws {
         let json = """
         { "maxWidth": 300 }
         """
         let data = json.data(using: .utf8)!
         let style = try JSONDecoder().decode(Document.Style.self, from: data)
-        #expect(style.maxWidth == 300)
+        #expect(style.maxWidth == .absolute(300))
     }
-    
+
     @Test func decodesMaxHeight() throws {
         let json = """
         { "maxHeight": 200 }
         """
         let data = json.data(using: .utf8)!
         let style = try JSONDecoder().decode(Document.Style.self, from: data)
-        #expect(style.maxHeight == 200)
+        #expect(style.maxHeight == .absolute(200))
     }
     
     @Test func decodesAllSizingProperties() throws {
@@ -280,12 +280,129 @@ struct StyleSizingTests {
         """
         let data = json.data(using: .utf8)!
         let style = try JSONDecoder().decode(Document.Style.self, from: data)
-        #expect(style.width == 100)
-        #expect(style.height == 50)
-        #expect(style.minWidth == 80)
-        #expect(style.minHeight == 40)
-        #expect(style.maxWidth == 200)
-        #expect(style.maxHeight == 100)
+        #expect(style.width == .absolute(100))
+        #expect(style.height == .absolute(50))
+        #expect(style.minWidth == .absolute(80))
+        #expect(style.minHeight == .absolute(40))
+        #expect(style.maxWidth == .absolute(200))
+        #expect(style.maxHeight == .absolute(100))
+    }
+
+    @Test func decodesFractionalDimensions() throws {
+        let json = """
+        {
+            "width": {"fractional": 0.8},
+            "height": {"fractional": 0.5},
+            "minWidth": {"absolute": 200},
+            "maxWidth": {"fractional": 0.9}
+        }
+        """
+        let data = json.data(using: .utf8)!
+        let style = try JSONDecoder().decode(Document.Style.self, from: data)
+        #expect(style.width == .fractional(0.8))
+        #expect(style.height == .fractional(0.5))
+        #expect(style.minWidth == .absolute(200))
+        #expect(style.maxWidth == .fractional(0.9))
+    }
+
+    @Test func decodesShorthandAbsoluteDimensions() throws {
+        let json = """
+        {
+            "width": 150,
+            "height": 200
+        }
+        """
+        let data = json.data(using: .utf8)!
+        let style = try JSONDecoder().decode(Document.Style.self, from: data)
+        #expect(style.width == .absolute(150))
+        #expect(style.height == .absolute(200))
+    }
+}
+
+// MARK: - Shadow Tests
+
+struct StyleShadowTests {
+
+    @Test func decodesFullShadow() throws {
+        let json = """
+        {
+            "shadow": {
+                "color": "#000000",
+                "radius": 8,
+                "x": 0,
+                "y": 4
+            }
+        }
+        """
+        let data = json.data(using: .utf8)!
+        let style = try JSONDecoder().decode(Document.Style.self, from: data)
+        #expect(style.shadow?.color == "#000000")
+        #expect(style.shadow?.radius == 8)
+        #expect(style.shadow?.x == 0)
+        #expect(style.shadow?.y == 4)
+    }
+
+    @Test func decodesPartialShadow() throws {
+        let json = """
+        {
+            "shadow": {
+                "color": "rgba(0, 0, 0, 0.1)",
+                "radius": 8
+            }
+        }
+        """
+        let data = json.data(using: .utf8)!
+        let style = try JSONDecoder().decode(Document.Style.self, from: data)
+        #expect(style.shadow?.color == "rgba(0, 0, 0, 0.1)")
+        #expect(style.shadow?.radius == 8)
+        #expect(style.shadow?.x == nil)
+        #expect(style.shadow?.y == nil)
+    }
+
+    @Test func decodesNilShadow() throws {
+        let json = """
+        {
+            "fontSize": 16
+        }
+        """
+        let data = json.data(using: .utf8)!
+        let style = try JSONDecoder().decode(Document.Style.self, from: data)
+        #expect(style.shadow == nil)
+    }
+
+    @Test func decodesNegativeOffsets() throws {
+        let json = """
+        {
+            "shadow": {
+                "color": "#000000",
+                "radius": 4,
+                "x": -2,
+                "y": -2
+            }
+        }
+        """
+        let data = json.data(using: .utf8)!
+        let style = try JSONDecoder().decode(Document.Style.self, from: data)
+        #expect(style.shadow?.x == -2)
+        #expect(style.shadow?.y == -2)
+    }
+
+    @Test func roundTripsShadow() throws {
+        let shadow = Document.Shadow(
+            color: "rgba(0, 0, 0, 0.15)",
+            radius: 12,
+            x: 0,
+            y: 6
+        )
+        let style = Document.Style(shadow: shadow)
+
+        let data = try JSONEncoder().encode(style)
+        let decoded = try JSONDecoder().decode(Document.Style.self, from: data)
+
+        #expect(decoded.shadow?.color == shadow.color)
+        #expect(decoded.shadow?.radius == shadow.radius)
+        #expect(decoded.shadow?.x == shadow.x)
+        #expect(decoded.shadow?.y == shadow.y)
     }
 }
 
@@ -454,8 +571,8 @@ struct StylePartialTests {
         """
         let data = json.data(using: .utf8)!
         let style = try JSONDecoder().decode(Document.Style.self, from: data)
-        #expect(style.width == 200)
-        #expect(style.height == 44)
+        #expect(style.width == .absolute(200))
+        #expect(style.height == .absolute(44))
         #expect(style.fontSize == nil)
     }
 }
@@ -477,6 +594,12 @@ struct StyleFullTests {
             "cornerRadius": 8,
             "borderWidth": 1,
             "borderColor": "#CCCCCC",
+            "shadow": {
+                "color": "rgba(0, 0, 0, 0.1)",
+                "radius": 8,
+                "x": 0,
+                "y": 4
+            },
             "tintColor": "#007AFF",
             "width": 200,
             "height": 44,
@@ -492,7 +615,7 @@ struct StyleFullTests {
         """
         let data = json.data(using: .utf8)!
         let style = try JSONDecoder().decode(Document.Style.self, from: data)
-        
+
         #expect(style.inherits == "baseStyle")
         #expect(style.fontFamily == "Helvetica Neue")
         #expect(style.fontSize == 16)
@@ -503,13 +626,17 @@ struct StyleFullTests {
         #expect(style.cornerRadius == 8)
         #expect(style.borderWidth == 1)
         #expect(style.borderColor == "#CCCCCC")
+        #expect(style.shadow?.color == "rgba(0, 0, 0, 0.1)")
+        #expect(style.shadow?.radius == 8)
+        #expect(style.shadow?.x == 0)
+        #expect(style.shadow?.y == 4)
         #expect(style.tintColor == "#007AFF")
-        #expect(style.width == 200)
-        #expect(style.height == 44)
-        #expect(style.minWidth == 100)
-        #expect(style.minHeight == 30)
-        #expect(style.maxWidth == 400)
-        #expect(style.maxHeight == 60)
+        #expect(style.width == .absolute(200))
+        #expect(style.height == .absolute(44))
+        #expect(style.minWidth == .absolute(100))
+        #expect(style.minHeight == .absolute(30))
+        #expect(style.maxWidth == .absolute(400))
+        #expect(style.maxHeight == .absolute(60))
         #expect(style.padding?.horizontal == 16)
         #expect(style.padding?.vertical == 12)
     }

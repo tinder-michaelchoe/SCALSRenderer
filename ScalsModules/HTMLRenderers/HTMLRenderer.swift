@@ -78,7 +78,7 @@ public struct HTMLRenderer: Renderer {
         case .system: ""
         }
         
-        let backgroundColor = tree.root.backgroundColor?.cssRGBA ?? "var(--ios-background)"
+        let backgroundColor = tree.root.backgroundColor.cssRGBA
         
         return """
         <!DOCTYPE html>

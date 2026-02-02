@@ -129,12 +129,10 @@ public enum ViewNodeType {
 public struct RootNodeData {
     public var backgroundColor: String?
     public var colorScheme: IR.ColorScheme
-    public var style: IR.Style
 
-    public init(backgroundColor: String? = nil, colorScheme: IR.ColorScheme = .system, style: IR.Style = IR.Style()) {
+    public init(backgroundColor: String? = nil, colorScheme: IR.ColorScheme = .system) {
         self.backgroundColor = backgroundColor
         self.colorScheme = colorScheme
-        self.style = style
     }
 }
 
@@ -143,20 +141,17 @@ public struct ContainerNodeData {
     public var alignment: IR.Alignment
     public var spacing: CGFloat
     public var padding: IR.EdgeInsets
-    public var style: IR.Style
 
     public init(
         layoutType: ContainerNode.LayoutType = .vstack,
         alignment: IR.Alignment = .center,
         spacing: CGFloat = 0,
-        padding: IR.EdgeInsets = .zero,
-        style: IR.Style = IR.Style()
+        padding: IR.EdgeInsets = .zero
     ) {
         self.layoutType = layoutType
         self.alignment = alignment
         self.spacing = spacing
         self.padding = padding
-        self.style = style
     }
 }
 
@@ -186,28 +181,23 @@ public struct SectionNodeData {
 
 public struct TextNodeData {
     public var content: String
-    public var style: IR.Style
 
-    public init(content: String = "", style: IR.Style = IR.Style()) {
+    public init(content: String = "") {
         self.content = content
-        self.style = style
     }
 }
 
 public struct ButtonNodeData {
     public var label: String
-    public var style: IR.Style
     public var fillWidth: Bool
     public var onTapAction: Document.Component.ActionBinding?
 
     public init(
         label: String = "",
-        style: IR.Style = IR.Style(),
         fillWidth: Bool = false,
         onTapAction: Document.Component.ActionBinding? = nil
     ) {
         self.label = label
-        self.style = style
         self.fillWidth = fillWidth
         self.onTapAction = onTapAction
     }
@@ -215,30 +205,24 @@ public struct ButtonNodeData {
 
 public struct TextFieldNodeData {
     public var placeholder: String
-    public var style: IR.Style
     public var bindingPath: String?
 
     public init(
         placeholder: String = "",
-        style: IR.Style = IR.Style(),
         bindingPath: String? = nil
     ) {
         self.placeholder = placeholder
-        self.style = style
         self.bindingPath = bindingPath
     }
 }
 
 public struct ToggleNodeData {
     public var bindingPath: String?
-    public var style: IR.Style
 
     public init(
-        bindingPath: String? = nil,
-        style: IR.Style = IR.Style()
+        bindingPath: String? = nil
     ) {
         self.bindingPath = bindingPath
-        self.style = style
     }
 }
 
@@ -246,18 +230,15 @@ public struct SliderNodeData {
     public var bindingPath: String?
     public var minValue: Double
     public var maxValue: Double
-    public var style: IR.Style
 
     public init(
         bindingPath: String? = nil,
         minValue: Double = 0.0,
-        maxValue: Double = 1.0,
-        style: IR.Style = IR.Style()
+        maxValue: Double = 1.0
     ) {
         self.bindingPath = bindingPath
         self.minValue = minValue
         self.maxValue = maxValue
-        self.style = style
     }
 }
 
@@ -265,13 +246,11 @@ public struct ImageNodeData {
     public var source: ImageNode.Source
     public var placeholder: ImageNode.Source?
     public var loading: ImageNode.Source?
-    public var style: IR.Style
 
-    public init(source: ImageNode.Source = .sfsymbol(name: "questionmark"), placeholder: ImageNode.Source? = nil, loading: ImageNode.Source? = nil, style: IR.Style = IR.Style()) {
+    public init(source: ImageNode.Source = .sfsymbol(name: "questionmark"), placeholder: ImageNode.Source? = nil, loading: ImageNode.Source? = nil) {
         self.source = source
         self.placeholder = placeholder
         self.loading = loading
-        self.style = style
     }
 }
 
@@ -280,40 +259,33 @@ public struct GradientNodeData {
     public var colors: [GradientNode.ColorStop]
     public var startPoint: IR.UnitPoint
     public var endPoint: IR.UnitPoint
-    public var style: IR.Style
 
     public init(
         gradientType: GradientNode.GradientType = .linear,
         colors: [GradientNode.ColorStop] = [],
         startPoint: IR.UnitPoint = .top,
-        endPoint: IR.UnitPoint = .bottom,
-        style: IR.Style = IR.Style()
+        endPoint: IR.UnitPoint = .bottom
     ) {
         self.gradientType = gradientType
         self.colors = colors
         self.startPoint = startPoint
         self.endPoint = endPoint
-        self.style = style
     }
 }
 
 public struct ShapeNodeData {
     public var shapeType: ShapeNode.ShapeType
-    public var style: IR.Style
 
-    public init(shapeType: ShapeNode.ShapeType, style: IR.Style = IR.Style()) {
+    public init(shapeType: ShapeNode.ShapeType) {
         self.shapeType = shapeType
-        self.style = style
     }
 }
 
 public struct CustomComponentNodeData {
     public var typeName: String
-    public var style: IR.Style
 
-    public init(typeName: String, style: IR.Style = IR.Style()) {
+    public init(typeName: String) {
         self.typeName = typeName
-        self.style = style
     }
 }
 

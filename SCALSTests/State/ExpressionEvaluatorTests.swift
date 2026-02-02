@@ -451,7 +451,7 @@ struct ExpressionEvaluatorComprehensiveArithmeticTests {
     // MARK: Edge Cases That Should NOT Match Arithmetic
 
     @Test func hyphenatedText() {
-        var state = MockStateReader()
+        let state = MockStateReader()
 
         let result = evaluator.evaluate("5-star rating", using: state)
         // Should return as-is, not try to evaluate as arithmetic
@@ -459,21 +459,21 @@ struct ExpressionEvaluatorComprehensiveArithmeticTests {
     }
 
     @Test func emailAddress() {
-        var state = MockStateReader()
+        let state = MockStateReader()
 
         let result = evaluator.evaluate("user@domain.com", using: state)
         #expect(result as? String == "user@domain.com")
     }
 
     @Test func justText() {
-        var state = MockStateReader()
+        let state = MockStateReader()
 
         let result = evaluator.evaluate("Hello World", using: state)
         #expect(result as? String == "Hello World")
     }
 
     @Test func textWithOperatorButNoOperands() {
-        var state = MockStateReader()
+        let state = MockStateReader()
 
         let result = evaluator.evaluate("Price: $10 + tax", using: state)
         // Should not match arithmetic pattern
@@ -790,7 +790,8 @@ struct ExpressionEvaluatorArrayTests {
 
         let result = evaluator.evaluate("items[index]", using: state)
         // Should return nil for out of bounds
-        #expect(result == nil)
+        let mirror = Mirror(reflecting: result)
+        #expect(mirror.displayStyle == .optional && mirror.children.isEmpty)
     }
 }
 

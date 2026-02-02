@@ -37,7 +37,7 @@ struct SliderNodeView: View {
     var body: some View {
         Slider(value: $value, in: node.minValue...node.maxValue)
             // Convert IR.Color to SwiftUI.Color
-            .tint(node.style.tintColor?.swiftUI)
+            .tint(node.tintColor?.swiftUI)
             .onAppear {
                 if let path = node.bindingPath {
                     value = stateStore.get(path) as? Double ?? node.minValue

@@ -113,14 +113,14 @@ private extension View {
         let maxHeight = style.maxHeight
 
         if width != nil || height != nil || minWidth != nil || maxWidth != nil || minHeight != nil || maxHeight != nil {
-            self.frame(
+            self.modifier(DimensionFrameModifier(
+                width: width,
+                height: height,
                 minWidth: minWidth,
-                idealWidth: width,
-                maxWidth: maxWidth,
                 minHeight: minHeight,
-                idealHeight: height,
+                maxWidth: maxWidth,
                 maxHeight: maxHeight
-            )
+            ))
         } else {
             self
         }

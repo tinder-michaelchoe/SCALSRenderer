@@ -398,7 +398,8 @@ extension Document {
         }
     }
 
-    public enum DataReferenceType: String, Codable {
+    @frozen
+    public enum DataReferenceType: String, Codable, Sendable {
         case `static`
         case binding
         case localBinding  // References local state with "local." prefix

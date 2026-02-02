@@ -17,9 +17,10 @@ public struct GradientComponentResolver: ComponentResolving {
 
     @MainActor
     public func resolve(_ component: Document.Component, context: ResolutionContext) throws -> ComponentResolutionResult {
-        let style = context.styleResolver.resolve(component.styleId)
+        // Resolve style to get flattened properties
+        let resolvedStyle = context.styleResolver.resolve(component.styleId)
         let nodeId = component.id ?? UUID().uuidString
-        let gradientNode = buildGradientNode(from: component, style: style)
+        let gradientNode = buildGradientNode(from: component, resolvedStyle: resolvedStyle)
 
         // Create view node if tracking
         let viewNode: ViewNode?
@@ -30,8 +31,7 @@ public struct GradientComponentResolver: ComponentResolving {
                     gradientType: gradientNode.gradientType,
                     colors: gradientNode.colors,
                     startPoint: gradientNode.startPoint,
-                    endPoint: gradientNode.endPoint,
-                    style: style
+                    endPoint: gradientNode.endPoint
                 ))
             )
             viewNode?.parent = context.parentViewNode
@@ -52,7 +52,7 @@ public struct GradientComponentResolver: ComponentResolving {
 
     // MARK: - Private Helpers
 
-    private func buildGradientNode(from component: Document.Component, style: IR.Style) -> GradientNode {
+    private func buildGradientNode(from component: Document.Component, resolvedStyle: ResolvedStyle) -> GradientNode {
         let colors = (component.gradientColors ?? []).map { (config: Document.GradientColorConfig) -> GradientNode.ColorStop in
             let color: GradientColor
             if let lightHex = config.lightColor, let darkHex = config.darkColor {
@@ -68,13 +68,26 @@ public struct GradientComponentResolver: ComponentResolving {
         let startPoint = GradientPointConverter.convert(component.gradientStart)
         let endPoint = GradientPointConverter.convert(component.gradientEnd)
 
+        // Resolve padding by merging node-level padding with style padding
+        let padding = IR.EdgeInsets(
+            from: component.padding,
+            mergingTop: resolvedStyle.paddingTop ?? 0,
+            mergingBottom: resolvedStyle.paddingBottom ?? 0,
+            mergingLeading: resolvedStyle.paddingLeading ?? 0,
+            mergingTrailing: resolvedStyle.paddingTrailing ?? 0
+        )
+
+        // Create GradientNode with flattened properties (no .style)
         return GradientNode(
             id: component.id,
             gradientType: .linear,
             colors: colors,
             startPoint: startPoint,
             endPoint: endPoint,
-            style: style
+            cornerRadius: resolvedStyle.cornerRadius ?? 0,
+            padding: padding,
+            width: resolvedStyle.width,
+            height: resolvedStyle.height
         )
     }
 

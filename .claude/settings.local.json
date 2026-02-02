@@ -44,18 +44,21 @@
       "Bash(test:*)",
       "Bash(swift -frontend -typecheck:*)",
       "Bash(xargs basename:*)",
-      "Bash(wc:*)",
+      "Bash(swift -typecheck:*)",
       "WebFetch(domain:github.com)",
+      "WebFetch(domain:konstaui.com)",
+      "Bash(xcrun simctl list devices available:*)",
       "Bash(tee:*)",
-      "Bash(xargs ls:*)",
-      "Bash(git -C /Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer log --oneline -10)",
-      "Bash(git -C /Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer show c5e87e2 --stat)",
-      "Bash(git -C /Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer show e438953 --stat)",
-      "Bash(git -C /Users/michael.choe/Desktop/PROGRAMMING/ScalsRenderer show c5e87e2)",
+      "Bash(xcrun swift-test:*)",
+      "Bash(xcrun xctest:*)",
+      "Bash(plutil:*)",
+      "Bash(DYLD_FRAMEWORK_PATH=. xcrun simctl spawn E4FE2CCB-6707-4EF1-B83B-712F3988E3F4 xctest:*)",
       "Bash(xcrun xcresulttool:*)",
+      "Bash(python3:*)",
       "Bash(git restore:*)",
-      "Bash(xcrun simctl:*)",
-      "Bash(timeout 90 bash:*)"
+      "Bash(xcrun swiftc:*)",
+      "Bash(do echo \"File: $file\")",
+      "Bash(xargs ls:*)"
     ]
   }
 }

@@ -58,12 +58,8 @@ final class RenderTreeUIView: UIView {
     }
 
     private func setupView() {
-        // Background color - convert IR.Color to UIColor
-        if let bg = tree.root.backgroundColor {
-            backgroundColor = bg.uiColor
-        } else {
-            backgroundColor = .systemBackground
-        }
+        // Background color - convert IR.Color to UIColor (non-optional)
+        backgroundColor = tree.root.backgroundColor.uiColor
 
         // Content container
         let contentStack = UIStackView()
@@ -139,60 +135,56 @@ final class RenderTreeUIView: UIView {
 // MARK: - UIKit Style Extensions
 
 public extension UILabel {
-    func applyStyle(_ style: IR.Style) {
-        // Convert IR.Color to UIColor
-        if let textColor = style.textColor {
-            self.textColor = textColor.uiColor
-        }
-        font = style.uiFont
-        // Convert IR.TextAlignment to NSTextAlignment
-        if let alignment = style.textAlignment {
-            textAlignment = alignment.uiKit
-        }
+    /// Apply text style from a TextNode's flattened properties
+    func applyStyle(from node: TextNode) {
+        textColor = node.textColor.uiColor
+        font = UIFont.systemFont(ofSize: node.fontSize, weight: node.fontWeight.uiKit)
+        textAlignment = node.textAlignment.uiKit
     }
 }
 
 public extension UIButton {
-    func applyStyle(_ style: IR.Style) {
-        // Convert IR.Color to UIColor
-        if let textColor = style.textColor {
-            setTitleColor(textColor.uiColor, for: .normal)
-        }
-        titleLabel?.font = style.uiFont
-        if let bgColor = style.backgroundColor {
-            self.backgroundColor = bgColor.uiColor
-        }
-        if let cornerRadius = style.cornerRadius {
-            layer.cornerRadius = cornerRadius
+    /// Apply style from a ButtonStateStyle's flattened properties
+    func applyStyle(_ style: ButtonStateStyle) {
+        setTitleColor(style.textColor.uiColor, for: .normal)
+        titleLabel?.font = UIFont.systemFont(ofSize: style.fontSize, weight: style.fontWeight.uiKit)
+        backgroundColor = style.backgroundColor.uiColor
+        layer.cornerRadius = style.cornerRadius
+        if style.cornerRadius > 0 {
             clipsToBounds = true
         }
-        // Apply horizontal content alignment based on textAlignment
-        if let textAlignment = style.textAlignment {
-            switch textAlignment {
-            case .leading:
-                contentHorizontalAlignment = .leading
-            case .center:
-                contentHorizontalAlignment = .center
-            case .trailing:
-                contentHorizontalAlignment = .trailing
-            }
+
+        // Apply border
+        if let border = style.border {
+            layer.borderColor = border.color.uiColor.cgColor
+            layer.borderWidth = border.width
+        }
+
+        // Apply shadow
+        if let shadow = style.shadow {
+            layer.shadowColor = shadow.color.uiColor.cgColor
+            layer.shadowRadius = shadow.radius
+            layer.shadowOffset = CGSize(width: shadow.x, height: shadow.y)
+            layer.shadowOpacity = Float(shadow.color.alpha)
         }
     }
 }
 
 public extension UITextField {
-    func applyStyle(_ style: IR.Style) {
-        // Convert IR.Color to UIColor
-        if let textColor = style.textColor {
-            self.textColor = textColor.uiColor
-        }
-        font = style.uiFont
-        if let bgColor = style.backgroundColor {
-            self.backgroundColor = bgColor.uiColor
-        }
-        if let cornerRadius = style.cornerRadius {
-            layer.cornerRadius = cornerRadius
+    /// Apply style from a TextFieldNode's flattened properties
+    func applyStyle(from node: TextFieldNode) {
+        textColor = node.textColor.uiColor
+        font = UIFont.systemFont(ofSize: node.fontSize)
+        backgroundColor = node.backgroundColor.uiColor
+        layer.cornerRadius = node.cornerRadius
+        if node.cornerRadius > 0 {
             clipsToBounds = true
+        }
+
+        // Apply border
+        if let border = node.border {
+            layer.borderColor = border.color.uiColor.cgColor
+            layer.borderWidth = border.width
         }
     }
 }

@@ -31,19 +31,8 @@ struct DividerNodeView: View {
 
     var body: some View {
         Rectangle()
-            .fill(backgroundColor)
-            .frame(height: height)
+            .fill(node.color.swiftUI)
+            .frame(height: node.thickness)
             .frame(maxWidth: .infinity)
-    }
-
-    private var height: CGFloat {
-        node.style.height ?? 1
-    }
-
-    private var backgroundColor: Color {
-        if let color = node.style.backgroundColor {
-            return color.swiftUI
-        }
-        return Color(UIColor.separator)
     }
 }

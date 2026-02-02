@@ -38,7 +38,7 @@ struct ToggleNodeView: View {
         Toggle("", isOn: $isOn)
             .labelsHidden()
             // Convert IR.Color to SwiftUI.Color
-            .tint(node.style.tintColor?.swiftUI)
+            .tint(node.tintColor?.swiftUI)
             .onAppear {
                 if let path = node.bindingPath {
                     isOn = stateStore.get(path) as? Bool ?? false
