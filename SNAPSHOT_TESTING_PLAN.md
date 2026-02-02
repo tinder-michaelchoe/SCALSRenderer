@@ -4,6 +4,8 @@
 
 This plan outlines a comprehensive snapshot testing strategy for the ScalsRenderer project to verify cross-renderer consistency and prevent visual regressions. The system will test that SwiftUI, UIKit, and HTML renderers produce equivalent outputs from the same IR (Intermediate Representation), and compare against canonical reference implementations.
 
+**IMPORTANT: Flattened Properties Architecture**: This plan has been updated to reflect the current IR architecture where nodes have flattened style properties directly (e.g., `textColor`, `fontSize`, `backgroundColor`) instead of an `IR.Style` property. This makes the IR layer simpler and more efficient.
+
 ### 🤖 Autonomous Execution
 
 **This test suite is designed for fully autonomous operation.** Once initiated, the implementation process runs continuously without human intervention:
@@ -27,6 +29,21 @@ This plan outlines a comprehensive snapshot testing strategy for the ScalsRender
 2. **Regression Prevention**: Catch visual regressions when renderer implementations change
 3. **Canonical Compliance**: SwiftUI renderer is the canonical reference - UIKit and HTML must match SwiftUI's output
 4. **Example Coverage**: Validate all 48 example files render correctly
+
+### Versioning System Impact
+
+**SCALS now includes a dual versioning system** (v0.1.0):
+- **Document Schema Version**: User-facing JSON API version
+- **IR Schema Version**: Internal IR contract between Resolution and Renderers
+
+**Impact on Snapshot Testing:**
+- `RenderTree` now includes `irVersion` property (e.g., `v0.1.0`)
+- Snapshots implicitly test the current IR version
+- If IR version changes (major version bump), snapshots may need regeneration
+- Document version changes typically don't affect IR rendering
+- See `Docs/Versioning.md` for full details
+
+**Note**: For Phase 1-6, we're testing IR v0.1.0. Future IR versions may require snapshot updates.
 
 ### Success Metrics
 - 100% of RenderNode types tested
@@ -395,8 +412,9 @@ final class TextNodeSnapshotTests: XCTestCase {
     func testTextWithBasicStyle() async throws {
         let node = RenderNode.text(TextNode(
             content: "Hello World",
-            style: IR.Style(fontSize: 16, textColor: .black),
-            padding: .zero
+            textColor: .black,
+            fontSize: 16
+            // Other properties use defaults
         ))
 
         let image = await RendererTestHelpers.renderSwiftUI(
@@ -421,8 +439,8 @@ final class TextNodeSnapshotTests: XCTestCase {
         for (name, style) in testCases {
             let node = RenderNode.text(TextNode(
                 content: "Color Scheme Test",
-                style: IR.Style(fontSize: 16),
-                padding: .zero
+                fontSize: 16
+                // textColor will use default .black
             ))
 
             let traits = UITraitCollection(userInterfaceStyle: style)
@@ -465,8 +483,8 @@ final class ComponentConsistencyTests: XCTestCase {
     func testTextNodeConsistency() async throws {
         let node = RenderNode.text(TextNode(
             content: "Consistency Test",
-            style: IR.Style(fontSize: 16, textColor: .black),
-            padding: .zero
+            textColor: .black,
+            fontSize: 16
         ))
 
         let size = CGSize(width: 375, height: 100)
@@ -609,8 +627,8 @@ final class CanonicalComparisonTests: XCTestCase {
         // Create equivalent IR node
         let node = RenderNode.text(TextNode(
             content: "Canonical Test",
-            style: IR.Style(fontSize: 16, textColor: .black),
-            padding: .zero
+            textColor: .black,
+            fontSize: 16
         ))
 
         // Render with ScalsRenderer
@@ -1029,13 +1047,19 @@ func testButtonWithBasicStyle() async throws {
     let node = RenderNode.button(ButtonNode(
         label: "Tap Me",
         styles: ButtonStyles(
-            normal: IR.Style(
-                backgroundColor: .systemBlue,
+            normal: ButtonStateStyle(
                 textColor: .white,
-                padding: EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
+                fontSize: 17,
+                fontWeight: .regular,
+                backgroundColor: .systemBlue,
+                cornerRadius: 8,
+                border: nil,
+                shadow: nil,
+                tintColor: nil,
+                padding: IR.EdgeInsets(top: 12, leading: 16, bottom: 12, trailing: 16)
             )
         ),
-        onTap: ActionBinding(action: .none)
+        onTap: nil
     ))
 
     let image = await RendererTestHelpers.renderSwiftUI(
@@ -1919,9 +1943,23 @@ final class [ComponentName]SnapshotTests: XCTestCase {
 
     @MainActor
     func test[Component]WithBasicStyle() async throws {
-        let node = RenderNode.[nodeType]([NodeType](
-            // Configure node
+        // Example for TextNode:
+        let node = RenderNode.text(TextNode(
+            content: "Example Text",
+            textColor: .black,
+            fontSize: 16
+            // Use default values for other properties
         ))
+
+        // Example for ContainerNode:
+        // let node = RenderNode.container(ContainerNode(
+        //     layoutType: .vstack,
+        //     alignment: .center,
+        //     spacing: 8,
+        //     children: [/* child nodes */],
+        //     backgroundColor: .white,
+        //     cornerRadius: 8
+        // ))
 
         let image = await RendererTestHelpers.renderSwiftUI(
             node,
@@ -1950,8 +1988,11 @@ final class [Component]ConsistencyTests: XCTestCase {
 
     @MainActor
     func test[Component]Consistency() async throws {
-        let node = RenderNode.[nodeType]([NodeType](
-            // Configure node
+        // Example: Create node with flattened properties
+        let node = RenderNode.text(TextNode(
+            content: "Consistency Test",
+            textColor: .black,
+            fontSize: 16
         ))
 
         // Choose appropriate size based on component content
@@ -1985,9 +2026,11 @@ final class [Component]CanonicalTests: XCTestCase {
 
     @MainActor
     func test[Component]VsCanonicalSwiftUI() async throws {
-        // Create SCALS IR node
-        let node = RenderNode.[nodeType]([NodeType](
-            // Configure node
+        // Create SCALS IR node with flattened properties
+        let node = RenderNode.text(TextNode(
+            content: "Example",
+            textColor: .black,
+            fontSize: 16
         ))
 
         // Choose appropriate size
@@ -2001,6 +2044,7 @@ final class [Component]CanonicalTests: XCTestCase {
             // Pure SwiftUI implementation
             Text("Example")
                 .font(.system(size: 16))
+                .foregroundColor(.black)
         }
 
         // Compare

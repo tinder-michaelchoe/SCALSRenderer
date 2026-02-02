@@ -17,22 +17,37 @@ final class ButtonNodeSnapshotTests: XCTestCase {
 
     @MainActor
     func testButtonWithBasicStyle() async throws {
-        // Create a simple button with basic styling
-        var normalStyle = IR.Style()
-        normalStyle.fontSize = 16
-        normalStyle.fontWeight = .semibold
-        normalStyle.textColor = IR.Color.white
-        normalStyle.backgroundColor = IR.Color(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0) // iOS blue
-        normalStyle.cornerRadius = 10
-        normalStyle.height = 44
-        normalStyle.paddingLeading = 20
-        normalStyle.paddingTrailing = 20
+        // Create a simple button with basic styling (flattened properties)
+        let normalStyle = ButtonStateStyle(
+            textColor: .white,
+            fontSize: 16,
+            fontWeight: .semibold,
+            backgroundColor: IR.Color(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0), // iOS blue
+            cornerRadius: 10,
+            border: nil,
+            shadow: nil,
+            tintColor: nil,
+            width: nil,
+            height: .absolute(44),
+            minWidth: nil,
+            minHeight: nil,
+            maxWidth: nil,
+            maxHeight: nil,
+            padding: IR.EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+        )
 
         let button = ButtonNode(
             id: "test-button",
             label: "Tap Me",
+            styleId: nil,
             styles: ButtonStyles(normal: normalStyle),
-            fillWidth: true
+            isSelectedBinding: nil,
+            fillWidth: true,
+            onTap: nil,
+            image: nil,
+            imagePlacement: .leading,
+            imageSpacing: 8,
+            buttonShape: nil
         )
 
         let node = RenderNode.button(button)
@@ -94,50 +109,81 @@ final class ButtonNodeSnapshotTests: XCTestCase {
 
     @MainActor
     func testButtonWithStates() async throws {
-        // Test button in different states: normal, disabled, selected
+        // Test button in different states: normal, disabled, selected (flattened properties)
 
         // Normal state
-        var normalStyle = IR.Style()
-        normalStyle.fontSize = 16
-        normalStyle.fontWeight = .semibold
-        normalStyle.textColor = IR.Color.white
-        normalStyle.backgroundColor = IR.Color(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0)
-        normalStyle.cornerRadius = 10
-        normalStyle.height = 44
-        normalStyle.paddingLeading = 20
-        normalStyle.paddingTrailing = 20
+        let normalStyle = ButtonStateStyle(
+            textColor: .white,
+            fontSize: 16,
+            fontWeight: .semibold,
+            backgroundColor: IR.Color(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0),
+            cornerRadius: 10,
+            border: nil,
+            shadow: nil,
+            tintColor: nil,
+            width: nil,
+            height: .absolute(44),
+            minWidth: nil,
+            minHeight: nil,
+            maxWidth: nil,
+            maxHeight: nil,
+            padding: IR.EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+        )
 
         // Disabled state
-        var disabledStyle = IR.Style()
-        disabledStyle.fontSize = 16
-        disabledStyle.fontWeight = .semibold
-        disabledStyle.textColor = IR.Color(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.3)
-        disabledStyle.backgroundColor = IR.Color(red: 0.0, green: 0.48, blue: 1.0, alpha: 0.3)
-        disabledStyle.cornerRadius = 10
-        disabledStyle.height = 44
-        disabledStyle.paddingLeading = 20
-        disabledStyle.paddingTrailing = 20
+        let disabledStyle = ButtonStateStyle(
+            textColor: IR.Color(red: 1.0, green: 1.0, blue: 1.0, alpha: 0.3),
+            fontSize: 16,
+            fontWeight: .semibold,
+            backgroundColor: IR.Color(red: 0.0, green: 0.48, blue: 1.0, alpha: 0.3),
+            cornerRadius: 10,
+            border: nil,
+            shadow: nil,
+            tintColor: nil,
+            width: nil,
+            height: .absolute(44),
+            minWidth: nil,
+            minHeight: nil,
+            maxWidth: nil,
+            maxHeight: nil,
+            padding: IR.EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+        )
 
         // Selected state
-        var selectedStyle = IR.Style()
-        selectedStyle.fontSize = 16
-        selectedStyle.fontWeight = .semibold
-        selectedStyle.textColor = IR.Color.white
-        selectedStyle.backgroundColor = IR.Color(red: 0.0, green: 0.34, blue: 0.72, alpha: 1.0) // Darker blue
-        selectedStyle.cornerRadius = 10
-        selectedStyle.height = 44
-        selectedStyle.paddingLeading = 20
-        selectedStyle.paddingTrailing = 20
+        let selectedStyle = ButtonStateStyle(
+            textColor: .white,
+            fontSize: 16,
+            fontWeight: .semibold,
+            backgroundColor: IR.Color(red: 0.0, green: 0.34, blue: 0.72, alpha: 1.0), // Darker blue
+            cornerRadius: 10,
+            border: nil,
+            shadow: nil,
+            tintColor: nil,
+            width: nil,
+            height: .absolute(44),
+            minWidth: nil,
+            minHeight: nil,
+            maxWidth: nil,
+            maxHeight: nil,
+            padding: IR.EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+        )
 
         let button = ButtonNode(
             id: "test-button-states",
             label: "Button States",
+            styleId: nil,
             styles: ButtonStyles(
                 normal: normalStyle,
                 selected: selectedStyle,
                 disabled: disabledStyle
             ),
-            fillWidth: true
+            isSelectedBinding: nil,
+            fillWidth: true,
+            onTap: nil,
+            image: nil,
+            imagePlacement: .leading,
+            imageSpacing: 8,
+            buttonShape: nil
         )
 
         let node = RenderNode.button(button)
@@ -165,21 +211,36 @@ final class ButtonNodeSnapshotTests: XCTestCase {
         ]
 
         for (name, bgColor, textColor) in colorSchemes {
-            var style = IR.Style()
-            style.fontSize = 16
-            style.fontWeight = .semibold
-            style.textColor = textColor
-            style.backgroundColor = bgColor
-            style.cornerRadius = 10
-            style.height = 44
-            style.paddingLeading = 20
-            style.paddingTrailing = 20
+            let style = ButtonStateStyle(
+                textColor: textColor,
+                fontSize: 16,
+                fontWeight: .semibold,
+                backgroundColor: bgColor,
+                cornerRadius: 10,
+                border: nil,
+                shadow: nil,
+                tintColor: nil,
+                width: nil,
+                height: .absolute(44),
+                minWidth: nil,
+                minHeight: nil,
+                maxWidth: nil,
+                maxHeight: nil,
+                padding: IR.EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+            )
 
             let button = ButtonNode(
                 id: "test-button-\(name)",
                 label: "\(name.capitalized) Button",
+                styleId: nil,
                 styles: ButtonStyles(normal: style),
-                fillWidth: true
+                isSelectedBinding: nil,
+                fillWidth: true,
+                onTap: nil,
+                image: nil,
+                imagePlacement: .leading,
+                imageSpacing: 8,
+                buttonShape: nil
             )
 
             let node = RenderNode.button(button)
@@ -220,23 +281,36 @@ final class ButtonNodeSnapshotTests: XCTestCase {
     @MainActor
     func testButtonWithBorder() async throws {
         // Test button with border styling
-        var style = IR.Style()
-        style.fontSize = 16
-        style.fontWeight = .semibold
-        style.textColor = IR.Color(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0) // Blue text
-        style.backgroundColor = IR.Color.clear
-        style.borderColor = IR.Color(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0) // Blue border
-        style.borderWidth = 2
-        style.cornerRadius = 10
-        style.height = 44
-        style.paddingLeading = 20
-        style.paddingTrailing = 20
+        let style = ButtonStateStyle(
+            textColor: IR.Color(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0), // Blue text
+            fontSize: 16,
+            fontWeight: .semibold,
+            backgroundColor: IR.Color.clear,
+            cornerRadius: 10,
+            border: IR.Border(color: IR.Color(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0), width: 2),
+            shadow: nil,
+            tintColor: nil,
+            width: nil,
+            height: .absolute(44),
+            minWidth: nil,
+            minHeight: nil,
+            maxWidth: nil,
+            maxHeight: nil,
+            padding: IR.EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20)
+        )
 
         let button = ButtonNode(
             id: "test-button-border",
             label: "Bordered Button",
+            styleId: nil,
             styles: ButtonStyles(normal: style),
-            fillWidth: true
+            isSelectedBinding: nil,
+            fillWidth: true,
+            onTap: nil,
+            image: nil,
+            imagePlacement: .leading,
+            imageSpacing: 8,
+            buttonShape: nil
         )
 
         let node = RenderNode.button(button)

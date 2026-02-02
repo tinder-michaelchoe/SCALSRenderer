@@ -17,15 +17,11 @@ final class TextNodeSnapshotTests: XCTestCase {
 
     @MainActor
     func testTextWithBasicStyle() async throws {
-        // Create a simple text node with basic styling
-        var style = IR.Style()
-        style.fontSize = 16
-        style.textColor = IR.Color.black
-
+        // Create a simple text node with basic styling (flattened properties)
         let node = RenderNode.text(TextNode(
             content: "testTextWithBasicStyle",
-            style: style,
-            padding: .zero
+            textColor: .black,
+            fontSize: 16
         ))
 
         // Render with SwiftUI
@@ -68,14 +64,10 @@ final class TextNodeSnapshotTests: XCTestCase {
     @MainActor
     func testTextWithCanonicalComparison() async throws {
         // Test that SCALS renderer output matches canonical SwiftUI
-        var style = IR.Style()
-        style.fontSize = 16
-        style.textColor = IR.Color.black
-
         let node = RenderNode.text(TextNode(
             content: "testTextWithCanonicalComparison",
-            style: style,
-            padding: .zero
+            textColor: .black,
+            fontSize: 16
         ))
 
         // SCALS renderer
@@ -102,14 +94,10 @@ final class TextNodeSnapshotTests: XCTestCase {
     @MainActor
     func testTextWithColorSchemes() async throws {
         // Test text rendering in both light and dark modes
-        var style = IR.Style()
-        style.fontSize = 18
-        style.textColor = IR.Color(red: 0.2, green: 0.2, blue: 0.8, alpha: 1.0)  // Blue text
-
         let node = RenderNode.text(TextNode(
             content: "testTextWithColorSchemes",
-            style: style,
-            padding: .zero
+            textColor: IR.Color(red: 0.2, green: 0.2, blue: 0.8, alpha: 1.0),  // Blue text
+            fontSize: 18
         ))
 
         // Light mode traits
@@ -216,15 +204,11 @@ final class TextNodeSnapshotTests: XCTestCase {
         ]
 
         for (weight, name) in weights {
-            var style = IR.Style()
-            style.fontSize = 18
-            style.fontWeight = weight
-            style.textColor = IR.Color.black
-
             let node = RenderNode.text(TextNode(
                 content: "Font Weight: \(name)",
-                style: style,
-                padding: .zero
+                textColor: .black,
+                fontSize: 18,
+                fontWeight: weight
             ))
 
             // SwiftUI
@@ -299,14 +283,10 @@ final class TextNodeSnapshotTests: XCTestCase {
         ]
 
         for (size, name) in sizes {
-            var style = IR.Style()
-            style.fontSize = size
-            style.textColor = IR.Color.black
-
             let node = RenderNode.text(TextNode(
                 content: "Size: \(Int(size))pt",
-                style: style,
-                padding: .zero
+                textColor: .black,
+                fontSize: size
             ))
 
             // SwiftUI
@@ -369,15 +349,11 @@ final class TextNodeSnapshotTests: XCTestCase {
         ]
 
         for (alignment, name) in alignments {
-            var textStyle = IR.Style()
-            textStyle.fontSize = 16
-            textStyle.textColor = IR.Color.black
-            textStyle.textAlignment = alignment
-
             let textNode = TextNode(
                 content: "Aligned \(name)",
-                style: textStyle,
-                padding: .zero
+                textColor: .black,
+                fontSize: 16,
+                textAlignment: alignment
             )
 
             let node = RenderNode.text(textNode)
@@ -444,14 +420,10 @@ final class TextNodeSnapshotTests: XCTestCase {
 
     @MainActor
     func testTextWithMultiline() async throws {
-        var style = IR.Style()
-        style.fontSize = 16
-        style.textColor = IR.Color.black
-
         let node = RenderNode.text(TextNode(
             content: "This is a multiline text example that should wrap to multiple lines when the content is too long to fit on a single line.",
-            style: style,
-            padding: .zero
+            textColor: .black,
+            fontSize: 16
         ))
 
         // SwiftUI
@@ -506,13 +478,10 @@ final class TextNodeSnapshotTests: XCTestCase {
 
     @MainActor
     func testTextWithPadding() async throws {
-        var style = IR.Style()
-        style.fontSize = 16
-        style.textColor = IR.Color.black
-
         let node = RenderNode.text(TextNode(
             content: "Text with padding",
-            style: style,
+            textColor: .black,
+            fontSize: 16,
             padding: IR.EdgeInsets(top: 16, leading: 32, bottom: 16, trailing: 32)
         ))
 
