@@ -1,0 +1,15 @@
+# SCALS Schema Files
+# Mark versioned schema files as generated to discourage direct editing
+# These are historical records that should not be modified
+SCALS/Schema/*-v[0-9]*.json linguist-generated=true
+
+# Show diffs for latest symlinks
+SCALS/Schema/*-latest.json linguist-generated=false
+
+# Xcode project files
+*.pbxproj merge=union
+*.xcuserstate binary
+
+# Swift Package Manager
+.build/ linguist-generated=true
+Package.resolved linguist-generated=true

@@ -17,6 +17,12 @@ import Foundation
 /// The root of the resolved render tree
 /// All styles resolved, data bound, references validated
 public struct RenderTree {
+    /// IR schema version used to create this tree.
+    ///
+    /// This version indicates the IR contract used for rendering.
+    /// Renderers can check this to ensure compatibility.
+    public let irVersion: DocumentVersion
+
     /// The root node containing all children
     public let root: RootNode
 
@@ -26,7 +32,13 @@ public struct RenderTree {
     /// Action definitions for execution
     public let actions: [String: ActionDefinition]
 
-    public init(root: RootNode, stateStore: StateStore, actions: [String: ActionDefinition]) {
+    public init(
+        root: RootNode,
+        stateStore: StateStore,
+        actions: [String: ActionDefinition],
+        irVersion: DocumentVersion = .currentIR
+    ) {
+        self.irVersion = irVersion
         self.root = root
         self.stateStore = stateStore
         self.actions = actions

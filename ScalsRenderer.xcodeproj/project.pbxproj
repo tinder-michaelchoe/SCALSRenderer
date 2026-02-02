@@ -176,16 +176,6 @@
 			path = ScalsModulesTests;
 			sourceTree = "<group>";
 		};
-		806245052F048FE60055EA41 /* ScalsExamples */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ScalsExamples;
-			sourceTree = "<group>";
-		};
-		806245142F048FE60055EA41 /* ScalsExamplesTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = ScalsExamplesTests;
-			sourceTree = "<group>";
-		};
 		8062452D2F0490550055EA41 /* SCALS */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = SCALS;
@@ -272,8 +262,6 @@
 			children = (
 				800AE78F2EFE26C900F18C75 /* ScalsRenderer */,
 				800AE79D2EFE26CB00F18C75 /* ScalsRendererTests */,
-				806245052F048FE60055EA41 /* ScalsExamples */,
-				806245142F048FE60055EA41 /* ScalsExamplesTests */,
 				8062452D2F0490550055EA41 /* SCALS */,
 				8062453C2F0490560055EA41 /* SCALSTests */,
 				803AE5492F09FC7600E3F1E8 /* ScalsModules */,
@@ -446,9 +434,6 @@
 				80624A172F0493E70055EA41 /* PBXTargetDependency */,
 				803AE5752F09FC7600E3F1E8 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				806245052F048FE60055EA41 /* ScalsExamples */,
-			);
 			name = ScalsExamples;
 			packageProductDependencies = (
 			);
@@ -469,9 +454,6 @@
 			dependencies = (
 				806245112F048FE60055EA41 /* PBXTargetDependency */,
 				806245132F048FE60055EA41 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				806245142F048FE60055EA41 /* ScalsExamplesTests */,
 			);
 			name = ScalsExamplesTests;
 			packageProductDependencies = (

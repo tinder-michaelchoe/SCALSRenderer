@@ -137,7 +137,7 @@ Auto-generates test cases from JSON schema definitions.
 **Usage**:
 ```bash
 scals-test-generator \
-  --schema scals-schema.json \
+  --schema scals-document-latest.json \
   --component button
 ```
 

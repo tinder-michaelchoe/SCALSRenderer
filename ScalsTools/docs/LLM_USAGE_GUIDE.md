@@ -91,7 +91,7 @@ swift run scals-component-generator \
 **Planned command**:
 ```bash
 swift run scals-test-generator \
-  --schema ../Docs/scals-schema.json \
+  --schema ../SCALS/Schema/scals-document-latest.json \
   --component button
 ```
 

@@ -1,8 +1,10 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://scals.io/schema/v1/ir.json",
+  "$id": "https://scals.io/schema/v0/ir.json",
   "title": "SCALS Intermediate Representation (IR) Schema",
-  "description": "JSON Schema for the resolved render tree output. This is the platform-agnostic IR that renderers consume after the Document has been resolved. All style properties are fully resolved and flattened directly onto nodes.",
+  "version": "0.1.0",
+  "stability": "stable",
+  "description": "JSON Schema for the resolved render tree output. This is the platform-agnostic IR that renderers consume after the Document has been resolved. All style properties are fully resolved and flattened directly onto nodes. Breaking changes to this schema are rare and require ecosystem-wide coordination.",
   "type": "object",
   "$ref": "#/$defs/renderTree",
 

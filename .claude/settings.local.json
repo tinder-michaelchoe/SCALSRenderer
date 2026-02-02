@@ -57,7 +57,8 @@
       "Bash(python3:*)",
       "Bash(git restore:*)",
       "Bash(xcrun swiftc:*)",
-      "Bash(do echo \"File: $file\")"
+      "Bash(do echo \"File: $file\")",
+      "Bash(xargs ls:*)"
     ]
   }
 }

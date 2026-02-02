@@ -1,8 +1,9 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://scals.io/schema/v1/document.json",
+  "$id": "https://scals.io/schema/v0/document.json",
   "title": "SCALS Document Schema",
-  "description": "JSON Schema for SCALS server-driven UI documents",
+  "version": "0.1.0",
+  "description": "JSON Schema for SCALS server-driven UI documents. This is the user-facing JSON API that can evolve frequently.",
   "type": "object",
   "required": ["id", "root"],
   "properties": {

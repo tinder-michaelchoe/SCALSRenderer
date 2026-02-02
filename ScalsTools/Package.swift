@@ -27,6 +27,7 @@ let package = Package(
         .executable(name: "scals-design-system-generator", targets: ["DesignSystemGenerator"]),
         .executable(name: "scals-custom-component-generator", targets: ["CustomComponentGenerator"]),
         .executable(name: "scals-update-assistant", targets: ["UpdateAssistant"]),
+        .executable(name: "scals-validate", targets: ["Validate"]),
     ],
     dependencies: [
         // Swift Argument Parser for CLI argument handling
@@ -169,6 +170,15 @@ let package = Package(
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
             ],
             path: "Sources/UpdateAssistant"
+        ),
+
+        // Version Validator - validates SCALS JSON documents for version field
+        .executableTarget(
+            name: "Validate",
+            dependencies: [
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+            ],
+            path: "Sources/Validate"
         )
     ]
 )

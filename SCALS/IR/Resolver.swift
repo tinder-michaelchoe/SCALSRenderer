@@ -126,7 +126,8 @@ public struct Resolver {
         return RenderTree(
             root: rootNode,
             stateStore: stateStore,
-            actions: actions
+            actions: actions,
+            irVersion: .currentIR
         )
     }
 
@@ -178,7 +179,8 @@ public struct Resolver {
         let renderTree = RenderTree(
             root: rootNode,
             stateStore: stateStore,
-            actions: actions
+            actions: actions,
+            irVersion: .currentIR
         )
 
         // Set up the view tree and attach to state store
