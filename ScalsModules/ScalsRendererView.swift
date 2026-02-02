@@ -20,6 +20,11 @@ public struct ScalsRendererView: View {
     private let swiftuiRendererRegistry: SwiftUINodeRendererRegistry
     private let designSystemProvider: (any DesignSystemProvider)?
 
+    /// Resolution error (only stored in DEBUG builds for error view)
+    #if DEBUG
+    private let resolutionError: Error?
+    #endif
+
     /// Initialize with a document and registries.
     ///
     /// - Parameters:
@@ -60,9 +65,14 @@ public struct ScalsRendererView: View {
             designSystemProvider: designSystemProvider
         )
         let tree: RenderTree
+        var capturedError: Error? = nil
         do {
             tree = try resolver.resolve()
         } catch {
+            capturedError = error
+            #if DEBUG
+            print("⚠️  SCALS: Resolution failed - \(error)")
+            #endif
             tree = RenderTree(
                 root: RootNode(),
                 stateStore: StateStore(),
@@ -70,6 +80,14 @@ public struct ScalsRendererView: View {
             )
         }
         self.renderTree = tree
+        #if DEBUG
+        self.resolutionError = capturedError
+        #endif
+
+        // Log version information in DEBUG builds
+        #if DEBUG
+        Self.logVersionInfo(document: document, renderTree: tree)
+        #endif
 
         // Create ActionContext with the resolved state store
         let ctx = ActionContext(
@@ -83,6 +101,19 @@ public struct ScalsRendererView: View {
     }
 
     public var body: some View {
+        #if DEBUG
+        if let error = resolutionError {
+            ResolutionErrorView(error: error)
+        } else {
+            renderContent()
+        }
+        #else
+        renderContent()
+        #endif
+    }
+
+    @ViewBuilder
+    private func renderContent() -> some View {
         // Use SwiftUIRenderer to render the RenderTree
         let renderer = SwiftUIRenderer(
             actionContext: observableActionContext.context,
@@ -103,6 +134,30 @@ public struct ScalsRendererView: View {
         observableActionContext.context.alertHandler = { config in
             AlertPresenter.present(config)
         }
+    }
+
+    // MARK: - Version Logging
+
+    /// Logs version information for debugging
+    private static func logVersionInfo(document: Document.Definition, renderTree: RenderTree) {
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        print("📄 SCALS Version Info")
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+
+        // Document version
+        if let docVersion = document.version {
+            print("   Document: v\(docVersion)")
+        } else {
+            print("   Document: ⚠️  No version specified (defaulting to v0.1.0)")
+        }
+
+        // Renderer version
+        print("   Renderer: v\(DocumentVersion.current.string)")
+
+        // IR version
+        print("   IR:       v\(renderTree.irVersion.string)")
+
+        print("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     }
 }
 
@@ -167,9 +222,11 @@ extension ScalsRendererView {
             designSystemProvider: designSystemProvider
         )
         let tree: RenderTree
+        var capturedError: Error? = nil
         do {
             tree = try resolver.resolve()
         } catch {
+            capturedError = error
             print("ScalsRendererView: Resolution failed - \(error)")
             tree = RenderTree(
                 root: RootNode(),
@@ -178,9 +235,13 @@ extension ScalsRendererView {
             )
         }
         self.renderTree = tree
+        #if DEBUG
+        self.resolutionError = capturedError
+        #endif
 
-        // Print RenderTree debug output if enabled
+        // Print version and debug output if enabled
         if debugMode {
+            Self.logVersionInfo(document: document, renderTree: tree)
             let debugRenderer = DebugRenderer()
             print(debugRenderer.render(tree))
         }
@@ -471,4 +532,103 @@ private struct SizePreferenceKey: PreferenceKey {
         value = nextValue()
     }
 }
+
+// MARK: - Resolution Error View (DEBUG only)
+
+#if DEBUG
+/// Displays resolution errors in DEBUG builds for easier debugging
+struct ResolutionErrorView: View {
+    let error: Error
+
+    @State private var isExpanded = true
+
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                // Header
+                HStack {
+                    Image(systemName: "exclamationmark.triangle.fill")
+                        .font(.largeTitle)
+                        .foregroundStyle(.yellow)
+
+                    VStack(alignment: .leading) {
+                        Text("SCALS Resolution Failed")
+                            .font(.headline)
+                        Text("DEBUG BUILD ONLY")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+
+                    Spacer()
+                }
+                .padding()
+                .background(.red.opacity(0.1))
+                .cornerRadius(12)
+
+                // Error details
+                VStack(alignment: .leading, spacing: 8) {
+                    Button {
+                        withAnimation { isExpanded.toggle() }
+                    } label: {
+                        HStack {
+                            Text("Error Details")
+                                .font(.subheadline.bold())
+                            Spacer()
+                            Image(systemName: isExpanded ? "chevron.up" : "chevron.down")
+                        }
+                    }
+                    .buttonStyle(.plain)
+
+                    if isExpanded {
+                        Text(error.localizedDescription)
+                            .font(.system(.body, design: .monospaced))
+                            .foregroundStyle(.red)
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color(.systemGray6))
+                            .cornerRadius(8)
+
+                        if let resolutionError = error as? ResolutionError {
+                            Text("Type: ResolutionError")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        } else {
+                            Text("Type: \(String(describing: type(of: error)))")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                    }
+                }
+                .padding()
+                .background(Color(.systemBackground))
+                .cornerRadius(12)
+                .shadow(radius: 2)
+
+                // Help text
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Common Causes")
+                        .font(.subheadline.bold())
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        Label("Invalid JSON structure", systemImage: "doc.badge.ellipsis")
+                        Label("Unknown style reference", systemImage: "paintbrush")
+                        Label("Invalid action definition", systemImage: "bolt.slash")
+                        Label("Missing required fields", systemImage: "exclamationmark.circle")
+                    }
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                }
+                .padding()
+                .background(Color(.systemBackground))
+                .cornerRadius(12)
+                .shadow(radius: 2)
+
+                Spacer()
+            }
+            .padding()
+        }
+        .background(Color(.systemGroupedBackground))
+    }
+}
+#endif
 
