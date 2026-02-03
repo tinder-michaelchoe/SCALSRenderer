@@ -76,15 +76,13 @@ struct RenderTreeView: View {
                 backgroundColor.swiftUI.ignoresSafeArea()
             }
 
-            // Content with edge insets using custom RootLayout
-            RootLayout(edgeInsets: tree.root.edgeInsets) {
-                VStack(spacing: 0) {
-                    ForEach(Array(tree.root.children.enumerated()), id: \.offset) { _, node in
-                        RenderNodeView(node: node, context: context)
-                    }
-                    Spacer(minLength: 0)
+            // Content with simple padding
+            VStack(spacing: 0) {
+                ForEach(Array(tree.root.children.enumerated()), id: \.offset) { _, node in
+                    RenderNodeView(node: node, context: context)
                 }
             }
+            .padding(tree.root.edgeInsets?.swiftUI ?? EdgeInsets())
             .ignoresSafeArea(edges: absoluteEdges)
         }
         .environmentObject(observableStateStore)

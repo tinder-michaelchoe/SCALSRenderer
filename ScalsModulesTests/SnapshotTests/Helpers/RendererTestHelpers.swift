@@ -78,10 +78,7 @@ struct RendererTestHelpers {
         let view: some View = {
             VStack {
                 content()
-                Spacer()
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            .edgesIgnoringSafeArea(.all)
         }()
         return await captureSwiftUIView(view, size: size, traits: traits)
     }
@@ -163,38 +160,56 @@ struct RendererTestHelpers {
     /// Captures a SwiftUI view as a UIImage
     @MainActor
     private static func captureSwiftUIView<Content: View>(_ view: Content, size: CGSize, traits: UITraitCollection) async -> UIImage {
-        // Create a window to host the view (required for SwiftUI rendering)
-        let window = UIWindow(frame: CGRect(origin: .zero, size: size))
+        // Create a container view that will hold the centered content
+        let containerView = UIView(frame: CGRect(origin: .zero, size: size))
+        containerView.backgroundColor = .systemBackground
 
-        let controller = UIHostingController(rootView: view)
-        controller.view.frame = CGRect(origin: .zero, size: size)
-        controller.view.backgroundColor = .systemBackground
-
-        // Apply trait collection using traitOverrides (iOS 17+)
+        // Apply trait collection
         if let userInterfaceStyle = traits.userInterfaceStyle as UIUserInterfaceStyle? {
-            controller.traitOverrides.userInterfaceStyle = userInterfaceStyle
+            containerView.overrideUserInterfaceStyle = userInterfaceStyle
         }
 
-        // Add controller to window
-        window.rootViewController = controller
+        // Create the hosting controller with the original view (no wrapping needed)
+        let controller = UIHostingController(rootView: view)
+        controller.view.translatesAutoresizingMaskIntoConstraints = false
+        controller.view.backgroundColor = .clear
+
+        // Add hosting controller's view to container
+        containerView.addSubview(controller.view)
+
+        // Center the view using Auto Layout
+        NSLayoutConstraint.activate([
+            controller.view.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            controller.view.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+        ])
+
+        // Prevent overflow with edge constraints
+        let leading = controller.view.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor)
+        let trailing = controller.view.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor)
+        let top = controller.view.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor)
+        let bottom = controller.view.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor)
+        NSLayoutConstraint.activate([leading, trailing, top, bottom])
+
+        // Create window and add container (needed for proper SwiftUI rendering)
+        let window = UIWindow(frame: CGRect(origin: .zero, size: size))
+        window.addSubview(containerView)
         window.makeKeyAndVisible()
 
         // Force layout
-        controller.view.setNeedsLayout()
-        controller.view.layoutIfNeeded()
+        containerView.setNeedsLayout()
+        containerView.layoutIfNeeded()
 
         // Small delay to ensure SwiftUI has rendered
         try? await Task.sleep(nanoseconds: 100_000_000) // 0.1 seconds
 
-        // Render to image
+        // Render the container to image
         let renderer = UIGraphicsImageRenderer(size: size)
         let image = renderer.image { context in
-            controller.view.layer.render(in: context.cgContext)
+            containerView.layer.render(in: context.cgContext)
         }
 
         // Clean up
         window.isHidden = true
-        window.rootViewController = nil
 
         return image
     }
@@ -202,35 +217,80 @@ struct RendererTestHelpers {
     /// Captures a UIKit view as a UIImage
     @MainActor
     private static func captureUIKitView(_ view: UIView, size: CGSize, traits: UITraitCollection) async -> UIImage {
-        view.frame = CGRect(origin: .zero, size: size)
+        // Create a container view that will hold the centered content
+        let containerView = UIView(frame: CGRect(origin: .zero, size: size))
+        containerView.backgroundColor = .systemBackground
 
-        // Apply trait collection using traitOverrides (iOS 17+)
-        let controller = UIViewController()
-        controller.view = view
+        // Apply trait collection
         if let userInterfaceStyle = traits.userInterfaceStyle as UIUserInterfaceStyle? {
-            controller.traitOverrides.userInterfaceStyle = userInterfaceStyle
+            containerView.overrideUserInterfaceStyle = userInterfaceStyle
         }
+
+        // Add the rendered view to container with Auto Layout
+        view.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(view)
+
+        // Center the view using Auto Layout
+        NSLayoutConstraint.activate([
+            view.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+            view.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+        ])
+
+        // Prevent overflow with edge constraints
+        let leading = view.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor)
+        let trailing = view.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor)
+        let top = view.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor)
+        let bottom = view.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor)
+        NSLayoutConstraint.activate([leading, trailing, top, bottom])
+
+        // Create window for proper rendering
+        let window = UIWindow(frame: CGRect(origin: .zero, size: size))
+        window.addSubview(containerView)
+        window.makeKeyAndVisible()
 
         // Force layout
-        view.layoutIfNeeded()
+        containerView.setNeedsLayout()
+        containerView.layoutIfNeeded()
 
-        // Render to image
+        // Render the container to image
         let renderer = UIGraphicsImageRenderer(size: size)
-        return renderer.image { context in
-            view.layer.render(in: context.cgContext)
+        let image = renderer.image { context in
+            containerView.layer.render(in: context.cgContext)
         }
+
+        // Clean up
+        window.isHidden = true
+
+        return image
     }
 
     /// Captures HTML as a UIImage using WKWebView
     @MainActor
     private static func captureHTML(_ html: String, size: CGSize) async throws -> UIImage {
+        // Inject centering CSS into the HTML
+        // The HTML structure is: <html lang="en" class="..."> ... <body style="..."> <div class="scals-root">
+        // The .scals-root has min-height: 100vh which prevents vertical centering, so we override it
+        let overrideCSS = """
+        <style>
+        html { height: 100%; }
+        body { display: flex; justify-content: center; align-items: center; height: 100%; margin: 0; background-color: white !important; }
+        .scals-root { min-height: auto !important; }
+        </style>
+        </head>
+        """
+
+        let centeredHTML = html.replacingOccurrences(
+            of: "</head>",
+            with: overrideCSS
+        )
+
         // Create unique ID for this capture operation
         let captureId = UUID().uuidString
 
         return try await withCheckedThrowingContinuation { continuation in
             let webView = WKWebView(frame: CGRect(origin: .zero, size: size))
             webView.isOpaque = false
-            webView.backgroundColor = .systemBackground
+            webView.backgroundColor = .white
             webView.scrollView.contentInset = .zero
             webView.scrollView.scrollIndicatorInsets = .zero
             webView.scrollView.contentInsetAdjustmentBehavior = .never
@@ -302,8 +362,8 @@ struct RendererTestHelpers {
             objc_setAssociatedObject(webView, key, delegate, .OBJC_ASSOCIATION_RETAIN)
             webView.navigationDelegate = delegate
 
-            // Load HTML
-            webView.loadHTMLString(html, baseURL: nil)
+            // Load HTML with centering
+            webView.loadHTMLString(centeredHTML, baseURL: nil)
         }
     }
 }

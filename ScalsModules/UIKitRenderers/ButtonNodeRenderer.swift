@@ -54,6 +54,9 @@ public struct ButtonNodeRenderer: UIKitNodeRendering {
         // Apply corner radius to configuration background
         config.background.cornerRadius = normalStyle.cornerRadius
 
+        // Apply padding from style
+        config.contentInsets = normalStyle.padding.uiKit
+
         button.configuration = config
 
         // Apply corner radius to layer as well

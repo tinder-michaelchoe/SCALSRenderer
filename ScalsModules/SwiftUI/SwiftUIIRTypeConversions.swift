@@ -27,6 +27,20 @@ extension IR.EdgeInsets {
     }
 }
 
+// MARK: - IR.PositionedEdgeInsets → SwiftUI.EdgeInsets
+
+extension IR.PositionedEdgeInsets {
+    /// Convert to SwiftUI EdgeInsets (extracts just the values, ignores positioning)
+    public var swiftUI: EdgeInsets {
+        EdgeInsets(
+            top: top?.value ?? 0,
+            leading: leading?.value ?? 0,
+            bottom: bottom?.value ?? 0,
+            trailing: trailing?.value ?? 0
+        )
+    }
+}
+
 // MARK: - IR.Alignment → SwiftUI.Alignment
 
 extension IR.Alignment {
