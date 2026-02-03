@@ -59,7 +59,8 @@
       "Bash(xcrun swiftc:*)",
       "Bash(do echo \"File: $file\")",
       "Bash(xargs ls:*)",
-      "Bash(SNAPSHOT_TESTING_RECORD=1 xcodebuild test:*)"
+      "Bash(SNAPSHOT_TESTING_RECORD=1 xcodebuild test:*)",
+      "Bash(xcrun simctl spawn:*)"
     ]
   }
 }

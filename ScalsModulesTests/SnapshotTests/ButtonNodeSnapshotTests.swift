@@ -42,7 +42,7 @@ final class ButtonNodeSnapshotTests: XCTestCase {
             styleId: nil,
             styles: ButtonStyles(normal: normalStyle),
             isSelectedBinding: nil,
-            fillWidth: true,
+            fillWidth: false,
             onTap: nil,
             image: nil,
             imagePlacement: .leading,
@@ -95,10 +95,8 @@ final class ButtonNodeSnapshotTests: XCTestCase {
                 .foregroundColor(.white)
                 .padding(.horizontal, 20)
                 .frame(height: 44)
-                .frame(maxWidth: .infinity)
                 .background(Color(red: 0.0, green: 0.48, blue: 1.0))
                 .cornerRadius(10)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }, size: StandardSnapshotSizes.compact)
 
         assertSnapshot(of: swiftUIImage, as: .image, named: "button-basic-scals", record: false)
