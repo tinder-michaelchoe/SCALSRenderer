@@ -28,6 +28,8 @@ let package = Package(
         .executable(name: "scals-custom-component-generator", targets: ["CustomComponentGenerator"]),
         .executable(name: "scals-update-assistant", targets: ["UpdateAssistant"]),
         .executable(name: "scals-validate", targets: ["Validate"]),
+        .executable(name: "scals-bump-ir-version", targets: ["BumpIRVersion"]),
+        .executable(name: "scals-bump-document-version", targets: ["BumpDocumentVersion"]),
     ],
     dependencies: [
         // Swift Argument Parser for CLI argument handling
@@ -179,6 +181,26 @@ let package = Package(
                 .product(name: "ArgumentParser", package: "swift-argument-parser"),
             ],
             path: "Sources/Validate"
+        ),
+
+        // IR Version Bump Tool
+        .executableTarget(
+            name: "BumpIRVersion",
+            dependencies: [
+                "ScalsToolsCore",
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+            ],
+            path: "Sources/BumpIRVersion"
+        ),
+
+        // Document Version Bump Tool
+        .executableTarget(
+            name: "BumpDocumentVersion",
+            dependencies: [
+                "ScalsToolsCore",
+                .product(name: "ArgumentParser", package: "swift-argument-parser"),
+            ],
+            path: "Sources/BumpDocumentVersion"
         )
     ]
 )
