@@ -39,8 +39,10 @@ public struct ButtonNodeRenderer: UIKitNodeRendering {
         // Apply text color from normal style
         config.baseForegroundColor = normalStyle.textColor.uiColor
 
-        // Apply background color from normal style
-        config.background.backgroundColor = normalStyle.backgroundColor.uiColor
+        // Apply background color from normal style (only if specified)
+        if let bgColor = normalStyle.backgroundColor {
+            config.background.backgroundColor = bgColor.uiColor
+        }
 
         // Configure image if present
         if let imageSource = buttonNode.image {

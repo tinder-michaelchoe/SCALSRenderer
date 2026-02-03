@@ -59,7 +59,7 @@ public struct ImageComponentResolver: ComponentResolving {
             styleId: component.styleId,
             onTap: component.actions?.onTap,
             tintColor: resolvedStyle.tintColor,
-            backgroundColor: resolvedStyle.backgroundColor ?? .clear,
+            backgroundColor: resolvedStyle.backgroundColor,
             cornerRadius: resolvedStyle.cornerRadius ?? 0,
             border: IR.Border(from: resolvedStyle),
             shadow: IR.Shadow(from: resolvedStyle),

@@ -265,9 +265,9 @@ struct iOS26HTMLNodeRenderer {
         // Padding
         classes.append(contentsOf: style.padding.tailwindPaddingClasses)
 
-        // Background color
-        if style.backgroundColor != .clear {
-            classes.append(style.backgroundColor.tailwindBgClass)
+        // Background color (only apply if specified)
+        if let backgroundColor = style.backgroundColor {
+            classes.append(backgroundColor.tailwindBgClass)
         }
 
         // Corner radius

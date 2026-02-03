@@ -67,10 +67,14 @@ extension Document {
         /// This version represents the renderer contract and should remain
         /// extremely stable. Breaking changes to IR are rare and require
         /// ecosystem-wide coordination.
-        public static let currentIR = DocumentVersion(0, 1, 0)
+        public static let currentIR = DocumentVersion(0, 2, 0)
 
         /// Version 0.1.0 constant for convenience.
         public static let v0_1_0 = DocumentVersion(0, 1, 0)
+
+        /// Version 0.2.0 constant for convenience.
+        /// - Note: backgroundColor changed from non-optional to optional (IR.Color?)
+        public static let v0_2_0 = DocumentVersion(0, 2, 0)
 
         // MARK: - Comparable
 

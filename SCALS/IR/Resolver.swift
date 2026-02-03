@@ -198,7 +198,7 @@ public struct Resolver {
 
     @MainActor
     private func resolveRoot(_ root: Document.RootComponent, context: ResolutionContext) throws -> RootNode {
-        let backgroundColor = root.backgroundColor.map { IR.Color(hex: $0) } ?? .clear
+        let backgroundColor = root.backgroundColor.map { IR.Color(hex: $0) }
         let colorScheme = ColorSchemeConverter.convert(root.colorScheme)
         let resolvedStyle = context.styleResolver.resolve(root.styleId)
 
@@ -231,7 +231,7 @@ public struct Resolver {
         _ root: Document.RootComponent,
         context: ResolutionContext
     ) throws -> (RootNode, ViewNode) {
-        let backgroundColor = root.backgroundColor.map { IR.Color(hex: $0) } ?? .clear
+        let backgroundColor = root.backgroundColor.map { IR.Color(hex: $0) }
         let colorScheme = ColorSchemeConverter.convert(root.colorScheme)
         let resolvedStyle = context.styleResolver.resolve(root.styleId)
 

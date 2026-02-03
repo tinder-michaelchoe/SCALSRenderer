@@ -75,7 +75,7 @@ public struct LayoutResolver: LayoutResolving {
             spacing: layout.spacing ?? 0,
             children: renderChildren,
             padding: padding,
-            backgroundColor: resolvedStyle.backgroundColor ?? .clear,
+            backgroundColor: resolvedStyle.backgroundColor,
             cornerRadius: resolvedStyle.cornerRadius ?? 0,
             shadow: IR.Shadow(from: resolvedStyle),
             border: IR.Border(from: resolvedStyle),

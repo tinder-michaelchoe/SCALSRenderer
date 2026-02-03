@@ -285,7 +285,7 @@ final class ButtonNodeSnapshotTests: XCTestCase {
             textColor: IR.Color(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0), // Blue text
             fontSize: 16,
             fontWeight: .semibold,
-            backgroundColor: IR.Color.clear,
+            backgroundColor: nil,
             cornerRadius: 10,
             border: IR.Border(color: IR.Color(red: 0.0, green: 0.48, blue: 1.0, alpha: 1.0), width: 2),
             shadow: nil,

@@ -8,6 +8,24 @@
 import SCALS
 import SwiftUI
 
+// MARK: - Optional Background Modifier
+
+/// ViewModifier that conditionally applies a background color only when the color is non-nil.
+/// This ensures we don't apply a `.clear` background when no background color is specified,
+/// which can affect view hierarchy and hit testing behavior.
+struct OptionalBackgroundModifier: ViewModifier {
+    let color: IR.Color?
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if let color = color {
+            content.background(color.swiftUI)
+        } else {
+            content
+        }
+    }
+}
+
 // MARK: - Container Node SwiftUI Renderer
 
 public struct ContainerNodeSwiftUIRenderer: SwiftUINodeRendering {
@@ -62,8 +80,8 @@ struct ContainerNodeView: View {
         .padding(.bottom, node.padding.bottom)
         .padding(.leading, node.padding.leading)
         .padding(.trailing, node.padding.trailing)
-        // Background and corner radius (non-optional in flattened IR)
-        .background(node.backgroundColor.swiftUI)
+        // Background (optional - only apply if specified)
+        .modifier(OptionalBackgroundModifier(color: node.backgroundColor))
         .cornerRadius(node.cornerRadius)
         // Border (optional)
         .overlay(

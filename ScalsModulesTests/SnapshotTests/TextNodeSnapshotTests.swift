@@ -480,9 +480,9 @@ final class TextNodeSnapshotTests: XCTestCase {
     func testTextWithPadding() async throws {
         let node = RenderNode.text(TextNode(
             content: "Text with padding",
+            padding: IR.EdgeInsets(top: 16, leading: 32, bottom: 16, trailing: 32),
             textColor: .black,
-            fontSize: 16,
-            padding: IR.EdgeInsets(top: 16, leading: 32, bottom: 16, trailing: 32)
+            fontSize: 16
         ))
 
         // SwiftUI

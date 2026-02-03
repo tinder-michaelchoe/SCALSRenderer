@@ -131,10 +131,10 @@ public enum iOS26DesignTokens {
     public static func wrapInDocument(
         html: String,
         colorScheme: IR.ColorScheme = .system,
-        backgroundColor: IR.Color = .clear
+        backgroundColor: IR.Color? = nil
     ) -> String {
         let darkClass = colorScheme == .dark ? "dark" : ""
-        let bgColor = backgroundColor == .clear ? SystemColors.systemBackground : backgroundColor.ios26CssRGBA
+        let bgColor = backgroundColor?.ios26CssRGBA ?? SystemColors.systemBackground
 
         return """
         <!DOCTYPE html>

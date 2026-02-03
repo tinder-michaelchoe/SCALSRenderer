@@ -88,14 +88,14 @@ public enum iOS26TailwindClasses {
 
     /// Generate style classes (background, corner radius, border)
     public static func styling(
-        backgroundColor: IR.Color,
+        backgroundColor: IR.Color?,
         cornerRadius: CGFloat,
         border: IR.Border?
     ) -> [String] {
         var classes: [String] = []
 
-        // Background color
-        if backgroundColor != .clear {
+        // Background color (only apply if specified)
+        if let backgroundColor = backgroundColor {
             classes.append(backgroundColor.tailwindBgClass)
         }
 

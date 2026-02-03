@@ -134,7 +134,7 @@ public struct ButtonComponentResolver: ComponentResolving {
             textColor: resolved.textColor ?? .black,
             fontSize: resolved.fontSize ?? 17,
             fontWeight: resolved.fontWeight ?? .regular,
-            backgroundColor: resolved.backgroundColor ?? .clear,
+            backgroundColor: resolved.backgroundColor,
             cornerRadius: resolved.cornerRadius ?? 0,
             border: IR.Border(from: resolved),
             shadow: IR.Shadow(from: resolved),

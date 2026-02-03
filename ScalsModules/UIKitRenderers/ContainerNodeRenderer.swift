@@ -115,8 +115,10 @@ public struct ContainerNodeRenderer: UIKitNodeRendering {
     // MARK: - Background Styling
 
     private func applyBackgroundStyling(to view: UIView, container: ContainerNode) {
-        // Apply background color - directly from node (non-optional)
-        view.backgroundColor = container.backgroundColor.uiColor
+        // Apply background color - only if specified (optional)
+        if let backgroundColor = container.backgroundColor {
+            view.backgroundColor = backgroundColor.uiColor
+        }
 
         // Apply corner radius - directly from node
         if container.cornerRadius > 0 {

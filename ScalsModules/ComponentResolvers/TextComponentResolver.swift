@@ -69,7 +69,7 @@ public struct TextComponentResolver: ComponentResolving {
             fontSize: resolvedStyle.fontSize ?? 17,
             fontWeight: resolvedStyle.fontWeight ?? .regular,
             textAlignment: resolvedStyle.textAlignment ?? .leading,
-            backgroundColor: resolvedStyle.backgroundColor ?? .clear,
+            backgroundColor: resolvedStyle.backgroundColor,
             cornerRadius: resolvedStyle.cornerRadius ?? 0,
             shadow: IR.Shadow(from: resolvedStyle),
             border: IR.Border(from: resolvedStyle),

@@ -431,7 +431,9 @@ extension ButtonStateStyle {
         rules["font-weight"] = fontWeight.cssValue
 
         // Background & Border
-        rules["background-color"] = backgroundColor.cssRGBA
+        if let bgColor = backgroundColor {
+            rules["background-color"] = bgColor.cssRGBA
+        }
         if cornerRadius > 0 {
             rules["border-radius"] = "\(Int(cornerRadius))px"
         }

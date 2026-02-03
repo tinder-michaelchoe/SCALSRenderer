@@ -49,8 +49,9 @@ public struct DebugRenderer: Renderer {
         var lines: [String] = []
 
         var props: [String] = []
-        let bg = root.backgroundColor
-        props.append("bg: rgba(\(bg.red), \(bg.green), \(bg.blue), \(bg.alpha))")
+        if let bg = root.backgroundColor {
+            props.append("bg: rgba(\(bg.red), \(bg.green), \(bg.blue), \(bg.alpha))")
+        }
         if root.edgeInsets != nil {
             props.append("edgeInsets")
         }

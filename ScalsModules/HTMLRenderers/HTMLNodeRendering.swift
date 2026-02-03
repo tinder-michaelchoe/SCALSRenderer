@@ -256,9 +256,14 @@ public struct HTMLNodeRenderer {
             dataAttrs += " data-has-action=\"true\""
         }
         
-        // Inline style for custom button color (ButtonStateStyle has non-optional properties)
+        // Inline style for custom button color (ButtonStateStyle has optional backgroundColor)
         let style = button.style
-        let inlineStyle = " style=\"background-color: \(style.backgroundColor.cssRGBA); color: \(style.textColor.cssRGBA)\""
+        var styleComponents: [String] = []
+        if let bgColor = style.backgroundColor {
+            styleComponents.append("background-color: \(bgColor.cssRGBA)")
+        }
+        styleComponents.append("color: \(style.textColor.cssRGBA)")
+        let inlineStyle = " style=\"\(styleComponents.joined(separator: "; "))\""
         
         return """
         <button\(id) class="\(className)" type="button"\(dataAttrs)\(inlineStyle)>

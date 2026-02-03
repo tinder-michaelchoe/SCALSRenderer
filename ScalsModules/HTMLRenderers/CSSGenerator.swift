@@ -69,8 +69,10 @@ public struct CSSGenerator {
         // Root container style
         var rootRules: [String] = []
 
-        // backgroundColor is now non-optional
-        rootRules.append("background-color: \(root.backgroundColor.cssRGBA)")
+        // backgroundColor (only apply if specified)
+        if let backgroundColor = root.backgroundColor {
+            rootRules.append("background-color: \(backgroundColor.cssRGBA)")
+        }
 
         // Edge insets as padding
         if let insets = root.edgeInsets {
@@ -205,7 +207,9 @@ public struct CSSGenerator {
         }
 
         // Flattened style properties - directly on node
-        rules.append("background-color: \(container.backgroundColor.cssRGBA)")
+        if let backgroundColor = container.backgroundColor {
+            rules.append("background-color: \(backgroundColor.cssRGBA)")
+        }
         if container.cornerRadius > 0 {
             rules.append("border-radius: \(Int(container.cornerRadius))px")
         }
@@ -344,7 +348,9 @@ public struct CSSGenerator {
         rules.append("font-size: \(Int(text.fontSize))px")
         rules.append("font-weight: \(text.fontWeight.cssValue)")
         rules.append("text-align: \(text.textAlignment.cssValue)")
-        rules.append("background-color: \(text.backgroundColor.cssRGBA)")
+        if let backgroundColor = text.backgroundColor {
+            rules.append("background-color: \(backgroundColor.cssRGBA)")
+        }
 
         if text.cornerRadius > 0 {
             rules.append("border-radius: \(Int(text.cornerRadius))px")
@@ -404,7 +410,9 @@ public struct CSSGenerator {
         // Flattened properties - directly on node
         rules.append("color: \(textField.textColor.cssRGBA)")
         rules.append("font-size: \(Int(textField.fontSize))px")
-        rules.append("background-color: \(textField.backgroundColor.cssRGBA)")
+        if let backgroundColor = textField.backgroundColor {
+            rules.append("background-color: \(backgroundColor.cssRGBA)")
+        }
         if textField.cornerRadius > 0 {
             rules.append("border-radius: \(Int(textField.cornerRadius))px")
         }
@@ -480,7 +488,9 @@ public struct CSSGenerator {
         if let tintColor = image.tintColor {
             rules.append("color: \(tintColor.cssRGBA)")
         }
-        rules.append("background-color: \(image.backgroundColor.cssRGBA)")
+        if let backgroundColor = image.backgroundColor {
+            rules.append("background-color: \(backgroundColor.cssRGBA)")
+        }
         if image.cornerRadius > 0 {
             rules.append("border-radius: \(Int(image.cornerRadius))px")
         }

@@ -101,8 +101,8 @@ struct ButtonNodeView: View {
                     maxWidth: node.fillWidth ? .infinity : nil,
                     alignment: .center
                 )
-                // Convert IR.Color to SwiftUI.Color
-                .background(currentStyle.backgroundColor.swiftUI)
+                // Background (optional - only apply if specified)
+                .modifier(OptionalBackgroundModifier(color: currentStyle.backgroundColor))
                 .cornerRadius(effectiveCornerRadius)
                 .overlay(
                     Group {

@@ -226,8 +226,10 @@ public final class ScalsUIKitView: UIView {
     // MARK: - Setup
 
     private func setupView() {
-        // Background color (non-optional in flattened IR)
-        backgroundColor = renderTree.root.backgroundColor.uiColor
+        // Background color (optional - only set if specified)
+        if let bgColor = renderTree.root.backgroundColor {
+            backgroundColor = bgColor.uiColor
+        }
 
         // Content container
         let contentStack = UIStackView()

@@ -71,7 +71,7 @@ public struct TextFieldComponentResolver: ComponentResolving {
             bindingPath: component.bind,
             textColor: resolvedStyle.textColor ?? .black,
             fontSize: resolvedStyle.fontSize ?? 17,
-            backgroundColor: resolvedStyle.backgroundColor ?? .clear,
+            backgroundColor: resolvedStyle.backgroundColor,
             cornerRadius: resolvedStyle.cornerRadius ?? 0,
             border: IR.Border(from: resolvedStyle),
             padding: padding,

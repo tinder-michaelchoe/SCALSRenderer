@@ -189,7 +189,7 @@ struct RootNodeTests {
     @Test func createsWithDefaults() {
         let root = RootNode()
 
-        #expect(root.backgroundColor == .clear)
+        #expect(root.backgroundColor == nil)
         #expect(root.edgeInsets == nil)
         #expect(root.colorScheme == .system)
         #expect(root.children.isEmpty)

@@ -77,8 +77,8 @@ public struct HTMLRenderer: Renderer {
         case .dark: "dark-mode"
         case .system: ""
         }
-        
-        let backgroundColor = tree.root.backgroundColor.cssRGBA
+
+        let backgroundColor = tree.root.backgroundColor?.cssRGBA ?? "transparent"
         
         return """
         <!DOCTYPE html>

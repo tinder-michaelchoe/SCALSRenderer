@@ -38,7 +38,7 @@ struct RenderTreeVersionTests {
         #expect(tree.irVersion == customVersion)
     }
 
-    @Test("Default IR version is v0.1.0")
+    @Test("Default IR version is v0.2.0")
     func defaultIRVersion() {
         let tree = RenderTree(
             root: RootNode(),
@@ -46,7 +46,7 @@ struct RenderTreeVersionTests {
             actions: [:]
         )
 
-        #expect(tree.irVersion == DocumentVersion(0, 1, 0))
+        #expect(tree.irVersion == DocumentVersion(0, 2, 0))
     }
 
     @Test("Resolver sets current IR version")

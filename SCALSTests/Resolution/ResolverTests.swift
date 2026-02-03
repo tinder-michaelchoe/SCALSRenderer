@@ -124,8 +124,8 @@ struct ResolverRootNodeTests {
         
         let renderTree = try resolver.resolve()
 
-        // backgroundColor is non-optional, verify it's set to clear
-        #expect(renderTree.root.backgroundColor == IR.Color.clear)
+        // backgroundColor is optional, verify it's nil when not specified
+        #expect(renderTree.root.backgroundColor == nil)
     }
     
     @Test @MainActor func resolvesRootColorSchemeLight() throws {

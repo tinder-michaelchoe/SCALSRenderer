@@ -58,8 +58,10 @@ final class RenderTreeUIView: UIView {
     }
 
     private func setupView() {
-        // Background color - convert IR.Color to UIColor (non-optional)
-        backgroundColor = tree.root.backgroundColor.uiColor
+        // Background color - only set if specified (optional)
+        if let bgColor = tree.root.backgroundColor {
+            backgroundColor = bgColor.uiColor
+        }
 
         // Content container
         let contentStack = UIStackView()
@@ -148,7 +150,9 @@ public extension UIButton {
     func applyStyle(_ style: ButtonStateStyle) {
         setTitleColor(style.textColor.uiColor, for: .normal)
         titleLabel?.font = UIFont.systemFont(ofSize: style.fontSize, weight: style.fontWeight.uiKit)
-        backgroundColor = style.backgroundColor.uiColor
+        if let bgColor = style.backgroundColor {
+            backgroundColor = bgColor.uiColor
+        }
         layer.cornerRadius = style.cornerRadius
         if style.cornerRadius > 0 {
             clipsToBounds = true
@@ -175,7 +179,9 @@ public extension UITextField {
     func applyStyle(from node: TextFieldNode) {
         textColor = node.textColor.uiColor
         font = UIFont.systemFont(ofSize: node.fontSize)
-        backgroundColor = node.backgroundColor.uiColor
+        if let bgColor = node.backgroundColor {
+            backgroundColor = bgColor.uiColor
+        }
         layer.cornerRadius = node.cornerRadius
         if node.cornerRadius > 0 {
             clipsToBounds = true

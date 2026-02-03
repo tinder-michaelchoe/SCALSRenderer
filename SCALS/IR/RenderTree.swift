@@ -55,7 +55,7 @@ public typealias RenderColorScheme = IR.ColorScheme
 
 /// The resolved root container
 public struct RootNode {
-    public let backgroundColor: IR.Color
+    public let backgroundColor: IR.Color?
     public let edgeInsets: IR.PositionedEdgeInsets?
     public let colorScheme: IR.ColorScheme
     public let actions: LifecycleActions
@@ -69,7 +69,7 @@ public struct RootNode {
     public let border: IR.Border?
 
     public init(
-        backgroundColor: IR.Color = .clear,
+        backgroundColor: IR.Color? = nil,
         edgeInsets: IR.PositionedEdgeInsets? = nil,
         colorScheme: IR.ColorScheme = .system,
         actions: LifecycleActions = LifecycleActions(),
@@ -223,8 +223,8 @@ public struct ContainerNode {
     /// Padding around the container content (fully resolved, no merging needed)
     public let padding: IR.EdgeInsets
 
-    /// Background color (always present, use .clear for transparent)
-    public let backgroundColor: IR.Color
+    /// Background color (nil means no background applied)
+    public let backgroundColor: IR.Color?
 
     /// Corner radius for rounded corners
     public let cornerRadius: CGFloat
@@ -251,7 +251,7 @@ public struct ContainerNode {
         spacing: CGFloat = 0,
         children: [RenderNode] = [],
         padding: IR.EdgeInsets = .zero,
-        backgroundColor: IR.Color = .clear,
+        backgroundColor: IR.Color? = nil,
         cornerRadius: CGFloat = 0,
         shadow: IR.Shadow? = nil,
         border: IR.Border? = nil,
@@ -331,8 +331,8 @@ public struct TextNode {
     /// Text alignment
     public let textAlignment: IR.TextAlignment
 
-    /// Background color
-    public let backgroundColor: IR.Color
+    /// Background color (nil means no background applied)
+    public let backgroundColor: IR.Color?
 
     /// Corner radius for background
     public let cornerRadius: CGFloat
@@ -364,7 +364,7 @@ public struct TextNode {
         fontSize: CGFloat = 17,
         fontWeight: IR.FontWeight = .regular,
         textAlignment: IR.TextAlignment = .leading,
-        backgroundColor: IR.Color = .clear,
+        backgroundColor: IR.Color? = nil,
         cornerRadius: CGFloat = 0,
         shadow: IR.Shadow? = nil,
         border: IR.Border? = nil,
@@ -402,8 +402,8 @@ public struct ButtonStateStyle: Sendable {
     public let fontSize: CGFloat
     public let fontWeight: IR.FontWeight
 
-    // Background & Border
-    public let backgroundColor: IR.Color
+    // Background & Border (nil means no background applied)
+    public let backgroundColor: IR.Color?
     public let cornerRadius: CGFloat
     public let border: IR.Border?
 
@@ -428,7 +428,7 @@ public struct ButtonStateStyle: Sendable {
         textColor: IR.Color = .black,
         fontSize: CGFloat = 17,
         fontWeight: IR.FontWeight = .regular,
-        backgroundColor: IR.Color = .clear,
+        backgroundColor: IR.Color? = nil,
         cornerRadius: CGFloat = 0,
         border: IR.Border? = nil,
         shadow: IR.Shadow? = nil,
@@ -565,7 +565,7 @@ public struct TextFieldNode {
 
     public let textColor: IR.Color
     public let fontSize: CGFloat
-    public let backgroundColor: IR.Color
+    public let backgroundColor: IR.Color?
     public let cornerRadius: CGFloat
     public let border: IR.Border?
     public let padding: IR.EdgeInsets
@@ -579,7 +579,7 @@ public struct TextFieldNode {
         bindingPath: String? = nil,
         textColor: IR.Color = .black,
         fontSize: CGFloat = 17,
-        backgroundColor: IR.Color = .clear,
+        backgroundColor: IR.Color? = nil,
         cornerRadius: CGFloat = 0,
         border: IR.Border? = nil,
         padding: IR.EdgeInsets = .zero,
@@ -703,7 +703,7 @@ public struct ImageNode {
     // MARK: - Flattened Style Properties
 
     public let tintColor: IR.Color?
-    public let backgroundColor: IR.Color
+    public let backgroundColor: IR.Color?
     public let cornerRadius: CGFloat
     public let border: IR.Border?
     public let shadow: IR.Shadow?
@@ -723,7 +723,7 @@ public struct ImageNode {
         styleId: String? = nil,
         onTap: Document.Component.ActionBinding? = nil,
         tintColor: IR.Color? = nil,
-        backgroundColor: IR.Color = .clear,
+        backgroundColor: IR.Color? = nil,
         cornerRadius: CGFloat = 0,
         border: IR.Border? = nil,
         shadow: IR.Shadow? = nil,
