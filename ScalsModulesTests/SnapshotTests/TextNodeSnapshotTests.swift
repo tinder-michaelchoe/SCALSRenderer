@@ -353,15 +353,18 @@ final class TextNodeSnapshotTests: XCTestCase {
                 content: "Aligned \(name)",
                 textColor: .black,
                 fontSize: 16,
-                textAlignment: alignment
+                textAlignment: alignment,
+                // Text needs full width to show alignment (intrinsic-width text has no room to align)
+                width: .fractional(1.0)
             )
 
             let node = RenderNode.text(textNode)
 
-            // SwiftUI
+            // SwiftUI - pinToEdges allows fractional width to work and shows alignment
             let swiftUIImage = await RendererTestHelpers.renderSwiftUI(
                 node,
-                size: StandardSnapshotSizes.compact
+                size: StandardSnapshotSizes.compact,
+                pinToEdges: true
             )
             assertSnapshot(
                 of: swiftUIImage,
@@ -370,10 +373,11 @@ final class TextNodeSnapshotTests: XCTestCase {
                 record: false
             )
 
-            // UIKit
+            // UIKit - pinToEdges allows fractional width to work and shows alignment
             let uikitImage = await RendererTestHelpers.renderUIKit(
                 node,
-                size: StandardSnapshotSizes.compact
+                size: StandardSnapshotSizes.compact,
+                pinToEdges: true
             )
             assertSnapshot(
                 of: uikitImage,
@@ -382,10 +386,11 @@ final class TextNodeSnapshotTests: XCTestCase {
                 record: false
             )
 
-            // HTML
+            // HTML - pinToEdges allows width percentage and text-align to work
             let htmlImage = try await RendererTestHelpers.renderHTML(
                 node,
-                size: StandardSnapshotSizes.compact
+                size: StandardSnapshotSizes.compact,
+                pinToEdges: true
             )
             assertSnapshot(
                 of: htmlImage,
@@ -394,8 +399,8 @@ final class TextNodeSnapshotTests: XCTestCase {
                 record: false
             )
 
-            // Canonical comparison
-            let textAlignment: TextAlignment = {
+            // Canonical comparison - text with full width shows alignment
+            let frameAlignment: SwiftUI.Alignment = {
                 switch alignment {
                 case .leading: return .leading
                 case .center: return .center
@@ -407,9 +412,8 @@ final class TextNodeSnapshotTests: XCTestCase {
                 Text("Aligned \(name)")
                     .font(.system(size: 16))
                     .foregroundColor(.black)
-                    .multilineTextAlignment(textAlignment)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-            }, size: StandardSnapshotSizes.compact)
+                    .containerRelativeFrame(.horizontal, alignment: frameAlignment)
+            }, size: StandardSnapshotSizes.compact, pinToEdges: true)
 
             assertSnapshot(of: swiftUIImage, as: .image, named: "text-align-\(name)-scals", record: false)
             assertSnapshot(of: canonicalImage, as: .image, named: "text-align-\(name)-canonical", record: false)

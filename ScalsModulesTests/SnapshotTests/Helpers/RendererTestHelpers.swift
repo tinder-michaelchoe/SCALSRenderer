@@ -27,11 +27,12 @@ struct RendererTestHelpers {
     ///   - node: The node to render
     ///   - size: The size to render at
     ///   - traits: UITraitCollection for customizing appearance (light/dark mode, etc.)
+    ///   - pinToEdges: If true, pins content to top-leading. If false (default), centers content.
     /// - Returns: A UIImage of the rendered node
     @MainActor
-    static func renderSwiftUI(_ node: RenderNode, size: CGSize, traits: UITraitCollection = UITraitCollection()) async -> UIImage {
+    static func renderSwiftUI(_ node: RenderNode, size: CGSize, traits: UITraitCollection = UITraitCollection(), pinToEdges: Bool = false) async -> UIImage {
         let tree = RenderTree(root: RootNode(children: [node]), stateStore: StateStore(), actions: [:])
-        return await renderSwiftUITree(tree, size: size, traits: traits)
+        return await renderSwiftUITree(tree, size: size, traits: traits, pinToEdges: pinToEdges)
     }
 
     /// Renders a RenderTree using SwiftUI renderer and captures it as an image
@@ -39,9 +40,10 @@ struct RendererTestHelpers {
     ///   - tree: The tree to render
     ///   - size: The size to render at
     ///   - traits: UITraitCollection for customizing appearance (light/dark mode, etc.)
+    ///   - pinToEdges: If true, pins content to top-leading. If false (default), centers content.
     /// - Returns: A UIImage of the rendered tree
     @MainActor
-    static func renderSwiftUITree(_ tree: RenderTree, size: CGSize, traits: UITraitCollection = UITraitCollection()) async -> UIImage {
+    static func renderSwiftUITree(_ tree: RenderTree, size: CGSize, traits: UITraitCollection = UITraitCollection(), pinToEdges: Bool = false) async -> UIImage {
         // Create renderer dependencies
         let stateStore = StateStore()
         let actionContext = ActionContext(
@@ -60,7 +62,7 @@ struct RendererTestHelpers {
 
         // Render and capture
         let view = renderer.render(tree)
-        return await captureSwiftUIView(view, size: size, traits: traits)
+        return await captureSwiftUIView(view, size: size, traits: traits, pinToEdges: pinToEdges)
     }
 
     /// Renders a canonical SwiftUI view (for comparison) and captures it as an image
@@ -68,19 +70,21 @@ struct RendererTestHelpers {
     ///   - content: ViewBuilder closure that creates the canonical view
     ///   - size: The size to render at
     ///   - traits: UITraitCollection for customizing appearance (light/dark mode, etc.)
+    ///   - pinToEdges: If true, pins content to top-leading. If false (default), centers content.
     /// - Returns: A UIImage of the rendered canonical view
     @MainActor
     static func renderCanonicalView<Content: View>(
         @ViewBuilder _ content: () -> Content,
         size: CGSize,
-        traits: UITraitCollection = UITraitCollection()
+        traits: UITraitCollection = UITraitCollection(),
+        pinToEdges: Bool = false
     ) async -> UIImage {
         let view: some View = {
             VStack {
                 content()
             }
         }()
-        return await captureSwiftUIView(view, size: size, traits: traits)
+        return await captureSwiftUIView(view, size: size, traits: traits, pinToEdges: pinToEdges)
     }
 
     // MARK: - UIKit Rendering
@@ -90,11 +94,12 @@ struct RendererTestHelpers {
     ///   - node: The node to render
     ///   - size: The size to render at
     ///   - traits: UITraitCollection for customizing appearance (light/dark mode, etc.)
+    ///   - pinToEdges: If true, pins content to top-leading. If false (default), centers content.
     /// - Returns: A UIImage of the rendered node
     @MainActor
-    static func renderUIKit(_ node: RenderNode, size: CGSize, traits: UITraitCollection = UITraitCollection()) async -> UIImage {
+    static func renderUIKit(_ node: RenderNode, size: CGSize, traits: UITraitCollection = UITraitCollection(), pinToEdges: Bool = false) async -> UIImage {
         let tree = RenderTree(root: RootNode(children: [node]), stateStore: StateStore(), actions: [:])
-        return await renderUIKitTree(tree, size: size, traits: traits)
+        return await renderUIKitTree(tree, size: size, traits: traits, pinToEdges: pinToEdges)
     }
 
     /// Renders a RenderTree using UIKit renderer and captures it as an image
@@ -102,9 +107,10 @@ struct RendererTestHelpers {
     ///   - tree: The tree to render
     ///   - size: The size to render at
     ///   - traits: UITraitCollection for customizing appearance (light/dark mode, etc.)
+    ///   - pinToEdges: If true, pins content to top-leading. If false (default), centers content.
     /// - Returns: A UIImage of the rendered tree
     @MainActor
-    static func renderUIKitTree(_ tree: RenderTree, size: CGSize, traits: UITraitCollection = UITraitCollection()) async -> UIImage {
+    static func renderUIKitTree(_ tree: RenderTree, size: CGSize, traits: UITraitCollection = UITraitCollection(), pinToEdges: Bool = false) async -> UIImage {
         // Create renderer dependencies
         let stateStore = StateStore()
         let actionContext = ActionContext(
@@ -122,7 +128,7 @@ struct RendererTestHelpers {
 
         // Render and capture
         let view = renderer.render(tree)
-        return await captureUIKitView(view, size: size, traits: traits)
+        return await captureUIKitView(view, size: size, traits: traits, pinToEdges: pinToEdges)
     }
 
     // MARK: - HTML Rendering
@@ -131,20 +137,22 @@ struct RendererTestHelpers {
     /// - Parameters:
     ///   - node: The node to render
     ///   - size: The size to render at
+    ///   - pinToEdges: If true, pins content to top-leading. If false (default), centers content.
     /// - Returns: A UIImage of the rendered HTML
     @MainActor
-    static func renderHTML(_ node: RenderNode, size: CGSize) async throws -> UIImage {
+    static func renderHTML(_ node: RenderNode, size: CGSize, pinToEdges: Bool = false) async throws -> UIImage {
         let tree = RenderTree(root: RootNode(children: [node]), stateStore: StateStore(), actions: [:])
-        return try await renderHTMLTree(tree, size: size)
+        return try await renderHTMLTree(tree, size: size, pinToEdges: pinToEdges)
     }
 
     /// Renders a RenderTree using HTML renderer and captures it as an image
     /// - Parameters:
     ///   - tree: The tree to render
     ///   - size: The size to render at
+    ///   - pinToEdges: If true, pins content to top-leading. If false (default), centers content.
     /// - Returns: A UIImage of the rendered HTML
     @MainActor
-    static func renderHTMLTree(_ tree: RenderTree, size: CGSize) async throws -> UIImage {
+    static func renderHTMLTree(_ tree: RenderTree, size: CGSize, pinToEdges: Bool = false) async throws -> UIImage {
         // Create renderer
         let renderer = HTMLRenderer()
 
@@ -152,15 +160,16 @@ struct RendererTestHelpers {
         let output = renderer.render(tree)
 
         // Capture HTML as image using WKWebView
-        return try await captureHTML(output.fullDocument, size: size)
+        return try await captureHTML(output.fullDocument, size: size, pinToEdges: pinToEdges)
     }
 
     // MARK: - Private Capture Methods
 
     /// Captures a SwiftUI view as a UIImage
+    /// - Parameter pinToEdges: If true, aligns content to top-leading. If false, centers content.
     @MainActor
-    private static func captureSwiftUIView<Content: View>(_ view: Content, size: CGSize, traits: UITraitCollection) async -> UIImage {
-        // Create a container view that will hold the centered content
+    private static func captureSwiftUIView<Content: View>(_ view: Content, size: CGSize, traits: UITraitCollection, pinToEdges: Bool = false) async -> UIImage {
+        // Create a container view that will hold the content
         let containerView = UIView(frame: CGRect(origin: .zero, size: size))
         containerView.backgroundColor = .systemBackground
 
@@ -169,26 +178,32 @@ struct RendererTestHelpers {
             containerView.overrideUserInterfaceStyle = userInterfaceStyle
         }
 
-        // Create the hosting controller with the original view (no wrapping needed)
-        let controller = UIHostingController(rootView: view)
+        // Wrap content in a ScrollView to provide container context for containerRelativeFrame.
+        // The ScrollView provides the sizing context that containerRelativeFrame needs to
+        // calculate fractional widths/heights. Without this, fractional dimensions won't work.
+        let alignment: SwiftUI.Alignment = pinToEdges ? .topLeading : .center
+        let wrappedView = ScrollView([.horizontal, .vertical]) {
+            view
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
+        }
+        .scrollDisabled(true)  // Disable scrolling - we just need the container context
+        .frame(width: size.width, height: size.height)
+
+        // Create the hosting controller with the wrapped view
+        let controller = UIHostingController(rootView: wrappedView)
         controller.view.translatesAutoresizingMaskIntoConstraints = false
         controller.view.backgroundColor = .clear
 
         // Add hosting controller's view to container
         containerView.addSubview(controller.view)
 
-        // Center the view using Auto Layout
+        // Pin the hosting controller's view to fill the container
         NSLayoutConstraint.activate([
-            controller.view.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            controller.view.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            controller.view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            controller.view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            controller.view.topAnchor.constraint(equalTo: containerView.topAnchor),
+            controller.view.bottomAnchor.constraint(equalTo: containerView.bottomAnchor),
         ])
-
-        // Prevent overflow with edge constraints
-        let leading = controller.view.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor)
-        let trailing = controller.view.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor)
-        let top = controller.view.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor)
-        let bottom = controller.view.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor)
-        NSLayoutConstraint.activate([leading, trailing, top, bottom])
 
         // Create window and add container (needed for proper SwiftUI rendering)
         let window = UIWindow(frame: CGRect(origin: .zero, size: size))
@@ -215,9 +230,10 @@ struct RendererTestHelpers {
     }
 
     /// Captures a UIKit view as a UIImage
+    /// - Parameter pinToEdges: If true, pins content to top-leading. If false, centers content.
     @MainActor
-    private static func captureUIKitView(_ view: UIView, size: CGSize, traits: UITraitCollection) async -> UIImage {
-        // Create a container view that will hold the centered content
+    private static func captureUIKitView(_ view: UIView, size: CGSize, traits: UITraitCollection, pinToEdges: Bool = false) async -> UIImage {
+        // Create a container view that will hold the content
         let containerView = UIView(frame: CGRect(origin: .zero, size: size))
         containerView.backgroundColor = .systemBackground
 
@@ -230,18 +246,31 @@ struct RendererTestHelpers {
         view.translatesAutoresizingMaskIntoConstraints = false
         containerView.addSubview(view)
 
-        // Center the view using Auto Layout
-        NSLayoutConstraint.activate([
-            view.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-            view.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-        ])
-
-        // Prevent overflow with edge constraints
-        let leading = view.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor)
-        let trailing = view.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor)
-        let top = view.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor)
-        let bottom = view.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor)
-        NSLayoutConstraint.activate([leading, trailing, top, bottom])
+        if pinToEdges {
+            // Pin to all edges horizontally to allow fractional width elements to expand.
+            // This ensures text alignment within those elements works correctly.
+            // Keep vertical centering.
+            NSLayoutConstraint.activate([
+                view.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+                view.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+                view.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+                view.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor),
+                view.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor),
+            ])
+        } else {
+            // Center the view using Auto Layout (default behavior)
+            NSLayoutConstraint.activate([
+                view.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+                view.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+            ])
+            // Prevent overflow with edge constraints
+            NSLayoutConstraint.activate([
+                view.leadingAnchor.constraint(greaterThanOrEqualTo: containerView.leadingAnchor),
+                view.trailingAnchor.constraint(lessThanOrEqualTo: containerView.trailingAnchor),
+                view.topAnchor.constraint(greaterThanOrEqualTo: containerView.topAnchor),
+                view.bottomAnchor.constraint(lessThanOrEqualTo: containerView.bottomAnchor),
+            ])
+        }
 
         // Create window for proper rendering
         let window = UIWindow(frame: CGRect(origin: .zero, size: size))
@@ -265,21 +294,34 @@ struct RendererTestHelpers {
     }
 
     /// Captures HTML as a UIImage using WKWebView
+    /// - Parameter pinToEdges: If true, pins content to top-left. If false, centers content.
     @MainActor
-    private static func captureHTML(_ html: String, size: CGSize) async throws -> UIImage {
-        // Inject centering CSS into the HTML
-        // The HTML structure is: <html lang="en" class="..."> ... <body style="..."> <div class="scals-root">
-        // The .scals-root has min-height: 100vh which prevents vertical centering, so we override it
-        let overrideCSS = """
-        <style>
-        html { height: 100%; }
-        body { display: flex; justify-content: center; align-items: center; height: 100%; margin: 0; background-color: white !important; }
-        .scals-root { min-height: auto !important; }
-        </style>
-        </head>
-        """
+    private static func captureHTML(_ html: String, size: CGSize, pinToEdges: Bool = false) async throws -> UIImage {
+        let overrideCSS: String
+        if pinToEdges {
+            // Fill width and keep vertical centering.
+            // This allows text-align and width percentage properties to work correctly.
+            overrideCSS = """
+            <style>
+            html { height: 100%; }
+            body { display: flex; justify-content: center; align-items: center; height: 100%; margin: 0; background-color: white !important; }
+            .scals-root { min-height: auto !important; width: 100%; }
+            </style>
+            </head>
+            """
+        } else {
+            // Center content (default behavior)
+            overrideCSS = """
+            <style>
+            html { height: 100%; }
+            body { display: flex; justify-content: center; align-items: center; height: 100%; margin: 0; background-color: white !important; }
+            .scals-root { min-height: auto !important; }
+            </style>
+            </head>
+            """
+        }
 
-        let centeredHTML = html.replacingOccurrences(
+        let styledHTML = html.replacingOccurrences(
             of: "</head>",
             with: overrideCSS
         )
@@ -363,7 +405,7 @@ struct RendererTestHelpers {
             webView.navigationDelegate = delegate
 
             // Load HTML with centering
-            webView.loadHTMLString(centeredHTML, baseURL: nil)
+            webView.loadHTMLString(styledHTML, baseURL: nil)
         }
     }
 }

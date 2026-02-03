@@ -37,11 +37,31 @@ struct TextNodeView: View {
     var body: some View {
         Text(displayContent)
             .applyTextStyle(from: node)
+            // When width is specified, expand text to fill container with alignment
+            // This must come BEFORE DimensionFrameModifier so the text fills the constrained width
+            .frame(
+                maxWidth: node.width != nil ? .infinity : nil,
+                alignment: frameAlignment
+            )
             .padding(.top, node.padding.top)
             .padding(.bottom, node.padding.bottom)
             .padding(.leading, node.padding.leading)
             .padding(.trailing, node.padding.trailing)
             .modifier(OptionalBackgroundModifier(color: node.backgroundColor))
+            // Apply dimension constraints to control outer size
+            .modifier(DimensionFrameModifier(
+                width: node.width,
+                height: node.height
+            ))
+    }
+
+    /// Convert text alignment to frame alignment for single-line text positioning
+    private var frameAlignment: SwiftUI.Alignment {
+        switch node.textAlignment {
+        case .leading: return .leading
+        case .center: return .center
+        case .trailing: return .trailing
+        }
     }
 
     /// Compute the content to display, reading from StateStore if dynamic
