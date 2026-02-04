@@ -242,14 +242,14 @@ struct JSONPlaygroundView: View {
     }
     
     private func generateHTML(from definition: Document.Definition) -> String {
-        // Create resolver with default registries
-        let componentRegistry = ComponentResolverRegistry.default
-        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
-        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
+        // Create resolver with registries from CoreManifest
+        let registries = CoreManifest.createRegistries()
+        let layoutResolver = LayoutResolver(componentRegistry: registries.componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: registries.componentRegistry)
         let resolver = Resolver(
             document: definition,
-            componentRegistry: componentRegistry,
-            actionResolverRegistry: ActionResolverRegistry.default,
+            componentRegistry: registries.componentRegistry,
+            actionResolverRegistry: registries.actionResolverRegistry,
             layoutResolver: layoutResolver,
             sectionLayoutResolver: sectionLayoutResolver
         )
