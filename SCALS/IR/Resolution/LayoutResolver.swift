@@ -88,7 +88,7 @@ public struct LayoutResolver: LayoutResolving {
         )
 
         return NodeResolutionResult(
-            renderNode: .container(containerNode),
+            renderNode: RenderNode(containerNode),
             viewNode: viewNode
         )
     }
@@ -158,7 +158,7 @@ public struct LayoutResolver: LayoutResolving {
             }
 
             return NodeResolutionResult(
-                renderNode: .spacer(spacerNode),
+                renderNode: RenderNode(spacerNode),
                 viewNode: viewNode
             )
         }
@@ -246,7 +246,7 @@ public struct LayoutResolver: LayoutResolving {
         )
 
         return NodeResolutionResult(
-            renderNode: .container(containerNode),
+            renderNode: RenderNode(containerNode),
             viewNode: containerViewNode
         )
     }
@@ -293,7 +293,7 @@ public struct LayoutResolver: LayoutResolving {
         )
 
         return NodeResolutionResult(
-            renderNode: .container(containerNode),
+            renderNode: RenderNode(containerNode),
             viewNode: viewNode
         )
     }

@@ -9,6 +9,7 @@ import Foundation
 import Testing
 
 @testable import SCALS
+@testable import ScalsModules
 
 // MARK: - Test Component Kinds
 
@@ -28,7 +29,7 @@ struct TestLabelResolver: ComponentResolving {
     @MainActor
     func resolve(_ component: Document.Component, context: ResolutionContext) throws -> ComponentResolutionResult {
         let node = TextNode(id: component.id, content: component.text ?? "")
-        return .renderOnly(.text(node))
+        return .renderOnly(RenderNode(node))
     }
 }
 
@@ -39,7 +40,7 @@ struct TestButtonResolver: ComponentResolving {
     @MainActor
     func resolve(_ component: Document.Component, context: ResolutionContext) throws -> ComponentResolutionResult {
         let node = ButtonNode(id: component.id, label: component.text ?? "")
-        return .renderOnly(.button(node))
+        return .renderOnly(RenderNode(node))
     }
 }
 
@@ -50,7 +51,7 @@ struct TestCustomTypeResolver: ComponentResolving {
     @MainActor
     func resolve(_ component: Document.Component, context: ResolutionContext) throws -> ComponentResolutionResult {
         let node = TextNode(id: component.id, content: "custom")
-        return .renderOnly(.text(node))
+        return .renderOnly(RenderNode(node))
     }
 }
 
@@ -159,7 +160,7 @@ struct ComponentResolverRegistryResolutionTests {
         
         let result = try registry.resolve(component, context: context)
         
-        if case .text(let textNode) = result.renderNode {
+        if let textNode = result.renderNode.data(TextNode.self) {
             #expect(textNode.content == "Hello")
         } else {
             Issue.record("Expected text node")
@@ -182,7 +183,7 @@ struct ComponentResolverRegistryResolutionTests {
         
         let result = try registry.resolve(component, context: context)
         
-        if case .button(let buttonNode) = result.renderNode {
+        if let buttonNode = result.renderNode.data(ButtonNode.self) {
             #expect(buttonNode.label == "Click Me")
         } else {
             Issue.record("Expected button node")

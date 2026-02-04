@@ -141,7 +141,7 @@ public final class BoundSlider: UISlider {
 /// UIView that renders a gradient using CAGradientLayer
 public final class GradientView: UIView {
     private let node: GradientNode
-    private let colorScheme: RenderColorScheme
+    private let colorScheme: IR.ColorScheme
 
     override public class var layerClass: AnyClass {
         CAGradientLayer.self
@@ -151,7 +151,7 @@ public final class GradientView: UIView {
         layer as! CAGradientLayer
     }
 
-    public init(node: GradientNode, colorScheme: RenderColorScheme) {
+    public init(node: GradientNode, colorScheme: IR.ColorScheme) {
         self.node = node
         self.colorScheme = colorScheme
         super.init(frame: .zero)

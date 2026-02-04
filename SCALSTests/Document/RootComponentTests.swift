@@ -560,7 +560,7 @@ struct RootComponentRoundTripTests {
     @Test func roundTripsRootActions() throws {
         let original = Document.LifecycleActions(
             onAppear: .reference("loadData"),
-            onDisappear: .inline(.dismiss)
+            onDisappear: .inline(Document.Action(type: .dismiss, parameters: [:]))
         )
 
         let data = try JSONEncoder().encode(original)

@@ -17,7 +17,7 @@ public struct DividerNodeSwiftUIRenderer: SwiftUINodeRendering {
 
     @MainActor
     public func render(_ node: RenderNode, context: SwiftUIRenderContext) -> AnyView {
-        guard case .divider(let dividerNode) = node else {
+        guard let dividerNode = node.data(DividerNode.self) else {
             return AnyView(EmptyView())
         }
         return AnyView(DividerNodeView(node: dividerNode))

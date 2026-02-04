@@ -17,7 +17,7 @@ public struct DividerNodeRenderer: UIKitNodeRendering {
     public init() {}
 
     public func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .divider(let dividerNode) = node else {
+        guard let dividerNode = node.data(DividerNode.self) else {
             return UIView()
         }
 

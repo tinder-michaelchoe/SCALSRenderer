@@ -46,10 +46,17 @@ struct RendererTestHelpers {
     static func renderSwiftUITree(_ tree: RenderTree, size: CGSize, traits: UITraitCollection = UITraitCollection(), pinToEdges: Bool = false) async -> UIImage {
         // Create renderer dependencies
         let stateStore = StateStore()
+        let document = Document.Definition(
+            id: "test",
+            root: Document.RootComponent(children: [])
+        )
+        let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
         let actionContext = ActionContext(
             stateStore: stateStore,
             actionDefinitions: [:],
-            registry: ActionRegistry()
+            registry: ActionRegistry(),
+            actionResolver: actionResolver,
+            document: document
         )
         let registry = SwiftUINodeRendererRegistry.default
 
@@ -113,10 +120,17 @@ struct RendererTestHelpers {
     static func renderUIKitTree(_ tree: RenderTree, size: CGSize, traits: UITraitCollection = UITraitCollection(), pinToEdges: Bool = false) async -> UIImage {
         // Create renderer dependencies
         let stateStore = StateStore()
+        let document = Document.Definition(
+            id: "test",
+            root: Document.RootComponent(children: [])
+        )
+        let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
         let actionContext = ActionContext(
             stateStore: stateStore,
             actionDefinitions: [:],
-            registry: ActionRegistry()
+            registry: ActionRegistry(),
+            actionResolver: actionResolver,
+            document: document
         )
         let registry = UIKitNodeRendererRegistry.default
 

@@ -19,9 +19,9 @@ final class ContainerNodeSnapshotTests: XCTestCase {
     func testVStackBasic() async throws {
         // Create a simple VStack with three text children (flattened properties)
         let children: [RenderNode] = [
-            .text(TextNode(content: "First Item", textColor: .black, fontSize: 16)),
-            .text(TextNode(content: "Second Item", textColor: .black, fontSize: 16)),
-            .text(TextNode(content: "Third Item", textColor: .black, fontSize: 16))
+            RenderNode(TextNode(content: "First Item", textColor: .black, fontSize: 16)),
+            RenderNode(TextNode(content: "Second Item", textColor: .black, fontSize: 16)),
+            RenderNode(TextNode(content: "Third Item", textColor: .black, fontSize: 16))
         ]
 
         let container = ContainerNode(
@@ -32,7 +32,7 @@ final class ContainerNodeSnapshotTests: XCTestCase {
             children: children
         )
 
-        let node = RenderNode.container(container)
+        let node = RenderNode(container)
 
         // Render with SwiftUI
         let swiftUIImage = await RendererTestHelpers.renderSwiftUI(node, size: StandardSnapshotSizes.compact)
@@ -65,9 +65,9 @@ final class ContainerNodeSnapshotTests: XCTestCase {
     func testHStackBasic() async throws {
         // Create a simple HStack with three text children (flattened properties)
         let children: [RenderNode] = [
-            .text(TextNode(content: "A", textColor: .black, fontSize: 16)),
-            .text(TextNode(content: "B", textColor: .black, fontSize: 16)),
-            .text(TextNode(content: "C", textColor: .black, fontSize: 16))
+            RenderNode(TextNode(content: "A", textColor: .black, fontSize: 16)),
+            RenderNode(TextNode(content: "B", textColor: .black, fontSize: 16)),
+            RenderNode(TextNode(content: "C", textColor: .black, fontSize: 16))
         ]
 
         let container = ContainerNode(
@@ -78,7 +78,7 @@ final class ContainerNodeSnapshotTests: XCTestCase {
             children: children
         )
 
-        let node = RenderNode.container(container)
+        let node = RenderNode(container)
 
         // Render with SwiftUI
         let swiftUIImage = await RendererTestHelpers.renderSwiftUI(node, size: StandardSnapshotSizes.compact)
@@ -111,12 +111,12 @@ final class ContainerNodeSnapshotTests: XCTestCase {
     func testZStackBasic() async throws {
         // Create a simple ZStack with overlapping elements
         let children: [RenderNode] = [
-            .text(TextNode(
+            RenderNode(TextNode(
                 content: "Background",
                 width: .absolute(100),
                 height: .absolute(100)
             )),
-            .text(TextNode(
+            RenderNode(TextNode(
                 content: "Front",
                 textColor: .green,
                 fontSize: 20,
@@ -132,7 +132,7 @@ final class ContainerNodeSnapshotTests: XCTestCase {
             children: children
         )
 
-        let node = RenderNode.container(container)
+        let node = RenderNode(container)
 
         // Render with SwiftUI
         let swiftUIImage = await RendererTestHelpers.renderSwiftUI(node, size: StandardSnapshotSizes.compact)
@@ -174,9 +174,9 @@ final class ContainerNodeSnapshotTests: XCTestCase {
 
         for (spacing, name) in spacings {
             let children: [RenderNode] = [
-                .text(TextNode(content: "Item 1", textColor: .black, fontSize: 16)),
-                .text(TextNode(content: "Item 2", textColor: .black, fontSize: 16)),
-                .text(TextNode(content: "Item 3", textColor: .black, fontSize: 16))
+                RenderNode(TextNode(content: "Item 1", textColor: .black, fontSize: 16)),
+                RenderNode(TextNode(content: "Item 2", textColor: .black, fontSize: 16)),
+                RenderNode(TextNode(content: "Item 3", textColor: .black, fontSize: 16))
             ]
 
             let container = ContainerNode(
@@ -187,7 +187,7 @@ final class ContainerNodeSnapshotTests: XCTestCase {
                 children: children
             )
 
-            let node = RenderNode.container(container)
+            let node = RenderNode(container)
 
             // SwiftUI
             let swiftUIImage = await RendererTestHelpers.renderSwiftUI(node, size: StandardSnapshotSizes.compact)
@@ -230,9 +230,9 @@ final class ContainerNodeSnapshotTests: XCTestCase {
 
         for (alignment, name) in alignments {
             let children: [RenderNode] = [
-                .text(TextNode(content: "Short", textColor: .black, fontSize: 16)),
-                .text(TextNode(content: "Medium Text", textColor: .black, fontSize: 16)),
-                .text(TextNode(content: "This is a longer line", textColor: .black, fontSize: 16))
+                RenderNode(TextNode(content: "Short", textColor: .black, fontSize: 16)),
+                RenderNode(TextNode(content: "Medium Text", textColor: .black, fontSize: 16)),
+                RenderNode(TextNode(content: "This is a longer line", textColor: .black, fontSize: 16))
             ]
 
             let container = ContainerNode(
@@ -243,7 +243,7 @@ final class ContainerNodeSnapshotTests: XCTestCase {
                 children: children
             )
 
-            let node = RenderNode.container(container)
+            let node = RenderNode(container)
 
             // SwiftUI
             let swiftUIImage = await RendererTestHelpers.renderSwiftUI(node, size: StandardSnapshotSizes.compact)

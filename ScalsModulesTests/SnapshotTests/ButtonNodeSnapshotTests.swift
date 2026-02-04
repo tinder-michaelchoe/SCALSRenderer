@@ -50,7 +50,7 @@ final class ButtonNodeSnapshotTests: XCTestCase {
             buttonShape: nil
         )
 
-        let node = RenderNode.button(button)
+        let node = RenderNode(button)
 
         // Render with SwiftUI
         let swiftUIImage = await RendererTestHelpers.renderSwiftUI(
@@ -184,7 +184,7 @@ final class ButtonNodeSnapshotTests: XCTestCase {
             buttonShape: nil
         )
 
-        let node = RenderNode.button(button)
+        let node = RenderNode(button)
 
         // Render normal state
         let swiftUIImage = await RendererTestHelpers.renderSwiftUI(node, size: StandardSnapshotSizes.compact)
@@ -241,7 +241,7 @@ final class ButtonNodeSnapshotTests: XCTestCase {
                 buttonShape: nil
             )
 
-            let node = RenderNode.button(button)
+            let node = RenderNode(button)
 
             // SwiftUI
             let swiftUIImage = await RendererTestHelpers.renderSwiftUI(node, size: StandardSnapshotSizes.compact)
@@ -311,7 +311,7 @@ final class ButtonNodeSnapshotTests: XCTestCase {
             buttonShape: nil
         )
 
-        let node = RenderNode.button(button)
+        let node = RenderNode(button)
 
         // SwiftUI
         let swiftUIImage = await RendererTestHelpers.renderSwiftUI(node, size: StandardSnapshotSizes.compact)

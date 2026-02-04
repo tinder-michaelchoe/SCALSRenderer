@@ -16,7 +16,7 @@ public struct ShapeNodeRenderer: UIKitNodeRendering {
     public init() {}
 
     public func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .shape(let shapeNode) = node else {
+        guard let shapeNode = node.data(ShapeNode.self) else {
             return UIView()
         }
 

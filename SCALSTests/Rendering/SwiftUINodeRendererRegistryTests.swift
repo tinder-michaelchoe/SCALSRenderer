@@ -15,8 +15,8 @@ import SwiftUI
 
 /// Mock SwiftUI renderer for testing text node rendering
 struct MockSwiftUITextRenderer: SwiftUINodeRendering {
-    static let nodeKind: RenderNodeKind = .text
-    
+    static let nodeKind: RenderNodeKind = RenderNodeKind.text
+
     @MainActor
     func render(_ node: RenderNode, context: SwiftUIRenderContext) -> AnyView {
         AnyView(Text("MockText").accessibilityIdentifier("mock_swiftui_text"))
@@ -25,8 +25,8 @@ struct MockSwiftUITextRenderer: SwiftUINodeRendering {
 
 /// Mock SwiftUI renderer for testing button node rendering
 struct MockSwiftUIButtonRenderer: SwiftUINodeRendering {
-    static let nodeKind: RenderNodeKind = .button
-    
+    static let nodeKind: RenderNodeKind = RenderNodeKind.button
+
     @MainActor
     func render(_ node: RenderNode, context: SwiftUIRenderContext) -> AnyView {
         AnyView(Button("MockButton") {}.accessibilityIdentifier("mock_swiftui_button"))
@@ -35,8 +35,8 @@ struct MockSwiftUIButtonRenderer: SwiftUINodeRendering {
 
 /// Mock SwiftUI renderer for testing container node rendering
 struct MockSwiftUIContainerRenderer: SwiftUINodeRendering {
-    static let nodeKind: RenderNodeKind = .container
-    
+    static let nodeKind: RenderNodeKind = RenderNodeKind.container
+
     @MainActor
     func render(_ node: RenderNode, context: SwiftUIRenderContext) -> AnyView {
         AnyView(VStack {}.accessibilityIdentifier("mock_swiftui_container"))
@@ -45,8 +45,8 @@ struct MockSwiftUIContainerRenderer: SwiftUINodeRendering {
 
 /// Mock SwiftUI renderer for custom node kind
 struct MockSwiftUICustomRenderer: SwiftUINodeRendering {
-    static let nodeKind: RenderNodeKind = .testCustom
-    
+    static let nodeKind: RenderNodeKind = RenderNodeKind.testCustom
+
     @MainActor
     func render(_ node: RenderNode, context: SwiftUIRenderContext) -> AnyView {
         AnyView(EmptyView().accessibilityIdentifier("mock_swiftui_custom"))
@@ -60,11 +60,8 @@ struct MockSwiftUICustomRenderer: SwiftUINodeRendering {
 func createSwiftUITestContext(registry: SwiftUINodeRendererRegistry) -> SwiftUIRenderContext {
     let stateStore = StateStore()
     let document = Document.Definition(
-        root: Document.RootComponent(children: []),
-        state: nil,
-        styles: nil,
-        dataSources: nil,
-        actions: nil
+        id: "test",
+        root: Document.RootComponent(children: [])
     )
     let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
     let actionContext = ActionContext(
@@ -94,7 +91,7 @@ struct SwiftUINodeRendererRegistryRegistrationTests {
         let registry = SwiftUINodeRendererRegistry()
         registry.register(MockSwiftUITextRenderer())
         
-        #expect(registry.hasRenderer(for: .text))
+        #expect(registry.hasRenderer(for: RenderNodeKind.text))
     }
     
     @Test func registersMultipleRenderers() {
@@ -103,9 +100,9 @@ struct SwiftUINodeRendererRegistryRegistrationTests {
         registry.register(MockSwiftUIButtonRenderer())
         registry.register(MockSwiftUIContainerRenderer())
         
-        #expect(registry.hasRenderer(for: .text))
-        #expect(registry.hasRenderer(for: .button))
-        #expect(registry.hasRenderer(for: .container))
+        #expect(registry.hasRenderer(for: RenderNodeKind.text))
+        #expect(registry.hasRenderer(for: RenderNodeKind.button))
+        #expect(registry.hasRenderer(for: RenderNodeKind.container))
     }
     
     @Test func registersCustomNodeKindRenderer() {
@@ -120,21 +117,21 @@ struct SwiftUINodeRendererRegistryRegistrationTests {
         registry.register(MockSwiftUITextRenderer())
         registry.register(MockSwiftUITextRenderer()) // Re-register
         
-        #expect(registry.hasRenderer(for: .text))
+        #expect(registry.hasRenderer(for: RenderNodeKind.text))
     }
     
     @Test func unregistersRenderer() async throws {
         let registry = SwiftUINodeRendererRegistry()
         registry.register(MockSwiftUITextRenderer())
         
-        #expect(registry.hasRenderer(for: .text))
+        #expect(registry.hasRenderer(for: RenderNodeKind.text))
         
         registry.unregister(.text)
         
         // Wait for async barrier to complete
         try await Task.sleep(nanoseconds: 100_000_000)
         
-        #expect(!registry.hasRenderer(for: .text))
+        #expect(!registry.hasRenderer(for: RenderNodeKind.text))
     }
 }
 
@@ -145,30 +142,30 @@ struct SwiftUINodeRendererRegistryLookupTests {
     @Test func hasRendererReturnsFalseForUnregistered() {
         let registry = SwiftUINodeRendererRegistry()
         
-        #expect(!registry.hasRenderer(for: .text))
-        #expect(!registry.hasRenderer(for: .button))
-        #expect(!registry.hasRenderer(for: .container))
+        #expect(!registry.hasRenderer(for: RenderNodeKind.text))
+        #expect(!registry.hasRenderer(for: RenderNodeKind.button))
+        #expect(!registry.hasRenderer(for: RenderNodeKind.container))
     }
     
     @Test func hasRendererReturnsTrueForRegistered() {
         let registry = SwiftUINodeRendererRegistry()
         registry.register(MockSwiftUITextRenderer())
         
-        #expect(registry.hasRenderer(for: .text))
-        #expect(!registry.hasRenderer(for: .button))
+        #expect(registry.hasRenderer(for: RenderNodeKind.text))
+        #expect(!registry.hasRenderer(for: RenderNodeKind.button))
     }
     
     @Test func rendererForKindReturnsNilForUnregistered() {
         let registry = SwiftUINodeRendererRegistry()
         
-        #expect(registry.renderer(for: .text) == nil)
+        #expect(registry.renderer(for: RenderNodeKind.text) == nil)
     }
     
     @Test func rendererForKindReturnsRendererForRegistered() {
         let registry = SwiftUINodeRendererRegistry()
         registry.register(MockSwiftUITextRenderer())
         
-        let renderer = registry.renderer(for: .text)
+        let renderer = registry.renderer(for: RenderNodeKind.text)
         #expect(renderer != nil)
     }
 }
@@ -180,58 +177,58 @@ struct SwiftUINodeRendererRegistryRenderingTests {
     @Test @MainActor func rendersTextNode() {
         let registry = SwiftUINodeRendererRegistry()
         registry.register(MockSwiftUITextRenderer())
-        
+
         let context = createSwiftUITestContext(registry: registry)
-        let textNode = RenderNode.text(TextNode(
+        let textNode = RenderNode(TextNode(
             content: "Test"
         ))
-        
+
         let view = registry.render(textNode, context: context)
-        
+
         #expect(view != nil)
     }
-    
+
     @Test @MainActor func rendersButtonNode() {
         let registry = SwiftUINodeRendererRegistry()
         registry.register(MockSwiftUIButtonRenderer())
-        
+
         let context = createSwiftUITestContext(registry: registry)
-        let buttonNode = RenderNode.button(ButtonNode(
+        let buttonNode = RenderNode(ButtonNode(
             label: "Tap Me",
             styles: ButtonStyles()
         ))
-        
+
         let view = registry.render(buttonNode, context: context)
-        
+
         #expect(view != nil)
     }
-    
+
     @Test @MainActor func rendersContainerNode() {
         let registry = SwiftUINodeRendererRegistry()
         registry.register(MockSwiftUIContainerRenderer())
-        
+
         let context = createSwiftUITestContext(registry: registry)
-        let containerNode = RenderNode.container(ContainerNode(
+        let containerNode = RenderNode(ContainerNode(
             layoutType: .vstack,
             children: []
         ))
-        
+
         let view = registry.render(containerNode, context: context)
-        
+
         #expect(view != nil)
     }
-    
+
     @Test @MainActor func returnsNilForUnregisteredKind() {
         let registry = SwiftUINodeRendererRegistry()
         // Don't register any renderers
-        
+
         let context = createSwiftUITestContext(registry: registry)
-        let textNode = RenderNode.text(TextNode(
+        let textNode = RenderNode(TextNode(
             content: "Test"
         ))
-        
+
         let view = registry.render(textNode, context: context)
-        
+
         #expect(view == nil)
     }
 }
@@ -241,24 +238,24 @@ struct SwiftUINodeRendererRegistryRenderingTests {
 struct SwiftUIMockRenderersProtocolTests {
     
     @Test func swiftUIMockRendererProvidesNodeKind() {
-        #expect(MockSwiftUITextRenderer.nodeKind == .text)
-        #expect(MockSwiftUIButtonRenderer.nodeKind == .button)
-        #expect(MockSwiftUIContainerRenderer.nodeKind == .container)
+        #expect(MockSwiftUITextRenderer.nodeKind == RenderNodeKind.text)
+        #expect(MockSwiftUIButtonRenderer.nodeKind == RenderNodeKind.button)
+        #expect(MockSwiftUIContainerRenderer.nodeKind == RenderNodeKind.container)
         #expect(MockSwiftUICustomRenderer.nodeKind == .testCustom)
     }
     
     @Test @MainActor func rendererReturnsAnyView() {
         let registry = SwiftUINodeRendererRegistry()
         registry.register(MockSwiftUITextRenderer())
-        
+
         let context = createSwiftUITestContext(registry: registry)
-        let textNode = RenderNode.text(TextNode(
+        let textNode = RenderNode(TextNode(
             content: "Test"
         ))
-        
+
         let renderer = MockSwiftUITextRenderer()
         let view = renderer.render(textNode, context: context)
-        
+
         // Verify it returns an AnyView (type check)
         _ = view // AnyView type
     }
@@ -271,16 +268,16 @@ struct SwiftUINodeRendererRegistryEdgeCaseTests {
     @Test func emptyRegistryHasNoRenderers() {
         let registry = SwiftUINodeRendererRegistry()
         
-        #expect(!registry.hasRenderer(for: .text))
-        #expect(!registry.hasRenderer(for: .button))
-        #expect(!registry.hasRenderer(for: .container))
-        #expect(!registry.hasRenderer(for: .sectionLayout))
-        #expect(!registry.hasRenderer(for: .textField))
-        #expect(!registry.hasRenderer(for: .toggle))
-        #expect(!registry.hasRenderer(for: .slider))
-        #expect(!registry.hasRenderer(for: .image))
-        #expect(!registry.hasRenderer(for: .gradient))
-        #expect(!registry.hasRenderer(for: .spacer))
+        #expect(!registry.hasRenderer(for: RenderNodeKind.text))
+        #expect(!registry.hasRenderer(for: RenderNodeKind.button))
+        #expect(!registry.hasRenderer(for: RenderNodeKind.container))
+        #expect(!registry.hasRenderer(for: RenderNodeKind.sectionLayout))
+        #expect(!registry.hasRenderer(for: RenderNodeKind.textField))
+        #expect(!registry.hasRenderer(for: RenderNodeKind.toggle))
+        #expect(!registry.hasRenderer(for: RenderNodeKind.slider))
+        #expect(!registry.hasRenderer(for: RenderNodeKind.image))
+        #expect(!registry.hasRenderer(for: RenderNodeKind.gradient))
+        #expect(!registry.hasRenderer(for: RenderNodeKind.spacer))
     }
     
     @Test func registerSameKindMultipleTimes() {
@@ -290,31 +287,31 @@ struct SwiftUINodeRendererRegistryEdgeCaseTests {
         registry.register(MockSwiftUITextRenderer())
         registry.register(MockSwiftUITextRenderer())
         
-        #expect(registry.hasRenderer(for: .text))
+        #expect(registry.hasRenderer(for: RenderNodeKind.text))
     }
     
     @Test func unregisterNonExistentKind() {
         let registry = SwiftUINodeRendererRegistry()
         
         // Should not crash
-        registry.unregister(.text)
-        registry.unregister(.button)
-        
-        #expect(!registry.hasRenderer(for: .text))
+        registry.unregister(RenderNodeKind.text)
+        registry.unregister(RenderNodeKind.button)
+
+        #expect(!registry.hasRenderer(for: RenderNodeKind.text))
     }
     
     @Test @MainActor func contextRenderMethodUsesRegistry() {
         let registry = SwiftUINodeRendererRegistry()
         registry.register(MockSwiftUITextRenderer())
-        
+
         let context = createSwiftUITestContext(registry: registry)
-        let textNode = RenderNode.text(TextNode(
+        let textNode = RenderNode(TextNode(
             content: "Test"
         ))
-        
+
         // Context.render should delegate to registry
         let view = context.render(textNode)
-        
+
         // If no renderer, it returns EmptyView wrapped in AnyView
         // If renderer exists, it returns the rendered view
         _ = view // Should not crash

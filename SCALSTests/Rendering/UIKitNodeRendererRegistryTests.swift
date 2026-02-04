@@ -76,11 +76,8 @@ struct MockCustomNodeRenderer: UIKitNodeRendering {
 func createTestContext(registry: UIKitNodeRendererRegistry) -> UIKitRenderContext {
     let stateStore = StateStore()
     let document = Document.Definition(
-        root: Document.RootComponent(children: []),
-        state: nil,
-        styles: nil,
-        dataSources: nil,
-        actions: nil
+        id: "test",
+        root: Document.RootComponent(children: [])
     )
     let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
     let actionContext = ActionContext(
@@ -191,7 +188,7 @@ struct UIKitNodeRendererRegistryRenderingTests {
         registry.register(MockTextNodeRenderer())
         
         let context = createTestContext(registry: registry)
-        let textNode = RenderNode.text(TextNode(content: "Test"))
+        let textNode = RenderNode(TextNode(content: "Test"))
         
         let view = registry.render(textNode, context: context)
         
@@ -204,7 +201,7 @@ struct UIKitNodeRendererRegistryRenderingTests {
         registry.register(MockButtonNodeRenderer())
         
         let context = createTestContext(registry: registry)
-        let buttonNode = RenderNode.button(ButtonNode(
+        let buttonNode = RenderNode(ButtonNode(
             label: "Tap Me",
             styles: ButtonStyles()
         ))
@@ -220,7 +217,7 @@ struct UIKitNodeRendererRegistryRenderingTests {
         registry.register(MockContainerNodeRenderer())
         
         let context = createTestContext(registry: registry)
-        let containerNode = RenderNode.container(ContainerNode(
+        let containerNode = RenderNode(ContainerNode(
             layoutType: .vstack,
             children: []
         ))
@@ -240,17 +237,17 @@ struct UIKitNodeRendererRegistryRenderingTests {
         let context = createTestContext(registry: registry)
         
         // Test text node goes to text renderer
-        let textNode = RenderNode.text(TextNode(content: "Test"))
+        let textNode = RenderNode(TextNode(content: "Test"))
         let textView = registry.render(textNode, context: context)
         #expect(textView.accessibilityIdentifier == "mock_text_renderer")
         
         // Test button node goes to button renderer
-        let buttonNode = RenderNode.button(ButtonNode(label: "Test", styles: ButtonStyles()))
+        let buttonNode = RenderNode(ButtonNode(label: "Test", styles: ButtonStyles()))
         let buttonView = registry.render(buttonNode, context: context)
         #expect(buttonView.accessibilityIdentifier == "mock_button_renderer")
         
         // Test container node goes to container renderer
-        let containerNode = RenderNode.container(ContainerNode(layoutType: .vstack, children: []))
+        let containerNode = RenderNode(ContainerNode(layoutType: .vstack, children: []))
         let containerView = registry.render(containerNode, context: context)
         #expect(containerView.accessibilityIdentifier == "mock_container_renderer")
     }

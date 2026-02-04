@@ -21,7 +21,7 @@ private struct ContextTestTextRenderer: UIKitNodeRendering {
     init() {}
     
     func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .text(let textNode) = node else {
+        guard let textNode = node.data(TextNode.self) else {
             return UIView()
         }
         let label = UILabel()
@@ -37,7 +37,7 @@ private struct ContextTestButtonRenderer: UIKitNodeRendering {
     init() {}
     
     func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .button(let buttonNode) = node else {
+        guard let buttonNode = node.data(ButtonNode.self) else {
             return UIView()
         }
         let button = UIButton()
@@ -53,17 +53,17 @@ private struct ContextTestContainerRenderer: UIKitNodeRendering {
     init() {}
     
     func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .container(let containerNode) = node else {
+        guard let containerNode = node.data(ContainerNode.self) else {
             return UIView()
         }
         let stackView = UIStackView()
         stackView.axis = containerNode.layoutType == .vstack ? .vertical : .horizontal
-        
+
         for child in containerNode.children {
             let childView = context.render(child)
             stackView.addArrangedSubview(childView)
         }
-        
+
         return stackView
     }
 }
@@ -74,11 +74,8 @@ private struct ContextTestContainerRenderer: UIKitNodeRendering {
 @MainActor
 func createContextTestActionContext(stateStore: StateStore) -> ActionContext {
     let document = Document.Definition(
-        root: Document.RootComponent(children: []),
-        state: nil,
-        styles: nil,
-        dataSources: nil,
-        actions: nil
+        id: "test",
+        root: Document.RootComponent(children: [])
     )
     let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
     return ActionContext(
@@ -198,11 +195,8 @@ struct UIKitRenderContextActionContextTests {
         let actionRegistry = ActionRegistry()
 
         let document = Document.Definition(
-            root: Document.RootComponent(children: []),
-            state: nil,
-            styles: nil,
-            dataSources: nil,
-            actions: nil
+            id: "test",
+            root: Document.RootComponent(children: [])
         )
         let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
         let actionContext = ActionContext(
@@ -241,7 +235,7 @@ struct UIKitRenderContextRenderingTests {
             registry: registry
         )
         
-        let textNode = RenderNode.text(TextNode(
+        let textNode = RenderNode(TextNode(
             content: "Child"
         ))
         
@@ -267,20 +261,20 @@ struct UIKitRenderContextRenderingTests {
         )
         
         // Test text node
-        let textView = context.render(RenderNode.text(TextNode(
+        let textView = context.render(RenderNode(TextNode(
             content: "Text"
         )))
         #expect(textView is UILabel)
         
         // Test button node
-        let buttonView = context.render(RenderNode.button(ButtonNode(
+        let buttonView = context.render(RenderNode(ButtonNode(
             label: "Button",
             styles: ButtonStyles()
         )))
         #expect(buttonView is UIButton)
         
         // Test container node
-        let containerView = context.render(RenderNode.container(ContainerNode(
+        let containerView = context.render(RenderNode(ContainerNode(
             layoutType: .vstack,
             children: []
         )))
@@ -319,7 +313,7 @@ struct SwiftUIRenderContextInitializationTests {
         let stateStore = StateStore()
         let actionContext = createContextTestActionContext(stateStore: stateStore)
         
-        let textNode = RenderNode.text(TextNode(
+        let textNode = RenderNode(TextNode(
             content: "Test"
         ))
         let tree = RenderTree(
@@ -356,7 +350,7 @@ struct SwiftUIRenderContextRenderingTests {
             rendererRegistry: registry
         )
         
-        let node = RenderNode.text(TextNode(
+        let node = RenderNode(TextNode(
             content: "Test"
         ))
 
@@ -395,7 +389,7 @@ struct SwiftUIRenderContextRenderingTests {
             rendererRegistry: registry
         )
         
-        let node = RenderNode.text(TextNode(
+        let node = RenderNode(TextNode(
             content: "Original"
         ))
 

@@ -17,7 +17,7 @@ public struct GradientNodeRenderer: UIKitNodeRendering {
     public init() {}
 
     public func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .gradient(let gradientNode) = node else {
+        guard let gradientNode = node.data(GradientNode.self) else {
             return UIView()
         }
 

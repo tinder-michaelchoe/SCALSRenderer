@@ -10,6 +10,7 @@ import Foundation
 import Testing
 
 @testable import SCALS
+@testable import ScalsModules
 
 // MARK: - Text Component Resolution Tests
 
@@ -585,14 +586,14 @@ struct RenderNodeKindTests {
     }
     
     @Test func renderNodeReturnsCorrectKind() {
-        let textNode = RenderNode.text(TextNode(content: ""))
-        #expect(textNode.kind == .text)
-        
-        let buttonNode = RenderNode.button(ButtonNode(label: ""))
-        #expect(buttonNode.kind == .button)
-        
-        let spacer = RenderNode.spacer(SpacerNode())
-        #expect(spacer.kind == .spacer)
+        let textNode = RenderNode(TextNode(content: ""))
+        #expect(textNode.kind == RenderNodeKind.text)
+
+        let buttonNode = RenderNode(ButtonNode(label: ""))
+        #expect(buttonNode.kind == RenderNodeKind.button)
+
+        let spacer = RenderNode(SpacerNode())
+        #expect(spacer.kind == RenderNodeKind.spacer)
     }
     
     @Test func customKindCanBeCreated() {

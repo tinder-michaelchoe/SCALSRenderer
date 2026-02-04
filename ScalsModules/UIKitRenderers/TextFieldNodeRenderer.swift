@@ -17,7 +17,7 @@ public struct TextFieldNodeRenderer: UIKitNodeRendering {
     public init() {}
 
     public func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .textField(let textFieldNode) = node else {
+        guard let textFieldNode = node.data(TextFieldNode.self) else {
             return UIView()
         }
 

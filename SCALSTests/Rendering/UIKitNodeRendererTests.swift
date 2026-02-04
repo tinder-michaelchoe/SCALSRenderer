@@ -22,7 +22,7 @@ struct MockTextRenderer: UIKitNodeRendering {
     init() {}
     
     func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .text(let textNode) = node else {
+        guard let textNode = node.data(TextNode.self) else {
             return UIView()
         }
         let label = UILabel()
@@ -39,7 +39,7 @@ struct MockButtonRenderer: UIKitNodeRendering {
     init() {}
     
     func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .button(let buttonNode) = node else {
+        guard let buttonNode = node.data(ButtonNode.self) else {
             return UIView()
         }
         let button = UIButton()
@@ -56,7 +56,7 @@ struct MockContainerRenderer: UIKitNodeRendering {
     init() {}
     
     func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .container(let containerNode) = node else {
+        guard let containerNode = node.data(ContainerNode.self) else {
             return UIView()
         }
         let stackView = UIStackView()
@@ -80,7 +80,7 @@ struct MockTextFieldRenderer: UIKitNodeRendering {
     init() {}
     
     func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .textField(let textFieldNode) = node else {
+        guard let textFieldNode = node.data(TextFieldNode.self) else {
             return UIView()
         }
         let textField = UITextField()
@@ -161,11 +161,8 @@ func createMockUIKitContext() -> UIKitRenderContext {
 
     let stateStore = StateStore()
     let document = Document.Definition(
-        root: Document.RootComponent(children: []),
-        state: nil,
-        styles: nil,
-        dataSources: nil,
-        actions: nil
+        id: "test",
+        root: Document.RootComponent(children: [])
     )
     let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
     let actionContext = ActionContext(
@@ -190,7 +187,7 @@ struct TextNodeRenderingTests {
     @Test @MainActor func rendersTextNodeToUILabel() {
         let context = createMockUIKitContext()
         
-        let node = RenderNode.text(TextNode(
+        let node = RenderNode(TextNode(
             content: "Hello World",
                     ))
         
@@ -203,7 +200,7 @@ struct TextNodeRenderingTests {
     @Test @MainActor func textNodeHasCorrectAccessibilityId() {
         let context = createMockUIKitContext()
         
-        let node = RenderNode.text(TextNode(
+        let node = RenderNode(TextNode(
             content: "Test",
                     ))
         
@@ -220,7 +217,7 @@ struct ButtonNodeRenderingTests {
     @Test @MainActor func rendersButtonNodeToUIButton() {
         let context = createMockUIKitContext()
         
-        let node = RenderNode.button(ButtonNode(
+        let node = RenderNode(ButtonNode(
             label: "Tap Me",
             styles: ButtonStyles()
         ))
@@ -233,7 +230,7 @@ struct ButtonNodeRenderingTests {
     @Test @MainActor func buttonNodeSetsTitle() {
         let context = createMockUIKitContext()
         
-        let node = RenderNode.button(ButtonNode(
+        let node = RenderNode(ButtonNode(
             label: "Click Here",
             styles: ButtonStyles()
         ))
@@ -253,7 +250,7 @@ struct ContainerNodeRenderingTests {
     @Test @MainActor func rendersVStackToVerticalStackView() {
         let context = createMockUIKitContext()
         
-        let node = RenderNode.container(ContainerNode(
+        let node = RenderNode(ContainerNode(
             layoutType: .vstack,
             alignment: .center,
             spacing: 8,
@@ -269,7 +266,7 @@ struct ContainerNodeRenderingTests {
     @Test @MainActor func rendersHStackToHorizontalStackView() {
         let context = createMockUIKitContext()
         
-        let node = RenderNode.container(ContainerNode(
+        let node = RenderNode(ContainerNode(
             layoutType: .hstack,
             alignment: .center,
             spacing: 8,
@@ -285,7 +282,7 @@ struct ContainerNodeRenderingTests {
     @Test @MainActor func containerSetsSpacing() {
         let context = createMockUIKitContext()
         
-        let node = RenderNode.container(ContainerNode(
+        let node = RenderNode(ContainerNode(
             layoutType: .vstack,
             alignment: .center,
             spacing: 16,
@@ -301,13 +298,13 @@ struct ContainerNodeRenderingTests {
     @Test @MainActor func containerRendersChildren() {
         let context = createMockUIKitContext()
         
-        let node = RenderNode.container(ContainerNode(
+        let node = RenderNode(ContainerNode(
             layoutType: .vstack,
             alignment: .center,
             spacing: 8,
             children: [
-                .text(TextNode(content: "Child 1")),
-                .text(TextNode(content: "Child 2"))
+                RenderNode(TextNode(content: "Child 1")),
+                RenderNode(TextNode(content: "Child 2"))
             ]
         ))
         
@@ -325,7 +322,7 @@ struct TextFieldNodeRenderingTests {
     @Test @MainActor func rendersTextFieldNodeToUITextField() {
         let context = createMockUIKitContext()
         
-        let node = RenderNode.textField(TextFieldNode(
+        let node = RenderNode(TextFieldNode(
             placeholder: "Enter text",
                     ))
         
@@ -337,7 +334,7 @@ struct TextFieldNodeRenderingTests {
     @Test @MainActor func textFieldSetsPlaceholder() {
         let context = createMockUIKitContext()
         
-        let node = RenderNode.textField(TextFieldNode(
+        let node = RenderNode(TextFieldNode(
             placeholder: "Type here...",
                     ))
         
@@ -356,7 +353,7 @@ struct ImageNodeRenderingTests {
     @Test @MainActor func rendersImageNodeToUIImageView() {
         let context = createMockUIKitContext()
         
-        let node = RenderNode.image(ImageNode(
+        let node = RenderNode(ImageNode(
             source: .sfsymbol(name: "star")        ))
         
         let view = context.render(node)
@@ -373,7 +370,7 @@ struct SpacerNodeRenderingTests {
     @Test @MainActor func rendersSpacerToUIView() {
         let context = createMockUIKitContext()
         
-        let view = context.render(RenderNode.spacer(SpacerNode()))
+        let view = context.render(RenderNode(SpacerNode()))
         
         // Spacer renders to a basic UIView (not a subclass)
         #expect(view.accessibilityIdentifier == "mock_spacer")
@@ -382,7 +379,7 @@ struct SpacerNodeRenderingTests {
     @Test @MainActor func spacerHasLowContentHuggingPriority() {
         let context = createMockUIKitContext()
         
-        let view = context.render(RenderNode.spacer(SpacerNode()))
+        let view = context.render(RenderNode(SpacerNode()))
 
         #expect(view.contentHuggingPriority(for: NSLayoutConstraint.Axis.vertical) == UILayoutPriority.defaultLow)
         #expect(view.contentHuggingPriority(for: NSLayoutConstraint.Axis.horizontal) == UILayoutPriority.defaultLow)
@@ -397,7 +394,7 @@ struct GradientNodeRenderingTests {
     @Test @MainActor func rendersGradientNodeToUIView() {
         let context = createMockUIKitContext()
         
-        let node = RenderNode.gradient(GradientNode(
+        let node = RenderNode(GradientNode(
             colors: [
                 GradientNode.ColorStop(color: .fixed(IR.Color.red), location: 0),
                 GradientNode.ColorStop(color: .fixed(IR.Color.blue), location: 1)
@@ -419,7 +416,7 @@ struct SectionLayoutNodeRenderingTests {
     @Test @MainActor func rendersSectionLayoutToScrollView() {
         let context = createMockUIKitContext()
         
-        let node = RenderNode.sectionLayout(SectionLayoutNode(
+        let node = RenderNode(SectionLayoutNode(
             sectionSpacing: 16,
             sections: []
         ))
@@ -449,22 +446,22 @@ struct UIKitMockRenderersProtocolTests {
         let context = createMockUIKitContext()
         
         // Each node type should dispatch to its corresponding mock renderer
-        let textView = context.render(RenderNode.text(TextNode(content: "Test")))
+        let textView = context.render(RenderNode(TextNode(content: "Test")))
         #expect(textView.accessibilityIdentifier == "mock_text")
         
-        let buttonView = context.render(RenderNode.button(ButtonNode(label: "Test", styles: ButtonStyles())))
+        let buttonView = context.render(RenderNode(ButtonNode(label: "Test", styles: ButtonStyles())))
         #expect(buttonView.accessibilityIdentifier == "mock_button")
         
-        let containerView = context.render(RenderNode.container(ContainerNode(layoutType: .vstack, children: [])))
+        let containerView = context.render(RenderNode(ContainerNode(layoutType: .vstack, children: [])))
         #expect(containerView.accessibilityIdentifier == "mock_container")
         
-        let textFieldView = context.render(RenderNode.textField(TextFieldNode(placeholder: "Test")))
+        let textFieldView = context.render(RenderNode(TextFieldNode(placeholder: "Test")))
         #expect(textFieldView.accessibilityIdentifier == "mock_textfield")
         
-        let imageView = context.render(RenderNode.image(ImageNode(source: .sfsymbol(name: "star"))))
+        let imageView = context.render(RenderNode(ImageNode(source: .sfsymbol(name: "star"))))
         #expect(imageView.accessibilityIdentifier == "mock_image")
         
-        let spacerView = context.render(RenderNode.spacer(SpacerNode()))
+        let spacerView = context.render(RenderNode(SpacerNode()))
         #expect(spacerView.accessibilityIdentifier == "mock_spacer")
     }
 }
@@ -477,13 +474,13 @@ struct NestedRenderingTests {
     @Test @MainActor func rendersNestedContainers() {
         let context = createMockUIKitContext()
         
-        let node = RenderNode.container(ContainerNode(
+        let node = RenderNode(ContainerNode(
             layoutType: .vstack,
             children: [
-                .container(ContainerNode(
+                RenderNode(ContainerNode(
                     layoutType: .hstack,
                     children: [
-                        .text(TextNode(content: "Nested"))
+                        RenderNode(TextNode(content: "Nested"))
                     ]
                 ))
             ]
@@ -504,12 +501,12 @@ struct NestedRenderingTests {
     @Test @MainActor func rendersMixedChildTypes() {
         let context = createMockUIKitContext()
         
-        let node = RenderNode.container(ContainerNode(
+        let node = RenderNode(ContainerNode(
             layoutType: .vstack,
             children: [
-                .text(TextNode(content: "Text")),
-                .button(ButtonNode(label: "Button", styles: ButtonStyles())),
-                .spacer(SpacerNode())
+                RenderNode(TextNode(content: "Text")),
+                RenderNode(ButtonNode(label: "Button", styles: ButtonStyles())),
+                RenderNode(SpacerNode())
             ]
         ))
         

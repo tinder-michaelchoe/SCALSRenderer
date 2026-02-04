@@ -8,6 +8,7 @@
 import Foundation
 import Testing
 @testable import SCALS
+@testable import ScalsModules
 
 // MARK: - Test Helpers
 
@@ -44,7 +45,7 @@ struct LayoutResolverVStackTests {
         
         let result = try resolver.resolve(layout, context: context)
         
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.layoutType == .vstack)
             #expect(container.children.count == 1)
         } else {
@@ -65,7 +66,7 @@ struct LayoutResolverVStackTests {
         
         let result = try resolver.resolve(layout, context: context)
         
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.spacing == 16)
         } else {
             Issue.record("Expected container node")
@@ -84,7 +85,7 @@ struct LayoutResolverVStackTests {
         
         let result = try resolver.resolve(layout, context: context)
         
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.spacing == 0)
         } else {
             Issue.record("Expected container node")
@@ -104,7 +105,7 @@ struct LayoutResolverVStackTests {
         
         let result = try resolver.resolve(layout, context: context)
         
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.alignment.horizontal == .leading)
         } else {
             Issue.record("Expected container node")
@@ -124,7 +125,7 @@ struct LayoutResolverVStackTests {
         
         let result = try resolver.resolve(layout, context: context)
         
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.alignment.horizontal == .center)
         } else {
             Issue.record("Expected container node")
@@ -144,7 +145,7 @@ struct LayoutResolverVStackTests {
         
         let result = try resolver.resolve(layout, context: context)
         
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.alignment.horizontal == .trailing)
         } else {
             Issue.record("Expected container node")
@@ -168,7 +169,7 @@ struct LayoutResolverHStackTests {
         
         let result = try resolver.resolve(layout, context: context)
         
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.layoutType == .hstack)
             #expect(container.children.count == 2)
         } else {
@@ -189,7 +190,7 @@ struct LayoutResolverHStackTests {
         
         let result = try resolver.resolve(layout, context: context)
         
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.spacing == 8)
         } else {
             Issue.record("Expected container node")
@@ -213,7 +214,7 @@ struct LayoutResolverZStackTests {
         
         let result = try resolver.resolve(layout, context: context)
         
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.layoutType == .zstack)
         } else {
             Issue.record("Expected container node")
@@ -233,7 +234,7 @@ struct LayoutResolverZStackTests {
         
         let result = try resolver.resolve(layout, context: context)
         
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.alignment.horizontal == .trailing)
             #expect(container.alignment.vertical == .bottom)
         } else {
@@ -259,7 +260,7 @@ struct LayoutResolverPaddingTests {
         
         let result = try resolver.resolve(layout, context: context)
         
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.padding.top == 10)
             #expect(container.padding.bottom == 20)
             #expect(container.padding.leading == 5)
@@ -282,7 +283,7 @@ struct LayoutResolverPaddingTests {
         
         let result = try resolver.resolve(layout, context: context)
         
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.padding.leading == 20)
             #expect(container.padding.trailing == 20)
             #expect(container.padding.top == 10)
@@ -304,7 +305,7 @@ struct LayoutResolverPaddingTests {
         
         let result = try resolver.resolve(layout, context: context)
         
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.padding.isEmpty)
         } else {
             Issue.record("Expected container node")
@@ -331,17 +332,17 @@ struct LayoutResolverNestedTests {
         
         let result = try resolver.resolve(layout, context: context)
         
-        if case .container(let vstack) = result.renderNode {
+        if let vstack = result.renderNode.data(ContainerNode.self) {
             #expect(vstack.children.count == 2)
             
-            if case .container(let hstack1) = vstack.children[0] {
+            if let hstack1 = vstack.children[0].data(ContainerNode.self) {
                 #expect(hstack1.layoutType == .hstack)
                 #expect(hstack1.children.count == 1)
             } else {
                 Issue.record("Expected first hstack")
             }
             
-            if case .container(let hstack2) = vstack.children[1] {
+            if let hstack2 = vstack.children[1].data(ContainerNode.self) {
                 #expect(hstack2.layoutType == .hstack)
                 #expect(hstack2.children.count == 2)
             } else {
@@ -374,9 +375,9 @@ struct LayoutResolverNestedTests {
         
         let result = try resolver.resolve(layout, context: context)
         
-        if case .container(let vstack) = result.renderNode {
-            if case .container(let hstack) = vstack.children[0] {
-                if case .container(let zstack) = hstack.children[0] {
+        if let vstack = result.renderNode.data(ContainerNode.self) {
+            if let hstack = vstack.children[0].data(ContainerNode.self) {
+                if let zstack = hstack.children[0].data(ContainerNode.self) {
                     #expect(zstack.layoutType == .zstack)
                     #expect(zstack.children.count == 1)
                 } else {
@@ -413,7 +414,7 @@ struct LayoutResolverForEachTests {
         
         let result = try resolver.resolveNode(.forEach(forEach), context: context)
         
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.children.count == 3)
         } else {
             Issue.record("Expected container node for forEach")
@@ -434,7 +435,7 @@ struct LayoutResolverForEachTests {
         
         let result = try resolver.resolveNode(.forEach(forEach), context: context)
         
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.children.isEmpty)
         } else {
             Issue.record("Expected empty container node")
@@ -453,7 +454,7 @@ struct LayoutResolverForEachTests {
         
         let result = try resolver.resolveNode(.forEach(forEach), context: context)
         
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.children.isEmpty)
         } else {
             Issue.record("Expected empty container node")
@@ -475,7 +476,7 @@ struct LayoutResolverForEachTests {
         
         let result = try resolver.resolveNode(.forEach(forEach), context: context)
         
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.layoutType == .vstack)
         } else {
             Issue.record("Expected vstack container")
@@ -497,7 +498,7 @@ struct LayoutResolverForEachTests {
         
         let result = try resolver.resolveNode(.forEach(forEach), context: context)
         
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.layoutType == .hstack)
         } else {
             Issue.record("Expected hstack container")
@@ -519,7 +520,7 @@ struct LayoutResolverForEachTests {
         
         let result = try resolver.resolveNode(.forEach(forEach), context: context)
         
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.spacing == 12)
         } else {
             Issue.record("Expected container with spacing")
@@ -545,7 +546,7 @@ struct LayoutResolverForEachTests {
         let result = try resolver.resolveNode(.forEach(forEach), context: context)
         
         // When array is empty, should render the emptyView
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.children.count == 2)
         } else {
             Issue.record("Expected empty view container")
@@ -566,7 +567,7 @@ struct LayoutResolverForEachTests {
         
         let result = try resolver.resolveNode(.forEach(forEach), context: context)
         
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.id == "forEach_myList")
         } else {
             Issue.record("Expected container with forEach id")
@@ -585,7 +586,7 @@ struct LayoutResolverSpacerTests {
         
         let result = try resolver.resolveNode(.spacer(Document.Spacer()), context: context)
         
-        if case .spacer = result.renderNode {
+        if result.renderNode.data(SpacerNode.self) != nil {
             // Success
         } else {
             Issue.record("Expected spacer node")
@@ -608,11 +609,11 @@ struct LayoutResolverSpacerTests {
         
         let result = try resolver.resolve(layout, context: context)
         
-        if case .container(let container) = result.renderNode {
+        if let container = result.renderNode.data(ContainerNode.self) {
             #expect(container.children.count == 3)
-            if case .spacer = container.children[0] { } else { Issue.record("Expected first spacer") }
-            if case .container = container.children[1] { } else { Issue.record("Expected middle container") }
-            if case .spacer = container.children[2] { } else { Issue.record("Expected last spacer") }
+            if container.children[0].data(SpacerNode.self) != nil { } else { Issue.record("Expected first spacer") }
+            if container.children[1].data(ContainerNode.self) != nil { } else { Issue.record("Expected middle container") }
+            if container.children[2].data(SpacerNode.self) != nil { } else { Issue.record("Expected last spacer") }
         } else {
             Issue.record("Expected container node")
         }

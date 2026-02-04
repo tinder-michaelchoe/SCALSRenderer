@@ -72,36 +72,39 @@ struct iOS26HTMLNodeRenderer {
     // MARK: - Node Rendering Dispatch
 
     mutating func renderNode(_ node: RenderNode) -> String {
-        switch node {
-        case .container(let container):
+        if let container = node.data(ContainerNode.self) {
             return renderContainer(container)
-        case .sectionLayout(let section):
+        } else if let section = node.data(SectionLayoutNode.self) {
             return renderSectionLayout(section)
-        case .text(let text):
+        } else if let text = node.data(TextNode.self) {
             return renderText(text)
-        case .button(let button):
+        } else if let button = node.data(ButtonNode.self) {
             return renderButton(button)
-        case .textField(let textField):
+        } else if let textField = node.data(TextFieldNode.self) {
             return renderTextField(textField)
-        case .toggle(let toggle):
+        } else if let toggle = node.data(ToggleNode.self) {
             return renderToggle(toggle)
-        case .slider(let slider):
+        } else if let slider = node.data(SliderNode.self) {
             return renderSlider(slider)
-        case .image(let image):
+        } else if let image = node.data(ImageNode.self) {
             return renderImage(image)
-        case .gradient(let gradient):
+        } else if let gradient = node.data(GradientNode.self) {
             return renderGradient(gradient)
-        case .shape(let shape):
+        } else if let shape = node.data(ShapeNode.self) {
             return renderShape(shape)
-        case .pageIndicator(let indicator):
+        } else if let indicator = node.data(PageIndicatorNode.self) {
             return renderPageIndicator(indicator)
-        case .spacer(let spacer):
+        } else if let spacer = node.data(SpacerNode.self) {
             return renderSpacer(spacer)
-        case .divider(let divider):
+        } else if let divider = node.data(DividerNode.self) {
             return renderDivider(divider)
-        case .custom(let kind, let customNode):
-            return renderCustom(kind: kind, node: customNode)
+        } else {
+            return renderUnknown(kind: node.kind)
         }
+    }
+
+    private func renderUnknown(kind: RenderNodeKind) -> String {
+        return "<div class=\"scals-unknown\" data-kind=\"\(kind.rawValue)\"></div>"
     }
 
     // MARK: - Container Rendering
@@ -613,13 +616,6 @@ struct iOS26HTMLNodeRenderer {
         html += "</div>\n"
 
         return html
-    }
-
-    // MARK: - Custom Node Rendering
-
-    func renderCustom(kind: RenderNodeKind, node: any CustomRenderNode) -> String {
-        // Custom nodes not supported in static HTML - return placeholder
-        return "<div class=\"p-4 bg-gray-100 text-gray-600 rounded\">[Custom: \(kind.rawValue)]</div>\n"
     }
 
     // MARK: - Helper Methods

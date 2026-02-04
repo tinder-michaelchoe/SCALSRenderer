@@ -248,27 +248,36 @@ public struct ChartProperties: ComponentProperties {
 #### Step 3: Define the Render Node
 
 ```swift
-public struct ChartNode: CustomRenderNode {
-    public static let kind = RenderNodeKind.chart
-    
+public struct ChartNode: RenderNodeData {
+    public static let nodeKind = RenderNodeKind.chart
+
     public let id: String?
+    public var styleId: String? { nil }
     public let dataPoints: [Double]
     public let chartType: String
     public let showLabels: Bool
-    public let style: IR.Style
-    
+
+    // Flattened style properties (resolved from Document)
+    public let backgroundColor: IR.Color?
+    public let cornerRadius: CGFloat
+    public let padding: IR.EdgeInsets
+
     public init(
         id: String? = nil,
         dataPoints: [Double],
         chartType: String = "line",
         showLabels: Bool = true,
-        style: IR.Style = IR.Style()
+        backgroundColor: IR.Color? = nil,
+        cornerRadius: CGFloat = 0,
+        padding: IR.EdgeInsets = .zero
     ) {
         self.id = id
         self.dataPoints = dataPoints
         self.chartType = chartType
         self.showLabels = showLabels
-        self.style = style
+        self.backgroundColor = backgroundColor
+        self.cornerRadius = cornerRadius
+        self.padding = padding
     }
 }
 ```
@@ -311,11 +320,10 @@ public struct ChartComponentResolver: ComponentResolving {
         let chartNode = ChartNode(
             id: component.id,
             dataPoints: dataPoints,
-            chartType: chartType,
-            style: style
+            chartType: chartType
         )
-        
-        let renderNode = RenderNode.custom(kind: .chart, node: chartNode)
+
+        let renderNode = RenderNode(chartNode)
         return ComponentResolutionResult(renderNode: renderNode, viewNode: viewNode)
     }
 }
@@ -326,16 +334,15 @@ public struct ChartComponentResolver: ComponentResolving {
 ```swift
 public struct ChartNodeSwiftUIRenderer: SwiftUINodeRendering {
     public static let nodeKind = RenderNodeKind.chart
-    
+
     public init() {}
-    
+
     @MainActor
     public func render(_ node: RenderNode, context: SwiftUIRenderContext) -> AnyView {
-        guard case .custom(_, let customNode) = node,
-              let chartNode = customNode as? ChartNode else {
+        guard let chartNode = node.data(ChartNode.self) else {
             return AnyView(EmptyView())
         }
-        
+
         return AnyView(
             ChartNodeView(node: chartNode, stateStore: context.stateStore)
         )
@@ -345,13 +352,15 @@ public struct ChartNodeSwiftUIRenderer: SwiftUINodeRendering {
 struct ChartNodeView: View {
     let node: ChartNode
     @ObservedObject var stateStore: StateStore
-    
+
     var body: some View {
         // Your chart implementation
         VStack {
             // ... chart drawing code
         }
-        .applyContainerStyle(node.style)
+        .padding(node.padding.swiftUI)
+        .background(node.backgroundColor?.swiftUI ?? Color.clear)
+        .cornerRadius(node.cornerRadius)
     }
 }
 ```
@@ -361,16 +370,15 @@ struct ChartNodeView: View {
 ```swift
 public struct ChartNodeUIKitRenderer: UIKitNodeRendering {
     public static let nodeKind = RenderNodeKind.chart
-    
+
     public init() {}
-    
+
     @MainActor
     public func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .custom(_, let customNode) = node,
-              let chartNode = customNode as? ChartNode else {
+        guard let chartNode = node.data(ChartNode.self) else {
             return UIView()
         }
-        
+
         let chartView = ChartUIKitView()
         chartView.configure(with: chartNode)
         return chartView

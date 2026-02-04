@@ -8,6 +8,7 @@
 import Foundation
 import Testing
 @testable import SCALS
+@testable import ScalsModules
 
 // MARK: - Simple Tests (No MainActor)
 

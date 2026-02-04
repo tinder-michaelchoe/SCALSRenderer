@@ -17,7 +17,7 @@ public struct ToggleNodeSwiftUIRenderer: SwiftUINodeRendering {
 
     @MainActor
     public func render(_ node: RenderNode, context: SwiftUIRenderContext) -> AnyView {
-        guard case .toggle(let toggleNode) = node else {
+        guard let toggleNode = node.data(ToggleNode.self) else {
             return AnyView(EmptyView())
         }
         return AnyView(

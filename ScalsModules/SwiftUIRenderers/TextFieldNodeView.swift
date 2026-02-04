@@ -18,7 +18,7 @@ public struct TextFieldNodeSwiftUIRenderer: SwiftUINodeRendering {
 
     @MainActor
     public func render(_ node: RenderNode, context: SwiftUIRenderContext) -> AnyView {
-        guard case .textField(let textFieldNode) = node else {
+        guard let textFieldNode = node.data(TextFieldNode.self) else {
             return AnyView(EmptyView())
         }
         // Wrap the StateStore in ObservableStateStore for SwiftUI observation

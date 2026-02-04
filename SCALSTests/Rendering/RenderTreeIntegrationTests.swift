@@ -18,11 +18,11 @@ import SwiftUI
 /// Mock text renderer for integration testing
 private struct IntegrationTextRenderer: UIKitNodeRendering {
     static let nodeKind: RenderNodeKind = .text
-    
+
     init() {}
-    
+
     func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .text(let textNode) = node else {
+        guard let textNode = node.data(TextNode.self) else {
             return UIView()
         }
         let label = UILabel()
@@ -34,11 +34,11 @@ private struct IntegrationTextRenderer: UIKitNodeRendering {
 /// Mock button renderer for integration testing
 private struct IntegrationButtonRenderer: UIKitNodeRendering {
     static let nodeKind: RenderNodeKind = .button
-    
+
     init() {}
-    
+
     func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .button(let buttonNode) = node else {
+        guard let buttonNode = node.data(ButtonNode.self) else {
             return UIView()
         }
         let button = UIButton()
@@ -50,22 +50,22 @@ private struct IntegrationButtonRenderer: UIKitNodeRendering {
 /// Mock container renderer for integration testing
 private struct IntegrationContainerRenderer: UIKitNodeRendering {
     static let nodeKind: RenderNodeKind = .container
-    
+
     init() {}
-    
+
     func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .container(let containerNode) = node else {
+        guard let containerNode = node.data(ContainerNode.self) else {
             return UIView()
         }
         let stackView = UIStackView()
         stackView.axis = containerNode.layoutType == .vstack ? .vertical : .horizontal
         stackView.spacing = containerNode.spacing
-        
+
         for child in containerNode.children {
             let childView = context.render(child)
             stackView.addArrangedSubview(childView)
         }
-        
+
         return stackView
     }
 }
@@ -73,11 +73,11 @@ private struct IntegrationContainerRenderer: UIKitNodeRendering {
 /// Mock text field renderer for integration testing
 private struct IntegrationTextFieldRenderer: UIKitNodeRendering {
     static let nodeKind: RenderNodeKind = .textField
-    
+
     init() {}
-    
+
     func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .textField(let textFieldNode) = node else {
+        guard let textFieldNode = node.data(TextFieldNode.self) else {
             return UIView()
         }
         let textField = UITextField()
@@ -89,11 +89,11 @@ private struct IntegrationTextFieldRenderer: UIKitNodeRendering {
 /// Mock image renderer for integration testing
 private struct IntegrationImageRenderer: UIKitNodeRendering {
     static let nodeKind: RenderNodeKind = .image
-    
+
     init() {}
-    
+
     func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .image(let imageNode) = node else {
+        guard let imageNode = node.data(ImageNode.self) else {
             return UIView()
         }
         let imageView = UIImageView()
@@ -147,11 +147,8 @@ private struct IntegrationSectionLayoutRenderer: UIKitNodeRendering {
 @MainActor
 func createIntegrationActionContext(stateStore: StateStore) -> ActionContext {
     let document = Document.Definition(
-        root: Document.RootComponent(children: []),
-        state: nil,
-        styles: nil,
-        dataSources: nil,
-        actions: nil
+        id: "test",
+        root: Document.RootComponent(children: [])
     )
     let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
     return ActionContext(
@@ -207,90 +204,90 @@ struct UIKitRenderTreeIntegrationTests {
     
     @Test @MainActor func rendersSimpleTextNode() {
         let context = createIntegrationUIKitContext()
-        
-        let node = RenderNode.text(TextNode(content: "Hello Integration Test"))
-        
+
+        let node = RenderNode(TextNode(content: "Hello Integration Test"))
+
         let view = context.render(node)
-        
+
         #expect(view is UILabel)
         #expect((view as? UILabel)?.text == "Hello Integration Test")
     }
-    
+
     @Test @MainActor func rendersNestedContainerStructure() {
         let context = createIntegrationUIKitContext()
-        
+
         // Build a nested structure: VStack > HStack > [Text, Button]
-        let node = RenderNode.container(ContainerNode(
+        let node = RenderNode(ContainerNode(
             layoutType: .vstack,
             alignment: .center,
             spacing: 8,
             children: [
-                .container(ContainerNode(
+                RenderNode(ContainerNode(
                     layoutType: .hstack,
                     alignment: .center,
                     spacing: 4,
                     children: [
-                        .text(TextNode(content: "Label")),
-                        .button(ButtonNode(label: "Action", styles: ButtonStyles()))
+                        RenderNode(TextNode(content: "Label")),
+                        RenderNode(ButtonNode(label: "Action", styles: ButtonStyles()))
                     ]
                 ))
             ]
         ))
-        
+
         let view = context.render(node)
         let stackView = view as? UIStackView
-        
+
         #expect(stackView?.axis == .vertical)
         #expect(stackView?.arrangedSubviews.count == 1)
-        
+
         let innerStack = stackView?.arrangedSubviews.first as? UIStackView
         #expect(innerStack?.axis == .horizontal)
         #expect(innerStack?.arrangedSubviews.count == 2)
     }
-    
+
     @Test @MainActor func rendersFormStructure() {
         let context = createIntegrationUIKitContext()
-        
+
         // Form-like structure: VStack > [TextField, Button]
-        let node = RenderNode.container(ContainerNode(
+        let node = RenderNode(ContainerNode(
             layoutType: .vstack,
             alignment: .leading,
             spacing: 16,
             children: [
-                .textField(TextFieldNode(placeholder: "Enter name")),
-                .button(ButtonNode(
+                RenderNode(TextFieldNode(placeholder: "Enter name")),
+                RenderNode(ButtonNode(
                     label: "Submit",
                     styles: ButtonStyles()
                 ))
             ]
         ))
-        
+
         let view = context.render(node)
         let stackView = view as? UIStackView
-        
+
         #expect(stackView?.arrangedSubviews.count == 2)
         #expect(stackView?.arrangedSubviews[0] is UITextField)
         #expect(stackView?.arrangedSubviews[1] is UIButton)
     }
-    
+
     @Test @MainActor func rendersContentWithSpacers() {
         let context = createIntegrationUIKitContext()
-        
+
         // VStack with spacers: [Text, Spacer, Button]
-        let node = RenderNode.container(ContainerNode(
+        let node = RenderNode(ContainerNode(
             layoutType: .vstack,
             children: [
-                .text(TextNode(content: "Title")),
-                .spacer(SpacerNode()),
-                .button(ButtonNode(label: "Bottom Button", styles: ButtonStyles()))
+                RenderNode(TextNode(content: "Title")),
+                RenderNode(SpacerNode()),
+                RenderNode(ButtonNode(label: "Bottom Button", styles: ButtonStyles()))
             ]
         ))
-        
+
         let view = context.render(node)
         let stackView = view as? UIStackView
-        
+
         #expect(stackView?.arrangedSubviews.count == 3)
-        
+
         // Middle view should be spacer (flexible UIView)
         let spacer = stackView?.arrangedSubviews[1]
         #expect(spacer?.contentHuggingPriority(for: NSLayoutConstraint.Axis.vertical) == UILayoutPriority.defaultLow)
@@ -298,20 +295,20 @@ struct UIKitRenderTreeIntegrationTests {
     
     @Test @MainActor func rendersImageNode() {
         let context = createIntegrationUIKitContext()
-        
-        let node = RenderNode.image(ImageNode(source: .sfsymbol(name: "star.fill")))
-        
+
+        let node = RenderNode(ImageNode(source: .sfsymbol(name: "star.fill")))
+
         let view = context.render(node)
         let imageView = view as? UIImageView
-        
+
         #expect(imageView != nil)
         #expect(imageView?.image != nil)
     }
-    
+
     @Test @MainActor func rendersGradientNode() {
         let context = createIntegrationUIKitContext()
-        
-        let node = RenderNode.gradient(GradientNode(
+
+        let node = RenderNode(GradientNode(
             colors: [
                 GradientNode.ColorStop(color: .fixed(IR.Color.blue), location: 0),
                 GradientNode.ColorStop(color: .fixed(IR.Color(red: 0.5, green: 0, blue: 0.5, alpha: 1)), location: 1)
@@ -319,35 +316,35 @@ struct UIKitRenderTreeIntegrationTests {
             startPoint: .top,
             endPoint: .bottom
         ))
-        
+
         let view = context.render(node)
 
         // Verify view was created
         _ = view
     }
-    
+
     @Test @MainActor func rendersSectionLayout() {
         let context = createIntegrationUIKitContext()
-        
+
         let section = IR.Section(
             id: "section1",
             layoutType: .list,
-            header: .text(TextNode(content: "Header")),
+            header: RenderNode(TextNode(content: "Header")),
             footer: nil,
             config: IR.SectionConfig(),
             children: [
-                .text(TextNode(content: "Item 1")),
-                .text(TextNode(content: "Item 2"))
+                RenderNode(TextNode(content: "Item 1")),
+                RenderNode(TextNode(content: "Item 2"))
             ]
         )
-        
-        let node = RenderNode.sectionLayout(SectionLayoutNode(
+
+        let node = RenderNode(SectionLayoutNode(
             sectionSpacing: 16,
             sections: [section]
         ))
-        
+
         let view = context.render(node)
-        
+
         #expect(view is UIScrollView)
     }
 }
@@ -437,9 +434,9 @@ struct SwiftUIRenderTreeIntegrationTests {
         
         let tree = RenderTree(
             root: RootNode(children: [
-                .text(TextNode(content: "First")),
-                .text(TextNode(content: "Second")),
-                .text(TextNode(content: "Third"))
+                RenderNode(TextNode(content: "First")),
+                RenderNode(TextNode(content: "Second")),
+                RenderNode(TextNode(content: "Third"))
             ]),
             stateStore: stateStore,
             actions: [:]
@@ -550,63 +547,63 @@ struct RenderTreeEdgeCaseTests {
     
     @Test @MainActor func rendersEmptyContainer() {
         let context = createIntegrationUIKitContext()
-        
-        let node = RenderNode.container(ContainerNode(
+
+        let node = RenderNode(ContainerNode(
             layoutType: .vstack,
             children: []
         ))
-        
+
         let view = context.render(node)
         let stackView = view as? UIStackView
-        
+
         #expect(stackView?.arrangedSubviews.isEmpty == true)
     }
-    
+
     @Test @MainActor func rendersDeeplyNestedStructure() {
         let context = createIntegrationUIKitContext()
-        
+
         // Create deeply nested structure (5 levels)
         func createNestedContainer(depth: Int) -> RenderNode {
             if depth == 0 {
-                return .text(TextNode(content: "Leaf"))
+                return RenderNode(TextNode(content: "Leaf"))
             }
-            return .container(ContainerNode(
+            return RenderNode(ContainerNode(
                 layoutType: .vstack,
                 children: [createNestedContainer(depth: depth - 1)]
             ))
         }
-        
+
         let node = createNestedContainer(depth: 5)
         let view = context.render(node)
-        
+
         #expect(view is UIStackView)
-        
+
         // Traverse to find the leaf
         var current: UIView? = view
         for _ in 0..<5 {
             current = (current as? UIStackView)?.arrangedSubviews.first
         }
-        
+
         #expect(current is UILabel)
     }
-    
+
     @Test @MainActor func rendersContainerWithMixedChildren() {
         let context = createIntegrationUIKitContext()
-        
-        let node = RenderNode.container(ContainerNode(
+
+        let node = RenderNode(ContainerNode(
             layoutType: .vstack,
             children: [
-                .text(TextNode(content: "Text")),
-                .button(ButtonNode(label: "Button", styles: ButtonStyles())),
-                .image(ImageNode(source: .sfsymbol(name: "star"))),
-                .spacer(SpacerNode()),
-                .textField(TextFieldNode(placeholder: "Input"))
+                RenderNode(TextNode(content: "Text")),
+                RenderNode(ButtonNode(label: "Button", styles: ButtonStyles())),
+                RenderNode(ImageNode(source: .sfsymbol(name: "star"))),
+                RenderNode(SpacerNode()),
+                RenderNode(TextFieldNode(placeholder: "Input"))
             ]
         ))
-        
+
         let view = context.render(node)
         let stackView = view as? UIStackView
-        
+
         #expect(stackView?.arrangedSubviews.count == 5)
         let views = stackView?.arrangedSubviews ?? []
         #expect(views[0] is UILabel)

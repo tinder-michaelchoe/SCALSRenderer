@@ -16,7 +16,7 @@ public struct SpacerNodeRenderer: UIKitNodeRendering {
     public init() {}
 
     public func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .spacer(let spacerNode) = node else {
+        guard let spacerNode = node.data(SpacerNode.self) else {
             return UIView()
         }
 

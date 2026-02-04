@@ -17,7 +17,7 @@ public struct ButtonNodeSwiftUIRenderer: SwiftUINodeRendering {
 
     @MainActor
     public func render(_ node: RenderNode, context: SwiftUIRenderContext) -> AnyView {
-        guard case .button(let buttonNode) = node else {
+        guard let buttonNode = node.data(ButtonNode.self) else {
             return AnyView(EmptyView())
         }
         return AnyView(

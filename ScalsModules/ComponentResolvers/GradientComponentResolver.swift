@@ -45,7 +45,7 @@ public struct GradientComponentResolver: ComponentResolving {
         }
 
         return ComponentResolutionResult(
-            renderNode: .gradient(gradientNode),
+            renderNode: RenderNode(gradientNode),
             viewNode: viewNode
         )
     }

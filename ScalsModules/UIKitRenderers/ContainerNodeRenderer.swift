@@ -17,7 +17,7 @@ public struct ContainerNodeRenderer: UIKitNodeRendering {
     public init() {}
 
     public func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .container(let containerNode) = node else {
+        guard let containerNode = node.data(ContainerNode.self) else {
             return UIView()
         }
 

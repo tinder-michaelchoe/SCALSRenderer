@@ -16,7 +16,7 @@ public struct PageIndicatorNodeSwiftUIRenderer: SwiftUINodeRendering {
 
     @MainActor
     public func render(_ node: RenderNode, context: SwiftUIRenderContext) -> AnyView {
-        guard case .pageIndicator(let indicatorNode) = node else {
+        guard let indicatorNode = node.data(PageIndicatorNode.self) else {
             return AnyView(EmptyView())
         }
         return AnyView(

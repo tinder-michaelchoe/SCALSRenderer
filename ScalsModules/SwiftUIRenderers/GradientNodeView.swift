@@ -17,7 +17,7 @@ public struct GradientNodeSwiftUIRenderer: SwiftUINodeRendering {
 
     @MainActor
     public func render(_ node: RenderNode, context: SwiftUIRenderContext) -> AnyView {
-        guard case .gradient(let gradientNode) = node else {
+        guard let gradientNode = node.data(GradientNode.self) else {
             return AnyView(EmptyView())
         }
         return AnyView(

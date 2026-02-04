@@ -50,7 +50,7 @@ public struct TextNodeRenderer: UIKitNodeRendering {
     public init() {}
 
     public func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .text(let textNode) = node else {
+        guard let textNode = node.data(TextNode.self) else {
             return UIView()
         }
 

@@ -64,7 +64,7 @@ public struct CustomComponentResolver {
             resolvedStyle: resolvedStyle
         )
 
-        let renderNode = RenderNode.custom(kind: .customComponent, node: customNode)
+        let renderNode = RenderNode(customNode)
 
         return ComponentResolutionResult(renderNode: renderNode, viewNode: viewNode)
     }

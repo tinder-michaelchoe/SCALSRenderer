@@ -91,7 +91,7 @@ public struct ShapeComponentResolver: ComponentResolving {
         }
 
         return ComponentResolutionResult(
-            renderNode: .shape(shapeNode),
+            renderNode: RenderNode(shapeNode),
             viewNode: viewNode
         )
     }

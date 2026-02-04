@@ -25,7 +25,7 @@ struct SectionLayoutResolverBasicTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections.isEmpty)
         } else {
             Issue.record("Expected sectionLayout node")
@@ -44,7 +44,7 @@ struct SectionLayoutResolverBasicTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.id == "main-sections")
         } else {
             Issue.record("Expected sectionLayout node")
@@ -63,7 +63,7 @@ struct SectionLayoutResolverBasicTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sectionSpacing == 24)
         } else {
             Issue.record("Expected sectionLayout node")
@@ -81,7 +81,7 @@ struct SectionLayoutResolverBasicTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sectionSpacing == 0)
         } else {
             Issue.record("Expected sectionLayout node")
@@ -109,7 +109,7 @@ struct SectionLayoutResolverTypeTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections.count == 1)
             if case .horizontal = node.sections[0].layoutType {
                 // Success
@@ -137,7 +137,7 @@ struct SectionLayoutResolverTypeTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             if case .list = node.sections[0].layoutType {
                 // Success
             } else {
@@ -167,7 +167,7 @@ struct SectionLayoutResolverTypeTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             if case .grid(let columns) = node.sections[0].layoutType {
                 if case .fixed(let count) = columns {
                     #expect(count == 3)
@@ -201,7 +201,7 @@ struct SectionLayoutResolverTypeTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             if case .grid(let columns) = node.sections[0].layoutType {
                 if case .adaptive(let minWidth) = columns {
                     #expect(minWidth == 120)
@@ -232,7 +232,7 @@ struct SectionLayoutResolverTypeTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             if case .grid(let columns) = node.sections[0].layoutType {
                 if case .fixed(let count) = columns {
                     #expect(count == 2) // Default is 2 columns
@@ -263,7 +263,7 @@ struct SectionLayoutResolverTypeTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             if case .flow = node.sections[0].layoutType {
                 // Success
             } else {
@@ -295,7 +295,7 @@ struct SectionLayoutResolverConfigTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections[0].config.itemSpacing == 12)
         } else {
             Issue.record("Expected sectionLayout node")
@@ -318,7 +318,7 @@ struct SectionLayoutResolverConfigTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections[0].config.lineSpacing == 16)
         } else {
             Issue.record("Expected sectionLayout node")
@@ -341,7 +341,7 @@ struct SectionLayoutResolverConfigTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections[0].config.itemSpacing == 8) // Default
             #expect(node.sections[0].config.lineSpacing == 8) // Default
         } else {
@@ -368,7 +368,7 @@ struct SectionLayoutResolverConfigTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections[0].config.contentInsets.leading == 16)
             #expect(node.sections[0].config.contentInsets.trailing == 16)
             #expect(node.sections[0].config.contentInsets.top == 8)
@@ -394,7 +394,7 @@ struct SectionLayoutResolverConfigTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections[0].config.showsIndicators == true)
         } else {
             Issue.record("Expected sectionLayout node")
@@ -417,7 +417,7 @@ struct SectionLayoutResolverConfigTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections[0].config.showsDividers == false)
         } else {
             Issue.record("Expected sectionLayout node")
@@ -440,7 +440,7 @@ struct SectionLayoutResolverConfigTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections[0].config.showsDividers == true) // Default is true
         } else {
             Issue.record("Expected sectionLayout node")
@@ -471,7 +471,7 @@ struct SectionLayoutResolverSnapBehaviorTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections[0].config.snapBehavior == IR.SnapBehavior.none)
         } else {
             Issue.record("Expected sectionLayout node")
@@ -497,7 +497,7 @@ struct SectionLayoutResolverSnapBehaviorTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections[0].config.snapBehavior == .viewAligned)
         } else {
             Issue.record("Expected sectionLayout node")
@@ -523,7 +523,7 @@ struct SectionLayoutResolverSnapBehaviorTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections[0].config.snapBehavior == .paging)
         } else {
             Issue.record("Expected sectionLayout node")
@@ -552,9 +552,9 @@ struct SectionLayoutResolverHeaderFooterTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections[0].header != nil)
-            if case .spacer = node.sections[0].header {
+            if node.sections[0].header?.data(SpacerNode.self) != nil {
                 // Success
             } else {
                 Issue.record("Expected spacer header")
@@ -581,7 +581,7 @@ struct SectionLayoutResolverHeaderFooterTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections[0].footer != nil)
         } else {
             Issue.record("Expected sectionLayout node")
@@ -606,7 +606,7 @@ struct SectionLayoutResolverHeaderFooterTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections[0].stickyHeader == true)
         } else {
             Issue.record("Expected sectionLayout node")
@@ -630,7 +630,7 @@ struct SectionLayoutResolverHeaderFooterTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections[0].stickyHeader == false)
         } else {
             Issue.record("Expected sectionLayout node")
@@ -669,7 +669,7 @@ struct SectionLayoutResolverMultipleSectionsTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections.count == 3)
             #expect(node.sections[0].id == "section1")
             #expect(node.sections[1].id == "section2")
@@ -703,7 +703,7 @@ struct SectionLayoutResolverMultipleSectionsTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             if case .horizontal = node.sections[0].layoutType { } else { Issue.record("Expected horizontal") }
             if case .list = node.sections[1].layoutType { } else { Issue.record("Expected list") }
             if case .flow = node.sections[2].layoutType { } else { Issue.record("Expected flow") }
@@ -733,7 +733,7 @@ struct SectionLayoutResolverChildrenTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections[0].children.count == 3)
         } else {
             Issue.record("Expected sectionLayout node")
@@ -756,7 +756,7 @@ struct SectionLayoutResolverChildrenTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections[0].children.isEmpty)
         } else {
             Issue.record("Expected sectionLayout node")
@@ -781,9 +781,9 @@ struct SectionLayoutResolverChildrenTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections[0].children.count == 1)
-            if case .container(let container) = node.sections[0].children[0] {
+            if let container = node.sections[0].children[0].data(ContainerNode.self) {
                 #expect(container.layoutType == .hstack)
             } else {
                 Issue.record("Expected container child")
@@ -814,7 +814,7 @@ struct SectionLayoutResolverAlignmentTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections[0].config.alignment == .leading)
         } else {
             Issue.record("Expected sectionLayout node")
@@ -837,7 +837,7 @@ struct SectionLayoutResolverAlignmentTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections[0].config.alignment == .center)
         } else {
             Issue.record("Expected sectionLayout node")
@@ -860,7 +860,7 @@ struct SectionLayoutResolverAlignmentTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.sections[0].config.alignment == .trailing)
         } else {
             Issue.record("Expected sectionLayout node")

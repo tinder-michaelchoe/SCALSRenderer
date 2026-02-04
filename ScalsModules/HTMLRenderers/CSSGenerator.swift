@@ -118,54 +118,37 @@ public struct CSSGenerator {
     private mutating func generateNodeStyles(_ node: RenderNode) -> String {
         var css = ""
 
-        switch node {
-        case .container(let container):
+        if let container = node.data(ContainerNode.self) {
             css += generateContainerStyles(container)
             for child in container.children {
                 css += generateNodeStyles(child)
             }
-
-        case .sectionLayout(let sectionLayout):
+        } else if let sectionLayout = node.data(SectionLayoutNode.self) {
             css += generateSectionLayoutStyles(sectionLayout)
-
-        case .text(let text):
+        } else if let text = node.data(TextNode.self) {
             css += generateTextStyles(text)
-
-        case .button(let button):
+        } else if let button = node.data(ButtonNode.self) {
             css += generateButtonStyles(button)
-
-        case .textField(let textField):
+        } else if let textField = node.data(TextFieldNode.self) {
             css += generateTextFieldStyles(textField)
-
-        case .toggle(let toggle):
+        } else if let toggle = node.data(ToggleNode.self) {
             css += generateToggleStyles(toggle)
-
-        case .slider(let slider):
+        } else if let slider = node.data(SliderNode.self) {
             css += generateSliderStyles(slider)
-
-        case .image(let image):
+        } else if let image = node.data(ImageNode.self) {
             css += generateImageStyles(image)
-
-        case .gradient(let gradient):
+        } else if let gradient = node.data(GradientNode.self) {
             css += generateGradientStyles(gradient)
-
-        case .shape(let shape):
+        } else if let shape = node.data(ShapeNode.self) {
             css += generateShapeStyles(shape)
-
-        case .pageIndicator(let pageIndicator):
+        } else if let pageIndicator = node.data(PageIndicatorNode.self) {
             css += generatePageIndicatorStyles(pageIndicator)
-
-        case .divider(let divider):
+        } else if let divider = node.data(DividerNode.self) {
             css += generateDividerStyles(divider)
-
-        case .spacer:
+        } else if node.data(SpacerNode.self) != nil {
             // Spacer uses base class, no custom CSS needed
-            break
-
-        case .custom(_, let customNode):
-            // Custom nodes can implement their own CSS generation
-            css += generateCustomNodeStyles(customNode)
         }
+        // Unknown or custom nodes are skipped
 
         return css
     }
@@ -639,13 +622,6 @@ public struct CSSGenerator {
         return ".\(className) {\n    \(rules.joined(separator: ";\n    "));\n}\n\n"
     }
 
-    private func generateCustomNodeStyles(_ node: any CustomRenderNode) -> String {
-        // Custom nodes can implement CSSGenerating protocol for their own styles
-        if let cssGenerating = node as? CSSGenerating {
-            return cssGenerating.generateCSS()
-        }
-        return ""
-    }
 
     // MARK: - Helpers
 

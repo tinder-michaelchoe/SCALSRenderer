@@ -17,7 +17,7 @@ public struct SpacerNodeSwiftUIRenderer: SwiftUINodeRendering {
 
     @MainActor
     public func render(_ node: RenderNode, context: SwiftUIRenderContext) -> AnyView {
-        guard case .spacer(let spacerNode) = node else {
+        guard let spacerNode = node.data(SpacerNode.self) else {
             return AnyView(EmptyView())
         }
 

@@ -18,7 +18,7 @@ final class TextNodeSnapshotTests: XCTestCase {
     @MainActor
     func testTextWithBasicStyle() async throws {
         // Create a simple text node with basic styling (flattened properties)
-        let node = RenderNode.text(TextNode(
+        let node = RenderNode(TextNode(
             content: "testTextWithBasicStyle",
             textColor: .black,
             fontSize: 16
@@ -64,7 +64,7 @@ final class TextNodeSnapshotTests: XCTestCase {
     @MainActor
     func testTextWithCanonicalComparison() async throws {
         // Test that SCALS renderer output matches canonical SwiftUI
-        let node = RenderNode.text(TextNode(
+        let node = RenderNode(TextNode(
             content: "testTextWithCanonicalComparison",
             textColor: .black,
             fontSize: 16
@@ -94,7 +94,7 @@ final class TextNodeSnapshotTests: XCTestCase {
     @MainActor
     func testTextWithColorSchemes() async throws {
         // Test text rendering in both light and dark modes
-        let node = RenderNode.text(TextNode(
+        let node = RenderNode(TextNode(
             content: "testTextWithColorSchemes",
             textColor: IR.Color(red: 0.2, green: 0.2, blue: 0.8, alpha: 1.0),  // Blue text
             fontSize: 18
@@ -204,7 +204,7 @@ final class TextNodeSnapshotTests: XCTestCase {
         ]
 
         for (weight, name) in weights {
-            let node = RenderNode.text(TextNode(
+            let node = RenderNode(TextNode(
                 content: "Font Weight: \(name)",
                 textColor: .black,
                 fontSize: 18,
@@ -283,7 +283,7 @@ final class TextNodeSnapshotTests: XCTestCase {
         ]
 
         for (size, name) in sizes {
-            let node = RenderNode.text(TextNode(
+            let node = RenderNode(TextNode(
                 content: "Size: \(Int(size))pt",
                 textColor: .black,
                 fontSize: size
@@ -358,7 +358,7 @@ final class TextNodeSnapshotTests: XCTestCase {
                 width: .fractional(1.0)
             )
 
-            let node = RenderNode.text(textNode)
+            let node = RenderNode(textNode)
 
             // SwiftUI - pinToEdges allows fractional width to work and shows alignment
             let swiftUIImage = await RendererTestHelpers.renderSwiftUI(
@@ -424,7 +424,7 @@ final class TextNodeSnapshotTests: XCTestCase {
 
     @MainActor
     func testTextWithMultiline() async throws {
-        let node = RenderNode.text(TextNode(
+        let node = RenderNode(TextNode(
             content: "This is a multiline text example that should wrap to multiple lines when the content is too long to fit on a single line.",
             textColor: .black,
             fontSize: 16
@@ -481,7 +481,7 @@ final class TextNodeSnapshotTests: XCTestCase {
 
     @MainActor
     func testTextWithPadding() async throws {
-        let node = RenderNode.text(TextNode(
+        let node = RenderNode(TextNode(
             content: "Text with padding",
             padding: IR.EdgeInsets(top: 16, leading: 32, bottom: 16, trailing: 32),
             textColor: .black,

@@ -14,14 +14,14 @@ import UIKit
 public final class UIKitRenderContext: @unchecked Sendable {
     public let actionContext: ActionContext
     public let stateStore: StateStore
-    public let colorScheme: RenderColorScheme
+    public let colorScheme: IR.ColorScheme
 
     private let registry: UIKitNodeRendererRegistry
 
     public init(
         actionContext: ActionContext,
         stateStore: StateStore,
-        colorScheme: RenderColorScheme,
+        colorScheme: IR.ColorScheme,
         registry: UIKitNodeRendererRegistry
     ) {
         self.actionContext = actionContext

@@ -64,7 +64,7 @@ public struct TextFieldComponentResolver: ComponentResolving {
         )
 
         // Create TextFieldNode with flattened properties (no .style)
-        let renderNode = RenderNode.textField(TextFieldNode(
+        let renderNode = RenderNode(TextFieldNode(
             id: component.id,
             placeholder: component.placeholder ?? "",
             styleId: component.styleId,

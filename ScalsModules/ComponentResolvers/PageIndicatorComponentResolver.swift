@@ -94,6 +94,6 @@ public struct PageIndicatorComponentResolver: ComponentResolving {
             }
         }
 
-        return ComponentResolutionResult(renderNode: .pageIndicator(node), viewNode: nil)
+        return ComponentResolutionResult(renderNode: RenderNode(node), viewNode: nil)
     }
 }

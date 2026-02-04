@@ -17,7 +17,7 @@ public struct ShapeNodeSwiftUIRenderer: SwiftUINodeRendering {
 
     @MainActor
     public func render(_ node: RenderNode, context: SwiftUIRenderContext) -> AnyView {
-        guard case .shape(let shapeNode) = node else {
+        guard let shapeNode = node.data(ShapeNode.self) else {
             return AnyView(EmptyView())
         }
         return AnyView(

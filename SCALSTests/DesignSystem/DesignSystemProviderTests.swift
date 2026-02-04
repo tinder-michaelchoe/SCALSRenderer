@@ -141,7 +141,7 @@ struct MockSwiftUIDesignSystemRenderer: SwiftUIDesignSystemRenderer {
 @Suite struct RenderNodeStyleIdTests {
     
     @Test func buttonNodeStyleId() {
-        let node = RenderNode.button(ButtonNode(
+        let node = RenderNode(ButtonNode(
             label: "Test",
             styleId: "@button.primary",
             styles: ButtonStyles()
@@ -151,7 +151,7 @@ struct MockSwiftUIDesignSystemRenderer: SwiftUIDesignSystemRenderer {
     }
     
     @Test func textNodeStyleId() {
-        let node = RenderNode.text(TextNode(
+        let node = RenderNode(TextNode(
             content: "Test",
             styleId: "@text.heading1"
         ))
@@ -160,7 +160,7 @@ struct MockSwiftUIDesignSystemRenderer: SwiftUIDesignSystemRenderer {
     }
     
     @Test func textFieldNodeStyleId() {
-        let node = RenderNode.textField(TextFieldNode(
+        let node = RenderNode(TextFieldNode(
             placeholder: "Enter text",
             styleId: "@textField.default"
         ))
@@ -169,7 +169,7 @@ struct MockSwiftUIDesignSystemRenderer: SwiftUIDesignSystemRenderer {
     }
     
     @Test func imageNodeStyleId() {
-        let node = RenderNode.image(ImageNode(
+        let node = RenderNode(ImageNode(
             source: .sfsymbol(name: "star"),
             styleId: "@icon.default"
         ))
@@ -178,13 +178,13 @@ struct MockSwiftUIDesignSystemRenderer: SwiftUIDesignSystemRenderer {
     }
     
     @Test func containerNodeHasNilStyleId() {
-        let node = RenderNode.container(ContainerNode())
+        let node = RenderNode(ContainerNode())
         
         #expect(node.styleId == nil)
     }
     
     @Test func spacerHasNilStyleId() {
-        let node = RenderNode.spacer(SpacerNode())
+        let node = RenderNode(SpacerNode())
         
         #expect(node.styleId == nil)
     }
@@ -224,7 +224,7 @@ struct MockSwiftUIDesignSystemRenderer: SwiftUIDesignSystemRenderer {
     
     @Test func defaultCanRenderReturnsFalse() {
         let provider = TokenOnlyProvider()
-        let node = RenderNode.button(ButtonNode(label: "Test", styles: ButtonStyles()))
+        let node = RenderNode(ButtonNode(label: "Test", styles: ButtonStyles()))
         
         // Default implementation should return false
         #expect(provider.canRender(node, styleId: "@button.primary") == false)
@@ -232,15 +232,12 @@ struct MockSwiftUIDesignSystemRenderer: SwiftUIDesignSystemRenderer {
     
     @Test @MainActor func defaultRenderReturnsNil() {
         let provider = SwiftUITokenOnlyProvider()
-        let node = RenderNode.button(ButtonNode(label: "Test", styles: ButtonStyles()))
+        let node = RenderNode(ButtonNode(label: "Test", styles: ButtonStyles()))
 
         let stateStore = StateStore()
         let document = Document.Definition(
-            root: Document.RootComponent(children: []),
-            state: nil,
-            styles: nil,
-            dataSources: nil,
-            actions: nil
+            id: "test",
+            root: Document.RootComponent(children: [])
         )
         let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
         let actionContext = ActionContext(

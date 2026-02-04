@@ -33,11 +33,12 @@ import SCALS
 ///     let chartType: String
 /// }
 ///
-/// struct ChartNode: CustomRenderNode {
-///     static let kind = RenderNodeKind.chart
+/// struct ChartNode: RenderNodeData {
+///     static let nodeKind = RenderNodeKind.chart
+///     var id: String? { nil }
+///     var styleId: String? { nil }
 ///     let dataPoints: [Double]
 ///     let chartType: String
-///     let style: IR.Style
 /// }
 ///
 /// struct ChartResolver: ComponentResolving { ... }

@@ -68,22 +68,5 @@ public extension DesignSystemProvider {
     }
 }
 
-// MARK: - RenderNode StyleId Extension
-
-public extension RenderNode {
-    /// The styleId for this render node, if applicable.
-    ///
-    /// Used by renderers to check for design system style references.
-    var styleId: String? {
-        switch self {
-        case .button(let n): return n.styleId
-        case .text(let n): return n.styleId
-        case .image(let n): return n.styleId
-        case .textField(let n): return n.styleId
-        case .toggle(let n): return n.styleId
-        case .slider(let n): return n.styleId
-        case .container, .sectionLayout, .gradient, .shape, .pageIndicator, .spacer, .divider, .custom:
-            return nil
-        }
-    }
-}
+// NOTE: RenderNode.styleId is now provided by the RenderNode struct itself
+// via the RenderNodeData protocol. The old switch-based extension has been removed.

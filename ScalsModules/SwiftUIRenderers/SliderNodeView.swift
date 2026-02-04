@@ -17,7 +17,7 @@ public struct SliderNodeSwiftUIRenderer: SwiftUINodeRendering {
 
     @MainActor
     public func render(_ node: RenderNode, context: SwiftUIRenderContext) -> AnyView {
-        guard case .slider(let sliderNode) = node else {
+        guard let sliderNode = node.data(SliderNode.self) else {
             return AnyView(EmptyView())
         }
         return AnyView(

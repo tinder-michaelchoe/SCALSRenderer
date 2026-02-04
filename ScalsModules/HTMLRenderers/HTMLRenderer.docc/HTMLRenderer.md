@@ -59,9 +59,11 @@ let renderer = HTMLRenderer(includeBaseStylesheet: false)
 Custom components can implement the ``HTMLRendering`` protocol:
 
 ```swift
-struct MyCustomNode: CustomRenderNode, HTMLRendering {
-    static var kind = RenderNodeKind(rawValue: "myCustom")
-    
+struct MyCustomNode: RenderNodeData, HTMLRendering {
+    static let nodeKind = RenderNodeKind(rawValue: "myCustom")
+    var id: String? { nil }
+    var styleId: String? { nil }
+
     func renderHTML() -> String {
         return "<div class=\"my-custom\">Custom content</div>"
     }
@@ -73,9 +75,11 @@ struct MyCustomNode: CustomRenderNode, HTMLRendering {
 Custom components can implement the ``CSSGenerating`` protocol:
 
 ```swift
-struct MyCustomNode: CustomRenderNode, CSSGenerating {
-    static var kind = RenderNodeKind(rawValue: "myCustom")
-    
+struct MyCustomNode: RenderNodeData, CSSGenerating {
+    static let nodeKind = RenderNodeKind(rawValue: "myCustom")
+    var id: String? { nil }
+    var styleId: String? { nil }
+
     func generateCSS() -> String {
         return ".my-custom { color: blue; }"
     }

@@ -17,7 +17,7 @@ public struct ImageNodeSwiftUIRenderer: SwiftUINodeRendering {
 
     @MainActor
     public func render(_ node: RenderNode, context: SwiftUIRenderContext) -> AnyView {
-        guard case .image(let imageNode) = node else {
+        guard let imageNode = node.data(ImageNode.self) else {
             return AnyView(EmptyView())
         }
         // Wrap the StateStore in ObservableStateStore for SwiftUI observation

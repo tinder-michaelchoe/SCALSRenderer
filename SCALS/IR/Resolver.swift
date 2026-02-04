@@ -328,7 +328,7 @@ public struct Resolver {
             }
 
             return NodeResolutionResult(
-                renderNode: .spacer(spacerNode),
+                renderNode: RenderNode(spacerNode),
                 viewNode: viewNode
             )
         }

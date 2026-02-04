@@ -355,41 +355,40 @@ public final class ScalsUIKitView: UIView {
     private func renderNode(_ node: RenderNode, viewNodeId: String?) -> UIView {
         let view: UIView
 
-        switch node {
-        case .container(let container):
+        if let container = node.data(ContainerNode.self) {
             view = renderContainer(container)
-        case .sectionLayout(let sectionLayout):
+        } else if let sectionLayout = node.data(SectionLayoutNode.self) {
             view = renderSectionLayout(sectionLayout)
-        case .text(let text):
+        } else if let text = node.data(TextNode.self) {
             view = renderText(text)
-        case .button(let button):
+        } else if let button = node.data(ButtonNode.self) {
             view = renderButton(button)
-        case .textField(let textField):
+        } else if let textField = node.data(TextFieldNode.self) {
             view = renderTextField(textField)
-        case .toggle(let toggle):
+        } else if let toggle = node.data(ToggleNode.self) {
             view = renderToggle(toggle)
-        case .slider(let slider):
+        } else if let slider = node.data(SliderNode.self) {
             view = renderSlider(slider)
-        case .image(let image):
+        } else if let image = node.data(ImageNode.self) {
             view = renderImage(image)
-        case .gradient(let gradient):
+        } else if let gradient = node.data(GradientNode.self) {
             view = renderGradient(gradient)
-        case .shape:
+        } else if node.data(ShapeNode.self) != nil {
             // Use the UIKit renderer registry for shapes
             let context = UIKitRenderContext(actionContext: actionContext, stateStore: renderTree.stateStore, colorScheme: renderTree.root.colorScheme, registry: rendererRegistry)
             view = rendererRegistry.render(node, context: context)
-        case .pageIndicator:
+        } else if node.data(PageIndicatorNode.self) != nil {
             // Use the UIKit renderer registry for page indicators
             let context = UIKitRenderContext(actionContext: actionContext, stateStore: renderTree.stateStore, colorScheme: renderTree.root.colorScheme, registry: rendererRegistry)
             view = rendererRegistry.render(node, context: context)
-        case .spacer:
+        } else if node.data(SpacerNode.self) != nil {
             view = renderSpacer()
-        case .divider(let divider):
+        } else if let divider = node.data(DividerNode.self) {
             view = renderDivider(divider)
-        case .custom(let kind, _):
-            // Use the UIKit renderer registry for custom nodes
+        } else {
+            // Use the UIKit renderer registry for unknown/custom nodes
             let context = UIKitRenderContext(actionContext: actionContext, stateStore: renderTree.stateStore, colorScheme: renderTree.root.colorScheme, registry: rendererRegistry)
-            if rendererRegistry.hasRenderer(for: kind) {
+            if rendererRegistry.hasRenderer(for: node.kind) {
                 view = rendererRegistry.render(node, context: context)
             } else {
                 view = UIView() // No renderer registered

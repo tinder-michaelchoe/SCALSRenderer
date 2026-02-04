@@ -25,8 +25,7 @@ public struct CustomComponentSwiftUIRenderer: SwiftUINodeRendering {
     @MainActor
     public func render(_ node: RenderNode, context: SwiftUIRenderContext) -> AnyView {
         // Extract the CustomComponentRenderNode
-        guard case .custom(_, let customNode) = node,
-              let componentNode = customNode as? CustomComponentRenderNode else {
+        guard let componentNode = node.data(CustomComponentRenderNode.self) else {
             return AnyView(
                 Text("Invalid custom component node")
                     .foregroundColor(.red)

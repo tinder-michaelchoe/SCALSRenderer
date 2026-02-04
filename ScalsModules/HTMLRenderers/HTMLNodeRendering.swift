@@ -43,49 +43,45 @@ public struct HTMLNodeRenderer {
     
     /// Render a single RenderNode to HTML.
     public mutating func renderNode(_ node: RenderNode) -> String {
-        switch node {
-        case .container(let container):
+        if let container = node.data(ContainerNode.self) {
             return renderContainer(container)
-            
-        case .sectionLayout(let sectionLayout):
+        } else if let sectionLayout = node.data(SectionLayoutNode.self) {
             return renderSectionLayout(sectionLayout)
-            
-        case .text(let text):
+        } else if let text = node.data(TextNode.self) {
             return renderText(text)
-            
-        case .button(let button):
+        } else if let button = node.data(ButtonNode.self) {
             return renderButton(button)
-            
-        case .textField(let textField):
+        } else if let textField = node.data(TextFieldNode.self) {
             return renderTextField(textField)
-            
-        case .toggle(let toggle):
+        } else if let toggle = node.data(ToggleNode.self) {
             return renderToggle(toggle)
-            
-        case .slider(let slider):
+        } else if let slider = node.data(SliderNode.self) {
             return renderSlider(slider)
-            
-        case .image(let image):
+        } else if let image = node.data(ImageNode.self) {
             return renderImage(image)
-            
-        case .gradient(let gradient):
+        } else if let gradient = node.data(GradientNode.self) {
             return renderGradient(gradient)
-
-        case .shape(let shape):
+        } else if let shape = node.data(ShapeNode.self) {
             return renderShape(shape)
-
-        case .pageIndicator(let pageIndicator):
+        } else if let pageIndicator = node.data(PageIndicatorNode.self) {
             return renderPageIndicator(pageIndicator)
-
-        case .spacer:
+        } else if node.data(SpacerNode.self) != nil {
             return renderSpacer()
-
-        case .divider(let divider):
+        } else if let divider = node.data(DividerNode.self) {
             return renderDivider(divider)
-
-        case .custom(let kind, let customNode):
-            return renderCustomNode(kind: kind, node: customNode)
+        } else {
+            // Handle custom nodes or unknown node types
+            return renderUnknownNode(kind: node.kind)
         }
+    }
+
+    /// Render an unknown or custom node type
+    private func renderUnknownNode(kind: RenderNodeKind) -> String {
+        return """
+        <div class="scals-custom scals-custom-\(kind.rawValue.cssClassName)" data-node-kind="\(kind.rawValue.htmlEscaped)">
+            <!-- Custom component: \(kind.rawValue) -->
+        </div>
+        """
     }
     
     // MARK: - Container Rendering
@@ -597,21 +593,6 @@ public struct HTMLNodeRenderer {
         return "<hr\(id) class=\"\(className)\" role=\"separator\">"
     }
     
-    // MARK: - Custom Node Rendering
-
-    private mutating func renderCustomNode(kind: RenderNodeKind, node: any CustomRenderNode) -> String {
-        // Check if the custom node implements HTMLRendering
-        if let htmlRendering = node as? HTMLRendering {
-            return htmlRendering.renderHTML()
-        }
-
-        // Fallback: render as a placeholder div
-        return """
-        <div class="scals-custom scals-custom-\(kind.rawValue.cssClassName)" data-node-kind="\(kind.rawValue.htmlEscaped)">
-            <!-- Custom component: \(kind.rawValue) -->
-        </div>
-        """
-    }
 
     // MARK: - Dimension Helper
 

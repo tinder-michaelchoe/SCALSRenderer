@@ -58,7 +58,7 @@ public struct TextComponentResolver: ComponentResolving {
         )
 
         // Create TextNode with flattened properties (no .style)
-        let renderNode = RenderNode.text(TextNode(
+        let renderNode = RenderNode(TextNode(
             id: component.id,
             content: contentResult.content,
             styleId: component.styleId,

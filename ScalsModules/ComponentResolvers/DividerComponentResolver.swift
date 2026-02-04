@@ -30,7 +30,7 @@ public struct DividerComponentResolver: ComponentResolving {
         )
 
         // Create DividerNode with flattened properties (no .style)
-        let renderNode = RenderNode.divider(DividerNode(
+        let renderNode = RenderNode(DividerNode(
             id: component.id,
             color: resolvedStyle.backgroundColor ?? IR.Color(red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0),
             thickness: resolvedStyle.height?.resolvedAbsolute ?? 1,

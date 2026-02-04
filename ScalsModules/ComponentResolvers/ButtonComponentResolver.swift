@@ -75,7 +75,7 @@ public struct ButtonComponentResolver: ComponentResolving {
             initializeLocalState(on: viewNode, from: localState)
         }
 
-        let renderNode = RenderNode.button(ButtonNode(
+        let renderNode = RenderNode(ButtonNode(
             id: component.id,
             label: component.text ?? contentResult.content,
             styleId: component.styleId,

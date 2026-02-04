@@ -331,7 +331,7 @@ struct ResolverChildResolutionTests {
         let renderTree = try resolver.resolve()
         
         #expect(renderTree.root.children.count == 1)
-        if case .spacer = renderTree.root.children[0] {
+        if renderTree.root.children[0].data(SpacerNode.self) != nil {
             // Success
         } else {
             Issue.record("Expected spacer node")
@@ -361,7 +361,7 @@ struct ResolverChildResolutionTests {
         let renderTree = try resolver.resolve()
         
         #expect(renderTree.root.children.count == 1)
-        if case .container(let container) = renderTree.root.children[0] {
+        if let container = renderTree.root.children[0].data(ContainerNode.self) {
             #expect(container.layoutType == .vstack)
             #expect(container.children.count == 1)
         } else {
@@ -396,9 +396,9 @@ struct ResolverChildResolutionTests {
         
         let renderTree = try resolver.resolve()
         
-        if case .container(let vstack) = renderTree.root.children[0] {
+        if let vstack = renderTree.root.children[0].data(ContainerNode.self) {
             #expect(vstack.layoutType == .vstack)
-            if case .container(let hstack) = vstack.children[0] {
+            if let hstack = vstack.children[0].data(ContainerNode.self) {
                 #expect(hstack.layoutType == .hstack)
                 #expect(hstack.children.count == 2)
             } else {

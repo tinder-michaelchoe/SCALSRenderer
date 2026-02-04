@@ -71,21 +71,17 @@ public struct DebugRenderer: Renderer {
     private func renderNode(_ node: RenderNode, indent: Int) -> String {
         let prefix = String(repeating: "  ", count: indent)
 
-        switch node {
-        case .container(let container):
+        if let container = node.data(ContainerNode.self) {
             return renderContainer(container, indent: indent)
-
-        case .sectionLayout(let sectionLayout):
+        } else if let sectionLayout = node.data(SectionLayoutNode.self) {
             return renderSectionLayout(sectionLayout, indent: indent)
-
-        case .text(let text):
+        } else if let text = node.data(TextNode.self) {
             var props: [String] = []
             if let id = text.id { props.append("id: \(id)") }
             props.append("content: \"\(text.content)\"")
             let propsStr = props.joined(separator: ", ")
             return "\(prefix)text (\(propsStr))"
-
-        case .button(let button):
+        } else if let button = node.data(ButtonNode.self) {
             var props: [String] = []
             if let id = button.id { props.append("id: \(id)") }
             props.append("label: \"\(button.label)\"")
@@ -93,38 +89,33 @@ public struct DebugRenderer: Renderer {
             if let onTap = button.onTap { props.append("onTap: \(onTap)") }
             let propsStr = props.joined(separator: ", ")
             return "\(prefix)button (\(propsStr))"
-
-        case .textField(let textField):
+        } else if let textField = node.data(TextFieldNode.self) {
             var props: [String] = []
             if let id = textField.id { props.append("id: \(id)") }
             if !textField.placeholder.isEmpty { props.append("placeholder: \"\(textField.placeholder)\"") }
             if let path = textField.bindingPath { props.append("binding: \(path)") }
             let propsStr = props.isEmpty ? "" : " (\(props.joined(separator: ", ")))"
             return "\(prefix)textField\(propsStr)"
-
-        case .image(let image):
+        } else if let image = node.data(ImageNode.self) {
             var props: [String] = []
             if let id = image.id { props.append("id: \(id)") }
             props.append("source: \(imageSourceDescription(image.source))")
             let propsStr = props.joined(separator: ", ")
             return "\(prefix)image (\(propsStr))"
-
-        case .toggle(let toggle):
+        } else if let toggle = node.data(ToggleNode.self) {
             var props: [String] = []
             if let id = toggle.id { props.append("id: \(id)") }
             if let path = toggle.bindingPath { props.append("binding: \(path)") }
             let propsStr = props.isEmpty ? "" : " (\(props.joined(separator: ", ")))"
             return "\(prefix)toggle\(propsStr)"
-
-        case .slider(let slider):
+        } else if let slider = node.data(SliderNode.self) {
             var props: [String] = []
             if let id = slider.id { props.append("id: \(id)") }
             if let path = slider.bindingPath { props.append("binding: \(path)") }
             props.append("range: \(slider.minValue)...\(slider.maxValue)")
             let propsStr = props.joined(separator: ", ")
             return "\(prefix)slider (\(propsStr))"
-
-        case .gradient(let gradient):
+        } else if let gradient = node.data(GradientNode.self) {
             var props: [String] = []
             if let id = gradient.id { props.append("id: \(id)") }
             props.append("colors: \(gradient.colors.count)")
@@ -132,8 +123,7 @@ public struct DebugRenderer: Renderer {
             props.append("to: \(gradient.endPoint)")
             let propsStr = props.joined(separator: ", ")
             return "\(prefix)gradient (\(propsStr))"
-
-        case .shape(let shape):
+        } else if let shape = node.data(ShapeNode.self) {
             var props: [String] = []
             if let id = shape.id { props.append("id: \(id)") }
             let shapeTypeName: String
@@ -147,8 +137,7 @@ public struct DebugRenderer: Renderer {
             props.append("type: \(shapeTypeName)")
             let propsStr = props.joined(separator: ", ")
             return "\(prefix)shape (\(propsStr))"
-
-        case .pageIndicator(let pageIndicator):
+        } else if let pageIndicator = node.data(PageIndicatorNode.self) {
             var props: [String] = []
             if let id = pageIndicator.id { props.append("id: \(id)") }
             props.append("currentPage: \(pageIndicator.currentPagePath)")
@@ -159,18 +148,15 @@ public struct DebugRenderer: Renderer {
             }
             let propsStr = props.joined(separator: ", ")
             return "\(prefix)pageIndicator (\(propsStr))"
-
-        case .spacer:
+        } else if node.data(SpacerNode.self) != nil {
             return "\(prefix)spacer"
-
-        case .divider(let divider):
+        } else if let divider = node.data(DividerNode.self) {
             var props: [String] = []
             if let id = divider.id { props.append("id: \(id)") }
             let propsStr = props.isEmpty ? "" : " (\(props.joined(separator: ", ")))"
             return "\(prefix)divider\(propsStr)"
-
-        case .custom(let kind, _):
-            return "\(prefix)custom (kind: \(kind.rawValue))"
+        } else {
+            return "\(prefix)unknown (kind: \(node.kind.rawValue))"
         }
     }
 

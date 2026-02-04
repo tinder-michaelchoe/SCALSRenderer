@@ -17,11 +17,8 @@ import SwiftUI
 @MainActor
 func createSwiftUITestActionContext(stateStore: StateStore) -> ActionContext {
     let document = Document.Definition(
-        root: Document.RootComponent(children: []),
-        state: nil,
-        styles: nil,
-        dataSources: nil,
-        actions: nil
+        id: "test",
+        root: Document.RootComponent(children: [])
     )
     let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
     return ActionContext(
@@ -109,7 +106,7 @@ struct SwiftUIRendererTests {
         )
         
         let tree = createTestRenderTree(children: [
-            .text(TextNode(content: "Test"))
+            RenderNode(TextNode(content: "Test"))
         ])
         let view = renderer.render(tree)
         
@@ -182,7 +179,7 @@ struct SwiftUIRenderContextTests {
             rendererRegistry: registry
         )
         
-        let node = RenderNode.text(TextNode(
+        let node = RenderNode(TextNode(
             content: "Test"
         ))
 
@@ -206,7 +203,7 @@ struct RootNodeTests {
     }
 
     @Test func createsWithChildren() {
-        let textNode = RenderNode.text(TextNode(
+        let textNode = RenderNode(TextNode(
             content: "Test"
         ))
 
@@ -252,14 +249,14 @@ struct RenderTreeTests {
     @Test @MainActor func createsWithActions() {
         let stateStore = StateStore()
         let root = RootNode()
-        let dismissAction = ActionDefinition.dismiss
-        
+        let dismissAction = IR.ActionDefinition(kind: Document.ActionKind(rawValue: "dismiss"))
+
         let tree = RenderTree(
             root: root,
             stateStore: stateStore,
             actions: ["close": dismissAction]
         )
-        
+
         #expect(tree.actions.count == 1)
         #expect(tree.actions["close"] != nil)
     }
@@ -285,8 +282,10 @@ struct RenderTreeTests {
 struct CustomSwiftUIRendererTests {
     
     /// A test custom node for custom rendering
-    struct TestChartNode: CustomRenderNode {
-        static let kind = RenderNodeKind(rawValue: "testChart")
+    struct TestChartNode: RenderNodeData {
+        static let nodeKind = RenderNodeKind(rawValue: "testChart")
+        var id: String? { nil }
+        var styleId: String? { nil }
         let dataPoints: [Double]
     }
     
@@ -322,7 +321,7 @@ struct CustomSwiftUIRendererTests {
         )
         
         let chartNode = TestChartNode(dataPoints: [1, 2, 3])
-        let node = RenderNode.custom(kind: TestChartNode.kind, node: chartNode)
+        let node = RenderNode(chartNode)
         
         let view = registry.render(node, context: context)
         
@@ -335,78 +334,80 @@ struct CustomSwiftUIRendererTests {
 struct SwiftUIRenderNodeKindTests {
     
     @Test func textNodeReturnsTextKind() {
-        let node = RenderNode.text(TextNode(content: "Test"))
+        let node = RenderNode(TextNode(content: "Test"))
 
-        #expect(node.kind == .text)
+        #expect(node.kind == RenderNodeKind.text)
     }
 
     @Test func buttonNodeReturnsButtonKind() {
-        let node = RenderNode.button(ButtonNode(label: "Test"))
+        let node = RenderNode(ButtonNode(label: "Test"))
 
-        #expect(node.kind == .button)
+        #expect(node.kind == RenderNodeKind.button)
     }
 
     @Test func containerNodeReturnsContainerKind() {
-        let node = RenderNode.container(ContainerNode())
+        let node = RenderNode(ContainerNode())
 
-        #expect(node.kind == .container)
+        #expect(node.kind == RenderNodeKind.container)
     }
 
     @Test func spacerNodeReturnsSpacerKind() {
-        let node = RenderNode.spacer(SpacerNode())
+        let node = RenderNode(SpacerNode())
 
         #expect(node.kind == .spacer)
     }
 
     @Test func textFieldNodeReturnsTextFieldKind() {
-        let node = RenderNode.textField(TextFieldNode(placeholder: "Test"))
+        let node = RenderNode(TextFieldNode(placeholder: "Test"))
 
-        #expect(node.kind == .textField)
+        #expect(node.kind == RenderNodeKind.textField)
     }
 
     @Test func toggleNodeReturnsToggleKind() {
-        let node = RenderNode.toggle(ToggleNode())
+        let node = RenderNode(ToggleNode())
 
-        #expect(node.kind == .toggle)
+        #expect(node.kind == RenderNodeKind.toggle)
     }
 
     @Test func sliderNodeReturnsSliderKind() {
-        let node = RenderNode.slider(SliderNode())
+        let node = RenderNode(SliderNode())
 
-        #expect(node.kind == .slider)
+        #expect(node.kind == RenderNodeKind.slider)
     }
 
     @Test func imageNodeReturnsImageKind() {
-        let node = RenderNode.image(ImageNode(source: .sfsymbol(name: "star")))
+        let node = RenderNode(ImageNode(source: .sfsymbol(name: "star")))
 
-        #expect(node.kind == .image)
+        #expect(node.kind == RenderNodeKind.image)
     }
 
     @Test func gradientNodeReturnsGradientKind() {
-        let node = RenderNode.gradient(GradientNode(
+        let node = RenderNode(GradientNode(
             colors: [],
             startPoint: .top,
             endPoint: .bottom
         ))
 
-        #expect(node.kind == .gradient)
+        #expect(node.kind == RenderNodeKind.gradient)
     }
-    
+
     @Test func sectionLayoutNodeReturnsSectionLayoutKind() {
-        let node = RenderNode.sectionLayout(SectionLayoutNode(
+        let node = RenderNode(SectionLayoutNode(
             sections: []
         ))
-        
-        #expect(node.kind == .sectionLayout)
+
+        #expect(node.kind == RenderNodeKind.sectionLayout)
     }
-    
+
     @Test func customNodeReturnsCustomKind() {
-        struct TestNode: CustomRenderNode {
-            static let kind = RenderNodeKind(rawValue: "test")
+        struct TestNode: RenderNodeData {
+            static let nodeKind = RenderNodeKind(rawValue: "test")
+            var id: String? { nil }
+            var styleId: String? { nil }
         }
-        
-        let node = RenderNode.custom(kind: TestNode.kind, node: TestNode())
-        
-        #expect(node.kind == TestNode.kind)
+
+        let node = RenderNode(TestNode())
+
+        #expect(node.kind == TestNode.nodeKind)
     }
 }

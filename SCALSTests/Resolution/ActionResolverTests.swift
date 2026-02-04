@@ -15,11 +15,8 @@ import Testing
 /// Creates a minimal ResolutionContext for testing
 fileprivate func makeTestContext() -> ResolutionContext {
     let document = Document.Definition(
-        root: Document.RootComponent(children: []),
-        state: nil,
-        styles: nil,
-        dataSources: nil,
-        actions: nil
+        id: "test",
+        root: Document.RootComponent(children: [])
     )
     let stateStore = StateStore()
     return ResolutionContext.withoutTracking(
@@ -489,7 +486,7 @@ struct ActionResolverCustomTests {
         struct CustomTestResolver: ActionResolving {
             static let actionKind = Document.ActionKind(rawValue: "custom.test")
             func resolve(_ action: Document.Action, context: ResolutionContext) throws -> IR.ActionDefinition {
-                return IR.ActionDefinition(kind: actionKind, executionData: [:])
+                return IR.ActionDefinition(kind: Self.actionKind, executionData: [:])
             }
         }
         registry.register(CustomTestResolver())

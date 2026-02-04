@@ -27,7 +27,7 @@ public struct SectionLayoutNodeSwiftUIRenderer: SwiftUINodeRendering {
 
     @MainActor
     public func render(_ node: RenderNode, context: SwiftUIRenderContext) -> AnyView {
-        guard case .sectionLayout(let sectionLayoutNode) = node else {
+        guard let sectionLayoutNode = node.data(SectionLayoutNode.self) else {
             return AnyView(EmptyView())
         }
         return AnyView(

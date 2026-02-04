@@ -16,7 +16,7 @@ public struct ButtonNodeRenderer: UIKitNodeRendering {
     public init() {}
 
     public func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .button(let buttonNode) = node else {
+        guard let buttonNode = node.data(ButtonNode.self) else {
             return UIView()
         }
 

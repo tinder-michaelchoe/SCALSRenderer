@@ -16,7 +16,7 @@ public struct PageIndicatorNodeRenderer: UIKitNodeRendering {
     public init() {}
 
     public func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .pageIndicator(let indicatorNode) = node else {
+        guard let indicatorNode = node.data(PageIndicatorNode.self) else {
             return UIView()
         }
 

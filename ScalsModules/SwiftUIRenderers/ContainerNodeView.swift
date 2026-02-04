@@ -35,7 +35,7 @@ public struct ContainerNodeSwiftUIRenderer: SwiftUINodeRendering {
 
     @MainActor
     public func render(_ node: RenderNode, context: SwiftUIRenderContext) -> AnyView {
-        guard case .container(let containerNode) = node else {
+        guard let containerNode = node.data(ContainerNode.self) else {
             return AnyView(EmptyView())
         }
         return AnyView(

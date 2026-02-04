@@ -51,7 +51,7 @@ public struct ImageComponentResolver: ComponentResolving {
         )
 
         // Create ImageNode with flattened properties (no .style)
-        let renderNode = RenderNode.image(ImageNode(
+        let renderNode = RenderNode(ImageNode(
             id: component.id,
             source: source,
             placeholder: placeholder,

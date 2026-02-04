@@ -187,15 +187,14 @@ public struct LightspeedProvider: SwiftUIDesignSystemRenderer {
         guard let styleId, styleId.hasPrefix("@") else { return false }
         let ref = String(styleId.dropFirst())
 
-        switch node {
-        case .button:
+        if node.data(ButtonNode.self) != nil {
             return ref.hasPrefix("button.")
-        // Add more component types as implemented:
-        // case .text: return ref.hasPrefix("text.")
-        // case .textField: return ref.hasPrefix("textField.")
-        default:
-            return false
         }
+        // Add more component types as implemented:
+        // if node.data(TextNode.self) != nil { return ref.hasPrefix("text.") }
+        // if node.data(TextFieldNode.self) != nil { return ref.hasPrefix("textField.") }
+
+        return false
     }
 
     /// Render a node using native Lightspeed components.
@@ -204,12 +203,11 @@ public struct LightspeedProvider: SwiftUIDesignSystemRenderer {
         guard let styleId, styleId.hasPrefix("@") else { return nil }
         let ref = String(styleId.dropFirst())
 
-        switch node {
-        case .button(let buttonNode):
+        if let buttonNode = node.data(ButtonNode.self) {
             return renderButton(buttonNode, ref: ref, context: context)
-        default:
-            return nil
         }
+
+        return nil
     }
 
     // MARK: - Component Wrappers

@@ -71,7 +71,7 @@ public struct SliderComponentResolver: ComponentResolving {
         )
 
         // Create SliderNode with flattened properties (no .style)
-        let renderNode = RenderNode.slider(SliderNode(
+        let renderNode = RenderNode(SliderNode(
             id: component.id,
             styleId: component.styleId,
             bindingPath: component.bind,

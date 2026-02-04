@@ -65,7 +65,7 @@ public struct ToggleComponentResolver: ComponentResolving {
         )
 
         // Create ToggleNode with flattened properties (no .style)
-        let renderNode = RenderNode.toggle(ToggleNode(
+        let renderNode = RenderNode(ToggleNode(
             id: component.id,
             styleId: component.styleId,
             bindingPath: component.bind,

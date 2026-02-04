@@ -12,8 +12,11 @@ import SwiftUI
 ///
 /// This node holds the original component definition and resolved style,
 /// deferring the actual rendering to the registered `CustomComponent` implementation.
-public struct CustomComponentRenderNode: CustomRenderNode {
-    public static let kind = RenderNodeKind(rawValue: "customComponent")
+public struct CustomComponentRenderNode: RenderNodeData {
+    public static let nodeKind = RenderNodeKind(rawValue: "customComponent")
+
+    public var id: String? { component.id }
+    public var styleId: String? { component.styleId }
 
     /// The component type name (matches `CustomComponent.typeName`)
     public let typeName: String

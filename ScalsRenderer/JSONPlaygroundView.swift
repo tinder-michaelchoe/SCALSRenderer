@@ -515,40 +515,38 @@ private func printRenderNode(_ node: RenderNode?, indent: Int) {
         return
     }
     let prefix = String(repeating: "  ", count: indent)
-    switch node {
-    case .container(let c):
+
+    if let c = node.data(ContainerNode.self) {
         print("\(prefix)Container(\(c.layoutType))")
         for child in c.children {
             printRenderNode(child, indent: indent + 1)
         }
-    case .text(let t):
+    } else if let t = node.data(TextNode.self) {
         print("\(prefix)Text(content: \"\(t.content)\", bindingPath: \(t.bindingPath ?? "nil"), bindingTemplate: \(t.bindingTemplate ?? "nil"))")
-    case .button(let b):
+    } else if let b = node.data(ButtonNode.self) {
         print("\(prefix)Button(label: \"\(b.label)\")")
-    case .sectionLayout(let s):
+    } else if let s = node.data(SectionLayoutNode.self) {
         print("\(prefix)SectionLayout(sections: \(s.sections.count))")
-    case .textField(let tf):
+    } else if let tf = node.data(TextFieldNode.self) {
         print("\(prefix)TextField(placeholder: \"\(tf.placeholder)\")")
-    case .toggle:
+    } else if node.data(ToggleNode.self) != nil {
         print("\(prefix)Toggle")
-    case .slider:
+    } else if node.data(SliderNode.self) != nil {
         print("\(prefix)Slider")
-    case .image:
+    } else if node.data(ImageNode.self) != nil {
         print("\(prefix)Image")
-    case .gradient:
+    } else if node.data(GradientNode.self) != nil {
         print("\(prefix)Gradient")
-    case .shape(let s):
+    } else if let s = node.data(ShapeNode.self) {
         print("\(prefix)Shape(\(s.shapeType))")
-    case .spacer:
+    } else if node.data(SpacerNode.self) != nil {
         print("\(prefix)Spacer")
-    case .divider:
+    } else if node.data(DividerNode.self) != nil {
         print("\(prefix)Divider")
-    case .pageIndicator(let pi):
+    } else if let pi = node.data(PageIndicatorNode.self) {
         print("\(prefix)PageIndicator(pageCount: \(pi.pageCountStatic ?? 0))")
-    case .custom(let kind, _):
-        print("\(prefix)Custom(\(kind.rawValue))")
-    @unknown default:
-        print("\(prefix)Unknown node type")
+    } else {
+        print("\(prefix)Custom(\(node.kind.rawValue))")
     }
 }
 

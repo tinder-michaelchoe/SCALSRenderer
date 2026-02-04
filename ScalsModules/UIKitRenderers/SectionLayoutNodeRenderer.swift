@@ -16,7 +16,7 @@ public struct SectionLayoutNodeRenderer: UIKitNodeRendering {
     public init() {}
 
     public func render(_ node: RenderNode, context: UIKitRenderContext) -> UIView {
-        guard case .sectionLayout(let sectionLayoutNode) = node else {
+        guard let sectionLayoutNode = node.data(SectionLayoutNode.self) else {
             return UIView()
         }
 

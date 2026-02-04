@@ -29,7 +29,7 @@ struct RenderTreeSchemaTests {
         let document = Document.Definition(
             id: "test",
             state: ["count": .intValue(0)],
-            actions: ["dismiss": .dismiss],
+            actions: ["dismiss": Document.Action(type: .dismiss, parameters: [:])],
             root: Document.RootComponent(children: [])
         )
         
@@ -92,7 +92,7 @@ struct RenderTreeSchemaTests {
             // matches schema: { "type": "navigate", "destination": "...", "presentation": "..." }
             #expect(navigateAction.kind == .navigate)
             let dest: String = try navigateAction.requiredParameter("destination")
-            let pres: NavigationPresentation = try navigateAction.requiredParameter("presentation")
+            let pres: Document.NavigationPresentation = try navigateAction.requiredParameter("presentation")
             #expect(dest == "settings")
             #expect(pres == .push)
         } else {
@@ -165,7 +165,7 @@ struct RootNodeSchemaTests {
     @Test @MainActor func rootNodeHasActionsObject() throws {
         let document = Document.Definition(
             id: "test",
-            actions: ["onLoad": .dismiss],
+            actions: ["onLoad": Document.Action(type: .dismiss, parameters: [:])],
             root: Document.RootComponent(
                 actions: Document.LifecycleActions(onAppear: .reference("onLoad")),
                 children: []
@@ -232,7 +232,7 @@ struct RenderNodeSchemaTests {
         let renderTree = try resolver.resolve()
         
         // Schema: spacerNode = { nodeType: "spacer" }
-        if case .spacer = renderTree.root.children[0] {
+        if renderTree.root.children[0].data(SpacerNode.self) != nil {
             // RenderNode.spacer maps to { "nodeType": "spacer" }
         } else {
             Issue.record("Expected spacer node")
@@ -265,7 +265,7 @@ struct RenderNodeSchemaTests {
         
         // Schema containerNode requires:
         // nodeType: "container", layoutType, alignment, spacing, padding, style, children
-        if case .container(let container) = renderTree.root.children[0] {
+        if let container = renderTree.root.children[0].data(ContainerNode.self) {
             // layoutType: enum ["vstack", "hstack", "zstack"]
             #expect(container.layoutType == .vstack)
             
@@ -297,7 +297,7 @@ struct RenderNodeSchemaTests {
         )
         
         // Schema: nodeType = "text"
-        #expect(RenderNode.text(textNode).kind == .text)
+        #expect(RenderNode(textNode).kind == RenderNodeKind.text)
         
         // Schema: content is string
         #expect(textNode.content == "Hello")
@@ -330,7 +330,7 @@ struct RenderNodeSchemaTests {
         )
 
         // Schema: nodeType = "button"
-        #expect(RenderNode.button(buttonNode).kind == .button)
+        #expect(RenderNode(buttonNode).kind == RenderNodeKind.button)
 
         // Schema: label is string
         #expect(buttonNode.label == "Click")
@@ -387,7 +387,7 @@ struct RenderNodeSchemaTests {
             maxValue: 100
         )
         
-        #expect(RenderNode.slider(sliderNode).kind == .slider)
+        #expect(RenderNode(sliderNode).kind == RenderNodeKind.slider)
         #expect(sliderNode.minValue == 0)
         #expect(sliderNode.maxValue == 100)
     }
@@ -405,7 +405,7 @@ struct RenderNodeSchemaTests {
             endPoint: .bottom
         )
         
-        #expect(RenderNode.gradient(gradientNode).kind == .gradient)
+        #expect(RenderNode(gradientNode).kind == RenderNodeKind.gradient)
         
         // Schema: gradientType enum ["linear", "radial"]
         #expect(gradientNode.gradientType == .linear)
@@ -563,10 +563,10 @@ struct ActionDefinitionSchemaTests {
         let context = ResolutionContext.withoutTracking(document: document, stateStore: StateStore())
         let resolver = ActionResolver(registry: ActionResolverRegistry.default)
 
-        let documentAction = Document.Action(type: .dismiss, parameters: [:])
+        let documentAction = Document.Action(type: Document.Action(type: .dismiss, parameters: [:]), parameters: [:])
         let action = try resolver.resolve(documentAction, context: context)
 
-        #expect(action.kind == .dismiss)
+        #expect(action.kind == Document.Action(type: .dismiss, parameters: [:]))
     }
     
     @Test func setStateActionMatchesSchema() throws {
@@ -614,8 +614,8 @@ struct ActionDefinitionSchemaTests {
         let context = ResolutionContext.withoutTracking(document: document, stateStore: StateStore())
         let resolver = ActionResolver(registry: ActionResolverRegistry.default)
 
-        let dismissAction1 = Document.Action(type: .dismiss, parameters: [:])
-        let dismissAction2 = Document.Action(type: .dismiss, parameters: [:])
+        let dismissAction1 = Document.Action(type: Document.Action(type: .dismiss, parameters: [:]), parameters: [:])
+        let dismissAction2 = Document.Action(type: Document.Action(type: .dismiss, parameters: [:]), parameters: [:])
         let documentAction = Document.Action(
             type: .sequence,
             parameters: ["steps": .arrayValue([dismissAction1, dismissAction2].map { action in
