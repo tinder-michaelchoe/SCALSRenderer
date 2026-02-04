@@ -233,26 +233,36 @@ struct MockSwiftUIDesignSystemRenderer: SwiftUIDesignSystemRenderer {
     @Test @MainActor func defaultRenderReturnsNil() {
         let provider = SwiftUITokenOnlyProvider()
         let node = RenderNode.button(ButtonNode(label: "Test", styles: ButtonStyles()))
-        
+
         let stateStore = StateStore()
+        let document = Document.Definition(
+            root: Document.RootComponent(children: []),
+            state: nil,
+            styles: nil,
+            dataSources: nil,
+            actions: nil
+        )
+        let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
         let actionContext = ActionContext(
             stateStore: stateStore,
             actionDefinitions: [:],
-            registry: ActionRegistry()
+            registry: ActionRegistry(),
+            actionResolver: actionResolver,
+            document: document
         )
-        
+
         let tree = RenderTree(
             root: RootNode(),
             stateStore: stateStore,
             actions: [:]
         )
-        
+
         let context = SwiftUIRenderContext(
             tree: tree,
             actionContext: actionContext,
             rendererRegistry: SwiftUINodeRendererRegistry()
         )
-        
+
         // Default implementation should return nil
         #expect(provider.render(node, styleId: "@button.primary", context: context) == nil)
     }

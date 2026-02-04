@@ -8,6 +8,7 @@
 import Foundation
 import Testing
 @testable import SCALS
+@testable import ScalsModules
 
 // MARK: - Dismiss Action Tests
 
@@ -19,12 +20,9 @@ struct DismissActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .dismiss = action {
-            // Success
-        } else {
-            Issue.record("Expected dismiss action")
-        }
+
+        #expect(action.type == .dismiss)
+        #expect(action.parameters.isEmpty)
     }
 }
 
@@ -42,17 +40,10 @@ struct SetStateActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .setState(let setStateAction) = action {
-            #expect(setStateAction.path == "user.name")
-            if case .literal(let value) = setStateAction.value {
-                #expect(value == .stringValue("John"))
-            } else {
-                Issue.record("Expected literal value")
-            }
-        } else {
-            Issue.record("Expected setState action")
-        }
+
+        #expect(action.type == .setState)
+        #expect(action.parameters["path"] == .stringValue("user.name"))
+        #expect(action.parameters["value"] == .stringValue("John"))
     }
     
     @Test func decodesSetStateWithIntLiteral() throws {
@@ -65,17 +56,10 @@ struct SetStateActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .setState(let setStateAction) = action {
-            #expect(setStateAction.path == "counter")
-            if case .literal(let value) = setStateAction.value {
-                #expect(value == .intValue(42))
-            } else {
-                Issue.record("Expected literal value")
-            }
-        } else {
-            Issue.record("Expected setState action")
-        }
+
+        #expect(action.type == .setState)
+        #expect(action.parameters["path"] == .stringValue("counter"))
+        #expect(action.parameters["value"] == .intValue(42))
     }
     
     @Test func decodesSetStateWithBoolLiteral() throws {
@@ -88,16 +72,10 @@ struct SetStateActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .setState(let setStateAction) = action {
-            if case .literal(let value) = setStateAction.value {
-                #expect(value == .boolValue(true))
-            } else {
-                Issue.record("Expected literal value")
-            }
-        } else {
-            Issue.record("Expected setState action")
-        }
+
+        #expect(action.type == .setState)
+        #expect(action.parameters["path"] == .stringValue("isActive"))
+        #expect(action.parameters["value"] == .boolValue(true))
     }
     
     @Test func decodesSetStateWithExpression() throws {
@@ -110,16 +88,15 @@ struct SetStateActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .setState(let setStateAction) = action {
-            #expect(setStateAction.path == "counter")
-            if case .expression(let expr) = setStateAction.value {
-                #expect(expr == "${counter} + 1")
-            } else {
-                Issue.record("Expected expression value")
-            }
+
+        #expect(action.type == .setState)
+        #expect(action.parameters["path"] == .stringValue("counter"))
+        // Expression is stored as an object in parameters
+        if let valueDict = action.parameters["value"]?.objectValue,
+           let expr = valueDict["$expr"]?.stringValue {
+            #expect(expr == "${counter} + 1")
         } else {
-            Issue.record("Expected setState action")
+            Issue.record("Expected expression value")
         }
     }
     
@@ -133,20 +110,14 @@ struct SetStateActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .setState(let setStateAction) = action {
-            if case .literal(let value) = setStateAction.value {
-                #expect(value == .arrayValue([
-                    .stringValue("a"),
-                    .stringValue("b"),
-                    .stringValue("c")
-                ]))
-            } else {
-                Issue.record("Expected literal value")
-            }
-        } else {
-            Issue.record("Expected setState action")
-        }
+
+        #expect(action.type == .setState)
+        #expect(action.parameters["path"] == .stringValue("items"))
+        #expect(action.parameters["value"] == .arrayValue([
+            .stringValue("a"),
+            .stringValue("b"),
+            .stringValue("c")
+        ]))
     }
 }
 
@@ -163,14 +134,11 @@ struct ToggleStateActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .toggleState(let toggleAction) = action {
-            #expect(toggleAction.path == "selected.technology")
-        } else {
-            Issue.record("Expected toggleState action")
-        }
+
+        #expect(action.type == .toggleState)
+        #expect(action.parameters["path"] == .stringValue("selected.technology"))
     }
-    
+
     @Test func decodesToggleStateWithSimplePath() throws {
         let json = """
         {
@@ -180,12 +148,9 @@ struct ToggleStateActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .toggleState(let toggleAction) = action {
-            #expect(toggleAction.path == "isActive")
-        } else {
-            Issue.record("Expected toggleState action")
-        }
+
+        #expect(action.type == .toggleState)
+        #expect(action.parameters["path"] == .stringValue("isActive"))
     }
 }
 
@@ -203,17 +168,10 @@ struct ShowAlertActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .showAlert(let alertAction) = action {
-            #expect(alertAction.title == "Warning")
-            if case .static(let msg) = alertAction.message {
-                #expect(msg == "Are you sure?")
-            } else {
-                Issue.record("Expected static message")
-            }
-        } else {
-            Issue.record("Expected showAlert action")
-        }
+
+        #expect(action.type == .showAlert)
+        #expect(action.parameters["title"] == .stringValue("Warning"))
+        #expect(action.parameters["message"] == .stringValue("Are you sure?"))
     }
     
     @Test func decodesShowAlertWithTemplateMessage() throws {
@@ -229,16 +187,18 @@ struct ShowAlertActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .showAlert(let alertAction) = action {
-            #expect(alertAction.title == "Info")
-            if case .template(let template) = alertAction.message {
-                #expect(template == "Count is ${count}")
-            } else {
-                Issue.record("Expected template message")
-            }
+
+        #expect(action.type == .showAlert)
+        #expect(action.parameters["title"] == .stringValue("Info"))
+
+        // Message is stored as an object with type and template
+        if let messageDict = action.parameters["message"]?.objectValue,
+           let type = messageDict["type"]?.stringValue,
+           let template = messageDict["template"]?.stringValue {
+            #expect(type == "binding")
+            #expect(template == "Count is ${count}")
         } else {
-            Issue.record("Expected showAlert action")
+            Issue.record("Expected template message object")
         }
     }
     
@@ -256,16 +216,36 @@ struct ShowAlertActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .showAlert(let alertAction) = action {
-            #expect(alertAction.buttons?.count == 2)
-            #expect(alertAction.buttons?[0].label == "Cancel")
-            #expect(alertAction.buttons?[0].style == .cancel)
-            #expect(alertAction.buttons?[1].label == "Delete")
-            #expect(alertAction.buttons?[1].style == .destructive)
-            #expect(alertAction.buttons?[1].action == "deleteItem")
+
+        #expect(action.type == .showAlert)
+        #expect(action.parameters["title"] == .stringValue("Confirm"))
+        #expect(action.parameters["message"] == .stringValue("Delete this item?"))
+
+        // Buttons are stored as an array of objects
+        if let buttonsArray = action.parameters["buttons"]?.arrayValue {
+            #expect(buttonsArray.count == 2)
+
+            if let button0 = buttonsArray[0].objectValue,
+               let label0 = button0["label"]?.stringValue,
+               let style0 = button0["style"]?.stringValue {
+                #expect(label0 == "Cancel")
+                #expect(style0 == "cancel")
+            } else {
+                Issue.record("Expected first button to decode properly")
+            }
+
+            if let button1 = buttonsArray[1].objectValue,
+               let label1 = button1["label"]?.stringValue,
+               let style1 = button1["style"]?.stringValue,
+               let action1 = button1["action"]?.stringValue {
+                #expect(label1 == "Delete")
+                #expect(style1 == "destructive")
+                #expect(action1 == "deleteItem")
+            } else {
+                Issue.record("Expected second button to decode properly")
+            }
         } else {
-            Issue.record("Expected showAlert action")
+            Issue.record("Expected buttons array")
         }
     }
     
@@ -281,11 +261,16 @@ struct ShowAlertActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .showAlert(let alertAction) = action {
-            #expect(alertAction.buttons?[0].style == .default)
+
+        #expect(action.type == .showAlert)
+        #expect(action.parameters["title"] == .stringValue("Notice"))
+
+        if let buttonsArray = action.parameters["buttons"]?.arrayValue,
+           let button0 = buttonsArray[0].objectValue,
+           let style0 = button0["style"]?.stringValue {
+            #expect(style0 == "default")
         } else {
-            Issue.record("Expected showAlert action")
+            Issue.record("Expected button with default style")
         }
     }
     
@@ -298,13 +283,10 @@ struct ShowAlertActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .showAlert(let alertAction) = action {
-            #expect(alertAction.title == "Title Only")
-            #expect(alertAction.message == nil)
-        } else {
-            Issue.record("Expected showAlert action")
-        }
+
+        #expect(action.type == .showAlert)
+        #expect(action.parameters["title"] == .stringValue("Title Only"))
+        #expect(action.parameters["message"] == nil)
     }
 }
 
@@ -321,13 +303,10 @@ struct NavigateActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .navigate(let navigateAction) = action {
-            #expect(navigateAction.destination == "home")
-            #expect(navigateAction.presentation == nil)
-        } else {
-            Issue.record("Expected navigate action")
-        }
+
+        #expect(action.type == .navigate)
+        #expect(action.parameters["destination"] == .stringValue("home"))
+        #expect(action.parameters["presentation"] == nil)
     }
     
     @Test func decodesNavigateWithPushPresentation() throws {
@@ -340,13 +319,10 @@ struct NavigateActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .navigate(let navigateAction) = action {
-            #expect(navigateAction.destination == "details")
-            #expect(navigateAction.presentation == .push)
-        } else {
-            Issue.record("Expected navigate action")
-        }
+
+        #expect(action.type == .navigate)
+        #expect(action.parameters["destination"] == .stringValue("details"))
+        #expect(action.parameters["presentation"] == .stringValue("push"))
     }
     
     @Test func decodesNavigateWithPresentPresentation() throws {
@@ -359,12 +335,10 @@ struct NavigateActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .navigate(let navigateAction) = action {
-            #expect(navigateAction.presentation == .present)
-        } else {
-            Issue.record("Expected navigate action")
-        }
+
+        #expect(action.type == .navigate)
+        #expect(action.parameters["destination"] == .stringValue("settings"))
+        #expect(action.parameters["presentation"] == .stringValue("present"))
     }
     
     @Test func decodesNavigateWithFullScreenPresentation() throws {
@@ -377,12 +351,10 @@ struct NavigateActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .navigate(let navigateAction) = action {
-            #expect(navigateAction.presentation == .fullScreen)
-        } else {
-            Issue.record("Expected navigate action")
-        }
+
+        #expect(action.type == .navigate)
+        #expect(action.parameters["destination"] == .stringValue("onboarding"))
+        #expect(action.parameters["presentation"] == .stringValue("fullScreen"))
     }
 }
 
@@ -403,29 +375,42 @@ struct SequenceActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .sequence(let sequenceAction) = action {
-            #expect(sequenceAction.steps.count == 3)
-            
-            if case .setState(let step0) = sequenceAction.steps[0] {
-                #expect(step0.path == "loading")
+
+        #expect(action.type == .sequence)
+
+        // Steps are stored as an array of action objects
+        if let stepsArray = action.parameters["steps"]?.arrayValue {
+            #expect(stepsArray.count == 3)
+
+            // Check first step: setState
+            if let step0 = stepsArray[0].objectValue,
+               let type0 = step0["type"]?.stringValue,
+               let path0 = step0["path"]?.stringValue {
+                #expect(type0 == "setState")
+                #expect(path0 == "loading")
             } else {
                 Issue.record("Expected setState as first step")
             }
-            
-            if case .navigate(let step1) = sequenceAction.steps[1] {
-                #expect(step1.destination == "results")
+
+            // Check second step: navigate
+            if let step1 = stepsArray[1].objectValue,
+               let type1 = step1["type"]?.stringValue,
+               let destination1 = step1["destination"]?.stringValue {
+                #expect(type1 == "navigate")
+                #expect(destination1 == "results")
             } else {
                 Issue.record("Expected navigate as second step")
             }
-            
-            if case .dismiss = sequenceAction.steps[2] {
-                // Success
+
+            // Check third step: dismiss
+            if let step2 = stepsArray[2].objectValue,
+               let type2 = step2["type"]?.stringValue {
+                #expect(type2 == "dismiss")
             } else {
                 Issue.record("Expected dismiss as third step")
             }
         } else {
-            Issue.record("Expected sequence action")
+            Issue.record("Expected steps array")
         }
     }
     
@@ -440,11 +425,13 @@ struct SequenceActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .sequence(let sequenceAction) = action {
-            #expect(sequenceAction.steps.count == 1)
+
+        #expect(action.type == .sequence)
+
+        if let stepsArray = action.parameters["steps"]?.arrayValue {
+            #expect(stepsArray.count == 1)
         } else {
-            Issue.record("Expected sequence action")
+            Issue.record("Expected steps array")
         }
     }
     
@@ -464,15 +451,21 @@ struct SequenceActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .sequence(let sequenceAction) = action {
-            if case .sequence(let nestedSequence) = sequenceAction.steps[0] {
-                #expect(nestedSequence.steps.count == 1)
+
+        #expect(action.type == .sequence)
+
+        if let stepsArray = action.parameters["steps"]?.arrayValue {
+            // Check first step is a nested sequence
+            if let step0 = stepsArray[0].objectValue,
+               let type0 = step0["type"]?.stringValue,
+               let nestedSteps = step0["steps"]?.arrayValue {
+                #expect(type0 == "sequence")
+                #expect(nestedSteps.count == 1)
             } else {
                 Issue.record("Expected nested sequence")
             }
         } else {
-            Issue.record("Expected sequence action")
+            Issue.record("Expected steps array")
         }
     }
 }
@@ -491,14 +484,10 @@ struct CustomActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .custom(let customAction) = action {
-            #expect(customAction.type == "analytics.track")
-            #expect(customAction.parameters["event"] == .stringValue("button_clicked"))
-            #expect(customAction.parameters["category"] == .stringValue("ui"))
-        } else {
-            Issue.record("Expected custom action")
-        }
+
+        #expect(action.type == Document.ActionKind(rawValue: "analytics.track"))
+        #expect(action.parameters["event"] == .stringValue("button_clicked"))
+        #expect(action.parameters["category"] == .stringValue("ui"))
     }
     
     @Test func decodesCustomActionWithComplexParams() throws {
@@ -512,18 +501,14 @@ struct CustomActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .custom(let customAction) = action {
-            #expect(customAction.type == "myCustomAction")
-            #expect(customAction.parameters["count"] == .intValue(5))
-            #expect(customAction.parameters["enabled"] == .boolValue(true))
-            #expect(customAction.parameters["tags"] == .arrayValue([
-                .stringValue("a"),
-                .stringValue("b")
-            ]))
-        } else {
-            Issue.record("Expected custom action")
-        }
+
+        #expect(action.type == Document.ActionKind(rawValue: "myCustomAction"))
+        #expect(action.parameters["count"] == .intValue(5))
+        #expect(action.parameters["enabled"] == .boolValue(true))
+        #expect(action.parameters["tags"] == .arrayValue([
+            .stringValue("a"),
+            .stringValue("b")
+        ]))
     }
     
     @Test func decodesCustomActionWithNoParams() throws {
@@ -534,135 +519,9 @@ struct CustomActionTests {
         """
         let data = json.data(using: .utf8)!
         let action = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .custom(let customAction) = action {
-            #expect(customAction.type == "unknownAction")
-            #expect(customAction.parameters.isEmpty)
-        } else {
-            Issue.record("Expected custom action")
-        }
-    }
-}
 
-// MARK: - SetValue Tests
-
-struct SetValueTests {
-    
-    @Test func decodesLiteralString() throws {
-        let json = "\"hello\""
-        let data = json.data(using: .utf8)!
-        let setValue = try JSONDecoder().decode(Document.SetValue.self, from: data)
-        
-        if case .literal(let value) = setValue {
-            #expect(value == .stringValue("hello"))
-        } else {
-            Issue.record("Expected literal value")
-        }
-    }
-    
-    @Test func decodesLiteralNumber() throws {
-        let json = "42"
-        let data = json.data(using: .utf8)!
-        let setValue = try JSONDecoder().decode(Document.SetValue.self, from: data)
-        
-        if case .literal(let value) = setValue {
-            #expect(value == .intValue(42))
-        } else {
-            Issue.record("Expected literal value")
-        }
-    }
-    
-    @Test func decodesExpression() throws {
-        let json = """
-        { "$expr": "count + 1" }
-        """
-        let data = json.data(using: .utf8)!
-        let setValue = try JSONDecoder().decode(Document.SetValue.self, from: data)
-        
-        if case .expression(let expr) = setValue {
-            #expect(expr == "count + 1")
-        } else {
-            Issue.record("Expected expression value")
-        }
-    }
-    
-    @Test func decodesLiteralNull() throws {
-        let json = "null"
-        let data = json.data(using: .utf8)!
-        let setValue = try JSONDecoder().decode(Document.SetValue.self, from: data)
-        
-        if case .literal(let value) = setValue {
-            #expect(value == .nullValue)
-        } else {
-            Issue.record("Expected literal null value")
-        }
-    }
-}
-
-// MARK: - AlertMessageContent Tests
-
-struct AlertMessageContentTests {
-    
-    @Test func decodesStaticString() throws {
-        let json = "\"Simple message\""
-        let data = json.data(using: .utf8)!
-        let content = try JSONDecoder().decode(Document.AlertMessageContent.self, from: data)
-        
-        if case .static(let message) = content {
-            #expect(message == "Simple message")
-        } else {
-            Issue.record("Expected static message")
-        }
-    }
-    
-    @Test func decodesTemplateBinding() throws {
-        let json = """
-        {
-            "type": "binding",
-            "template": "Hello ${name}!"
-        }
-        """
-        let data = json.data(using: .utf8)!
-        let content = try JSONDecoder().decode(Document.AlertMessageContent.self, from: data)
-        
-        if case .template(let template) = content {
-            #expect(template == "Hello ${name}!")
-        } else {
-            Issue.record("Expected template message")
-        }
-    }
-}
-
-// MARK: - AlertButton Tests
-
-struct AlertButtonTests {
-    
-    @Test func decodesMinimalButton() throws {
-        let json = """
-        { "label": "OK" }
-        """
-        let data = json.data(using: .utf8)!
-        let button = try JSONDecoder().decode(Document.AlertButton.self, from: data)
-        
-        #expect(button.label == "OK")
-        #expect(button.style == nil)
-        #expect(button.action == nil)
-    }
-    
-    @Test func decodesFullButton() throws {
-        let json = """
-        {
-            "label": "Delete",
-            "style": "destructive",
-            "action": "confirmDelete"
-        }
-        """
-        let data = json.data(using: .utf8)!
-        let button = try JSONDecoder().decode(Document.AlertButton.self, from: data)
-        
-        #expect(button.label == "Delete")
-        #expect(button.style == .destructive)
-        #expect(button.action == "confirmDelete")
+        #expect(action.type == Document.ActionKind(rawValue: "unknownAction"))
+        #expect(action.parameters.isEmpty)
     }
 }
 
@@ -687,23 +546,25 @@ struct ActionDictionaryTests {
         """
         let data = json.data(using: .utf8)!
         let actions = try JSONDecoder().decode([String: Document.Action].self, from: data)
-        
+
         #expect(actions.count == 3)
-        
-        if case .dismiss = actions["dismiss"] {
-            // Success
+
+        if let dismissAction = actions["dismiss"] {
+            #expect(dismissAction.type == .dismiss)
         } else {
             Issue.record("Expected dismiss action")
         }
-        
-        if case .setState = actions["increment"] {
-            // Success
+
+        if let incrementAction = actions["increment"] {
+            #expect(incrementAction.type == .setState)
+            #expect(incrementAction.parameters["path"] == .stringValue("count"))
         } else {
             Issue.record("Expected setState action")
         }
-        
-        if case .navigate = actions["goHome"] {
-            // Success
+
+        if let goHomeAction = actions["goHome"] {
+            #expect(goHomeAction.type == .navigate)
+            #expect(goHomeAction.parameters["destination"] == .stringValue("home"))
         } else {
             Issue.record("Expected navigate action")
         }
@@ -715,43 +576,43 @@ struct ActionDictionaryTests {
 struct ActionRoundTripTests {
     
     @Test func roundTripsDismissAction() throws {
-        let original = Document.Action.dismiss
+        let original = Document.Action(type: .dismiss, parameters: [:])
         let data = try JSONEncoder().encode(original)
         let decoded = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .dismiss = decoded {
-            // Success
-        } else {
-            Issue.record("Expected dismiss action after round trip")
-        }
+
+        #expect(decoded.type == .dismiss)
+        #expect(decoded.parameters.isEmpty)
     }
     
     @Test func roundTripsSetStateAction() throws {
-        let original = Document.Action.setState(
-            Document.SetStateAction(path: "count", value: .literal(.intValue(10)))
+        let original = Document.Action(
+            type: .setState,
+            parameters: [
+                "path": .stringValue("count"),
+                "value": .intValue(10)
+            ]
         )
         let data = try JSONEncoder().encode(original)
         let decoded = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .setState(let action) = decoded {
-            #expect(action.path == "count")
-        } else {
-            Issue.record("Expected setState action after round trip")
-        }
+
+        #expect(decoded.type == .setState)
+        #expect(decoded.parameters["path"] == .stringValue("count"))
+        #expect(decoded.parameters["value"] == .intValue(10))
     }
     
     @Test func roundTripsNavigateAction() throws {
-        let original = Document.Action.navigate(
-            Document.NavigateAction(destination: "home", presentation: .push)
+        let original = Document.Action(
+            type: .navigate,
+            parameters: [
+                "destination": .stringValue("home"),
+                "presentation": .stringValue("push")
+            ]
         )
         let data = try JSONEncoder().encode(original)
         let decoded = try JSONDecoder().decode(Document.Action.self, from: data)
-        
-        if case .navigate(let action) = decoded {
-            #expect(action.destination == "home")
-            #expect(action.presentation == .push)
-        } else {
-            Issue.record("Expected navigate action after round trip")
-        }
+
+        #expect(decoded.type == .navigate)
+        #expect(decoded.parameters["destination"] == .stringValue("home"))
+        #expect(decoded.parameters["presentation"] == .stringValue("push"))
     }
 }

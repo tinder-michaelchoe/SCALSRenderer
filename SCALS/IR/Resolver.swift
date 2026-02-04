@@ -39,7 +39,11 @@ public struct ResolutionResult {
 ///
 /// Example:
 /// ```swift
-/// let resolver = Resolver(document: document)
+/// let resolver = Resolver(
+///     document: document,
+///     componentRegistry: ComponentResolverRegistry.default,
+///     actionResolverRegistry: ActionResolverRegistry.default
+/// )
 /// let renderTree = try resolver.resolve()
 ///
 /// // For testing, inject a pre-configured StateStore:
@@ -58,13 +62,15 @@ public struct Resolver {
     public init(
         document: Document.Definition,
         componentRegistry: ComponentResolverRegistry,
+        actionResolverRegistry: ActionResolverRegistry,
         designSystemProvider: (any DesignSystemProvider)? = nil
     ) {
         self.document = document
         self.componentRegistry = componentRegistry
-        self.actionResolver = ActionResolver()
+        self.actionResolver = ActionResolver(registry: actionResolverRegistry)
         self.designSystemProvider = designSystemProvider
     }
+
 
     // MARK: - Public API
 
@@ -120,7 +126,7 @@ public struct Resolver {
             designSystemProvider: designSystemProvider
         )
 
-        let actions = actionResolver.resolveAll(document.actions)
+        let actions = try actionResolver.resolveAll(document.actions, context: context)
         let rootNode = try resolveRoot(document.root, context: context)
 
         return RenderTree(
@@ -173,7 +179,7 @@ public struct Resolver {
             designSystemProvider: designSystemProvider
         )
 
-        let actions = actionResolver.resolveAll(document.actions)
+        let actions = try actionResolver.resolveAll(document.actions, context: context)
         let (rootNode, viewNode) = try resolveRootWithTracking(document.root, context: context)
 
         let renderTree = RenderTree(

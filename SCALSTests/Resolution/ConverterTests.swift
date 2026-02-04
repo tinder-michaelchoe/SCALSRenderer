@@ -343,34 +343,4 @@ struct StateValueConverterTests {
         let result = StateValueConverter.anyToStateValue(CustomClass())
         #expect(result == .nullValue)
     }
-    
-    // MARK: - ToSetValue Tests
-    
-    @Test func convertsNilToNullLiteral() {
-        let result = StateValueConverter.toSetValue(nil)
-        if case .literal(.nullValue) = result {
-            // Success
-        } else {
-            Issue.record("Expected null literal")
-        }
-    }
-    
-    @Test func convertsExpressionDict() {
-        let dict: [String: Any] = ["$expr": "counter + 1"]
-        let result = StateValueConverter.toSetValue(dict)
-        if case .expression(let expr) = result {
-            #expect(expr == "counter + 1")
-        } else {
-            Issue.record("Expected expression")
-        }
-    }
-    
-    @Test func convertsValueToLiteral() {
-        let result = StateValueConverter.toSetValue(42)
-        if case .literal(.intValue(let v)) = result {
-            #expect(v == 42)
-        } else {
-            Issue.record("Expected int literal")
-        }
-    }
 }

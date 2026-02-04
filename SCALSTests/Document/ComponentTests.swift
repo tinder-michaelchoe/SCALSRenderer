@@ -8,6 +8,7 @@
 import Foundation
 import Testing
 @testable import SCALS
+@testable import ScalsModules
 
 // MARK: - Basic Properties Tests
 
@@ -148,11 +149,7 @@ struct ComponentActionTests {
         let component = try JSONDecoder().decode(Document.Component.self, from: data)
         
         if case .inline(let action) = component.actions?.onTap {
-            if case .dismiss = action {
-                // Success
-            } else {
-                Issue.record("Expected dismiss action")
-            }
+            #expect(action.type == .dismiss)
         } else {
             Issue.record("Expected inline action binding")
         }
@@ -175,11 +172,7 @@ struct ComponentActionTests {
         let component = try JSONDecoder().decode(Document.Component.self, from: data)
         
         if case .inline(let action) = component.actions?.onValueChanged {
-            if case .setState = action {
-                // Success
-            } else {
-                Issue.record("Expected setState action")
-            }
+            #expect(action.type == .setState)
         } else {
             Issue.record("Expected inline action binding")
         }
@@ -727,11 +720,7 @@ struct ActionBindingTests {
         let binding = try JSONDecoder().decode(Document.Component.ActionBinding.self, from: data)
         
         if case .inline(let action) = binding {
-            if case .dismiss = action {
-                // Success
-            } else {
-                Issue.record("Expected dismiss action")
-            }
+            #expect(action.type == .dismiss)
         } else {
             Issue.record("Expected inline binding")
         }

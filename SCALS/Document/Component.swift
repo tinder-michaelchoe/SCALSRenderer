@@ -342,23 +342,7 @@ extension Document {
     }
 }
 
-// MARK: - Dynamic Coding Key
-
-/// Dynamic coding key for capturing unknown JSON keys
-struct DynamicCodingKey: CodingKey {
-    var stringValue: String
-    var intValue: Int?
-
-    init?(stringValue: String) {
-        self.stringValue = stringValue
-        self.intValue = nil
-    }
-
-    init?(intValue: Int) {
-        self.intValue = intValue
-        self.stringValue = String(intValue)
-    }
-}
+// Dynamic coding key is now defined in DynamicCodingKey.swift
 
 
 // MARK: - Gradient Color Config

@@ -242,11 +242,12 @@ struct JSONPlaygroundView: View {
     }
     
     private func generateHTML(from definition: Document.Definition) -> String {
-        // Create resolver with default component registry
+        // Create resolver with default registries
         let componentRegistry = ComponentResolverRegistry.default
         let resolver = Resolver(
             document: definition,
-            componentRegistry: componentRegistry
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: ActionResolverRegistry.default
         )
 
         // Resolve to render tree

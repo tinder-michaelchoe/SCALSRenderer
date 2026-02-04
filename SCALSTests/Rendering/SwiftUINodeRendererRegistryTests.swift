@@ -59,10 +59,20 @@ struct MockSwiftUICustomRenderer: SwiftUINodeRendering {
 @MainActor
 func createSwiftUITestContext(registry: SwiftUINodeRendererRegistry) -> SwiftUIRenderContext {
     let stateStore = StateStore()
+    let document = Document.Definition(
+        root: Document.RootComponent(children: []),
+        state: nil,
+        styles: nil,
+        dataSources: nil,
+        actions: nil
+    )
+    let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
     let actionContext = ActionContext(
         stateStore: stateStore,
         actionDefinitions: [:],
-        registry: ActionRegistry()
+        registry: ActionRegistry(),
+        actionResolver: actionResolver,
+        document: document
     )
     let renderTree = RenderTree(
         root: RootNode(children: []),

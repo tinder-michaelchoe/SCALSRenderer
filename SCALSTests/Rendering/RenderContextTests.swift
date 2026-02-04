@@ -73,10 +73,20 @@ private struct ContextTestContainerRenderer: UIKitNodeRendering {
 /// Creates a test ActionContext with required parameters
 @MainActor
 func createContextTestActionContext(stateStore: StateStore) -> ActionContext {
-    ActionContext(
+    let document = Document.Definition(
+        root: Document.RootComponent(children: []),
+        state: nil,
+        styles: nil,
+        dataSources: nil,
+        actions: nil
+    )
+    let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
+    return ActionContext(
         stateStore: stateStore,
         actionDefinitions: [:],
-        registry: ActionRegistry()
+        registry: ActionRegistry(),
+        actionResolver: actionResolver,
+        document: document
     )
 }
 
@@ -186,20 +196,30 @@ struct UIKitRenderContextActionContextTests {
         let registry = UIKitNodeRendererRegistry()
         let stateStore = StateStore()
         let actionRegistry = ActionRegistry()
-        
+
+        let document = Document.Definition(
+            root: Document.RootComponent(children: []),
+            state: nil,
+            styles: nil,
+            dataSources: nil,
+            actions: nil
+        )
+        let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
         let actionContext = ActionContext(
             stateStore: stateStore,
             actionDefinitions: [:],
-            registry: actionRegistry
+            registry: actionRegistry,
+            actionResolver: actionResolver,
+            document: document
         )
-        
+
         let context = UIKitRenderContext(
             actionContext: actionContext,
             stateStore: stateStore,
             colorScheme: .light,
             registry: registry
         )
-        
+
         // Should have access to action context
         _ = context.actionContext
     }

@@ -17,21 +17,26 @@ extension ActionRegistry {
 
     /// Register all built-in action handlers
     public func registerBuiltInActions() {
+        // Core action handlers (refactored to use new system)
         register(DismissActionHandler())
         register(SetStateActionHandler())
+        register(ToggleStateActionHandler())
         register(ShowAlertActionHandler())
         register(SequenceActionHandler())
         register(NavigateActionHandler())
 
-        // Array action handlers
-        register(AppendToArrayActionHandler())
-        register(RemoveFromArrayActionHandler())
-        register(ToggleInArrayActionHandler())
-        register(SetArrayItemActionHandler())
-        register(ClearArrayActionHandler())
+        // TODO: Additional action handlers not yet migrated to new system
+        // - AppendToArrayActionHandler
+        // - RemoveFromArrayActionHandler
+        // - ToggleInArrayActionHandler
+        // - SetArrayItemActionHandler
+        // - ClearArrayActionHandler
+        // - RequestActionHandler
+        // - CancelRequestActionHandler
+    }
 
-        // HTTP request handlers
-        register(RequestActionHandler())
-        register(CancelRequestActionHandler())
+    /// Alias for registerBuiltInActions for consistency with ActionResolverRegistry
+    public func registerBuiltInHandlers() {
+        registerBuiltInActions()
     }
 }

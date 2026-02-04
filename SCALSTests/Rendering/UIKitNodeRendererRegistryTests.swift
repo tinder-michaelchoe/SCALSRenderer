@@ -75,10 +75,20 @@ struct MockCustomNodeRenderer: UIKitNodeRendering {
 @MainActor
 func createTestContext(registry: UIKitNodeRendererRegistry) -> UIKitRenderContext {
     let stateStore = StateStore()
+    let document = Document.Definition(
+        root: Document.RootComponent(children: []),
+        state: nil,
+        styles: nil,
+        dataSources: nil,
+        actions: nil
+    )
+    let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
     let actionContext = ActionContext(
         stateStore: stateStore,
         actionDefinitions: [:],
-        registry: ActionRegistry()
+        registry: ActionRegistry(),
+        actionResolver: actionResolver,
+        document: document
     )
     return UIKitRenderContext(
         actionContext: actionContext,

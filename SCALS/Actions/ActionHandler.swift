@@ -34,7 +34,7 @@ public typealias ActionClosure = @MainActor (ActionParameters, ActionExecutionCo
 /// Example:
 /// ```swift
 /// class OrderViewController: UIViewController, ScalsActionDelegate {
-///     func cladsRenderer(
+///     func scalsRenderer(
 ///         handleAction actionId: String,
 ///         parameters: ActionParameters,
 ///         context: ActionExecutionContext
@@ -58,7 +58,7 @@ public protocol ScalsActionDelegate: AnyObject {
     ///   - parameters: Parameters passed to the action
     ///   - context: Execution context with state store and callbacks
     /// - Returns: `true` if the action was handled, `false` to fall through to registry
-    func cladsRenderer(
+    func scalsRenderer(
         handleAction actionId: String,
         parameters: ActionParameters,
         context: ActionExecutionContext
@@ -69,15 +69,15 @@ public protocol ScalsActionDelegate: AnyObject {
 
 /// Protocol for action handlers that can execute actions
 public protocol ActionHandler {
-    /// The action type identifier (e.g., "dismiss", "setState", "showAlert")
-    static var actionType: String { get }
+    /// The action kind this handler handles (matches ActionKind)
+    static var actionKind: Document.ActionKind { get }
 
-    /// Execute the action with the given parameters
+    /// Execute the action with the given resolved definition
     /// - Parameters:
-    ///   - parameters: The raw parameters from JSON for this action
+    ///   - definition: The resolved IR action definition
     ///   - context: The execution context providing access to state and callbacks
     @MainActor
-    func execute(parameters: ActionParameters, context: ActionExecutionContext) async
+    func execute(definition: IR.ActionDefinition, context: ActionExecutionContext) async
 }
 
 // MARK: - Cancellable Action Handler Protocol
@@ -145,6 +145,10 @@ public protocol ActionExecutionContext: AnyObject {
 
     /// Execute an action directly from parameters
     func executeAction(type: String, parameters: ActionParameters) async
+
+    /// Execute a resolved action definition (needed for sequence actions)
+    /// - Parameter definition: The resolved IR action definition to execute
+    func executeActionDefinition(_ definition: IR.ActionDefinition) async
 
     /// Dismiss the current view
     func dismiss()

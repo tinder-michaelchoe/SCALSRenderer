@@ -18,35 +18,40 @@ public final class ActionContext: ActionExecutionContext {
     public let documentId: String
     public let actionRegistry: ActionRegistry
     private let actionDefinitions: [String: Document.Action]
+    private let actionResolver: ActionResolver
+    private let document: Document.Definition
 
-    /// Alert presenter for showing alerts (injectable for testing)
-    private let alertPresenter: AlertPresenting?
+    /// Presenters for platform-specific view operations (injectable for testing)
+    /// These can be set after initialization for SwiftUI @Environment dependencies
+    public var dismissPresenter: DismissPresenting?
+    public var navigationPresenter: NavigationPresenting?
+    public var alertPresenter: AlertPresenting?
 
     /// Delegate for handling custom actions
     public weak var actionDelegate: ScalsActionDelegate?
-
-    /// Callback to dismiss the current view
-    public var dismissHandler: (() -> Void)?
-
-    /// Callback to present an alert (legacy - prefer alertPresenter)
-    public var alertHandler: ((AlertConfiguration) -> Void)?
-
-    /// Callback for navigation
-    public var navigationHandler: ((String, Document.NavigationPresentation?) -> Void)?
 
     public init(
         stateStore: StateStoring,
         actionDefinitions: [String: Document.Action],
         registry: ActionRegistry,
+        actionResolver: ActionResolver,
+        document: Document.Definition,
         documentId: String = UUID().uuidString,
         actionDelegate: ScalsActionDelegate? = nil,
+        dismissPresenter: DismissPresenting? = nil,
+        navigationPresenter: NavigationPresenting? = nil,
         alertPresenter: AlertPresenting? = nil
     ) {
         self.stateStore = stateStore
         self.actionDefinitions = actionDefinitions
         self.actionRegistry = registry
+        self.actionResolver = actionResolver
+        self.document = document
         self.documentId = documentId
         self.actionDelegate = actionDelegate
+        // Presenters can be set after initialization for SwiftUI @Environment dependencies
+        self.dismissPresenter = dismissPresenter
+        self.navigationPresenter = navigationPresenter
         self.alertPresenter = alertPresenter
     }
 
@@ -71,7 +76,7 @@ public final class ActionContext: ActionExecutionContext {
         // 2. Check delegate (for intercepting, with parameters extracted from action)
         if let delegate = actionDelegate {
             let parameters = extractParameters(from: action)
-            let handled = await delegate.cladsRenderer(
+            let handled = await delegate.scalsRenderer(
                 handleAction: actionId,
                 parameters: parameters,
                 context: self
@@ -85,41 +90,33 @@ public final class ActionContext: ActionExecutionContext {
 
     /// Extract parameters from an action for delegate calls
     private func extractParameters(from action: Document.Action) -> ActionParameters {
-        switch action {
-        case .custom(let customAction):
-            return ActionParameters(raw: customAction.parameters.mapValues { stateValueToAny($0) })
-        default:
-            return ActionParameters(raw: [:])
-        }
+        return ActionParameters(raw: action.parameters.mapValues { stateValueToAny($0) })
     }
 
     /// Execute a typed Action directly
+    /// Resolves the Document.Action to IR.ActionDefinition, then executes it.
     public func executeAction(_ action: Document.Action) async {
-        switch action {
-        case .dismiss:
-            dismiss()
-
-        case .setState(let setStateAction):
-            executeSetState(setStateAction)
-
-        case .toggleState(let toggleStateAction):
-            executeToggleState(toggleStateAction)
-
-        case .showAlert(let showAlertAction):
-            executeShowAlert(showAlertAction)
-
-        case .navigate(let navigateAction):
-            navigate(to: navigateAction.destination, presentation: navigateAction.presentation)
-
-        case .sequence(let sequenceAction):
-            for step in sequenceAction.steps {
-                await executeAction(step)
+        do {
+            // Cast StateStoring to concrete StateStore for resolution context
+            guard let concreteStore = stateStore as? StateStore else {
+                print("ActionContext: stateStore must be a StateStore instance for resolution")
+                return
             }
 
-        case .custom(let customAction):
-            // Fall back to registry-based handling for custom actions
-            let parameters = ActionParameters(raw: customAction.parameters.mapValues { stateValueToAny($0) })
-            await executeAction(type: customAction.type, parameters: parameters)
+            // Create resolution context
+            let context = ResolutionContext.withoutTracking(
+                document: document,
+                stateStore: concreteStore,
+                designSystemProvider: nil
+            )
+
+            // Resolve Document.Action → IR.ActionDefinition
+            let resolved = try actionResolver.resolve(action, context: context)
+
+            // Execute the resolved action
+            await executeActionDefinition(resolved)
+        } catch {
+            print("ActionContext: Failed to resolve/execute action - \(error)")
         }
     }
 
@@ -129,77 +126,45 @@ public final class ActionContext: ActionExecutionContext {
     /// 1. Registry handlers (includes custom actions wrapped as ClosureActionHandler)
     /// 2. Action delegate
     public func executeAction(type actionType: String, parameters: ActionParameters) async {
-        // 1. Check registry handlers first (includes ClosureActionHandler for custom actions)
-        if let handler = actionRegistry.handler(for: actionType) {
-            await handler.execute(parameters: parameters, context: self)
+        // Create a minimal IR.ActionDefinition for backward compatibility
+        let actionKind = Document.ActionKind(rawValue: actionType)
+        var executionData: [String: AnySendable] = [:]
+        for (key, value) in parameters.raw {
+            executionData[key] = AnySendable(value)
+        }
+        let definition = IR.ActionDefinition(kind: actionKind, executionData: executionData)
+
+        await executeActionDefinition(definition)
+    }
+
+    /// Execute a resolved action definition
+    /// - Parameter definition: The resolved IR action definition to execute
+    public func executeActionDefinition(_ definition: IR.ActionDefinition) async {
+        // NO SWITCH STATEMENT - delegate ALL actions to the registry
+        if let handler = actionRegistry.handler(for: definition.kind.rawValue) {
+            await handler.execute(definition: definition, context: self)
             return
         }
 
-        // 2. Check delegate
+        // Fallback to delegate
         if let delegate = actionDelegate {
-            let handled = await delegate.cladsRenderer(
-                handleAction: actionType,
+            var rawParams: [String: Any] = [:]
+            for (key, wrapper) in definition.executionData {
+                rawParams[key] = wrapper.value
+            }
+            let parameters = ActionParameters(raw: rawParams)
+            let handled = await delegate.scalsRenderer(
+                handleAction: definition.kind.rawValue,
                 parameters: parameters,
                 context: self
             )
             if handled { return }
         }
 
-        print("ActionContext: No handler registered for action type '\(actionType)'")
+        print("ActionContext: No handler registered for action kind '\(definition.kind.rawValue)'")
     }
 
-    // MARK: - Action Execution Helpers
-
-    private func executeSetState(_ action: Document.SetStateAction) {
-        let value: Any
-        switch action.value {
-        case .literal(let stateValue):
-            value = stateValueToAny(stateValue)
-        case .expression(let expr):
-            value = stateStore.evaluate(expression: expr)
-        }
-        stateStore.set(action.path, value: value)
-    }
-
-    private func executeToggleState(_ action: Document.ToggleStateAction) {
-        let currentValue = stateStore.get(action.path) as? Bool ?? false
-        stateStore.set(action.path, value: !currentValue)
-    }
-
-    private func executeShowAlert(_ action: Document.ShowAlertAction) {
-        let message: String?
-        if let msgContent = action.message {
-            switch msgContent {
-            case .static(let str):
-                message = str
-            case .template(let template):
-                message = stateStore.interpolate(template)
-            }
-        } else {
-            message = nil
-        }
-
-        let buttons = (action.buttons ?? []).map { button in
-            AlertConfiguration.Button(
-                label: button.label,
-                style: button.style ?? .default,
-                action: button.action
-            )
-        }
-
-        let config = AlertConfiguration(
-            title: action.title,
-            message: message,
-            buttons: buttons.isEmpty ? [AlertConfiguration.Button(label: "OK", style: .default, action: nil)] : buttons,
-            onButtonTap: { [weak self] actionId in
-                if let actionId = actionId {
-                    self?.execute(actionId)
-                }
-            }
-        )
-
-        presentAlert(config)
-    }
+    // MARK: - Utility Methods
 
     private func stateValueToAny(_ value: Document.StateValue) -> Any {
         switch value {
@@ -215,22 +180,17 @@ public final class ActionContext: ActionExecutionContext {
 
     /// Dismiss the current view
     public func dismiss() {
-        dismissHandler?()
+        dismissPresenter?.dismiss()
     }
 
     /// Present an alert using the injected alert presenter
     public func presentAlert(_ config: AlertConfiguration) {
-        // Use legacy handler if set, otherwise use injected presenter
-        if let handler = alertHandler {
-            handler(config)
-        } else {
-            alertPresenter?.present(config)
-        }
+        alertPresenter?.present(config)
     }
 
     /// Navigate to another view
     public func navigate(to destination: String, presentation: Document.NavigationPresentation?) {
-        navigationHandler?(destination, presentation)
+        navigationPresenter?.navigate(to: destination, presentation: presentation)
     }
 
     // MARK: - Convenience Execution
@@ -310,4 +270,44 @@ public struct AlertConfiguration {
 /// ```
 public protocol AlertPresenting: AnyObject {
     func present(_ config: AlertConfiguration)
+}
+
+// MARK: - Dismiss Presenting Protocol
+
+/// Protocol for dismissing views, enabling dependency injection for testing.
+///
+/// **Platform-Agnostic**: This protocol does not depend on UIKit or SwiftUI.
+/// Platform-specific implementations are in the renderer layer.
+///
+/// Example test usage:
+/// ```swift
+/// class MockDismissPresenter: DismissPresenting {
+///     var dismissCalled = false
+///     func dismiss() {
+///         dismissCalled = true
+///     }
+/// }
+/// ```
+public protocol DismissPresenting: AnyObject {
+    func dismiss()
+}
+
+// MARK: - Navigation Presenting Protocol
+
+/// Protocol for navigation, enabling dependency injection for testing.
+///
+/// **Platform-Agnostic**: This protocol does not depend on UIKit or SwiftUI.
+/// Platform-specific implementations are in the renderer layer.
+///
+/// Example test usage:
+/// ```swift
+/// class MockNavigationPresenter: NavigationPresenting {
+///     var navigatedDestination: String?
+///     func navigate(to destination: String, presentation: Document.NavigationPresentation?) {
+///         navigatedDestination = destination
+///     }
+/// }
+/// ```
+public protocol NavigationPresenting: AnyObject {
+    func navigate(to destination: String, presentation: Document.NavigationPresentation?)
 }

@@ -61,6 +61,7 @@ public final class ScalsRegistry: @unchecked Sendable {
     private let componentRegistry: ComponentResolverRegistry
     private let uikitRegistry: UIKitNodeRendererRegistry
     private let swiftuiRegistry: SwiftUINodeRendererRegistry
+    private let actionResolverRegistry: ActionResolverRegistry  // NEW
     private let actionRegistry: ActionRegistry
 
     // MARK: - Initialization
@@ -72,6 +73,7 @@ public final class ScalsRegistry: @unchecked Sendable {
             componentRegistry: ComponentResolverRegistry(),
             uikitRegistry: UIKitNodeRendererRegistry(),
             swiftuiRegistry: SwiftUINodeRendererRegistry(),
+            actionResolverRegistry: ActionResolverRegistry(),  // NEW
             actionRegistry: ActionRegistry()
         )
     }
@@ -82,12 +84,14 @@ public final class ScalsRegistry: @unchecked Sendable {
         componentRegistry: ComponentResolverRegistry,
         uikitRegistry: UIKitNodeRendererRegistry,
         swiftuiRegistry: SwiftUINodeRendererRegistry,
+        actionResolverRegistry: ActionResolverRegistry,  // NEW
         actionRegistry: ActionRegistry
     ) {
         self.propertiesRegistry = propertiesRegistry
         self.componentRegistry = componentRegistry
         self.uikitRegistry = uikitRegistry
         self.swiftuiRegistry = swiftuiRegistry
+        self.actionResolverRegistry = actionResolverRegistry  // NEW
         self.actionRegistry = actionRegistry
     }
 
@@ -187,9 +191,52 @@ public final class ScalsRegistry: @unchecked Sendable {
         swiftuiRegistry.register(renderer)
     }
 
-    /// Registers just an action handler
-    public func registerAction<A: ActionHandler>(_ handler: A) {
+    /// Registers just an action handler (legacy method)
+    public func registerActionHandler<A: ActionHandler>(_ handler: A) {
         actionRegistry.register(handler)
+    }
+
+    /// Registers just an action resolver
+    public func registerActionResolver<A: ActionResolving>(_ resolver: A) {
+        actionResolverRegistry.register(resolver)
+    }
+
+    /// Registers a complete action (resolver + handler) atomically.
+    ///
+    /// **Important:** The resolver and handler must have matching `actionKind` values.
+    /// This is validated at runtime with a precondition.
+    ///
+    /// - Parameters:
+    ///   - resolver: The resolver that converts Document.Action → IR.ActionDefinition
+    ///   - handler: The handler that executes IR.ActionDefinition → effects
+    public func registerAction<R: ActionResolving, H: ActionHandler>(
+        resolver: R,
+        handler: H
+    ) {
+        // Runtime validation (can't do compile-time with static properties)
+        precondition(
+            R.actionKind == H.actionKind,
+            """
+            ActionResolving and ActionHandler must have matching actionKind.
+            Resolver has: \(R.actionKind.rawValue)
+            Handler has: \(H.actionKind.rawValue)
+            """
+        )
+
+        actionResolverRegistry.register(resolver)
+        actionRegistry.register(handler)
+    }
+
+    // MARK: - Accessor Methods
+
+    /// Get the action resolver registry
+    public var actionResolvers: ActionResolverRegistry {
+        actionResolverRegistry
+    }
+
+    /// Get the action handler registry
+    public var actionHandlers: ActionRegistry {
+        actionRegistry
     }
 }
 

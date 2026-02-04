@@ -146,10 +146,20 @@ private struct IntegrationSectionLayoutRenderer: UIKitNodeRendering {
 /// Creates a test ActionContext
 @MainActor
 func createIntegrationActionContext(stateStore: StateStore) -> ActionContext {
-    ActionContext(
+    let document = Document.Definition(
+        root: Document.RootComponent(children: []),
+        state: nil,
+        styles: nil,
+        dataSources: nil,
+        actions: nil
+    )
+    let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
+    return ActionContext(
         stateStore: stateStore,
         actionDefinitions: [:],
-        registry: ActionRegistry()
+        registry: ActionRegistry(),
+        actionResolver: actionResolver,
+        document: document
     )
 }
 
@@ -465,7 +475,11 @@ struct FullPipelineIntegrationTests {
         
         // Resolve to RenderTree
         let componentRegistry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: componentRegistry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         let renderTree = try resolver.resolve()
         
         // Verify tree structure
@@ -507,7 +521,11 @@ struct FullPipelineIntegrationTests {
         
         // Resolve to RenderTree
         let componentRegistry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: componentRegistry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         let renderTree = try resolver.resolve()
         
         // Create SwiftUI renderer

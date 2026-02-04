@@ -60,7 +60,9 @@
       "Bash(do echo \"File: $file\")",
       "Bash(xargs ls:*)",
       "Bash(SNAPSHOT_TESTING_RECORD=1 xcodebuild test:*)",
-      "Bash(xcrun simctl spawn:*)"
+      "Bash(xcrun simctl spawn:*)",
+      "Bash(git push:*)",
+      "Bash(git branch:*)"
     ]
   }
 }

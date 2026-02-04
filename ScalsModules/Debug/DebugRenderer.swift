@@ -289,28 +289,12 @@ public struct DebugRenderer: Renderer {
     }
 
     private func actionDescription(_ action: ActionDefinition) -> String {
-        switch action {
-        case .dismiss:
-            return "dismiss"
-        case .setState(let path, let value):
-            return "setState(\(path), \(stateValueDescription(value)))"
-        case .toggleState(let path):
-            return "toggleState(\(path))"
-        case .showAlert(let config):
-            return "showAlert(\"\(config.title)\")"
-        case .sequence(let steps):
-            return "sequence[\(steps.count) steps]"
-        case .navigate(let dest, let pres):
-            return "navigate(\(dest), \(pres.rawValue))"
-        case .custom(let type, _):
-            return "custom(\(type))"
-        }
-    }
-
-    private func stateValueDescription(_ value: StateSetValue) -> String {
-        switch value {
-        case .literal(let v): return "\(v)"
-        case .expression(let expr): return "expr(\(expr))"
+        let paramCount = action.executionData.count
+        if paramCount == 0 {
+            return action.kind.rawValue
+        } else {
+            let paramKeys = action.executionData.keys.sorted().joined(separator: ", ")
+            return "\(action.kind.rawValue)(\(paramKeys))"
         }
     }
 }

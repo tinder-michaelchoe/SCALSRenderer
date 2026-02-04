@@ -66,20 +66,21 @@ public final class ObservableActionContext: ObservableObject {
         get { context.actionDelegate }
         set { context.actionDelegate = newValue }
     }
-    
-    public var dismissHandler: (() -> Void)? {
-        get { context.dismissHandler }
-        set { context.dismissHandler = newValue }
+
+    // Presenters for view operations
+    public var dismissPresenter: DismissPresenting? {
+        get { context.dismissPresenter }
+        set { context.dismissPresenter = newValue }
     }
-    
-    public var alertHandler: ((AlertConfiguration) -> Void)? {
-        get { context.alertHandler }
-        set { context.alertHandler = newValue }
+
+    public var alertPresenter: AlertPresenting? {
+        get { context.alertPresenter }
+        set { context.alertPresenter = newValue }
     }
-    
-    public var navigationHandler: ((String, Document.NavigationPresentation?) -> Void)? {
-        get { context.navigationHandler }
-        set { context.navigationHandler = newValue }
+
+    public var navigationPresenter: NavigationPresenting? {
+        get { context.navigationPresenter }
+        set { context.navigationPresenter = newValue }
     }
     
     // MARK: - Action Execution

@@ -814,7 +814,8 @@ enum Example: String, CaseIterable, Identifiable {
     }
 
     static var actionExamples: [Example] {
-        [.setState, .toggleState, .showAlert, .dismiss, .navigate, .sequence, .arrayActions, .httpRequest]
+        [.setState, .toggleState, .showAlert, .dismiss, .navigate, .sequence, .arrayActions/*, .httpRequest*/]
+        // HTTP Request example requires custom action resolvers/handlers - commented out until implemented
     }
 
     static var dataExamples: [Example] {
@@ -826,7 +827,8 @@ enum Example: String, CaseIterable, Identifiable {
     }
 
     static var complexExamples: [Example] {
-        [.componentShowcase, .dadJokes, .taskManager, .shoppingCart, .musicPlayer, .metMuseum, .weatherDashboard, .plantCareTracker]
+        [.componentShowcase, /*.dadJokes,*/ .taskManager, .shoppingCart, .musicPlayer, .metMuseum, .weatherDashboard, .plantCareTracker]
+        // Dad Jokes example requires custom action resolvers/handlers - commented out until implemented
     }
 
     static var tinderExamples: [Example] {

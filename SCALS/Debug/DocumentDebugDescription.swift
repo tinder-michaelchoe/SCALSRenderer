@@ -331,21 +331,12 @@ extension Document.DataSource {
 
 extension Document.Action {
     var debugTypeName: String {
-        switch self {
-        case .dismiss:
-            return "dismiss"
-        case .setState(let action):
-            return "setState(path: \(action.path))"
-        case .toggleState(let action):
-            return "toggleState(path: \(action.path))"
-        case .showAlert(let action):
-            return "showAlert(title: \(action.title))"
-        case .navigate(let action):
-            return "navigate(destination: \(action.destination))"
-        case .sequence(let action):
-            return "sequence(steps: \(action.steps.count))"
-        case .custom(let action):
-            return "custom(\(action.type))"
+        let paramCount = parameters.count
+        if paramCount == 0 {
+            return type.rawValue
+        } else {
+            let paramKeys = parameters.keys.sorted().joined(separator: ", ")
+            return "\(type.rawValue)(\(paramKeys))"
         }
     }
 }

@@ -15,6 +15,7 @@ import Testing
 import SwiftUI
 
 @testable import SCALS
+@testable import ScalsModules
 
 // MARK: - RenderTree Schema Compliance Tests
 
@@ -33,7 +34,11 @@ struct RenderTreeSchemaTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         let renderTree = try resolver.resolve()
         
         // Schema requires: root, state (via stateStore), actions
@@ -51,33 +56,43 @@ struct RenderTreeSchemaTests {
         let document = Document.Definition(
             id: "test",
             actions: [
-                "close": .dismiss,
-                "toggle": .toggleState(Document.ToggleStateAction(path: "isOn")),
-                "navigate": .navigate(Document.NavigateAction(destination: "settings", presentation: .push))
+                "close": Document.Action(type: .dismiss, parameters: [:]),
+                "toggle": Document.Action(type: .toggleState, parameters: ["path": .stringValue("isOn")]),
+                "navigate": Document.Action(type: .navigate, parameters: ["destination": .stringValue("settings"), "presentation": .stringValue("push")])
             ],
             root: Document.RootComponent(children: [])
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         let renderTree = try resolver.resolve()
         
         // Per schema, actions are ActionDefinition with type discriminator
-        if case .dismiss = renderTree.actions["close"] {
+        if let closeAction = renderTree.actions["close"] {
             // matches schema: { "type": "dismiss" }
+            #expect(closeAction.kind == .dismiss)
         } else {
             Issue.record("Expected dismiss action")
         }
-        
-        if case .toggleState(let path) = renderTree.actions["toggle"] {
+
+        if let toggleAction = renderTree.actions["toggle"] {
             // matches schema: { "type": "toggleState", "path": "..." }
+            #expect(toggleAction.kind == .toggleState)
+            let path: String = try toggleAction.requiredParameter("path")
             #expect(path == "isOn")
         } else {
             Issue.record("Expected toggleState action")
         }
-        
-        if case .navigate(let dest, let pres) = renderTree.actions["navigate"] {
+
+        if let navigateAction = renderTree.actions["navigate"] {
             // matches schema: { "type": "navigate", "destination": "...", "presentation": "..." }
+            #expect(navigateAction.kind == .navigate)
+            let dest: String = try navigateAction.requiredParameter("destination")
+            let pres: NavigationPresentation = try navigateAction.requiredParameter("presentation")
             #expect(dest == "settings")
             #expect(pres == .push)
         } else {
@@ -100,7 +115,11 @@ struct RootNodeSchemaTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         let renderTree = try resolver.resolve()
         
         // Schema: colorScheme is required, enum: ["light", "dark", "system"]
@@ -114,7 +133,11 @@ struct RootNodeSchemaTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         let renderTree = try resolver.resolve()
         
         // Schema: should default to "system"
@@ -128,7 +151,11 @@ struct RootNodeSchemaTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         let renderTree = try resolver.resolve()
         
         // Schema: children is required array of renderNode
@@ -146,7 +173,11 @@ struct RootNodeSchemaTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         let renderTree = try resolver.resolve()
         
         // Schema: lifecycleActions has optional onAppear/onDisappear
@@ -166,7 +197,11 @@ struct RootNodeSchemaTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         let renderTree = try resolver.resolve()
         
         // Schema: edgeInsets has positioning enum: ["safeArea", "absolute"]
@@ -189,7 +224,11 @@ struct RenderNodeSchemaTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         let renderTree = try resolver.resolve()
         
         // Schema: spacerNode = { nodeType: "spacer" }
@@ -217,7 +256,11 @@ struct RenderNodeSchemaTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         let renderTree = try resolver.resolve()
         
         // Schema containerNode requires:
@@ -514,117 +557,166 @@ struct SectionLayoutSchemaTests {
 
 struct ActionDefinitionSchemaTests {
     
-    @Test func dismissActionMatchesSchema() {
+    @Test func dismissActionMatchesSchema() throws {
         // Schema: { type: "dismiss" }
-        let resolver = ActionResolver()
-        let action = resolver.resolve(.dismiss)
-        
-        if case .dismiss = action {
-            // Matches schema
-        } else {
-            Issue.record("Expected dismiss action")
-        }
+        let document = Document.Definition(id: "test", root: Document.RootComponent(children: []))
+        let context = ResolutionContext.withoutTracking(document: document, stateStore: StateStore())
+        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+
+        let documentAction = Document.Action(type: .dismiss, parameters: [:])
+        let action = try resolver.resolve(documentAction, context: context)
+
+        #expect(action.kind == .dismiss)
     }
     
-    @Test func setStateActionMatchesSchema() {
-        // Schema: { type: "setState", path: string, value: stateSetValue }
-        let resolver = ActionResolver()
-        let action = resolver.resolve(.setState(Document.SetStateAction(
-            path: "user.name",
-            value: .literal(.stringValue("John"))
-        )))
-        
-        if case .setState(let path, let value) = action {
-            #expect(path == "user.name")
-            if case .literal(let stateValue) = value {
-                #expect(stateValue == .stringValue("John"))
-            }
-        } else {
-            Issue.record("Expected setState action")
-        }
+    @Test func setStateActionMatchesSchema() throws {
+        // Schema: { type: "setState", path: string, value: any }
+        let document = Document.Definition(id: "test", root: Document.RootComponent(children: []))
+        let context = ResolutionContext.withoutTracking(document: document, stateStore: StateStore())
+        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+
+        let documentAction = Document.Action(
+            type: .setState,
+            parameters: ["path": .stringValue("user.name"), "value": .stringValue("John")]
+        )
+        let action = try resolver.resolve(documentAction, context: context)
+
+        #expect(action.kind == .setState)
+        let path: String = try action.requiredParameter("path")
+        let value: String = try action.requiredParameter("value")
+        #expect(path == "user.name")
+        #expect(value == "John")
     }
     
-    @Test func navigateActionMatchesSchema() {
+    @Test func navigateActionMatchesSchema() throws {
         // Schema: { type: "navigate", destination: string, presentation: enum }
-        let resolver = ActionResolver()
-        let action = resolver.resolve(.navigate(Document.NavigateAction(
-            destination: "profile",
-            presentation: .fullScreen
-        )))
-        
-        if case .navigate(let dest, let pres) = action {
-            #expect(dest == "profile")
-            // Schema: presentation enum ["push", "present", "fullScreen"]
-            #expect(pres == .fullScreen)
-        } else {
-            Issue.record("Expected navigate action")
-        }
+        let document = Document.Definition(id: "test", root: Document.RootComponent(children: []))
+        let context = ResolutionContext.withoutTracking(document: document, stateStore: StateStore())
+        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+
+        let documentAction = Document.Action(
+            type: .navigate,
+            parameters: ["destination": .stringValue("profile"), "presentation": .stringValue("fullScreen")]
+        )
+        let action = try resolver.resolve(documentAction, context: context)
+
+        #expect(action.kind == .navigate)
+        let dest: String = try action.requiredParameter("destination")
+        let pres: Document.NavigationPresentation = try action.requiredParameter("presentation")
+        #expect(dest == "profile")
+        // Schema: presentation enum ["push", "present", "fullScreen"]
+        #expect(pres == .fullScreen)
     }
     
-    @Test func sequenceActionMatchesSchema() {
+    @Test func sequenceActionMatchesSchema() throws {
         // Schema: { type: "sequence", steps: [actionDefinition] }
-        let resolver = ActionResolver()
-        let action = resolver.resolve(.sequence(Document.SequenceAction(
-            steps: [.dismiss, .dismiss]
-        )))
-        
-        if case .sequence(let steps) = action {
-            #expect(steps.count == 2)
-        } else {
-            Issue.record("Expected sequence action")
-        }
+        let document = Document.Definition(id: "test", root: Document.RootComponent(children: []))
+        let context = ResolutionContext.withoutTracking(document: document, stateStore: StateStore())
+        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+
+        let dismissAction1 = Document.Action(type: .dismiss, parameters: [:])
+        let dismissAction2 = Document.Action(type: .dismiss, parameters: [:])
+        let documentAction = Document.Action(
+            type: .sequence,
+            parameters: ["steps": .arrayValue([dismissAction1, dismissAction2].map { action in
+                // Convert Document.Action to StateValue representation
+                var dict: [String: StateValue] = ["type": .stringValue(action.type.rawValue)]
+                for (key, value) in action.parameters {
+                    dict[key] = value
+                }
+                return .objectValue(dict)
+            })]
+        )
+        let action = try resolver.resolve(documentAction, context: context)
+
+        #expect(action.kind == .sequence)
+        let steps: [IR.ActionDefinition] = try action.requiredParameter("steps")
+        #expect(steps.count == 2)
     }
     
-    @Test func showAlertActionMatchesSchema() {
-        // Schema: { type: "showAlert", config: alertConfig }
-        // alertConfig: { title, message?, buttons }
-        let resolver = ActionResolver()
-        let action = resolver.resolve(.showAlert(Document.ShowAlertAction(
-            title: "Confirm",
-            message: .static("Are you sure?"),
-            buttons: [
-                Document.AlertButton(label: "Yes", style: .default, action: "confirm"),
-                Document.AlertButton(label: "No", style: .cancel)
+    @Test func showAlertActionMatchesSchema() throws {
+        // Schema: { type: "showAlert", title: string, message?: string, buttons: array }
+        let document = Document.Definition(id: "test", root: Document.RootComponent(children: []))
+        let context = ResolutionContext.withoutTracking(document: document, stateStore: StateStore())
+        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+
+        let documentAction = Document.Action(
+            type: .showAlert,
+            parameters: [
+                "title": .stringValue("Confirm"),
+                "message": .stringValue("Are you sure?"),
+                "buttons": .arrayValue([
+                    .objectValue([
+                        "label": .stringValue("Yes"),
+                        "style": .stringValue("default"),
+                        "action": .stringValue("confirm")
+                    ]),
+                    .objectValue([
+                        "label": .stringValue("No"),
+                        "style": .stringValue("cancel")
+                    ])
+                ])
             ]
-        )))
-        
-        if case .showAlert(let config) = action {
-            #expect(config.title == "Confirm")
-            
-            // Schema: message oneOf [{ type: "static", value }, { type: "template", value }]
-            if case .static(let msg) = config.message {
-                #expect(msg == "Are you sure?")
-            }
-            
-            // Schema: buttons array of alertButton { label, style, action? }
-            #expect(config.buttons.count == 2)
-            #expect(config.buttons[0].label == "Yes")
-            #expect(config.buttons[0].style == .default)
-            #expect(config.buttons[0].action == "confirm")
-            #expect(config.buttons[1].style == .cancel)
-        } else {
-            Issue.record("Expected showAlert action")
-        }
+        )
+        let action = try resolver.resolve(documentAction, context: context)
+
+        #expect(action.kind == .showAlert)
+        let title: String = try action.requiredParameter("title")
+        let message: String? = action.parameter("message")
+        let isTemplate: Bool = action.parameter("messageIsTemplate") ?? false
+        let buttons: [[String: Any]] = try action.requiredParameter("buttons")
+
+        #expect(title == "Confirm")
+        #expect(message == "Are you sure?")
+        #expect(isTemplate == false)
+
+        // Schema: buttons array of alertButton { label, style, action? }
+        #expect(buttons.count == 2)
+        #expect(buttons[0]["label"] as? String == "Yes")
+        #expect(buttons[0]["style"] as? String == "default")
+        #expect(buttons[0]["action"] as? String == "confirm")
+        #expect(buttons[1]["label"] as? String == "No")
+        #expect(buttons[1]["style"] as? String == "cancel")
     }
     
-    @Test func customActionMatchesSchema() {
+    @Test func customActionMatchesSchema() throws {
         // Schema: { type: string (not reserved), parameters?: object }
-        let resolver = ActionResolver()
-        let action = resolver.resolve(.custom(Document.CustomAction(
-            type: "analytics.track",
+        let document = Document.Definition(id: "test", root: Document.RootComponent(children: []))
+        let context = ResolutionContext.withoutTracking(document: document, stateStore: StateStore())
+
+        // Register a custom resolver for analytics.track
+        let registry = ActionResolverRegistry.default
+        let customKind = Document.ActionKind(rawValue: "analytics.track")
+        struct AnalyticsResolver: ActionResolving {
+            static let actionKind = Document.ActionKind(rawValue: "analytics.track")
+            func resolve(_ action: Document.Action, context: ResolutionContext) throws -> IR.ActionDefinition {
+                // Pass through all parameters as execution data
+                var executionData: [String: AnySendable] = [:]
+                for (key, value) in action.parameters {
+                    executionData[key] = AnySendable(StateValueConverter.unwrap(value))
+                }
+                return IR.ActionDefinition(kind: actionKind, executionData: executionData)
+            }
+        }
+        registry.register(AnalyticsResolver())
+
+        let resolver = ActionResolver(registry: registry)
+
+        let documentAction = Document.Action(
+            type: customKind,
             parameters: [
                 "event": .stringValue("button_tap"),
                 "count": .intValue(1)
             ]
-        )))
-        
-        if case .custom(let type, let params) = action {
-            #expect(type == "analytics.track")
-            #expect(params["event"] == .stringValue("button_tap"))
-            #expect(params["count"] == .intValue(1))
-        } else {
-            Issue.record("Expected custom action")
-        }
+        )
+        let action = try resolver.resolve(documentAction, context: context)
+
+        #expect(action.kind.rawValue == "analytics.track")
+        // Custom actions store their parameters directly
+        let event: String = try action.requiredParameter("event")
+        let count: Int = try action.requiredParameter("count")
+        #expect(event == "button_tap")
+        #expect(count == 1)
     }
 }
 
@@ -657,49 +749,17 @@ struct StyleSchemaTests {
 
 /// Tests for JSON serialization - requires Codable conformance on IR types.
 /// These tests document the expected serialization format for cross-platform use.
+///
+/// Note: With the fully dynamic action system, ActionDefinition stores parameters
+/// as [String: AnySendable] which is not directly Codable. Serialization would
+/// require custom encoding logic to convert AnySendable values to JSON-compatible types.
 struct IRSerializationTests {
-    
-    @Test func actionDefinitionIsEncodable() throws {
-        // ActionDefinition is already Codable
-        let action = ActionDefinition.dismiss
-        
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = .prettyPrinted
-        
-        let data = try encoder.encode(action)
-        let json = String(data: data, encoding: .utf8)!
-        
-        // Should produce: { "type": "dismiss" } per schema
-        #expect(json.contains("dismiss"))
-    }
-    
-    @Test func stateSetValueIsEncodable() throws {
-        // StateSetValue is already Codable
-        let value = StateSetValue.literal(.stringValue("test"))
-        
-        let encoder = JSONEncoder()
-        let data = try encoder.encode(value)
-        let json = String(data: data, encoding: .utf8)!
-        
-        #expect(json.contains("test"))
-    }
-    
-    @Test func alertConfigIsEncodable() throws {
-        let config = AlertActionConfig(
-            title: "Test",
-            message: .static("Message"),
-            buttons: [AlertButtonConfig(label: "OK", style: .default)]
-        )
-        
-        let encoder = JSONEncoder()
-        let data = try encoder.encode(config)
-        let json = String(data: data, encoding: .utf8)!
-        
-        #expect(json.contains("Test"))
-        #expect(json.contains("Message"))
-        #expect(json.contains("OK"))
-    }
-    
+
+    // Serialization tests removed - ActionDefinition now uses dynamic dictionary
+    // with AnySendable wrapper which is not directly Codable. For cross-platform
+    // serialization, custom encoding logic would be needed to convert the
+    // executionData dictionary to JSON-compatible types.
+
     // TODO: Add tests for RenderTree, RootNode, RenderNode once Codable conformance is added
     // These would validate the full IR output against the JSON schema
 }

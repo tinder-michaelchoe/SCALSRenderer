@@ -9,6 +9,7 @@ import Foundation
 import Testing
 
 @testable import SCALS
+@testable import ScalsModules
 
 // MARK: - Context Creation Tests
 
@@ -418,8 +419,8 @@ struct ResolutionContextActionTests {
         let document = Document.Definition(
             id: "test",
             actions: [
-                "submitAction": .dismiss,
-                "toggleAction": .toggleState(Document.ToggleStateAction(path: "isOn"))
+                "submitAction": Document.Action(type: .dismiss, parameters: [:]),
+                "toggleAction": Document.Action(type: .toggleState, parameters: ["path": .stringValue("isOn")])
             ],
             root: Document.RootComponent(children: [])
         )
@@ -431,12 +432,7 @@ struct ResolutionContextActionTests {
         
         let action = context.document.actions?["submitAction"]
         #expect(action != nil)
-        
-        if case .dismiss = action {
-            // Success
-        } else {
-            Issue.record("Expected dismiss action")
-        }
+        #expect(action?.type == .dismiss)
     }
 }
 

@@ -31,7 +31,8 @@ public final class ActionRegistry: @unchecked Sendable {
         // Wasm is single-threaded, no synchronization needed
         merged.handlers = self.handlers
         for (actionType, closure) in customActions {
-            merged.handlers[actionType] = ClosureActionHandler(actionType: actionType, closure: closure)
+            let actionKind = Document.ActionKind(rawValue: actionType)
+            merged.handlers[actionType] = ClosureActionHandler(actionKind: actionKind, closure: closure)
         }
         #else
         queue.sync {
@@ -40,7 +41,8 @@ public final class ActionRegistry: @unchecked Sendable {
 
             // Wrap closures as ClosureActionHandler and add them
             for (actionType, closure) in customActions {
-                merged.handlers[actionType] = ClosureActionHandler(actionType: actionType, closure: closure)
+                let actionKind = Document.ActionKind(rawValue: actionType)
+                merged.handlers[actionType] = ClosureActionHandler(actionKind: actionKind, closure: closure)
             }
         }
         #endif
@@ -51,10 +53,10 @@ public final class ActionRegistry: @unchecked Sendable {
     /// - Parameter handler: The handler instance to register
     public func register(_ handler: any ActionHandler) {
         #if arch(wasm32)
-        handlers[type(of: handler).actionType] = handler
+        handlers[type(of: handler).actionKind.rawValue] = handler
         #else
         queue.sync {
-            handlers[type(of: handler).actionType] = handler
+            handlers[type(of: handler).actionKind.rawValue] = handler
         }
         #endif
     }
@@ -62,14 +64,15 @@ public final class ActionRegistry: @unchecked Sendable {
 
     /// Register an action closure directly
     /// - Parameters:
-    ///   - actionType: The action type identifier
+    ///   - actionType: The action type identifier (string)
     ///   - closure: The closure to execute for this action
     public func registerClosure(_ actionType: String, closure: @escaping ActionClosure) {
+        let actionKind = Document.ActionKind(rawValue: actionType)
         #if arch(wasm32)
-        handlers[actionType] = ClosureActionHandler(actionType: actionType, closure: closure)
+        handlers[actionType] = ClosureActionHandler(actionKind: actionKind, closure: closure)
         #else
         queue.sync {
-            handlers[actionType] = ClosureActionHandler(actionType: actionType, closure: closure)
+            handlers[actionType] = ClosureActionHandler(actionKind: actionKind, closure: closure)
         }
         #endif
     }
@@ -117,18 +120,24 @@ public final class ActionRegistry: @unchecked Sendable {
 /// An ActionHandler that wraps a closure.
 /// This allows closures to be stored uniformly with other ActionHandler types.
 public struct ClosureActionHandler: ActionHandler {
-    public let actionType: String
+    public let actionKind: Document.ActionKind
     private let closure: ActionClosure
 
-    public static var actionType: String { "" } // Not used, instance property is used instead
+    public static var actionKind: Document.ActionKind { Document.ActionKind(rawValue: "") } // Not used, instance property is used instead
 
-    public init(actionType: String, closure: @escaping ActionClosure) {
-        self.actionType = actionType
+    public init(actionKind: Document.ActionKind, closure: @escaping ActionClosure) {
+        self.actionKind = actionKind
         self.closure = closure
     }
 
     @MainActor
-    public func execute(parameters: ActionParameters, context: ActionExecutionContext) async {
+    public func execute(definition: IR.ActionDefinition, context: ActionExecutionContext) async {
+        // Convert IR.ActionDefinition back to ActionParameters for backward compatibility
+        var rawParams: [String: Any] = [:]
+        for (key, wrapper) in definition.executionData {
+            rawParams[key] = wrapper.value
+        }
+        let parameters = ActionParameters(raw: rawParams)
         await closure(parameters, context)
     }
 }

@@ -8,6 +8,7 @@
 import Foundation
 import Testing
 @testable import SCALS
+@testable import ScalsModules
 
 // MARK: - Basic Resolution Tests
 
@@ -20,7 +21,11 @@ struct ResolverBasicTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         
         let renderTree = try resolver.resolve()
         
@@ -36,7 +41,11 @@ struct ResolverBasicTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         
         let renderTree = try resolver.resolve()
         
@@ -55,7 +64,11 @@ struct ResolverBasicTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         
         let renderTree = try resolver.resolve()
         
@@ -72,7 +85,11 @@ struct ResolverBasicTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         
         let stateStore = StateStore()
         stateStore.set("count", value: 100)
@@ -94,7 +111,11 @@ struct ResolverBasicTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         
         let stateStore = StateStore()
         stateStore.set("existingValue", value: "pre-existing")
@@ -120,7 +141,11 @@ struct ResolverRootNodeTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         
         let renderTree = try resolver.resolve()
 
@@ -138,7 +163,11 @@ struct ResolverRootNodeTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         
         let renderTree = try resolver.resolve()
         
@@ -155,7 +184,11 @@ struct ResolverRootNodeTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         
         let renderTree = try resolver.resolve()
         
@@ -172,7 +205,11 @@ struct ResolverRootNodeTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         
         let renderTree = try resolver.resolve()
         
@@ -192,7 +229,11 @@ struct ResolverRootNodeTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         
         let renderTree = try resolver.resolve()
         
@@ -211,26 +252,32 @@ struct ResolverActionTests {
         let document = Document.Definition(
             id: "test-doc",
             actions: [
-                "dismissAction": .dismiss,
-                "toggleAction": .toggleState(Document.ToggleStateAction(path: "isActive"))
+                "dismissAction": Document.Action(type: .dismiss, parameters: [:]),
+                "toggleAction": Document.Action(type: .toggleState, parameters: ["path": .stringValue("isActive")])
             ],
             root: Document.RootComponent(children: [])
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         
         let renderTree = try resolver.resolve()
         
         #expect(renderTree.actions.count == 2)
-        
-        if case .dismiss = renderTree.actions["dismissAction"] {
-            // Success
+
+        if let dismissAction = renderTree.actions["dismissAction"] {
+            #expect(dismissAction.kind == .dismiss)
         } else {
             Issue.record("Expected dismiss action")
         }
-        
-        if case .toggleState(let path) = renderTree.actions["toggleAction"] {
+
+        if let toggleAction = renderTree.actions["toggleAction"] {
+            #expect(toggleAction.kind == .toggleState)
+            let path: String = try toggleAction.requiredParameter("path")
             #expect(path == "isActive")
         } else {
             Issue.record("Expected toggleState action")
@@ -240,7 +287,7 @@ struct ResolverActionTests {
     @Test @MainActor func resolvesRootActions() throws {
         let document = Document.Definition(
             id: "test-doc",
-            actions: ["onLoadAction": .dismiss],
+            actions: ["onLoadAction": Document.Action(type: .dismiss, parameters: [:])],
             root: Document.RootComponent(
                 actions: Document.LifecycleActions(
                     onAppear: .reference("onLoadAction")
@@ -250,7 +297,11 @@ struct ResolverActionTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         
         let renderTree = try resolver.resolve()
         
@@ -271,7 +322,11 @@ struct ResolverChildResolutionTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         
         let renderTree = try resolver.resolve()
         
@@ -297,7 +352,11 @@ struct ResolverChildResolutionTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         
         let renderTree = try resolver.resolve()
         
@@ -329,7 +388,11 @@ struct ResolverChildResolutionTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         
         let renderTree = try resolver.resolve()
         
@@ -358,7 +421,11 @@ struct ResolverTrackingTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         
         let result = try resolver.resolveWithTracking()
         
@@ -374,7 +441,11 @@ struct ResolverTrackingTests {
         )
         
         let registry = ComponentResolverRegistry()
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         
         let stateStore = StateStore()
         stateStore.set("value", value: 999)
@@ -403,7 +474,11 @@ struct ResolverErrorTests {
         
         let registry = ComponentResolverRegistry()
         // Don't register any resolvers
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         
         #expect(throws: ComponentResolutionError.self) {
             _ = try resolver.resolve()

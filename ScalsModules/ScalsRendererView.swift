@@ -14,6 +14,8 @@ import SwiftUI
 public struct ScalsRendererView: View {
     private let renderTree: RenderTree
     @StateObject private var observableActionContext: ObservableActionContext
+    @StateObject private var alertPresenter = SwiftUIAlertPresenter()
+    @Environment(\.dismiss) private var dismissAction
 
     @Environment(\.dismiss) private var dismiss
 
@@ -62,6 +64,7 @@ public struct ScalsRendererView: View {
         let resolver = Resolver(
             document: document,
             componentRegistry: componentRegistry,
+            actionResolverRegistry: ActionResolverRegistry.default,
             designSystemProvider: designSystemProvider
         )
         let tree: RenderTree
@@ -89,12 +92,21 @@ public struct ScalsRendererView: View {
         Self.logVersionInfo(document: document, renderTree: tree)
         #endif
 
+        // Create ActionResolver for runtime action resolution
+        let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
+
         // Create ActionContext with the resolved state store
+        // Note: Presenters will be injected via properties after initialization
         let ctx = ActionContext(
             stateStore: tree.stateStore,
             actionDefinitions: document.actions ?? [:],
             registry: actionRegistry,
-            actionDelegate: actionDelegate
+            actionResolver: actionResolver,
+            document: document,
+            actionDelegate: actionDelegate,
+            dismissPresenter: nil,
+            navigationPresenter: nil,
+            alertPresenter: nil
         )
         // Wrap in ObservableActionContext for SwiftUI integration
         _observableActionContext = StateObject(wrappedValue: ObservableActionContext(wrapping: ctx))
@@ -124,15 +136,16 @@ public struct ScalsRendererView: View {
             .onAppear {
                 setupContext()
             }
+            .modifier(alertPresenter.modifier())
     }
 
     private func setupContext() {
-        observableActionContext.context.dismissHandler = { [dismiss] in
-            dismiss()
-        }
-
-        observableActionContext.context.alertHandler = { config in
-            AlertPresenter.present(config)
+        // Inject presenters (prefer over legacy callbacks)
+        observableActionContext.context.dismissPresenter = SwiftUIDismissPresenter(dismiss: dismissAction)
+        observableActionContext.context.alertPresenter = alertPresenter
+        observableActionContext.context.navigationPresenter = SwiftUINavigationPresenter { destination, presentation in
+            // Default: no-op, apps can customize via navigationHandler callback for backward compatibility
+            print("ScalsRendererView: Navigation to '\(destination)' not implemented")
         }
     }
 
@@ -219,6 +232,7 @@ extension ScalsRendererView {
         let resolver = Resolver(
             document: document,
             componentRegistry: componentRegistry,
+            actionResolverRegistry: ActionResolverRegistry.default,
             designSystemProvider: designSystemProvider
         )
         let tree: RenderTree
@@ -246,12 +260,21 @@ extension ScalsRendererView {
             print(debugRenderer.render(tree))
         }
 
+        // Create ActionResolver for runtime action resolution
+        let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
+
         // Create ActionContext with the resolved state store
+        // Note: Presenters will be injected via properties after initialization
         let ctx = ActionContext(
             stateStore: tree.stateStore,
             actionDefinitions: document.actions ?? [:],
             registry: actionRegistry,
-            actionDelegate: actionDelegate
+            actionResolver: actionResolver,
+            document: document,
+            actionDelegate: actionDelegate,
+            dismissPresenter: nil,
+            navigationPresenter: nil,
+            alertPresenter: nil
         )
         // Wrap in ObservableActionContext for SwiftUI integration
         _observableActionContext = StateObject(wrappedValue: ObservableActionContext(wrapping: ctx))
@@ -373,12 +396,8 @@ public struct ScalsRendererBindingView<State: Codable & Equatable>: View {
     }
 
     private func setupContext() {
-        renderContext.actionContext.dismissHandler = { [dismiss] in
-            dismiss()
-        }
-        renderContext.actionContext.alertHandler = { config in
-            AlertPresenter.present(config)
-        }
+        renderContext.actionContext.dismissPresenter = SwiftUIDismissPresenter(dismiss: dismiss)
+        renderContext.actionContext.alertPresenter = UIKitAlertPresenter()
     }
 }
 
@@ -401,7 +420,11 @@ class BindingRenderContext<State: Codable>: ObservableObject {
         self.configuration = configuration
 
         // Resolve document
-        let resolver = Resolver(document: document, componentRegistry: configuration.componentRegistry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: configuration.componentRegistry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         let tree: RenderTree
         do {
             tree = try resolver.resolve()
@@ -413,11 +436,16 @@ class BindingRenderContext<State: Codable>: ObservableObject {
         self.renderTree = tree
         self.stateStore = tree.stateStore
 
+        // Create ActionResolver for runtime action resolution
+        let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
+
         // Create action context
         self._actionContext = ActionContext(
             stateStore: tree.stateStore,
             actionDefinitions: document.actions ?? [:],
             registry: configuration.actionRegistry,
+            actionResolver: actionResolver,
+            document: document,
             actionDelegate: configuration.actionDelegate
         )
 

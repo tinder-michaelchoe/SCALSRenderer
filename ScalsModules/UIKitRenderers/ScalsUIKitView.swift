@@ -16,32 +16,32 @@ import UIKit
 @MainActor
 public protocol ScalsRendererDelegate: AnyObject {
     /// Called when any state value changes
-    func cladsRenderer(_ view: ScalsUIKitView, didChangeState path: String, from oldValue: Any?, to newValue: Any?)
+    func scalsRenderer(_ view: ScalsUIKitView, didChangeState path: String, from oldValue: Any?, to newValue: Any?)
 
     /// Called when an action is about to be executed
-    func cladsRenderer(_ view: ScalsUIKitView, willExecuteAction actionId: String)
+    func scalsRenderer(_ view: ScalsUIKitView, willExecuteAction actionId: String)
 
     /// Called when an action has finished executing
-    func cladsRenderer(_ view: ScalsUIKitView, didExecuteAction actionId: String)
+    func scalsRenderer(_ view: ScalsUIKitView, didExecuteAction actionId: String)
 
     /// Called when a dismiss action is triggered
-    func cladsRendererDidRequestDismiss(_ view: ScalsUIKitView)
+    func scalsRendererDidRequestDismiss(_ view: ScalsUIKitView)
 
     /// Called when a navigation action is triggered
-    func cladsRenderer(_ view: ScalsUIKitView, didRequestNavigation destination: String, presentation: Document.NavigationPresentation)
+    func scalsRenderer(_ view: ScalsUIKitView, didRequestNavigation destination: String, presentation: Document.NavigationPresentation)
 
     /// Called when an alert action is triggered
-    func cladsRenderer(_ view: ScalsUIKitView, didRequestAlert config: AlertConfiguration)
+    func scalsRenderer(_ view: ScalsUIKitView, didRequestAlert config: AlertConfiguration)
 }
 
 /// Default implementations (all optional)
 public extension ScalsRendererDelegate {
-    func cladsRenderer(_ view: ScalsUIKitView, didChangeState path: String, from oldValue: Any?, to newValue: Any?) {}
-    func cladsRenderer(_ view: ScalsUIKitView, willExecuteAction actionId: String) {}
-    func cladsRenderer(_ view: ScalsUIKitView, didExecuteAction actionId: String) {}
-    func cladsRendererDidRequestDismiss(_ view: ScalsUIKitView) {}
-    func cladsRenderer(_ view: ScalsUIKitView, didRequestNavigation destination: String, presentation: Document.NavigationPresentation) {}
-    func cladsRenderer(_ view: ScalsUIKitView, didRequestAlert config: AlertConfiguration) {}
+    func scalsRenderer(_ view: ScalsUIKitView, didChangeState path: String, from oldValue: Any?, to newValue: Any?) {}
+    func scalsRenderer(_ view: ScalsUIKitView, willExecuteAction actionId: String) {}
+    func scalsRenderer(_ view: ScalsUIKitView, didExecuteAction actionId: String) {}
+    func scalsRendererDidRequestDismiss(_ view: ScalsUIKitView) {}
+    func scalsRenderer(_ view: ScalsUIKitView, didRequestNavigation destination: String, presentation: Document.NavigationPresentation) {}
+    func scalsRenderer(_ view: ScalsUIKitView, didRequestAlert config: AlertConfiguration) {}
 }
 
 // MARK: - ScalsUIKitView
@@ -101,7 +101,11 @@ public final class ScalsUIKitView: UIView {
         self.rendererRegistry = rendererRegistry
 
         // Resolve with tracking for efficient updates
-        let resolver = Resolver(document: document, componentRegistry: componentRegistry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         do {
             let result = try resolver.resolveWithTracking()
             self.renderTree = result.renderTree
@@ -116,10 +120,15 @@ public final class ScalsUIKitView: UIView {
             self.viewTreeRoot = nil
         }
 
+        // Create ActionResolver for runtime action resolution
+        let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
+
         self.actionContext = ActionContext(
             stateStore: stateStore,
             actionDefinitions: document.actions ?? [:],
             registry: actionRegistry,
+            actionResolver: actionResolver,
+            document: document,
             actionDelegate: actionDelegate
         )
 
@@ -194,9 +203,9 @@ public final class ScalsUIKitView: UIView {
     /// Execute an action by ID
     public func executeAction(_ actionId: String) {
         Task { @MainActor in
-            delegate?.cladsRenderer(self, willExecuteAction: actionId)
+            delegate?.scalsRenderer(self, willExecuteAction: actionId)
             await actionContext.executeAction(id: actionId)
-            delegate?.cladsRenderer(self, didExecuteAction: actionId)
+            delegate?.scalsRenderer(self, didExecuteAction: actionId)
         }
     }
 
@@ -205,13 +214,13 @@ public final class ScalsUIKitView: UIView {
         Task { @MainActor in
             switch binding {
             case .reference(let actionId):
-                delegate?.cladsRenderer(self, willExecuteAction: actionId)
+                delegate?.scalsRenderer(self, willExecuteAction: actionId)
                 await actionContext.executeAction(id: actionId)
-                delegate?.cladsRenderer(self, didExecuteAction: actionId)
+                delegate?.scalsRenderer(self, didExecuteAction: actionId)
             case .inline(let action):
-                delegate?.cladsRenderer(self, willExecuteAction: "inline")
+                delegate?.scalsRenderer(self, willExecuteAction: "inline")
                 await actionContext.executeAction(action)
-                delegate?.cladsRenderer(self, didExecuteAction: "inline")
+                delegate?.scalsRenderer(self, didExecuteAction: "inline")
             }
         }
     }
@@ -259,7 +268,7 @@ public final class ScalsUIKitView: UIView {
         // Register for state changes
         stateCallbackId = stateStore.onStateChange { [weak self] path, oldValue, newValue in
             guard let self = self else { return }
-            self.delegate?.cladsRenderer(self, didChangeState: path, from: oldValue, to: newValue)
+            self.delegate?.scalsRenderer(self, didChangeState: path, from: oldValue, to: newValue)
         }
 
         // Set up tree updater callback for efficient updates
@@ -269,19 +278,12 @@ public final class ScalsUIKitView: UIView {
     }
 
     private func setupActionHandlers() {
-        actionContext.dismissHandler = { [weak self] in
+        // Create presenters that delegate to ScalsRendererDelegate
+        actionContext.dismissPresenter = UIKitDismissDelegatePresenter(view: self)
+        actionContext.alertPresenter = UIKitAlertDelegatePresenter(view: self)
+        actionContext.navigationPresenter = UIKitNavigationPresenter { [weak self] destination, presentation in
             guard let self = self else { return }
-            self.delegate?.cladsRendererDidRequestDismiss(self)
-        }
-
-        actionContext.alertHandler = { [weak self] config in
-            guard let self = self else { return }
-            self.delegate?.cladsRenderer(self, didRequestAlert: config)
-        }
-
-        actionContext.navigationHandler = { [weak self] destination, presentation in
-            guard let self = self else { return }
-            self.delegate?.cladsRenderer(self, didRequestNavigation: destination, presentation: presentation ?? .push)
+            self.delegate?.scalsRenderer(self, didRequestNavigation: destination, presentation: presentation ?? .push)
         }
     }
 
@@ -998,27 +1000,27 @@ open class ScalsViewController: UIViewController, ScalsRendererDelegate {
 
     // MARK: - ScalsRendererDelegate (Override in subclass)
 
-    open func cladsRenderer(_ view: ScalsUIKitView, didChangeState path: String, from oldValue: Any?, to newValue: Any?) {
+    open func scalsRenderer(_ view: ScalsUIKitView, didChangeState path: String, from oldValue: Any?, to newValue: Any?) {
         // Override in subclass
     }
 
-    open func cladsRenderer(_ view: ScalsUIKitView, willExecuteAction actionId: String) {
+    open func scalsRenderer(_ view: ScalsUIKitView, willExecuteAction actionId: String) {
         // Override in subclass
     }
 
-    open func cladsRenderer(_ view: ScalsUIKitView, didExecuteAction actionId: String) {
+    open func scalsRenderer(_ view: ScalsUIKitView, didExecuteAction actionId: String) {
         // Override in subclass
     }
 
-    open func cladsRendererDidRequestDismiss(_ view: ScalsUIKitView) {
+    open func scalsRendererDidRequestDismiss(_ view: ScalsUIKitView) {
         dismiss(animated: true)
     }
 
-    open func cladsRenderer(_ view: ScalsUIKitView, didRequestNavigation destination: String, presentation: Document.NavigationPresentation) {
+    open func scalsRenderer(_ view: ScalsUIKitView, didRequestNavigation destination: String, presentation: Document.NavigationPresentation) {
         // Override in subclass for navigation
     }
 
-    open func cladsRenderer(_ view: ScalsUIKitView, didRequestAlert config: AlertConfiguration) {
+    open func scalsRenderer(_ view: ScalsUIKitView, didRequestAlert config: AlertConfiguration) {
         AlertPresenter.present(config)
     }
 }

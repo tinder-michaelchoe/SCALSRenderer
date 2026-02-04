@@ -63,7 +63,8 @@ struct RenderTreeVersionTests {
         let document = try Document.Definition(jsonString: json)
         let resolver = Resolver(
             document: document,
-            componentRegistry: .default
+            componentRegistry: .default,
+            actionResolverRegistry: .default
         )
 
         let tree = try resolver.resolve()

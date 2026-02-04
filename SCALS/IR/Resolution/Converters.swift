@@ -131,19 +131,6 @@ public enum StateValueConverter {
         }
     }
 
-    /// Converts a value to StateSetValue for action resolution
-    public static func toSetValue(_ value: Any?) -> StateSetValue {
-        guard let value = value else { return .literal(.nullValue) }
-
-        if let dict = value as? [String: Any],
-           let expr = dict["$expr"] as? String {
-            return .expression(expr)
-        }
-
-        // Convert to StateValue
-        let stateValue = anyToStateValue(value)
-        return .literal(stateValue)
-    }
 
     /// Converts an Any value to StateValue
     public static func anyToStateValue(_ value: Any) -> Document.StateValue {

@@ -91,7 +91,11 @@ private func _cladsRenderImpl(jsonPtr: UnsafePointer<CChar>, jsonLen: Int32) -> 
 
         // Create resolver and resolve to render tree
         // Note: In Wasm, we run synchronously since it's single-threaded.
-        let resolver = Resolver(document: document, componentRegistry: registry)
+        let resolver = Resolver(
+            document: document,
+            componentRegistry: registry,
+            actionResolverRegistry: ActionResolverRegistry.default
+        )
         let renderTree = try resolver.resolve()
 
         // Render to HTML

@@ -8,6 +8,7 @@
 import Foundation
 import Testing
 @testable import SCALS
+@testable import ScalsModules
 
 // MARK: - Basic Properties Tests
 
@@ -285,11 +286,7 @@ struct LifecycleActionsTests {
         let root = try JSONDecoder().decode(Document.RootComponent.self, from: data)
         
         if case .inline(let action) = root.actions?.onAppear {
-            if case .setState = action {
-                // Success
-            } else {
-                Issue.record("Expected setState action")
-            }
+            #expect(action.type == .setState)
         } else {
             Issue.record("Expected inline action binding")
         }
@@ -327,11 +324,7 @@ struct LifecycleActionsTests {
         let root = try JSONDecoder().decode(Document.RootComponent.self, from: data)
         
         if case .inline(let action) = root.actions?.onDisappear {
-            if case .dismiss = action {
-                // Success
-            } else {
-                Issue.record("Expected dismiss action")
-            }
+            #expect(action.type == .dismiss)
         } else {
             Issue.record("Expected inline action binding")
         }
@@ -512,11 +505,9 @@ struct RootComponentFullTests {
         }
         
         if case .inline(let action) = root.actions?.onDisappear {
-            if case .dismiss = action {
-                // Success
-            }
+            #expect(action.type == .dismiss)
         }
-        
+
         #expect(root.children.count == 1)
         if case .layout(let vstack) = root.children[0] {
             #expect(vstack.children.count == 3)
@@ -580,11 +571,7 @@ struct RootComponentRoundTripTests {
         }
         
         if case .inline(let action) = decoded.onDisappear {
-            if case .dismiss = action {
-                // Success
-            } else {
-                Issue.record("Expected dismiss action")
-            }
+            #expect(action.type == .dismiss)
         }
     }
 }
