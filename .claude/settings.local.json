@@ -64,7 +64,11 @@
       "Bash(git push:*)",
       "Bash(git branch:*)",
       "Bash(git rm:*)",
-      "Bash(swift package:*)"
+      "Bash(swift package:*)",
+      "Bash(wc:*)",
+      "Bash(du:*)",
+      "Bash(sort:*)",
+      "Bash(gh pr create:*)"
     ]
   }
 }
