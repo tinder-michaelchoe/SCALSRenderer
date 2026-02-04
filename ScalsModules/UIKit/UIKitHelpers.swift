@@ -208,7 +208,7 @@ extension UnitPoint {
 // MARK: - Alignment Conversion
 
 extension SwiftUI.Alignment {
-    func toUIKit(for layoutType: ContainerNode.LayoutType) -> UIStackView.Alignment {
+    func toUIKit(for layoutType: LayoutType) -> UIStackView.Alignment {
         switch layoutType {
         case .vstack:
             if horizontal == .leading { return .leading }

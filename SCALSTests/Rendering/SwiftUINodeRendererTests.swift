@@ -16,15 +16,16 @@ import SwiftUI
 /// Creates a test ActionContext
 @MainActor
 func createSwiftUITestActionContext(stateStore: StateStore) -> ActionContext {
+    let registries = CoreManifest.createRegistries()
     let document = Document.Definition(
         id: "test",
         root: Document.RootComponent(children: [])
     )
-    let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
+    let actionResolver = ActionResolver(registry: registries.actionResolverRegistry)
     return ActionContext(
         stateStore: stateStore,
         actionDefinitions: [:],
-        registry: ActionRegistry(),
+        registry: registries.actionRegistry,
         actionResolver: actionResolver,
         document: document
     )

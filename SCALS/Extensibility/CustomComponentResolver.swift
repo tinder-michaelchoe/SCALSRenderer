@@ -44,10 +44,7 @@ public struct CustomComponentResolver {
         // Create view node if tracking
         let viewNode: ViewNode?
         if context.isTracking {
-            viewNode = ViewNode(
-                id: nodeId,
-                nodeType: .customComponent(CustomComponentNodeData(typeName: typeName))
-            )
+            viewNode = ViewNode(id: nodeId)
             viewNode?.parent = context.parentViewNode
         } else {
             viewNode = nil

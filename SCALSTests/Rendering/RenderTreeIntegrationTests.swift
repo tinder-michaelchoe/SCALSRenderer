@@ -146,15 +146,16 @@ private struct IntegrationSectionLayoutRenderer: UIKitNodeRendering {
 /// Creates a test ActionContext
 @MainActor
 func createIntegrationActionContext(stateStore: StateStore) -> ActionContext {
+    let registries = CoreManifest.createRegistries()
     let document = Document.Definition(
         id: "test",
         root: Document.RootComponent(children: [])
     )
-    let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
+    let actionResolver = ActionResolver(registry: registries.actionResolverRegistry)
     return ActionContext(
         stateStore: stateStore,
         actionDefinitions: [:],
-        registry: ActionRegistry(),
+        registry: registries.actionRegistry,
         actionResolver: actionResolver,
         document: document
     )
@@ -469,19 +470,23 @@ struct FullPipelineIntegrationTests {
                 ))
             ])
         )
-        
+
         // Resolve to RenderTree
-        let componentRegistry = ComponentResolverRegistry()
+        let registries = CoreManifest.createRegistries()
+        let layoutResolver = LayoutResolver(componentRegistry: registries.componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: registries.componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: componentRegistry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: registries.componentRegistry,
+            actionResolverRegistry: registries.actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         let renderTree = try resolver.resolve()
-        
+
         // Verify tree structure
         #expect(renderTree.root.children.count == 1)
-        
+
         // Create UIKit renderer with mock renderers
         let uikitRegistry = UIKitNodeRendererRegistry()
         uikitRegistry.register(IntegrationTextRenderer())
@@ -515,16 +520,20 @@ struct FullPipelineIntegrationTests {
                 ))
             ])
         )
-        
+
         // Resolve to RenderTree
-        let componentRegistry = ComponentResolverRegistry()
+        let registries = CoreManifest.createRegistries()
+        let layoutResolver = LayoutResolver(componentRegistry: registries.componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: registries.componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: componentRegistry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: registries.componentRegistry,
+            actionResolverRegistry: registries.actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         let renderTree = try resolver.resolve()
-        
+
         // Create SwiftUI renderer
         let registry = SwiftUINodeRendererRegistry()
         let actionContext = createIntegrationActionContext(stateStore: renderTree.stateStore)

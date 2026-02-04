@@ -9,6 +9,7 @@ import Foundation
 import Testing
 
 @testable import SCALS
+@testable import ScalsModules
 
 // MARK: - Basic Section Layout Tests
 

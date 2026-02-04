@@ -79,7 +79,7 @@ extension IR.ColorScheme {
 
 extension IR.Alignment {
     /// Convert to UIKit UIStackView.Alignment based on the layout type
-    public func toUIKit(for layoutType: ContainerNode.LayoutType) -> UIStackView.Alignment {
+    public func toUIKit(for layoutType: LayoutType) -> UIStackView.Alignment {
         switch layoutType {
         case .vstack:
             // For vertical stacks, horizontal alignment matters

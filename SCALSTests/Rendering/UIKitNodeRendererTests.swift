@@ -164,7 +164,7 @@ func createMockUIKitContext() -> UIKitRenderContext {
         id: "test",
         root: Document.RootComponent(children: [])
     )
-    let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
+    let actionResolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
     let actionContext = ActionContext(
         stateStore: stateStore,
         actionDefinitions: [:],

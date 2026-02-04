@@ -61,10 +61,15 @@ struct RenderTreeVersionTests {
         """
 
         let document = try Document.Definition(jsonString: json)
+        let registries = CoreManifest.createRegistries()
+        let layoutResolver = LayoutResolver(componentRegistry: registries.componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: registries.componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: .default,
-            actionResolverRegistry: .default
+            componentRegistry: registries.componentRegistry,
+            actionResolverRegistry: registries.actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
 
         let tree = try resolver.resolve()

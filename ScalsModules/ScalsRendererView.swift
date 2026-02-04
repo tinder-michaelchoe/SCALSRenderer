@@ -32,6 +32,7 @@ public struct ScalsRendererView: View {
     /// - Parameters:
     ///   - document: The document definition to render
     ///   - actionRegistry: Registry for action handlers (may include merged custom actions)
+    ///   - actionResolverRegistry: Registry for action resolvers
     ///   - componentRegistry: Registry for component resolvers
     ///   - swiftuiRendererRegistry: Registry for SwiftUI renderers
     ///   - customComponents: Array of custom component types to register
@@ -40,6 +41,7 @@ public struct ScalsRendererView: View {
     public init(
         document: Document.Definition,
         actionRegistry: ActionRegistry,
+        actionResolverRegistry: ActionResolverRegistry,
         componentRegistry: ComponentResolverRegistry,
         swiftuiRendererRegistry: SwiftUINodeRendererRegistry,
         customComponents: [any CustomComponent.Type] = [],
@@ -61,10 +63,14 @@ public struct ScalsRendererView: View {
         self.designSystemProvider = designSystemProvider
 
         // Resolve Document (AST) into RenderTree (IR)
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
             componentRegistry: componentRegistry,
-            actionResolverRegistry: ActionResolverRegistry.default,
+            actionResolverRegistry: actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver,
             designSystemProvider: designSystemProvider
         )
         let tree: RenderTree
@@ -93,7 +99,7 @@ public struct ScalsRendererView: View {
         #endif
 
         // Create ActionResolver for runtime action resolution
-        let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let actionResolver = ActionResolver(registry: actionResolverRegistry)
 
         // Create ActionContext with the resolved state store
         // Note: Presenters will be injected via properties after initialization
@@ -181,6 +187,7 @@ extension ScalsRendererView {
     public init?(
         jsonString: String,
         actionRegistry: ActionRegistry,
+        actionResolverRegistry: ActionResolverRegistry,
         componentRegistry: ComponentResolverRegistry,
         swiftuiRendererRegistry: SwiftUINodeRendererRegistry,
         customComponents: [any CustomComponent.Type] = [],
@@ -194,6 +201,7 @@ extension ScalsRendererView {
         self.init(
             document: document,
             actionRegistry: actionRegistry,
+            actionResolverRegistry: actionResolverRegistry,
             componentRegistry: componentRegistry,
             swiftuiRendererRegistry: swiftuiRendererRegistry,
             customComponents: customComponents,
@@ -207,6 +215,7 @@ extension ScalsRendererView {
     public init(
         document: Document.Definition,
         actionRegistry: ActionRegistry,
+        actionResolverRegistry: ActionResolverRegistry,
         componentRegistry: ComponentResolverRegistry,
         swiftuiRendererRegistry: SwiftUINodeRendererRegistry,
         customComponents: [any CustomComponent.Type] = [],
@@ -229,10 +238,14 @@ extension ScalsRendererView {
         self.designSystemProvider = designSystemProvider
 
         // Resolve Document (AST) into RenderTree (IR)
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
             componentRegistry: componentRegistry,
-            actionResolverRegistry: ActionResolverRegistry.default,
+            actionResolverRegistry: actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver,
             designSystemProvider: designSystemProvider
         )
         let tree: RenderTree
@@ -261,7 +274,7 @@ extension ScalsRendererView {
         }
 
         // Create ActionResolver for runtime action resolution
-        let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let actionResolver = ActionResolver(registry: actionResolverRegistry)
 
         // Create ActionContext with the resolved state store
         // Note: Presenters will be injected via properties after initialization
@@ -297,6 +310,9 @@ public struct ScalsRendererBindingConfiguration<State: Codable> {
     /// Registry for action handlers (may include merged custom actions)
     public var actionRegistry: ActionRegistry
 
+    /// Registry for action resolvers
+    public var actionResolverRegistry: ActionResolverRegistry
+
     /// Registry for component resolvers
     public var componentRegistry: ComponentResolverRegistry
 
@@ -317,6 +333,7 @@ public struct ScalsRendererBindingConfiguration<State: Codable> {
         onStateChange: ((_ path: String, _ oldValue: Any?, _ newValue: Any?) -> Void)? = nil,
         onAction: ((_ actionId: String, _ parameters: [String: Any]) -> Void)? = nil,
         actionRegistry: ActionRegistry,
+        actionResolverRegistry: ActionResolverRegistry,
         componentRegistry: ComponentResolverRegistry,
         swiftuiRendererRegistry: SwiftUINodeRendererRegistry,
         customComponents: [any CustomComponent.Type] = [],
@@ -327,6 +344,7 @@ public struct ScalsRendererBindingConfiguration<State: Codable> {
         self.onStateChange = onStateChange
         self.onAction = onAction
         self.actionRegistry = actionRegistry
+        self.actionResolverRegistry = actionResolverRegistry
         self.componentRegistry = componentRegistry
         self.swiftuiRendererRegistry = swiftuiRendererRegistry
         self.customComponents = customComponents
@@ -420,10 +438,14 @@ class BindingRenderContext<State: Codable>: ObservableObject {
         self.configuration = configuration
 
         // Resolve document
+        let layoutResolver = LayoutResolver(componentRegistry: configuration.componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: configuration.componentRegistry)
         let resolver = Resolver(
             document: document,
             componentRegistry: configuration.componentRegistry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            actionResolverRegistry: configuration.actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         let tree: RenderTree
         do {
@@ -437,7 +459,7 @@ class BindingRenderContext<State: Codable>: ObservableObject {
         self.stateStore = tree.stateStore
 
         // Create ActionResolver for runtime action resolution
-        let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let actionResolver = ActionResolver(registry: configuration.actionResolverRegistry)
 
         // Create action context
         self._actionContext = ActionContext(

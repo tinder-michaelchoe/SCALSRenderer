@@ -307,10 +307,7 @@ public struct ChartComponentResolver: ComponentResolving {
         // Create view node for dependency tracking (optional)
         let viewNode: ViewNode?
         if context.isTracking {
-            viewNode = ViewNode(
-                id: nodeId,
-                nodeType: .custom(kind: "chart")
-            )
+            viewNode = ViewNode(id: nodeId)
             viewNode?.parent = context.parentViewNode
         } else {
             viewNode = nil

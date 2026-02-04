@@ -87,12 +87,14 @@ public final class ScalsUIKitView: UIView {
     /// - Parameters:
     ///   - document: The document definition to render
     ///   - actionRegistry: The action registry for handling actions (may include merged custom actions)
+    ///   - actionResolverRegistry: The action resolver registry
     ///   - componentRegistry: The component resolver registry
     ///   - rendererRegistry: The UIKit node renderer registry
     ///   - actionDelegate: Delegate for handling custom actions
     public init(
         document: Document.Definition,
         actionRegistry: ActionRegistry,
+        actionResolverRegistry: ActionResolverRegistry,
         componentRegistry: ComponentResolverRegistry,
         rendererRegistry: UIKitNodeRendererRegistry,
         actionDelegate: ScalsActionDelegate? = nil
@@ -101,10 +103,14 @@ public final class ScalsUIKitView: UIView {
         self.rendererRegistry = rendererRegistry
 
         // Resolve with tracking for efficient updates
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
             componentRegistry: componentRegistry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            actionResolverRegistry: actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         do {
             let result = try resolver.resolveWithTracking()
@@ -121,7 +127,7 @@ public final class ScalsUIKitView: UIView {
         }
 
         // Create ActionResolver for runtime action resolution
-        let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let actionResolver = ActionResolver(registry: actionResolverRegistry)
 
         self.actionContext = ActionContext(
             stateStore: stateStore,
@@ -143,6 +149,7 @@ public final class ScalsUIKitView: UIView {
     public convenience init?(
         jsonString: String,
         actionRegistry: ActionRegistry,
+        actionResolverRegistry: ActionResolverRegistry,
         componentRegistry: ComponentResolverRegistry,
         rendererRegistry: UIKitNodeRendererRegistry,
         actionDelegate: ScalsActionDelegate? = nil
@@ -153,6 +160,7 @@ public final class ScalsUIKitView: UIView {
         self.init(
             document: document,
             actionRegistry: actionRegistry,
+            actionResolverRegistry: actionResolverRegistry,
             componentRegistry: componentRegistry,
             rendererRegistry: rendererRegistry,
             actionDelegate: actionDelegate
@@ -303,32 +311,29 @@ public final class ScalsUIKitView: UIView {
     private func updateNodeView(_ node: ViewNode) {
         guard let view = viewRegistry[node.id]?.view else { return }
 
-        // Update the view based on its type
-        switch node.nodeType {
-        case .text:
-            if let label = view as? UILabel {
-                // Re-resolve content with current state
-                let content = resolveTextContent(for: node)
-                label.text = content
+        // Update the view based on its actual UIKit type
+        if let label = view as? UILabel {
+            // Text node - re-resolve content with current state
+            let content = resolveTextContent(for: node)
+            label.text = content
+        } else if let button = view as? UIButton {
+            // Button node - re-resolve content with current state
+            let content = resolveTextContent(for: node)
+            if !content.isEmpty {
+                button.setTitle(content, for: .normal)
             }
-
-        case .button(let data):
-            if let button = view as? UIButton {
-                let content = resolveTextContent(for: node)
-                button.setTitle(content.isEmpty ? data.label : content, for: .normal)
-            }
-
-        case .textField(let data):
-            if let textField = view as? BoundTextField {
-                // TextField handles its own binding, but we might need to refresh
-                if let path = data.bindingPath, !path.hasPrefix("local.") {
+        } else if let textField = view as? BoundTextField {
+            // TextField node - refresh from state if using global binding
+            // Note: TextFields with local bindings manage their own state
+            for path in node.writePaths {
+                if !path.hasPrefix("local.") {
                     textField.text = stateStore.get(path) as? String ?? ""
+                    break
                 }
             }
-
-        default:
-            break
         }
+        // For other view types, a full re-render would be needed
+        // Currently, we only support lightweight updates for text, buttons, and textfields
     }
 
     private func resolveTextContent(for node: ViewNode) -> String {
@@ -956,6 +961,7 @@ open class ScalsViewController: UIViewController, ScalsRendererDelegate {
     public init(
         document: Document.Definition,
         actionRegistry: ActionRegistry,
+        actionResolverRegistry: ActionResolverRegistry,
         componentRegistry: ComponentResolverRegistry,
         rendererRegistry: UIKitNodeRendererRegistry
     ) {
@@ -963,6 +969,7 @@ open class ScalsViewController: UIViewController, ScalsRendererDelegate {
         cladsView = ScalsUIKitView(
             document: document,
             actionRegistry: actionRegistry,
+            actionResolverRegistry: actionResolverRegistry,
             componentRegistry: componentRegistry,
             rendererRegistry: rendererRegistry
         )
@@ -972,13 +979,14 @@ open class ScalsViewController: UIViewController, ScalsRendererDelegate {
     public convenience init?(
         jsonString: String,
         actionRegistry: ActionRegistry,
+        actionResolverRegistry: ActionResolverRegistry,
         componentRegistry: ComponentResolverRegistry,
         rendererRegistry: UIKitNodeRendererRegistry
     ) {
         guard let document = try? Document.Definition(jsonString: jsonString) else {
             return nil
         }
-        self.init(document: document, actionRegistry: actionRegistry, componentRegistry: componentRegistry, rendererRegistry: rendererRegistry)
+        self.init(document: document, actionRegistry: actionRegistry, actionResolverRegistry: actionResolverRegistry, componentRegistry: componentRegistry, rendererRegistry: rendererRegistry)
     }
 
     required public init?(coder: NSCoder) {

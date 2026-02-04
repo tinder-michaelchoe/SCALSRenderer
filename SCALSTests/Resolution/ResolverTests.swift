@@ -10,6 +10,17 @@ import Testing
 @testable import SCALS
 @testable import ScalsModules
 
+// MARK: - Test Helpers
+
+/// Creates registries for testing
+private func createTestRegistries() -> (
+    componentRegistry: ComponentResolverRegistry,
+    actionResolverRegistry: ActionResolverRegistry
+) {
+    let registries = CoreManifest.createRegistries()
+    return (registries.componentRegistry, registries.actionResolverRegistry)
+}
+
 // MARK: - Basic Resolution Tests
 
 struct ResolverBasicTests {
@@ -19,12 +30,16 @@ struct ResolverBasicTests {
             id: "test-doc",
             root: Document.RootComponent(children: [])
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: createTestRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         
         let renderTree = try resolver.resolve()
@@ -39,12 +54,16 @@ struct ResolverBasicTests {
             version: "1.0",
             root: Document.RootComponent(children: [])
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: createTestRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         
         let renderTree = try resolver.resolve()
@@ -62,12 +81,16 @@ struct ResolverBasicTests {
             ],
             root: Document.RootComponent(children: [])
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: createTestRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         
         let renderTree = try resolver.resolve()
@@ -83,12 +106,16 @@ struct ResolverBasicTests {
             state: ["count": .intValue(0)],
             root: Document.RootComponent(children: [])
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: createTestRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         
         let stateStore = StateStore()
@@ -109,12 +136,16 @@ struct ResolverBasicTests {
             ],
             root: Document.RootComponent(children: [])
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: createTestRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         
         let stateStore = StateStore()
@@ -139,12 +170,16 @@ struct ResolverRootNodeTests {
                 children: []
             )
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: createTestRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         
         let renderTree = try resolver.resolve()
@@ -161,12 +196,16 @@ struct ResolverRootNodeTests {
                 children: []
             )
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: createTestRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         
         let renderTree = try resolver.resolve()
@@ -182,12 +221,16 @@ struct ResolverRootNodeTests {
                 children: []
             )
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: createTestRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         
         let renderTree = try resolver.resolve()
@@ -203,12 +246,16 @@ struct ResolverRootNodeTests {
                 children: []
             )
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: createTestRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         
         let renderTree = try resolver.resolve()
@@ -227,12 +274,16 @@ struct ResolverRootNodeTests {
                 children: []
             )
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: createTestRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         
         let renderTree = try resolver.resolve()
@@ -257,12 +308,16 @@ struct ResolverActionTests {
             ],
             root: Document.RootComponent(children: [])
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: createTestRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         
         let renderTree = try resolver.resolve()
@@ -295,12 +350,16 @@ struct ResolverActionTests {
                 children: []
             )
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: createTestRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         
         let renderTree = try resolver.resolve()
@@ -320,12 +379,16 @@ struct ResolverChildResolutionTests {
                 children: [.spacer(Document.Spacer())]
             )
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: createTestRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         
         let renderTree = try resolver.resolve()
@@ -350,12 +413,16 @@ struct ResolverChildResolutionTests {
                 ]
             )
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: createTestRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         
         let renderTree = try resolver.resolve()
@@ -386,12 +453,16 @@ struct ResolverChildResolutionTests {
                 ]
             )
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: createTestRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         
         let renderTree = try resolver.resolve()
@@ -419,12 +490,16 @@ struct ResolverTrackingTests {
             id: "test-doc",
             root: Document.RootComponent(children: [.spacer(Document.Spacer())])
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: createTestRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         
         let result = try resolver.resolveWithTracking()
@@ -439,12 +514,16 @@ struct ResolverTrackingTests {
             state: ["value": .intValue(0)],
             root: Document.RootComponent(children: [])
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: createTestRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         
         let stateStore = StateStore()
@@ -471,13 +550,17 @@ struct ResolverErrorTests {
                 ]
             )
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
         // Don't register any resolvers
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: createTestRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         
         #expect(throws: ComponentResolutionError.self) {

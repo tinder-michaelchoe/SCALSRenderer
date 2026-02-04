@@ -264,7 +264,7 @@ public struct DebugRenderer: Renderer {
 
     // MARK: - Helpers
 
-    private func imageSourceDescription(_ source: ImageNode.Source) -> String {
+    private func imageSourceDescription(_ source: ImageSource) -> String {
         switch source {
         case .sfsymbol(let name): return "sfsymbol(\(name))"
         case .asset(let name): return "asset(\(name))"

@@ -44,26 +44,26 @@ struct RendererTestHelpers {
     /// - Returns: A UIImage of the rendered tree
     @MainActor
     static func renderSwiftUITree(_ tree: RenderTree, size: CGSize, traits: UITraitCollection = UITraitCollection(), pinToEdges: Bool = false) async -> UIImage {
-        // Create renderer dependencies
+        // Create renderer dependencies using CoreManifest registries
+        let registries = CoreManifest.createRegistries()
         let stateStore = StateStore()
         let document = Document.Definition(
             id: "test",
             root: Document.RootComponent(children: [])
         )
-        let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let actionResolver = ActionResolver(registry: registries.actionResolverRegistry)
         let actionContext = ActionContext(
             stateStore: stateStore,
             actionDefinitions: [:],
-            registry: ActionRegistry(),
+            registry: registries.actionRegistry,
             actionResolver: actionResolver,
             document: document
         )
-        let registry = SwiftUINodeRendererRegistry.default
 
         // Create renderer
         let renderer = SwiftUIRenderer(
             actionContext: actionContext,
-            rendererRegistry: registry,
+            rendererRegistry: registries.swiftUIRegistry,
             designSystemProvider: nil
         )
 
@@ -118,26 +118,26 @@ struct RendererTestHelpers {
     /// - Returns: A UIImage of the rendered tree
     @MainActor
     static func renderUIKitTree(_ tree: RenderTree, size: CGSize, traits: UITraitCollection = UITraitCollection(), pinToEdges: Bool = false) async -> UIImage {
-        // Create renderer dependencies
+        // Create renderer dependencies using CoreManifest registries
+        let registries = CoreManifest.createRegistries()
         let stateStore = StateStore()
         let document = Document.Definition(
             id: "test",
             root: Document.RootComponent(children: [])
         )
-        let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let actionResolver = ActionResolver(registry: registries.actionResolverRegistry)
         let actionContext = ActionContext(
             stateStore: stateStore,
             actionDefinitions: [:],
-            registry: ActionRegistry(),
+            registry: registries.actionRegistry,
             actionResolver: actionResolver,
             document: document
         )
-        let registry = UIKitNodeRendererRegistry.default
 
         // Create renderer
         let renderer = UIKitRenderer(
             actionContext: actionContext,
-            registry: registry
+            registry: registries.uiKitRegistry
         )
 
         // Render and capture

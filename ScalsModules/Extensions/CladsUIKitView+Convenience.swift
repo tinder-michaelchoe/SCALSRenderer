@@ -2,7 +2,7 @@
 //  ScalsUIKitView+Convenience.swift
 //  ScalsModules
 //
-//  Convenience initializers for ScalsUIKitView and ScalsViewController that use default registries.
+//  Convenience initializers for ScalsUIKitView and ScalsViewController that use CoreManifest.
 //  Custom actions are merged into the action registry internally.
 //
 
@@ -10,7 +10,7 @@ import SCALS
 import UIKit
 
 extension ScalsUIKitView {
-    /// Initialize with a document using default registries.
+    /// Initialize with a document using CoreManifest.
     ///
     /// - Parameters:
     ///   - document: The document definition to render
@@ -36,19 +36,23 @@ extension ScalsUIKitView {
         customActions: [String: ActionClosure] = [:],
         actionDelegate: ScalsActionDelegate? = nil
     ) {
+        // Create registries from CoreManifest
+        let registries = CoreManifest.createRegistries()
+
         // Merge custom actions into the registry
-        let registry = ActionRegistry.default.merging(customActions: customActions)
+        let actionRegistry = registries.actionRegistry.merging(customActions: customActions)
 
         self.init(
             document: document,
-            actionRegistry: registry,
-            componentRegistry: .default,
-            rendererRegistry: .default,
+            actionRegistry: actionRegistry,
+            actionResolverRegistry: registries.actionResolverRegistry,
+            componentRegistry: registries.componentRegistry,
+            rendererRegistry: registries.uiKitRegistry,
             actionDelegate: actionDelegate
         )
     }
 
-    /// Initialize from a JSON string using default registries.
+    /// Initialize from a JSON string using CoreManifest.
     public convenience init?(
         jsonString: String,
         customActions: [String: ActionClosure] = [:],
@@ -58,14 +62,18 @@ extension ScalsUIKitView {
             return nil
         }
 
+        // Create registries from CoreManifest
+        let registries = CoreManifest.createRegistries()
+
         // Merge custom actions into the registry
-        let registry = ActionRegistry.default.merging(customActions: customActions)
+        let actionRegistry = registries.actionRegistry.merging(customActions: customActions)
 
         self.init(
             document: document,
-            actionRegistry: registry,
-            componentRegistry: .default,
-            rendererRegistry: .default,
+            actionRegistry: actionRegistry,
+            actionResolverRegistry: registries.actionResolverRegistry,
+            componentRegistry: registries.componentRegistry,
+            rendererRegistry: registries.uiKitRegistry,
             actionDelegate: actionDelegate
         )
     }
@@ -74,23 +82,31 @@ extension ScalsUIKitView {
 // MARK: - ScalsViewController Convenience
 
 extension ScalsViewController {
-    /// Initialize with a document using default registries.
+    /// Initialize with a document using CoreManifest.
     public convenience init(document: Document.Definition) {
+        // Create registries from CoreManifest
+        let registries = CoreManifest.createRegistries()
+
         self.init(
             document: document,
-            actionRegistry: .default,
-            componentRegistry: .default,
-            rendererRegistry: .default
+            actionRegistry: registries.actionRegistry,
+            actionResolverRegistry: registries.actionResolverRegistry,
+            componentRegistry: registries.componentRegistry,
+            rendererRegistry: registries.uiKitRegistry
         )
     }
 
-    /// Initialize from a JSON string using default registries.
+    /// Initialize from a JSON string using CoreManifest.
     public convenience init?(jsonString: String) {
+        // Create registries from CoreManifest
+        let registries = CoreManifest.createRegistries()
+
         self.init(
             jsonString: jsonString,
-            actionRegistry: .default,
-            componentRegistry: .default,
-            rendererRegistry: .default
+            actionRegistry: registries.actionRegistry,
+            actionResolverRegistry: registries.actionResolverRegistry,
+            componentRegistry: registries.componentRegistry,
+            rendererRegistry: registries.uiKitRegistry
         )
     }
 }

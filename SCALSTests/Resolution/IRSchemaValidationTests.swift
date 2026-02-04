@@ -32,12 +32,16 @@ struct RenderTreeSchemaTests {
             actions: ["dismiss": Document.Action(type: .dismiss, parameters: [:])],
             root: Document.RootComponent(children: [])
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: CoreManifest.createRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         let renderTree = try resolver.resolve()
         
@@ -62,12 +66,16 @@ struct RenderTreeSchemaTests {
             ],
             root: Document.RootComponent(children: [])
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: CoreManifest.createRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         let renderTree = try resolver.resolve()
         
@@ -113,12 +121,16 @@ struct RootNodeSchemaTests {
             id: "test",
             root: Document.RootComponent(colorScheme: "dark", children: [])
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: CoreManifest.createRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         let renderTree = try resolver.resolve()
         
@@ -131,12 +143,16 @@ struct RootNodeSchemaTests {
             id: "test",
             root: Document.RootComponent(children: [])
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: CoreManifest.createRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         let renderTree = try resolver.resolve()
         
@@ -149,12 +165,16 @@ struct RootNodeSchemaTests {
             id: "test",
             root: Document.RootComponent(children: [.spacer(Document.Spacer()), .spacer(Document.Spacer())])
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: CoreManifest.createRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         let renderTree = try resolver.resolve()
         
@@ -171,12 +191,16 @@ struct RootNodeSchemaTests {
                 children: []
             )
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: CoreManifest.createRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         let renderTree = try resolver.resolve()
         
@@ -195,12 +219,16 @@ struct RootNodeSchemaTests {
                 children: []
             )
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: CoreManifest.createRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         let renderTree = try resolver.resolve()
         
@@ -222,12 +250,16 @@ struct RenderNodeSchemaTests {
             id: "test",
             root: Document.RootComponent(children: [.spacer(Document.Spacer())])
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: CoreManifest.createRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         let renderTree = try resolver.resolve()
         
@@ -254,12 +286,16 @@ struct RenderNodeSchemaTests {
                 ]
             )
         )
-        
-        let registry = ComponentResolverRegistry()
+
+        let componentRegistry = ComponentResolverRegistry()
+        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
+        let sectionLayoutResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
         let resolver = Resolver(
             document: document,
-            componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            componentRegistry: componentRegistry,
+            actionResolverRegistry: CoreManifest.createRegistries().actionResolverRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         let renderTree = try resolver.resolve()
         
@@ -444,7 +480,7 @@ struct SectionLayoutSchemaTests {
         let result = try resolver.resolve(sectionLayout, context: context)
         
         // Schema sectionLayoutNode requires: nodeType, sectionSpacing, sections
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             #expect(node.id == "sections")
             #expect(node.sectionSpacing == 24)
             #expect(node.sections.count == 1)
@@ -468,7 +504,7 @@ struct SectionLayoutSchemaTests {
             )]
         )
         let horizontalResult = try resolver.resolve(horizontalLayout, context: context)
-        if case .sectionLayout(let node) = horizontalResult.renderNode {
+        if let node = horizontalResult.renderNode.data(SectionLayoutNode.self) {
             if case .horizontal = node.sections[0].layoutType {
                 // Matches schema
             } else {
@@ -484,7 +520,7 @@ struct SectionLayoutSchemaTests {
             )]
         )
         let gridResult = try resolver.resolve(gridLayout, context: context)
-        if case .sectionLayout(let node) = gridResult.renderNode {
+        if let node = gridResult.renderNode.data(SectionLayoutNode.self) {
             if case .grid(let columns) = node.sections[0].layoutType {
                 if case .fixed(let count) = columns {
                     #expect(count == 3)
@@ -523,7 +559,7 @@ struct SectionLayoutSchemaTests {
         
         let result = try resolver.resolve(sectionLayout, context: context)
         
-        if case .sectionLayout(let node) = result.renderNode {
+        if let node = result.renderNode.data(SectionLayoutNode.self) {
             let config = node.sections[0].config
             
             // Schema: alignment enum ["leading", "center", "trailing"]
@@ -561,19 +597,19 @@ struct ActionDefinitionSchemaTests {
         // Schema: { type: "dismiss" }
         let document = Document.Definition(id: "test", root: Document.RootComponent(children: []))
         let context = ResolutionContext.withoutTracking(document: document, stateStore: StateStore())
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
 
-        let documentAction = Document.Action(type: Document.Action(type: .dismiss, parameters: [:]), parameters: [:])
+        let documentAction = Document.Action(type: .dismiss, parameters: [:])
         let action = try resolver.resolve(documentAction, context: context)
 
-        #expect(action.kind == Document.Action(type: .dismiss, parameters: [:]))
+        #expect(action.kind == .dismiss)
     }
     
     @Test func setStateActionMatchesSchema() throws {
         // Schema: { type: "setState", path: string, value: any }
         let document = Document.Definition(id: "test", root: Document.RootComponent(children: []))
         let context = ResolutionContext.withoutTracking(document: document, stateStore: StateStore())
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
 
         let documentAction = Document.Action(
             type: .setState,
@@ -592,7 +628,7 @@ struct ActionDefinitionSchemaTests {
         // Schema: { type: "navigate", destination: string, presentation: enum }
         let document = Document.Definition(id: "test", root: Document.RootComponent(children: []))
         let context = ResolutionContext.withoutTracking(document: document, stateStore: StateStore())
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
 
         let documentAction = Document.Action(
             type: .navigate,
@@ -612,15 +648,15 @@ struct ActionDefinitionSchemaTests {
         // Schema: { type: "sequence", steps: [actionDefinition] }
         let document = Document.Definition(id: "test", root: Document.RootComponent(children: []))
         let context = ResolutionContext.withoutTracking(document: document, stateStore: StateStore())
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
 
-        let dismissAction1 = Document.Action(type: Document.Action(type: .dismiss, parameters: [:]), parameters: [:])
-        let dismissAction2 = Document.Action(type: Document.Action(type: .dismiss, parameters: [:]), parameters: [:])
+        let dismissAction1 = Document.Action(type: .dismiss, parameters: [:])
+        let dismissAction2 = Document.Action(type: .dismiss, parameters: [:])
         let documentAction = Document.Action(
             type: .sequence,
             parameters: ["steps": .arrayValue([dismissAction1, dismissAction2].map { action in
                 // Convert Document.Action to StateValue representation
-                var dict: [String: StateValue] = ["type": .stringValue(action.type.rawValue)]
+                var dict: [String: Document.StateValue] = ["type": .stringValue(action.type.rawValue)]
                 for (key, value) in action.parameters {
                     dict[key] = value
                 }
@@ -638,7 +674,7 @@ struct ActionDefinitionSchemaTests {
         // Schema: { type: "showAlert", title: string, message?: string, buttons: array }
         let document = Document.Definition(id: "test", root: Document.RootComponent(children: []))
         let context = ResolutionContext.withoutTracking(document: document, stateStore: StateStore())
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
 
         let documentAction = Document.Action(
             type: .showAlert,
@@ -685,7 +721,7 @@ struct ActionDefinitionSchemaTests {
         let context = ResolutionContext.withoutTracking(document: document, stateStore: StateStore())
 
         // Register a custom resolver for analytics.track
-        let registry = ActionResolverRegistry.default
+        let registry = CoreManifest.createRegistries().actionResolverRegistry
         let customKind = Document.ActionKind(rawValue: "analytics.track")
         struct AnalyticsResolver: ActionResolving {
             static let actionKind = Document.ActionKind(rawValue: "analytics.track")
@@ -695,7 +731,7 @@ struct ActionDefinitionSchemaTests {
                 for (key, value) in action.parameters {
                     executionData[key] = AnySendable(StateValueConverter.unwrap(value))
                 }
-                return IR.ActionDefinition(kind: actionKind, executionData: executionData)
+                return IR.ActionDefinition(kind: Self.actionKind, executionData: executionData)
             }
         }
         registry.register(AnalyticsResolver())

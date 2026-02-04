@@ -94,6 +94,12 @@ public protocol LayoutResolving {
     /// **Thread Safety**: Must be called from main thread due to component resolution.
     @MainActor
     func resolve(_ layout: Document.Layout, context: ResolutionContext) throws -> NodeResolutionResult
+
+    /// Resolves any layout node (layout, component, spacer, forEach, sectionLayout)
+    ///
+    /// **Thread Safety**: Must be called from main thread due to component resolution.
+    @MainActor
+    func resolveNode(_ node: Document.LayoutNode, context: ResolutionContext) throws -> NodeResolutionResult
 }
 
 // MARK: - Section Resolving Protocol

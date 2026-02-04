@@ -48,7 +48,10 @@ extension SectionLayoutTypeIdentifier {
 public protocol SwiftUISectionLayoutRendering {
     /// The layout type this renderer handles
     static var layoutTypeIdentifier: SectionLayoutTypeIdentifier { get }
-    
+
+    /// Initialize the renderer
+    init()
+
     /// Render a section with this layout type
     /// - Parameters:
     ///   - section: The section to render

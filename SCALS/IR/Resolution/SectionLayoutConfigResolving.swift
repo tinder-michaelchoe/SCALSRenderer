@@ -30,7 +30,10 @@ import Foundation
 public protocol SectionLayoutConfigResolving {
     /// The section layout type this resolver handles
     static var layoutType: Document.SectionType { get }
-    
+
+    /// Initialize the resolver
+    init()
+
     /// Resolve the document config into IR types
     /// - Parameter config: The document-level section layout configuration
     /// - Returns: The resolved IR section type and config

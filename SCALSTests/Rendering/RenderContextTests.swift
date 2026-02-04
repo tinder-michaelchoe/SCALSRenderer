@@ -77,7 +77,7 @@ func createContextTestActionContext(stateStore: StateStore) -> ActionContext {
         id: "test",
         root: Document.RootComponent(children: [])
     )
-    let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
+    let actionResolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
     return ActionContext(
         stateStore: stateStore,
         actionDefinitions: [:],
@@ -198,7 +198,7 @@ struct UIKitRenderContextActionContextTests {
             id: "test",
             root: Document.RootComponent(children: [])
         )
-        let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let actionResolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let actionContext = ActionContext(
             stateStore: stateStore,
             actionDefinitions: [:],

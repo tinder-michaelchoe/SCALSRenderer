@@ -323,9 +323,9 @@ extension IR.Style {
     }
 }
 
-// MARK: - ContainerNode.LayoutType → CSS
+// MARK: - LayoutType → CSS
 
-extension ContainerNode.LayoutType {
+extension LayoutType {
     /// CSS class name for this layout type
     public var cssClass: String {
         switch self {
@@ -391,9 +391,9 @@ extension GradientColor {
     }
 }
 
-// MARK: - ImageNode.Source → HTML
+// MARK: - ImageSource → HTML
 
-extension ImageNode.Source {
+extension ImageSource {
     /// Generate appropriate HTML/CSS for the image source
     public var htmlAttributes: (tag: String, attributes: [String: String]) {
         switch self {

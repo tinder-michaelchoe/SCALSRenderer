@@ -2,7 +2,7 @@
 //  ScalsRendererView+Convenience.swift
 //  ScalsModules
 //
-//  Convenience initializers for ScalsRendererView that use default registries.
+//  Convenience initializers for ScalsRendererView that use CoreManifest.
 //  Custom actions and custom components are merged/registered internally.
 //
 
@@ -10,7 +10,7 @@ import SCALS
 import SwiftUI
 
 extension ScalsRendererView {
-    /// Initialize with a document using default registries.
+    /// Initialize with a document using CoreManifest.
     ///
     /// - Parameters:
     ///   - document: The document definition to render
@@ -41,21 +41,25 @@ extension ScalsRendererView {
         actionDelegate: ScalsActionDelegate? = nil,
         designSystemProvider: (any DesignSystemProvider)? = nil
     ) {
+        // Create registries from CoreManifest
+        let registries = CoreManifest.createRegistries()
+
         // Merge custom actions into the registry
-        let registry = ActionRegistry.default.merging(customActions: customActions)
+        let actionRegistry = registries.actionRegistry.merging(customActions: customActions)
 
         self.init(
             document: document,
-            actionRegistry: registry,
-            componentRegistry: .default,
-            swiftuiRendererRegistry: .default,
+            actionRegistry: actionRegistry,
+            actionResolverRegistry: registries.actionResolverRegistry,
+            componentRegistry: registries.componentRegistry,
+            swiftuiRendererRegistry: registries.swiftUIRegistry,
             customComponents: customComponents,
             actionDelegate: actionDelegate,
             designSystemProvider: designSystemProvider
         )
     }
 
-    /// Initialize from a JSON string using default registries.
+    /// Initialize from a JSON string using CoreManifest.
     ///
     /// - Parameters:
     ///   - jsonString: JSON string defining the document
@@ -83,15 +87,19 @@ extension ScalsRendererView {
     ) {
         do {
             let document = try Document.Definition(jsonString: jsonString)
-            
+
+            // Create registries from CoreManifest
+            let registries = CoreManifest.createRegistries()
+
             // Merge custom actions into the registry
-            let registry = ActionRegistry.default.merging(customActions: customActions)
+            let actionRegistry = registries.actionRegistry.merging(customActions: customActions)
 
             self.init(
                 document: document,
-                actionRegistry: registry,
-                componentRegistry: .default,
-                swiftuiRendererRegistry: .default,
+                actionRegistry: actionRegistry,
+                actionResolverRegistry: registries.actionResolverRegistry,
+                componentRegistry: registries.componentRegistry,
+                swiftuiRendererRegistry: registries.swiftUIRegistry,
                 customComponents: customComponents,
                 actionDelegate: actionDelegate,
                 designSystemProvider: designSystemProvider,
@@ -105,7 +113,7 @@ extension ScalsRendererView {
         }
     }
 
-    /// Initialize from a Document with optional debug output using default registries.
+    /// Initialize from a Document with optional debug output using CoreManifest.
     public init(
         document: Document.Definition,
         customActions: [String: ActionClosure] = [:],
@@ -114,14 +122,18 @@ extension ScalsRendererView {
         designSystemProvider: (any DesignSystemProvider)? = nil,
         debugMode: Bool
     ) {
+        // Create registries from CoreManifest
+        let registries = CoreManifest.createRegistries()
+
         // Merge custom actions into the registry
-        let registry = ActionRegistry.default.merging(customActions: customActions)
+        let actionRegistry = registries.actionRegistry.merging(customActions: customActions)
 
         self.init(
             document: document,
-            actionRegistry: registry,
-            componentRegistry: .default,
-            swiftuiRendererRegistry: .default,
+            actionRegistry: actionRegistry,
+            actionResolverRegistry: registries.actionResolverRegistry,
+            componentRegistry: registries.componentRegistry,
+            swiftuiRendererRegistry: registries.swiftUIRegistry,
             customComponents: customComponents,
             actionDelegate: actionDelegate,
             designSystemProvider: designSystemProvider,
@@ -133,7 +145,7 @@ extension ScalsRendererView {
 // MARK: - Binding Configuration Convenience
 
 extension ScalsRendererBindingConfiguration {
-    /// Initialize with default registries
+    /// Initialize with CoreManifest registries
     public init(
         initialState: State? = nil,
         onStateChange: ((_ path: String, _ oldValue: Any?, _ newValue: Any?) -> Void)? = nil,
@@ -143,16 +155,20 @@ extension ScalsRendererBindingConfiguration {
         actionDelegate: ScalsActionDelegate? = nil,
         debugMode: Bool = false
     ) {
+        // Create registries from CoreManifest
+        let registries = CoreManifest.createRegistries()
+
         // Merge custom actions into the registry
-        let registry = ActionRegistry.default.merging(customActions: customActions)
+        let actionRegistry = registries.actionRegistry.merging(customActions: customActions)
 
         self.init(
             initialState: initialState,
             onStateChange: onStateChange,
             onAction: onAction,
-            actionRegistry: registry,
-            componentRegistry: .default,
-            swiftuiRendererRegistry: .default,
+            actionRegistry: actionRegistry,
+            actionResolverRegistry: registries.actionResolverRegistry,
+            componentRegistry: registries.componentRegistry,
+            swiftuiRendererRegistry: registries.swiftUIRegistry,
             customComponents: customComponents,
             actionDelegate: actionDelegate,
             debugMode: debugMode

@@ -33,8 +33,8 @@ public struct ResolutionResult {
 ///
 /// The Resolver orchestrates the resolution process by delegating to specialized resolvers:
 /// - `ComponentResolverRegistry` for component resolution
-/// - `LayoutResolver` for container layouts
-/// - `SectionLayoutResolver` for section-based layouts
+/// - `LayoutResolving` for container layouts (injected)
+/// - `SectionLayoutResolving` for section-based layouts (injected)
 /// - `ActionResolver` for action definitions
 ///
 /// Example:
@@ -42,7 +42,9 @@ public struct ResolutionResult {
 /// let resolver = Resolver(
 ///     document: document,
 ///     componentRegistry: ComponentResolverRegistry.default,
-///     actionResolverRegistry: ActionResolverRegistry.default
+///     actionResolverRegistry: ActionResolverRegistry.default,
+///     layoutResolver: LayoutResolver(componentRegistry: componentRegistry),
+///     sectionLayoutResolver: SectionLayoutResolver(componentRegistry: componentRegistry)
 /// )
 /// let renderTree = try resolver.resolve()
 ///
@@ -56,6 +58,8 @@ public struct Resolver {
     private let componentRegistry: ComponentResolverRegistry
     private let actionResolver: ActionResolver
     private let designSystemProvider: (any DesignSystemProvider)?
+    private let layoutResolver: any LayoutResolving
+    private let sectionLayoutResolver: any SectionLayoutResolving
 
     // MARK: - Initialization
 
@@ -63,11 +67,15 @@ public struct Resolver {
         document: Document.Definition,
         componentRegistry: ComponentResolverRegistry,
         actionResolverRegistry: ActionResolverRegistry,
+        layoutResolver: any LayoutResolving,
+        sectionLayoutResolver: any SectionLayoutResolving,
         designSystemProvider: (any DesignSystemProvider)? = nil
     ) {
         self.document = document
         self.componentRegistry = componentRegistry
         self.actionResolver = ActionResolver(registry: actionResolverRegistry)
+        self.layoutResolver = layoutResolver
+        self.sectionLayoutResolver = sectionLayoutResolver
         self.designSystemProvider = designSystemProvider
     }
 
@@ -208,9 +216,8 @@ public struct Resolver {
         let colorScheme = ColorSchemeConverter.convert(root.colorScheme)
         let resolvedStyle = context.styleResolver.resolve(root.styleId)
 
-        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
         let children = try root.children.map { child -> RenderNode in
-            try resolveNode(child, context: context, layoutResolver: layoutResolver).renderNode
+            try resolveNode(child, context: context).renderNode
         }
 
         return RootNode(
@@ -242,24 +249,17 @@ public struct Resolver {
         let resolvedStyle = context.styleResolver.resolve(root.styleId)
 
         // Create view node for root
-        let viewNode = ViewNode(
-            id: "root",
-            nodeType: .root(RootNodeData(
-                backgroundColor: root.backgroundColor,
-                colorScheme: colorScheme
-            ))
-        )
+        let viewNode = ViewNode(id: "root")
 
         // Update context with root as parent
         let childContext = context.withParent(viewNode)
-        let layoutResolver = LayoutResolver(componentRegistry: componentRegistry)
 
         // Resolve children with tracking
         var renderChildren: [RenderNode] = []
         var viewChildren: [ViewNode] = []
 
         for child in root.children {
-            let result = try resolveNode(child, context: childContext, layoutResolver: layoutResolver)
+            let result = try resolveNode(child, context: childContext)
             renderChildren.append(result.renderNode)
             if let childViewNode = result.viewNode {
                 viewChildren.append(childViewNode)
@@ -294,44 +294,11 @@ public struct Resolver {
     @MainActor
     private func resolveNode(
         _ node: Document.LayoutNode,
-        context: ResolutionContext,
-        layoutResolver: LayoutResolver
+        context: ResolutionContext
     ) throws -> NodeResolutionResult {
-        switch node {
-        case .layout(let layout):
-            return try layoutResolver.resolve(layout, context: context)
-
-        case .sectionLayout(let sectionLayout):
-            let sectionResolver = SectionLayoutResolver(componentRegistry: componentRegistry)
-            return try sectionResolver.resolve(sectionLayout, context: context)
-
-        case .forEach:
-            return try layoutResolver.resolveNode(node, context: context)
-
-        case .component(let component):
-            let result = try componentRegistry.resolve(component, context: context)
-            return NodeResolutionResult(renderNode: result.renderNode, viewNode: result.viewNode)
-
-        case .spacer(let spacer):
-            let spacerNode = SpacerNode(
-                minLength: spacer.minLength,
-                width: spacer.width,
-                height: spacer.height
-            )
-
-            let viewNode: ViewNode?
-            if context.isTracking {
-                viewNode = ViewNode(id: UUID().uuidString, nodeType: .spacer)
-                viewNode?.parent = context.parentViewNode
-            } else {
-                viewNode = nil
-            }
-
-            return NodeResolutionResult(
-                renderNode: RenderNode(spacerNode),
-                viewNode: viewNode
-            )
-        }
+        // Delegate all node resolution to the layout resolver
+        // This keeps SCALS completely free of concrete node types
+        return try layoutResolver.resolveNode(node, context: context)
     }
 }
 

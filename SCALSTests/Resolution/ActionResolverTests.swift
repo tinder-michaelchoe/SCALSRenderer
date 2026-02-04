@@ -31,7 +31,7 @@ fileprivate func makeTestContext() -> ResolutionContext {
 struct ActionResolverDismissTests {
 
     @Test func resolvesDismissAction() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .dismiss, parameters: [:])
         let context = makeTestContext()
 
@@ -46,7 +46,7 @@ struct ActionResolverDismissTests {
 struct ActionResolverSetStateTests {
 
     @Test func resolvesSetStateWithLiteralString() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .setState, parameters: [
             "path": .stringValue("user.name"),
             "value": .stringValue("John")
@@ -63,7 +63,7 @@ struct ActionResolverSetStateTests {
     }
 
     @Test func resolvesSetStateWithLiteralInt() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .setState, parameters: [
             "path": .stringValue("counter"),
             "value": .intValue(42)
@@ -80,7 +80,7 @@ struct ActionResolverSetStateTests {
     }
 
     @Test func resolvesSetStateWithLiteralBool() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .setState, parameters: [
             "path": .stringValue("isActive"),
             "value": .boolValue(true)
@@ -97,7 +97,7 @@ struct ActionResolverSetStateTests {
     }
 
     @Test func resolvesSetStateWithExpression() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .setState, parameters: [
             "path": .stringValue("count"),
             "value": .objectValue(["$expr": .stringValue("${count} + 1")])
@@ -114,7 +114,7 @@ struct ActionResolverSetStateTests {
     }
 
     @Test func resolvesSetStateWithNestedPath() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .setState, parameters: [
             "path": .stringValue("user.profile.settings.theme"),
             "value": .stringValue("dark")
@@ -134,7 +134,7 @@ struct ActionResolverSetStateTests {
 struct ActionResolverToggleStateTests {
 
     @Test func resolvesToggleStateAction() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .toggleState, parameters: [
             "path": .stringValue("isEnabled")
         ])
@@ -148,7 +148,7 @@ struct ActionResolverToggleStateTests {
     }
 
     @Test func resolvesToggleStateWithNestedPath() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .toggleState, parameters: [
             "path": .stringValue("settings.notifications.enabled")
         ])
@@ -167,7 +167,7 @@ struct ActionResolverToggleStateTests {
 struct ActionResolverShowAlertTests {
 
     @Test func resolvesShowAlertWithTitleOnly() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .showAlert, parameters: [
             "title": .stringValue("Alert Title")
         ])
@@ -185,7 +185,7 @@ struct ActionResolverShowAlertTests {
     }
 
     @Test func resolvesShowAlertWithStaticMessage() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .showAlert, parameters: [
             "title": .stringValue("Error"),
             "message": .stringValue("Something went wrong")
@@ -204,7 +204,7 @@ struct ActionResolverShowAlertTests {
     }
 
     @Test func resolvesShowAlertWithTemplateMessage() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .showAlert, parameters: [
             "title": .stringValue("Welcome"),
             "message": .objectValue(["$template": .stringValue("Hello ${username}!")])
@@ -223,7 +223,7 @@ struct ActionResolverShowAlertTests {
     }
 
     @Test func resolvesShowAlertWithButtons() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .showAlert, parameters: [
             "title": .stringValue("Confirm"),
             "buttons": .arrayValue([
@@ -245,7 +245,7 @@ struct ActionResolverShowAlertTests {
     }
 
     @Test func resolvesShowAlertWithButtonAction() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .showAlert, parameters: [
             "title": .stringValue("Delete?"),
             "buttons": .arrayValue([
@@ -267,7 +267,7 @@ struct ActionResolverShowAlertTests {
     }
 
     @Test func resolvesShowAlertWithDefaultButtonStyle() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .showAlert, parameters: [
             "title": .stringValue("Info"),
             "buttons": .arrayValue([
@@ -290,7 +290,7 @@ struct ActionResolverShowAlertTests {
 struct ActionResolverNavigateTests {
 
     @Test func resolvesNavigateWithDefaultPresentation() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .navigate, parameters: [
             "destination": .stringValue("settings")
         ])
@@ -306,7 +306,7 @@ struct ActionResolverNavigateTests {
     }
 
     @Test func resolvesNavigateWithPush() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .navigate, parameters: [
             "destination": .stringValue("profile"),
             "presentation": .stringValue("push")
@@ -323,7 +323,7 @@ struct ActionResolverNavigateTests {
     }
 
     @Test func resolvesNavigateWithPresent() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .navigate, parameters: [
             "destination": .stringValue("modal"),
             "presentation": .stringValue("present")
@@ -338,7 +338,7 @@ struct ActionResolverNavigateTests {
     }
 
     @Test func resolvesNavigateWithFullScreen() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .navigate, parameters: [
             "destination": .stringValue("fullscreen"),
             "presentation": .stringValue("fullScreen")
@@ -358,7 +358,7 @@ struct ActionResolverNavigateTests {
 struct ActionResolverSequenceTests {
 
     @Test func resolvesEmptySequence() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .sequence, parameters: [
             "steps": .arrayValue([])
         ])
@@ -372,7 +372,7 @@ struct ActionResolverSequenceTests {
     }
 
     @Test func resolvesSingleStepSequence() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .sequence, parameters: [
             "steps": .arrayValue([
                 .objectValue(["type": .stringValue("dismiss")])
@@ -389,7 +389,7 @@ struct ActionResolverSequenceTests {
     }
 
     @Test func resolvesMultiStepSequence() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .sequence, parameters: [
             "steps": .arrayValue([
                 .objectValue([
@@ -417,7 +417,7 @@ struct ActionResolverSequenceTests {
     }
 
     @Test func resolvesNestedSequence() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(type: .sequence, parameters: [
             "steps": .arrayValue([
                 .objectValue([
@@ -447,7 +447,7 @@ struct ActionResolverSequenceTests {
 struct ActionResolverCustomTests {
 
     @Test func throwsErrorForUnregisteredActionType() {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(
             type: Document.ActionKind(rawValue: "analytics.track"),
             parameters: [:]
@@ -460,7 +460,7 @@ struct ActionResolverCustomTests {
     }
 
     @Test func throwsErrorForUnregisteredActionWithParameters() {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let action = Document.Action(
             type: Document.ActionKind(rawValue: "api.call"),
             parameters: [
@@ -477,7 +477,7 @@ struct ActionResolverCustomTests {
 
     @Test func canResolveCustomActionWithRegisteredResolver() throws {
         // Create a registry with a custom resolver
-        let registry = ActionResolverRegistry.default
+        let registry = CoreManifest.createRegistries().actionResolverRegistry
 
         // Define custom action kind
         let customKind = Document.ActionKind(rawValue: "custom.test")
@@ -506,7 +506,7 @@ struct ActionResolverCustomTests {
 struct ActionResolverResolveAllTests {
 
     @Test func resolvesNilActionsToEmptyDictionary() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let context = makeTestContext()
 
         let result = try resolver.resolveAll(nil, context: context)
@@ -515,7 +515,7 @@ struct ActionResolverResolveAllTests {
     }
 
     @Test func resolvesEmptyActionsToEmptyDictionary() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let context = makeTestContext()
 
         let result = try resolver.resolveAll([:], context: context)
@@ -524,7 +524,7 @@ struct ActionResolverResolveAllTests {
     }
 
     @Test func resolvesMultipleActions() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let actions: [String: Document.Action] = [
             "close": Document.Action(type: .dismiss, parameters: [:]),
             "toggle": Document.Action(type: .toggleState, parameters: ["path": .stringValue("flag")]),
@@ -541,7 +541,7 @@ struct ActionResolverResolveAllTests {
     }
 
     @Test func preservesActionIds() throws {
-        let resolver = ActionResolver(registry: ActionResolverRegistry.default)
+        let resolver = ActionResolver(registry: CoreManifest.createRegistries().actionResolverRegistry)
         let actions: [String: Document.Action] = [
             "mySpecialAction": Document.Action(type: .dismiss, parameters: [:])
         ]

@@ -263,7 +263,7 @@ These components are still thread-safe and protected by NSLock:
 
 ```swift
 // Component resolvers do this:
-let viewNode = ViewNode(id: nodeId, nodeType: .button(...))  // ViewNode is a class
+let viewNode = ViewNode(id: nodeId)  // ViewNode is a class
 context.tracker?.recordRead(path)  // @MainActor method
 ```
 

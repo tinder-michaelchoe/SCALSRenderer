@@ -15,7 +15,7 @@ public enum iOS26TailwindClasses {
 
     /// Generate flex layout classes for ContainerNode
     public static func flexLayout(
-        type: ContainerNode.LayoutType,
+        type: LayoutType,
         spacing: CGFloat,
         alignment: IR.Alignment
     ) -> [String] {

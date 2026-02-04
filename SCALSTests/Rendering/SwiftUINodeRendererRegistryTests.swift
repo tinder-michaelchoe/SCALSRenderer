@@ -58,16 +58,17 @@ struct MockSwiftUICustomRenderer: SwiftUINodeRendering {
 /// Creates a test SwiftUIRenderContext
 @MainActor
 func createSwiftUITestContext(registry: SwiftUINodeRendererRegistry) -> SwiftUIRenderContext {
+    let registries = CoreManifest.createRegistries()
     let stateStore = StateStore()
     let document = Document.Definition(
         id: "test",
         root: Document.RootComponent(children: [])
     )
-    let actionResolver = ActionResolver(registry: ActionResolverRegistry.default)
+    let actionResolver = ActionResolver(registry: registries.actionResolverRegistry)
     let actionContext = ActionContext(
         stateStore: stateStore,
         actionDefinitions: [:],
-        registry: ActionRegistry(),
+        registry: registries.actionRegistry,
         actionResolver: actionResolver,
         document: document
     )
