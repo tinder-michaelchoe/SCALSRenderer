@@ -471,7 +471,6 @@ final class TextNodeSnapshotTests: XCTestCase {
             Text("This is a multiline text example that should wrap to multiple lines when the content is too long to fit on a single line.")
                 .font(.system(size: 16))
                 .foregroundColor(.black)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }, size: StandardSnapshotSizes.compact)
 
         assertSnapshot(of: swiftUIImage, as: .image, named: "text-multiline-scals", record: false)
@@ -534,8 +533,6 @@ final class TextNodeSnapshotTests: XCTestCase {
                 .padding(.bottom, 16)
                 .padding(.leading, 32)
                 .padding(.trailing, 32)
-                .background(Color(red: 0.9, green: 0.9, blue: 0.9))
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }, size: StandardSnapshotSizes.compact)
 
         assertSnapshot(of: swiftUIImage, as: .image, named: "text-padding-scals", record: false)

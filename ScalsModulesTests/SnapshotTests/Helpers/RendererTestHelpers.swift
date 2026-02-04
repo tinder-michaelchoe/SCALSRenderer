@@ -182,7 +182,7 @@ struct RendererTestHelpers {
         // The ScrollView provides the sizing context that containerRelativeFrame needs to
         // calculate fractional widths/heights. Without this, fractional dimensions won't work.
         let alignment: SwiftUI.Alignment = pinToEdges ? .topLeading : .center
-        let wrappedView = ScrollView([.horizontal, .vertical]) {
+        let wrappedView = Group {
             view
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: alignment)
         }

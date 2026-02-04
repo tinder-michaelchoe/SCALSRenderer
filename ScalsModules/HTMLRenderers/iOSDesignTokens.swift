@@ -387,6 +387,15 @@ body {
     display: block;
 }
 
+/* Inner wrapper for centering text content within explicit dimensions */
+.ios-text-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
 .ios-text--secondary {
     color: var(--ios-secondary-label);
 }
@@ -476,11 +485,19 @@ body {
 
 .ios-zstack {
     display: grid;
-    grid-template-areas: "stack";
+    place-items: center;
 }
 
 .ios-zstack > * {
-    grid-area: stack;
+    grid-row: 1;
+    grid-column: 1;
+}
+
+/* ZStack children need flex centering for content alignment */
+.ios-zstack > .ios-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .ios-spacer {

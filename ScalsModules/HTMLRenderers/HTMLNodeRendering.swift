@@ -89,16 +89,16 @@ public struct HTMLNodeRenderer {
     }
     
     // MARK: - Container Rendering
-    
+
     private mutating func renderContainer(_ container: ContainerNode) -> String {
         let className = containerClassName(for: container)
         let id = container.id.map { " id=\"\($0.htmlEscaped)\"" } ?? ""
-        
+
         var childrenHTML = ""
         for child in container.children {
             childrenHTML += renderNode(child)
         }
-        
+
         return """
         <div\(id) class="\(className)">
         \(childrenHTML.indented(by: 4))
@@ -196,7 +196,7 @@ public struct HTMLNodeRenderer {
     
     private mutating func renderText(_ text: TextNode) -> String {
         var classes = ["ios-text"]
-        
+
         // Always add a generated class name that matches CSSGenerator
         textCounter += 1
         if let id = text.id {
@@ -204,16 +204,16 @@ public struct HTMLNodeRenderer {
         } else {
             classes.append("scals-text-\(textCounter)")
         }
-        
+
         // Add padding classes if needed
         if !text.padding.isEmpty {
             classes.append("has-padding")
         }
-        
+
         let id = text.id.map { " id=\"\($0.htmlEscaped)\"" } ?? ""
         let className = classes.joined(separator: " ")
         let content = text.content.htmlEscaped
-        
+
         // Data attributes for dynamic content
         var dataAttrs = ""
         if let bindingPath = text.bindingPath {
@@ -222,7 +222,7 @@ public struct HTMLNodeRenderer {
         if let bindingTemplate = text.bindingTemplate {
             dataAttrs += " data-binding-template=\"\(bindingTemplate.htmlEscaped)\""
         }
-        
+
         return "<span\(id) class=\"\(className)\"\(dataAttrs)>\(content)</span>"
     }
     

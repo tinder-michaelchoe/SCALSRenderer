@@ -97,7 +97,7 @@ extension IR.HorizontalAlignment {
         }
     }
     
-    /// Convert to CSS justify-content
+    /// Convert to CSS justify-content (for flexbox)
     public var cssJustifyContent: String {
         switch self {
         case .leading: return "flex-start"
@@ -105,17 +105,35 @@ extension IR.HorizontalAlignment {
         case .trailing: return "flex-end"
         }
     }
+
+    /// Convert to CSS Grid alignment (place-items column value)
+    public var cssGridJustify: String {
+        switch self {
+        case .leading: return "start"
+        case .center: return "center"
+        case .trailing: return "end"
+        }
+    }
 }
 
 // MARK: - IR.VerticalAlignment → CSS
 
 extension IR.VerticalAlignment {
-    /// Convert to CSS align-items
+    /// Convert to CSS align-items (for flexbox)
     public var cssAlignItems: String {
         switch self {
         case .top: return "flex-start"
         case .center: return "center"
         case .bottom: return "flex-end"
+        }
+    }
+
+    /// Convert to CSS Grid alignment (place-items row value)
+    public var cssGridAlign: String {
+        switch self {
+        case .top: return "start"
+        case .center: return "center"
+        case .bottom: return "end"
         }
     }
 }
@@ -431,14 +449,16 @@ extension ButtonStateStyle {
         rules["font-weight"] = fontWeight.cssValue
 
         // Background & Border
-        if let bgColor = backgroundColor {
-            rules["background-color"] = bgColor.cssRGBA
-        }
+        // Always output background-color to override base .ios-button class default
+        rules["background-color"] = backgroundColor?.cssRGBA ?? "transparent"
         if cornerRadius > 0 {
             rules["border-radius"] = "\(Int(cornerRadius))px"
         }
         if let border = border {
             rules["border"] = "\(Int(border.width))px solid \(border.color.cssRGBA)"
+        } else {
+            // Override base .ios-button border: none if no border specified
+            rules["border"] = "none"
         }
 
         // Shadow

@@ -55,7 +55,6 @@ final class ContainerNodeSnapshotTests: XCTestCase {
             }
             .font(.system(size: 16))
             .foregroundColor(.black)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }, size: StandardSnapshotSizes.compact)
 
         assertSnapshot(of: swiftUIImage, as: .image, named: "vstack-basic-scals", record: false)
@@ -102,7 +101,6 @@ final class ContainerNodeSnapshotTests: XCTestCase {
             }
             .font(.system(size: 16))
             .foregroundColor(.black)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }, size: StandardSnapshotSizes.compact)
 
         assertSnapshot(of: swiftUIImage, as: .image, named: "hstack-basic-scals", record: false)
@@ -115,13 +113,12 @@ final class ContainerNodeSnapshotTests: XCTestCase {
         let children: [RenderNode] = [
             .text(TextNode(
                 content: "Background",
-                backgroundColor: IR.Color(red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0),
                 width: .absolute(100),
                 height: .absolute(100)
             )),
             .text(TextNode(
                 content: "Front",
-                textColor: .black,
+                textColor: .green,
                 fontSize: 20,
                 fontWeight: .bold
             ))
@@ -154,12 +151,10 @@ final class ContainerNodeSnapshotTests: XCTestCase {
             ZStack {
                 Text("Background")
                     .frame(width: 100, height: 100)
-                    .background(Color(red: 0.9, green: 0.9, blue: 0.9))
                 Text("Front")
                     .font(.system(size: 20, weight: .bold))
-                    .foregroundColor(.black)
+                    .foregroundColor(.green)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         }, size: StandardSnapshotSizes.compact)
 
         assertSnapshot(of: swiftUIImage, as: .image, named: "zstack-basic-scals", record: false)
@@ -215,7 +210,6 @@ final class ContainerNodeSnapshotTests: XCTestCase {
                 }
                 .font(.system(size: 16))
                 .foregroundColor(.black)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }, size: StandardSnapshotSizes.compact)
 
             assertSnapshot(of: swiftUIImage, as: .image, named: "vstack-spacing-\(name)-scals", record: false)
@@ -281,7 +275,6 @@ final class ContainerNodeSnapshotTests: XCTestCase {
                 }
                 .font(.system(size: 16))
                 .foregroundColor(.black)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             }, size: StandardSnapshotSizes.compact)
 
             assertSnapshot(of: swiftUIImage, as: .image, named: "vstack-align-\(name)-scals", record: false)

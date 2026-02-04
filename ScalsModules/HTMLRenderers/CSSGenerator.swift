@@ -185,15 +185,28 @@ public struct CSSGenerator {
             rules.append("display: flex")
             rules.append("flex-direction: row")
         case .zstack:
-            rules.append("display: grid")
-            rules.append("grid-template-areas: \"stack\"")
+            // ZStack layout is handled by base .ios-zstack class
+            // Don't override here to preserve grid stacking behavior
+            break
         }
 
         // Alignment
-        let (alignItems, justifyContent) = container.alignment.cssFlexAlignment
-        if container.layoutType != .zstack {
-            rules.append("align-items: \(alignItems)")
-            rules.append("justify-content: \(justifyContent)")
+        // For flexbox, align-items controls cross-axis, justify-content controls main-axis.
+        // VStack (column): cross-axis is horizontal, main-axis is vertical
+        // HStack (row): cross-axis is vertical, main-axis is horizontal
+        // ZStack: alignment is handled via the test helper centering for now
+        switch container.layoutType {
+        case .vstack:
+            // VStack: horizontal alignment → align-items, vertical → justify-content
+            rules.append("align-items: \(container.alignment.horizontal.cssJustifyContent)")
+            rules.append("justify-content: \(container.alignment.vertical.cssAlignItems)")
+        case .hstack:
+            // HStack: vertical alignment → align-items, horizontal → justify-content
+            rules.append("align-items: \(container.alignment.vertical.cssAlignItems)")
+            rules.append("justify-content: \(container.alignment.horizontal.cssJustifyContent)")
+        case .zstack:
+            // ZStack alignment is handled in base CSS
+            break
         }
 
         // Spacing (gap)
@@ -240,10 +253,13 @@ public struct CSSGenerator {
             rules.append("max-height: \(maxHeight.cssValue)")
         }
 
+        var css = ""
         if !rules.isEmpty {
-            return ".\(className) {\n    \(rules.joined(separator: ";\n    "));\n}\n\n"
+            css += ".\(className) {\n    \(rules.joined(separator: ";\n    "));\n}\n\n"
         }
-        return ""
+
+
+        return css
     }
 
     // MARK: - Section Layout Styles
@@ -370,6 +386,7 @@ public struct CSSGenerator {
         if let height = text.height {
             rules.append("height: \(height.cssValue)")
         }
+
 
         return ".\(className) {\n    \(rules.joined(separator: ";\n    "));\n}\n\n"
     }
