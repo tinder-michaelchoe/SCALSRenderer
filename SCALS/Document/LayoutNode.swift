@@ -95,6 +95,63 @@ extension Document {
             self.horizontal = horizontal
             self.vertical = vertical
         }
+
+        // Custom decoding to support both string shortcuts and object format
+        public init(from decoder: Decoder) throws {
+            let container = try decoder.singleValueContainer()
+
+            // Try to decode as a string shortcut first
+            if let alignmentString = try? container.decode(String.self) {
+                switch alignmentString {
+                case "topLeading":
+                    self.horizontal = .leading
+                    self.vertical = .top
+                case "top":
+                    self.horizontal = .center
+                    self.vertical = .top
+                case "topTrailing":
+                    self.horizontal = .trailing
+                    self.vertical = .top
+                case "leading":
+                    self.horizontal = .leading
+                    self.vertical = .center
+                case "center":
+                    self.horizontal = .center
+                    self.vertical = .center
+                case "trailing":
+                    self.horizontal = .trailing
+                    self.vertical = .center
+                case "bottomLeading":
+                    self.horizontal = .leading
+                    self.vertical = .bottom
+                case "bottom":
+                    self.horizontal = .center
+                    self.vertical = .bottom
+                case "bottomTrailing":
+                    self.horizontal = .trailing
+                    self.vertical = .bottom
+                default:
+                    // Unknown string, default to center
+                    self.horizontal = .center
+                    self.vertical = .center
+                }
+            } else {
+                // Try to decode as an object with horizontal/vertical
+                let objectContainer = try decoder.container(keyedBy: CodingKeys.self)
+                self.horizontal = try objectContainer.decodeIfPresent(HorizontalAlignment.self, forKey: .horizontal)
+                self.vertical = try objectContainer.decodeIfPresent(VerticalAlignment.self, forKey: .vertical)
+            }
+        }
+
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.container(keyedBy: CodingKeys.self)
+            try container.encodeIfPresent(horizontal, forKey: .horizontal)
+            try container.encodeIfPresent(vertical, forKey: .vertical)
+        }
+
+        enum CodingKeys: String, CodingKey {
+            case horizontal, vertical
+        }
     }
 }
 
@@ -109,6 +166,7 @@ extension Document {
         public let trailing: CGFloat?
         public let horizontal: CGFloat?
         public let vertical: CGFloat?
+        public let all: CGFloat?
 
         public init(
             top: CGFloat? = nil,
@@ -116,7 +174,8 @@ extension Document {
             leading: CGFloat? = nil,
             trailing: CGFloat? = nil,
             horizontal: CGFloat? = nil,
-            vertical: CGFloat? = nil
+            vertical: CGFloat? = nil,
+            all: CGFloat? = nil
         ) {
             self.top = top
             self.bottom = bottom
@@ -124,13 +183,15 @@ extension Document {
             self.trailing = trailing
             self.horizontal = horizontal
             self.vertical = vertical
+            self.all = all
         }
 
         /// Resolves the padding values, preferring specific values over general ones
-        public var resolvedTop: CGFloat { top ?? vertical ?? 0 }
-        public var resolvedBottom: CGFloat { bottom ?? vertical ?? 0 }
-        public var resolvedLeading: CGFloat { leading ?? horizontal ?? 0 }
-        public var resolvedTrailing: CGFloat { trailing ?? horizontal ?? 0 }
+        /// Priority: specific (top/bottom/leading/trailing) > axis (vertical/horizontal) > all > 0
+        public var resolvedTop: CGFloat { top ?? vertical ?? all ?? 0 }
+        public var resolvedBottom: CGFloat { bottom ?? vertical ?? all ?? 0 }
+        public var resolvedLeading: CGFloat { leading ?? horizontal ?? all ?? 0 }
+        public var resolvedTrailing: CGFloat { trailing ?? horizontal ?? all ?? 0 }
     }
 }
 
@@ -166,6 +227,7 @@ extension Document {
         public let type: LayoutType
         public let alignment: Alignment?
         public let horizontalAlignment: HorizontalAlignment?
+        public let verticalAlignment: VerticalAlignment?
         public let spacing: CGFloat?
         public let padding: Padding?
         public let children: [LayoutNode]
@@ -193,17 +255,44 @@ extension Document {
             styleId = try container.decodeIfPresent(String.self, forKey: .styleId)
             style = try container.decodeIfPresent(Style.self, forKey: .style)
 
-            // Try to decode alignment as Alignment first (for zstack)
-            if let alignmentObj = try? container.decodeIfPresent(Alignment.self, forKey: .alignment) {
-                alignment = alignmentObj
-                horizontalAlignment = nil
-            } else if let alignStr = try? container.decodeIfPresent(HorizontalAlignment.self, forKey: .alignment) {
-                // For vstack/hstack, alignment is a simple string
-                horizontalAlignment = alignStr
-                alignment = nil
-            } else {
-                alignment = nil
-                horizontalAlignment = nil
+            // Decode alignment based on layout type
+            // This ensures we decode the correct alignment type for each layout
+            switch type {
+            case .vstack:
+                // VStack uses horizontal alignment (leading, center, trailing)
+                if let hAlign = try? container.decodeIfPresent(HorizontalAlignment.self, forKey: .alignment) {
+                    horizontalAlignment = hAlign
+                    alignment = nil
+                    verticalAlignment = nil
+                } else {
+                    alignment = nil
+                    horizontalAlignment = nil
+                    verticalAlignment = nil
+                }
+
+            case .hstack:
+                // HStack uses vertical alignment (top, center, bottom)
+                if let vAlign = try? container.decodeIfPresent(VerticalAlignment.self, forKey: .alignment) {
+                    verticalAlignment = vAlign
+                    alignment = nil
+                    horizontalAlignment = nil
+                } else {
+                    alignment = nil
+                    horizontalAlignment = nil
+                    verticalAlignment = nil
+                }
+
+            case .zstack:
+                // ZStack uses 2D alignment (can be string shortcut or object)
+                if let alignmentObj = try? container.decodeIfPresent(Alignment.self, forKey: .alignment) {
+                    alignment = alignmentObj
+                    horizontalAlignment = nil
+                    verticalAlignment = nil
+                } else {
+                    alignment = nil
+                    horizontalAlignment = nil
+                    verticalAlignment = nil
+                }
             }
         }
 
@@ -220,6 +309,8 @@ extension Document {
                 try container.encode(alignment, forKey: .alignment)
             } else if let horizontalAlignment = horizontalAlignment {
                 try container.encode(horizontalAlignment, forKey: .alignment)
+            } else if let verticalAlignment = verticalAlignment {
+                try container.encode(verticalAlignment, forKey: .alignment)
             }
         }
 
@@ -227,6 +318,7 @@ extension Document {
             type: LayoutType,
             alignment: Alignment? = nil,
             horizontalAlignment: HorizontalAlignment? = nil,
+            verticalAlignment: VerticalAlignment? = nil,
             spacing: CGFloat? = nil,
             padding: Padding? = nil,
             children: [LayoutNode],
@@ -237,6 +329,7 @@ extension Document {
             self.type = type
             self.alignment = alignment
             self.horizontalAlignment = horizontalAlignment
+            self.verticalAlignment = verticalAlignment
             self.spacing = spacing
             self.padding = padding
             self.children = children

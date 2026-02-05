@@ -65,7 +65,8 @@ public let slidersJSON = """
             },
             { "type": "slider", "bind": "temperature", "minValue": 60, "maxValue": 90, "styleId": "redTint" }
           ]
-        }
+        },
+        { "type": "spacer" }
       ]
     }]
   }

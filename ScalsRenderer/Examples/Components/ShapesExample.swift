@@ -133,6 +133,7 @@ public let shapesJSON = """
         {
           "type": "vstack",
           "styleId": "cardBackground",
+          "padding": { "all": 16 },
           "spacing": 8,
           "children": [
             { "type": "label", "text": "Card with Background", "styleId": "cardTitle" },

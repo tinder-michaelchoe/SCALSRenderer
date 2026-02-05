@@ -38,14 +38,13 @@ public protocol ComponentProperties: Codable, Sendable {
 /// Registry for component properties decoders.
 ///
 /// Allows custom components to register their properties types for decoding.
-public final class ComponentPropertiesRegistry: @unchecked Sendable {
+public final class ComponentPropertiesRegistry {
+
+    let lock = NSRecursiveLock()
 
     // MARK: - Storage
 
     private var decoders: [Document.ComponentKind: any ComponentPropertiesDecoding] = [:]
-    #if !arch(wasm32)
-    private let queue = DispatchQueue(label: "com.clads.componentPropertiesRegistry", attributes: .concurrent)
-    #endif
 
     // MARK: - Initialization
 
@@ -55,53 +54,36 @@ public final class ComponentPropertiesRegistry: @unchecked Sendable {
 
     /// Registers a properties type for a component kind
     public func register<T: ComponentProperties>(_ type: T.Type) {
+        lock.lock()
+        defer { lock.unlock() }
         let decoder = ComponentPropertiesDecoder<T>()
-        #if arch(wasm32)
         decoders[T.kind] = decoder
-        #else
-        queue.async(flags: .barrier) {
-            self.decoders[T.kind] = decoder
-        }
-        #endif
     }
 
     /// Decodes properties for a component kind from a decoder
     public func decode(kind: Document.ComponentKind, from decoder: Decoder) throws -> (any ComponentProperties)? {
-        #if arch(wasm32)
-        let result = decoders[kind]
-        #else
+        lock.lock()
+        defer { lock.unlock() }
         var result: (any ComponentPropertiesDecoding)?
-        queue.sync {
-            result = decoders[kind]
-        }
-        #endif
+        result = decoders[kind]
         return try result?.decode(from: decoder)
     }
 
     /// Decodes properties for a component kind from additional properties dictionary
     public func decode(kind: Document.ComponentKind, from dictionary: [String: AnyCodableValue]) throws -> (any ComponentProperties)? {
-        #if arch(wasm32)
-        let result = decoders[kind]
-        #else
+        lock.lock()
+        defer { lock.unlock() }
         var result: (any ComponentPropertiesDecoding)?
-        queue.sync {
-            result = decoders[kind]
-        }
-        #endif
+        result = decoders[kind]
         return try result?.decode(from: dictionary)
     }
 
     /// Checks if a properties decoder is registered for a kind
     public func hasDecoder(for kind: Document.ComponentKind) -> Bool {
-        #if arch(wasm32)
-        return decoders[kind] != nil
-        #else
-        var result = false
-        queue.sync {
-            result = decoders[kind] != nil
-        }
+        lock.lock()
+        defer { lock.unlock() }
+        let result = decoders[kind] != nil
         return result
-        #endif
     }
 }
 

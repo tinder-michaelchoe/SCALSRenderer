@@ -28,4 +28,10 @@ extension Document.ActionKind {
 
     /// Execute multiple actions in sequence
     public static let sequence = Document.ActionKind(rawValue: "sequence")
+
+    /// Open a URL in Safari
+    public static let openURL = Document.ActionKind(rawValue: "openURL")
+
+    /// Make an HTTP request
+    public static let request = Document.ActionKind(rawValue: "request")
 }

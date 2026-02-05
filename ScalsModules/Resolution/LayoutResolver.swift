@@ -89,7 +89,7 @@ public struct LayoutResolver: LayoutResolving {
         case .vstack:
             return (.vstack, IR.Alignment(forVStack: layout.horizontalAlignment))
         case .hstack:
-            return (.hstack, IR.Alignment(forHStack: layout.alignment?.vertical))
+            return (.hstack, IR.Alignment(forHStack: layout.verticalAlignment))
         case .zstack:
             return (.zstack, IR.Alignment(forZStack: layout.alignment))
         }

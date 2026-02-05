@@ -41,7 +41,8 @@ public let togglesJSON = """
             { "type": "spacer" },
             { "type": "toggle", "bind": "autoSave", "styleId": "orangeTint" }
           ]
-        }
+        },
+        { "type": "spacer" }
       ]
     }]
   }

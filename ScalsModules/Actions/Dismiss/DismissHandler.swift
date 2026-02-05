@@ -15,7 +15,11 @@ public struct DismissHandler: ActionHandler {
 
     @MainActor
     public func execute(definition: IR.ActionDefinition, context: ActionExecutionContext) async {
-        // Dismiss the current view
-        context.dismiss()
+        // Access unified presentation handler
+        guard let handler: PresentationHandler = context.presenter(for: PresenterKey.presentation) else {
+            print("DismissHandler: No presentation handler registered")
+            return
+        }
+        handler.dismiss()
     }
 }

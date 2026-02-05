@@ -361,11 +361,36 @@ public struct ExpressionEvaluator {
         }
 
         // Normalize spacing around operators for easier parsing
+        // Be careful with minus sign - don't add spaces if it's a negative number
         normalized = normalized.replacingOccurrences(of: "%", with: " % ")
         normalized = normalized.replacingOccurrences(of: "*", with: " * ")
         normalized = normalized.replacingOccurrences(of: "/", with: " / ")
         normalized = normalized.replacingOccurrences(of: "+", with: " + ")
-        normalized = normalized.replacingOccurrences(of: "-", with: " - ")
+
+        // For minus, only add spaces if it's an operator (not a negative sign)
+        // Pattern: look for minus that follows a digit, closing paren, or identifier
+        var result = ""
+        for (index, char) in normalized.enumerated() {
+            if char == "-" {
+                // Check if previous character exists and what it is
+                if index > 0 {
+                    let prevIndex = normalized.index(normalized.startIndex, offsetBy: index - 1)
+                    let prevChar = normalized[prevIndex]
+                    // Add spaces around minus if previous char is alphanumeric, digit, or closing paren
+                    if prevChar.isNumber || prevChar.isLetter || prevChar == ")" {
+                        result.append(" - ")
+                    } else {
+                        result.append("-")
+                    }
+                } else {
+                    // Minus at start of string is a negative sign
+                    result.append("-")
+                }
+            } else {
+                result.append(char)
+            }
+        }
+        normalized = result
 
         // Clean up multiple spaces
         while normalized.contains("  ") {

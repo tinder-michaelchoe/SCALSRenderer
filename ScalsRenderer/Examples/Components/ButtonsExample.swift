@@ -32,7 +32,27 @@ public let buttonsJSON = """
       "backgroundColor": "#34C759", "textColor": "#FFFFFF",
       "cornerRadius": 20, "height": 36, "padding": { "horizontal": 16 }
     },
-    "countLabel": { "fontSize": 14, "textColor": "#666666" }
+    "countLabel": { "fontSize": 14, "textColor": "#666666" },
+    "iconButton": {
+      "fontSize": 16, "fontWeight": "medium",
+      "backgroundColor": "#F2F2F7", "textColor": "#000000",
+      "cornerRadius": 10, "width": 44, "height": 44
+    },
+    "iconButtonPrimary": {
+      "fontSize": 16, "fontWeight": "medium",
+      "backgroundColor": "#007AFF", "textColor": "#FFFFFF",
+      "cornerRadius": 10, "width": 44, "height": 44
+    },
+    "verticalButton": {
+      "fontSize": 14, "fontWeight": "medium",
+      "backgroundColor": "#F2F2F7", "textColor": "#000000",
+      "cornerRadius": 12, "padding": { "vertical": 12, "horizontal": 16 }
+    },
+    "compactButton": {
+      "fontSize": 13, "fontWeight": "medium",
+      "backgroundColor": "#E5E5EA", "textColor": "#000000",
+      "cornerRadius": 8, "height": 32, "padding": { "horizontal": 12 }
+    }
   },
   "actions": {
     "increment": { "type": "setState", "path": "tapCount", "value": { "$expr": "${tapCount} + 1" } }
@@ -58,21 +78,75 @@ public let buttonsJSON = """
         { "type": "button", "text": "Secondary Button", "styleId": "secondary", "fillWidth": true, "actions": { "onTap": "increment" } },
         { "type": "button", "text": "Destructive", "styleId": "destructive", "fillWidth": true, "actions": { "onTap": "increment" } },
 
-        { "type": "label", "text": "Image + Text (Leading)", "styleId": "sectionTitle" },
+        { "type": "label", "text": "Image Only", "styleId": "sectionTitle" },
         {
-          "type": "vstack", "spacing": 8,
+          "type": "hstack", "spacing": 12,
           "children": [
-            { "type": "button", "text": "Add Item", "image": { "sfsymbol": "plus" }, "imagePlacement": "leading", "styleId": "primary", "fillWidth": true, "actions": { "onTap": "increment" } },
-            { "type": "button", "text": "Edit", "image": { "sfsymbol": "pencil" }, "imagePlacement": "leading", "styleId": "secondary", "fillWidth": true, "actions": { "onTap": "increment" } }
+            { "type": "button", "image": { "sfsymbol": "plus" }, "styleId": "iconButtonPrimary", "actions": { "onTap": "increment" } },
+            { "type": "button", "image": { "sfsymbol": "heart" }, "styleId": "iconButton", "actions": { "onTap": "increment" } },
+            { "type": "button", "image": { "sfsymbol": "star" }, "styleId": "iconButton", "actions": { "onTap": "increment" } },
+            { "type": "button", "image": { "sfsymbol": "trash" }, "styleId": "iconButton", "actions": { "onTap": "increment" } },
+            { "type": "button", "image": { "sfsymbol": "square.and.arrow.up" }, "styleId": "iconButton", "actions": { "onTap": "increment" } }
           ]
         },
 
-        { "type": "label", "text": "Image + Text (Trailing)", "styleId": "sectionTitle" },
+        { "type": "label", "text": "Image Leading", "styleId": "sectionTitle" },
         {
           "type": "vstack", "spacing": 8,
           "children": [
-            { "type": "button", "text": "Settings", "image": { "sfsymbol": "gear" }, "imagePlacement": "trailing", "styleId": "secondary", "fillWidth": true, "actions": { "onTap": "increment" } },
-            { "type": "button", "text": "Next", "image": { "sfsymbol": "chevron.right" }, "imagePlacement": "trailing", "styleId": "primary", "fillWidth": true, "actions": { "onTap": "increment" } }
+            { "type": "button", "text": "Add Item", "image": { "sfsymbol": "plus.circle.fill" }, "imagePlacement": "leading", "styleId": "primary", "fillWidth": true, "actions": { "onTap": "increment" } },
+            { "type": "button", "text": "Edit Document", "image": { "sfsymbol": "pencil.circle" }, "imagePlacement": "leading", "styleId": "secondary", "fillWidth": true, "actions": { "onTap": "increment" } },
+            { "type": "button", "text": "Download", "image": { "sfsymbol": "arrow.down.circle" }, "imagePlacement": "leading", "styleId": "secondary", "fillWidth": true, "actions": { "onTap": "increment" } }
+          ]
+        },
+
+        { "type": "label", "text": "Image Trailing", "styleId": "sectionTitle" },
+        {
+          "type": "vstack", "spacing": 8,
+          "children": [
+            { "type": "button", "text": "Open Settings", "image": { "sfsymbol": "gear" }, "imagePlacement": "trailing", "styleId": "secondary", "fillWidth": true, "actions": { "onTap": "increment" } },
+            { "type": "button", "text": "Continue", "image": { "sfsymbol": "chevron.right" }, "imagePlacement": "trailing", "styleId": "primary", "fillWidth": true, "actions": { "onTap": "increment" } },
+            { "type": "button", "text": "External Link", "image": { "sfsymbol": "arrow.up.right" }, "imagePlacement": "trailing", "styleId": "secondary", "fillWidth": true, "actions": { "onTap": "increment" } }
+          ]
+        },
+
+        { "type": "label", "text": "Image Top", "styleId": "sectionTitle" },
+        {
+          "type": "hstack", "spacing": 12,
+          "children": [
+            { "type": "button", "text": "Home", "image": { "sfsymbol": "house.fill" }, "imagePlacement": "top", "styleId": "verticalButton", "actions": { "onTap": "increment" } },
+            { "type": "button", "text": "Search", "image": { "sfsymbol": "magnifyingglass" }, "imagePlacement": "top", "styleId": "verticalButton", "actions": { "onTap": "increment" } },
+            { "type": "button", "text": "Profile", "image": { "sfsymbol": "person.fill" }, "imagePlacement": "top", "styleId": "verticalButton", "actions": { "onTap": "increment" } }
+          ]
+        },
+
+        { "type": "label", "text": "Image Bottom", "styleId": "sectionTitle" },
+        {
+          "type": "hstack", "spacing": 12,
+          "children": [
+            { "type": "button", "text": "Upload", "image": { "sfsymbol": "arrow.up.doc" }, "imagePlacement": "bottom", "styleId": "verticalButton", "actions": { "onTap": "increment" } },
+            { "type": "button", "text": "Share", "image": { "sfsymbol": "square.and.arrow.up" }, "imagePlacement": "bottom", "styleId": "verticalButton", "actions": { "onTap": "increment" } },
+            { "type": "button", "text": "Archive", "image": { "sfsymbol": "archivebox" }, "imagePlacement": "bottom", "styleId": "verticalButton", "actions": { "onTap": "increment" } }
+          ]
+        },
+
+        { "type": "label", "text": "Compact with Images", "styleId": "sectionTitle" },
+        {
+          "type": "hstack", "spacing": 8,
+          "children": [
+            { "type": "button", "text": "Like", "image": { "sfsymbol": "hand.thumbsup" }, "imagePlacement": "leading", "styleId": "compactButton", "actions": { "onTap": "increment" } },
+            { "type": "button", "text": "Save", "image": { "sfsymbol": "bookmark" }, "imagePlacement": "leading", "styleId": "compactButton", "actions": { "onTap": "increment" } },
+            { "type": "button", "text": "More", "image": { "sfsymbol": "ellipsis" }, "imagePlacement": "trailing", "styleId": "compactButton", "actions": { "onTap": "increment" } }
+          ]
+        },
+
+        { "type": "label", "text": "Mixed Styles", "styleId": "sectionTitle" },
+        {
+          "type": "vstack", "spacing": 8,
+          "children": [
+            { "type": "button", "text": "Delete All", "image": { "sfsymbol": "trash.fill" }, "imagePlacement": "leading", "styleId": "destructive", "fillWidth": true, "actions": { "onTap": "increment" } },
+            { "type": "button", "text": "Refresh", "image": { "sfsymbol": "arrow.clockwise" }, "imagePlacement": "trailing", "styleId": "pill", "actions": { "onTap": "increment" } },
+            { "type": "button", "text": "Selected", "image": { "sfsymbol": "checkmark" }, "imagePlacement": "leading", "styleId": "pillSelected", "actions": { "onTap": "increment" } }
           ]
         },
 

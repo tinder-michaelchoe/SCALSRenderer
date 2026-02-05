@@ -152,8 +152,18 @@ public enum PhotoTouchUpJSON {
       },
       "actions": {
         "dismiss": { "type": "dismiss" },
-        "learnMore": { "type": "learnMore" },
-        "review": { "type": "review" }
+        "learnMore": {
+          "type": "showAlert",
+          "title": "Learn More",
+          "message": "The user pressed Learn More",
+          "buttons": [
+            { "text": "OK", "role": "cancel" }
+          ]
+        },
+        "review": {
+          "type": "openURL",
+          "url": "http://www.yahoo.com"
+        }
       }
     }
     """
@@ -162,37 +172,17 @@ public enum PhotoTouchUpJSON {
 // MARK: - Example View
 
 public struct PhotoTouchUpExampleView: View {
-    @Environment(\.dismiss) private var dismiss
-    @State private var showingLearnMore = false
-
     public init() {}
 
     public var body: some View {
         if let rendererView = ScalsRendererView(
             jsonString: PhotoTouchUpJSON.bottomSheet,
-            customActions: [
-                "learnMore": { _, _ in
-                    await MainActor.run {
-                        showingLearnMore = true
-                    }
-                },
-                "review": { [dismiss] _, _ in
-                    await MainActor.run {
-                        dismiss()
-                    }
-                }
-            ],
             customComponents: [
                 PhotoComparisonComponent.self,
                 CloseButtonComponent.self
             ]
         ) {
             rendererView
-                .alert("Learn More", isPresented: $showingLearnMore) {
-                    Button("OK", role: .cancel) {}
-                } message: {
-                    Text("This would open the learn more page about photo touch ups.")
-                }
         } else {
             Text("Failed to load view")
                 .foregroundColor(.red)

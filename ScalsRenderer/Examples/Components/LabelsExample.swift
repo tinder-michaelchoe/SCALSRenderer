@@ -23,7 +23,8 @@ public let labelsJSON = """
         { "type": "label", "text": "Body text with regular weight and dark gray color.", "styleId": "body" },
         { "type": "label", "text": "Caption - smaller and lighter", "styleId": "caption" },
         { "type": "hstack", "children": [{ "type": "spacer" }, { "type": "label", "text": "Centered Text", "styleId": "centered" }, { "type": "spacer" }] },
-        { "type": "label", "text": "This is a multiline label that can wrap to multiple lines when the text is too long to fit on a single line.", "styleId": "multiline" }
+        { "type": "label", "text": "This is a multiline label that can wrap to multiple lines when the text is too long to fit on a single line.", "styleId": "multiline" },
+        { "type": "spacer" }
       ]
     }]
   }

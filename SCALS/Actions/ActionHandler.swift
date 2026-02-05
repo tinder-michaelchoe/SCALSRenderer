@@ -140,6 +140,9 @@ public protocol ActionExecutionContext: AnyObject {
     /// The action registry for looking up handlers
     var actionRegistry: ActionRegistry { get }
 
+    /// Generic presenter storage - access presenters by key
+    func presenter<T>(for key: String) -> T?
+
     /// Execute another action by its ID
     func executeAction(id: String) async
 
@@ -149,13 +152,4 @@ public protocol ActionExecutionContext: AnyObject {
     /// Execute a resolved action definition (needed for sequence actions)
     /// - Parameter definition: The resolved IR action definition to execute
     func executeActionDefinition(_ definition: IR.ActionDefinition) async
-
-    /// Dismiss the current view
-    func dismiss()
-
-    /// Present an alert
-    func presentAlert(_ config: AlertConfiguration)
-
-    /// Navigate to another view
-    func navigate(to destination: String, presentation: Document.NavigationPresentation?)
 }

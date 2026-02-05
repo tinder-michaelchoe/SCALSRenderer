@@ -39,7 +39,8 @@ public let setStateJSON = """
             { "type": "button", "text": "Reset", "styleId": "button", "actions": { "onTap": "reset" } },
             { "type": "button", "text": "+", "styleId": "button", "actions": { "onTap": "increment" } }
           ]
-        }
+        },
+        { "type": "spacer" }
       ]
     }]
   }

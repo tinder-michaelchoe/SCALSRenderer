@@ -9,18 +9,23 @@
 import Combine
 import SCALS
 import SwiftUI
+#if canImport(UIKit)
+import UIKit
+#endif
 
 /// Main entry point for rendering a document
 public struct ScalsRendererView: View {
     private let renderTree: RenderTree
     @StateObject private var observableActionContext: ObservableActionContext
     @StateObject private var alertPresenter = SwiftUIAlertPresenter()
-    @Environment(\.dismiss) private var dismissAction
 
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.dismiss) private var dismissAction
 
     private let swiftuiRendererRegistry: SwiftUINodeRendererRegistry
     private let designSystemProvider: (any DesignSystemProvider)?
+
+    // Store the presentation handler for view controller updates
+    @State private var presentationHandler: SwiftUIPresentationHandler?
 
     /// Resolution error (only stored in DEBUG builds for error view)
     #if DEBUG
@@ -109,10 +114,7 @@ public struct ScalsRendererView: View {
             registry: actionRegistry,
             actionResolver: actionResolver,
             document: document,
-            actionDelegate: actionDelegate,
-            dismissPresenter: nil,
-            navigationPresenter: nil,
-            alertPresenter: nil
+            actionDelegate: actionDelegate
         )
         // Wrap in ObservableActionContext for SwiftUI integration
         _observableActionContext = StateObject(wrappedValue: ObservableActionContext(wrapping: ctx))
@@ -143,16 +145,29 @@ public struct ScalsRendererView: View {
                 setupContext()
             }
             .modifier(alertPresenter.modifier())
+            .background(ViewControllerExtractor(onExtract: { viewController in
+                // Update the presentation handler with extracted view controller
+                presentationHandler?.setExtractedViewController(viewController)
+            }))
     }
 
     private func setupContext() {
-        // Inject presenters (prefer over legacy callbacks)
-        observableActionContext.context.dismissPresenter = SwiftUIDismissPresenter(dismiss: dismissAction)
-        observableActionContext.context.alertPresenter = alertPresenter
-        observableActionContext.context.navigationPresenter = SwiftUINavigationPresenter { destination, presentation in
-            // Default: no-op, apps can customize via navigationHandler callback for backward compatibility
-            print("ScalsRendererView: Navigation to '\(destination)' not implemented")
-        }
+        // Create unified presentation handler
+        let handler = SwiftUIPresentationHandler(
+            dismissAction: dismissAction,
+            alertPresenter: alertPresenter,
+            extractedViewController: nil,
+            navigationHandler: { destination, presentation in
+                // Default: no-op, apps can customize via navigationHandler callback for backward compatibility
+                print("ScalsRendererView: Navigation to '\(destination)' not implemented")
+            }
+        )
+
+        // Store handler for view controller updates
+        presentationHandler = handler
+
+        // Inject unified handler
+        observableActionContext.context.setPresenter(handler, for: PresenterKey.presentation)
     }
 
     // MARK: - Version Logging
@@ -284,10 +299,7 @@ extension ScalsRendererView {
             registry: actionRegistry,
             actionResolver: actionResolver,
             document: document,
-            actionDelegate: actionDelegate,
-            dismissPresenter: nil,
-            navigationPresenter: nil,
-            alertPresenter: nil
+            actionDelegate: actionDelegate
         )
         // Wrap in ObservableActionContext for SwiftUI integration
         _observableActionContext = StateObject(wrappedValue: ObservableActionContext(wrapping: ctx))
@@ -414,8 +426,14 @@ public struct ScalsRendererBindingView<State: Codable & Equatable>: View {
     }
 
     private func setupContext() {
-        renderContext.actionContext.dismissPresenter = SwiftUIDismissPresenter(dismiss: dismiss)
-        renderContext.actionContext.alertPresenter = UIKitAlertPresenter()
+        // Create unified presentation handler for SwiftUI binding-based rendering
+        let handler = SwiftUIPresentationHandler(
+            dismissAction: dismiss,
+            alertPresenter: SwiftUIAlertPresenter()
+        )
+
+        // Inject unified handler
+        renderContext.actionContext.setPresenter(handler, for: PresenterKey.presentation)
     }
 }
 
@@ -678,6 +696,44 @@ struct ResolutionErrorView: View {
             .padding()
         }
         .background(Color(.systemGroupedBackground))
+    }
+}
+#endif
+
+// MARK: - View Controller Extraction Helper
+
+#if canImport(UIKit)
+/// Helper to extract the UIViewController from SwiftUI's view hierarchy.
+///
+/// This is useful when you need to present UIKit components (like SFSafariViewController)
+/// from a SwiftUI view.
+///
+/// Usage in SwiftUI:
+/// ```swift
+/// .background(ViewControllerExtractor { viewController in
+///     // Use the view controller
+///     urlPresenter.setPresentingViewController(viewController)
+/// })
+/// ```
+struct ViewControllerExtractor: UIViewControllerRepresentable {
+    let onExtract: (UIViewController?) -> Void
+
+    func makeUIViewController(context: Context) -> UIViewController {
+        let vc = ExtractorViewController()
+        vc.onExtract = onExtract
+        return vc
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+
+    class ExtractorViewController: UIViewController {
+        var onExtract: ((UIViewController?) -> Void)?
+
+        override func didMove(toParent parent: UIViewController?) {
+            super.didMove(toParent: parent)
+            // Extract the parent view controller when this view is added to hierarchy
+            onExtract?(parent)
+        }
     }
 }
 #endif

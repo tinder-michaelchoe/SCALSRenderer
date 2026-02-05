@@ -101,7 +101,11 @@ struct ContainerNodeView: View {
         )
         .modifier(DimensionFrameModifier(
             width: node.width,
-            height: node.height
+            height: node.height,
+            minWidth: node.minWidth,
+            minHeight: node.minHeight,
+            maxWidth: node.maxWidth,
+            maxHeight: node.maxHeight
         ))
     }
 

@@ -20,8 +20,12 @@ public struct NavigateHandler: ActionHandler {
             let destination: String = try definition.requiredParameter("destination")
             let presentation: Document.NavigationPresentation? = definition.parameter("presentation")
 
-            // Navigate
-            context.navigate(to: destination, presentation: presentation)
+            // Access unified presentation handler
+            guard let handler: PresentationHandler = context.presenter(for: PresenterKey.presentation) else {
+                print("NavigateHandler: No presentation handler registered")
+                return
+            }
+            handler.navigate(to: destination, presentation: presentation)
 
         } catch {
             print("NavigateHandler error: \(error)")

@@ -59,8 +59,12 @@ public struct ShowAlertHandler: ActionHandler {
                 }
             )
 
-            // Present alert
-            context.presentAlert(alertConfig)
+            // Access unified presentation handler
+            guard let handler: PresentationHandler = context.presenter(for: PresenterKey.presentation) else {
+                print("ShowAlertHandler: No presentation handler registered")
+                return
+            }
+            handler.presentAlert(alertConfig)
 
         } catch {
             print("ShowAlertHandler error: \(error)")

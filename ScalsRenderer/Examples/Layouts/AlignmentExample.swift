@@ -11,6 +11,7 @@ public let alignmentJSON = """
     "boxSmall": { "width": 40, "height": 40, "backgroundColor": "#34C759", "cornerRadius": 6 },
     "boxWide": { "width": 120, "height": 40, "backgroundColor": "#FF9500", "cornerRadius": 8 },
     "boxTall": { "width": 40, "height": 80, "backgroundColor": "#FF2D55", "cornerRadius": 8 },
+    "boxBig": { "width": 100, "height": 100, "backgroundColor": "#007AFF", "cornerRadius": 12 },
     "containerBg": { "backgroundColor": "#F2F2F7", "cornerRadius": 12, "padding": { "all": 16 }, "minHeight": 120 }
   },
   "root": {
@@ -158,7 +159,7 @@ public let alignmentJSON = """
                 "alignment": "topLeading",
                 "styleId": "containerBg",
                 "children": [
-                  { "type": "gradient", "gradientColors": [{"color": "#007AFF", "location": 0}], "styleId": "box" },
+                  { "type": "gradient", "gradientColors": [{"color": "#007AFF", "location": 0}], "styleId": "boxBig" },
                   { "type": "gradient", "gradientColors": [{"color": "#34C759", "location": 0}], "styleId": "boxSmall" }
                 ]
               }
@@ -175,7 +176,7 @@ public let alignmentJSON = """
                 "alignment": "top",
                 "styleId": "containerBg",
                 "children": [
-                  { "type": "gradient", "gradientColors": [{"color": "#007AFF", "location": 0}], "styleId": "box" },
+                  { "type": "gradient", "gradientColors": [{"color": "#007AFF", "location": 0}], "styleId": "boxBig" },
                   { "type": "gradient", "gradientColors": [{"color": "#34C759", "location": 0}], "styleId": "boxSmall" }
                 ]
               }
@@ -192,7 +193,7 @@ public let alignmentJSON = """
                 "alignment": "topTrailing",
                 "styleId": "containerBg",
                 "children": [
-                  { "type": "gradient", "gradientColors": [{"color": "#007AFF", "location": 0}], "styleId": "box" },
+                  { "type": "gradient", "gradientColors": [{"color": "#007AFF", "location": 0}], "styleId": "boxBig" },
                   { "type": "gradient", "gradientColors": [{"color": "#34C759", "location": 0}], "styleId": "boxSmall" }
                 ]
               }
@@ -209,7 +210,7 @@ public let alignmentJSON = """
                 "alignment": "leading",
                 "styleId": "containerBg",
                 "children": [
-                  { "type": "gradient", "gradientColors": [{"color": "#007AFF", "location": 0}], "styleId": "box" },
+                  { "type": "gradient", "gradientColors": [{"color": "#007AFF", "location": 0}], "styleId": "boxBig" },
                   { "type": "gradient", "gradientColors": [{"color": "#34C759", "location": 0}], "styleId": "boxSmall" }
                 ]
               }
@@ -226,7 +227,7 @@ public let alignmentJSON = """
                 "alignment": "center",
                 "styleId": "containerBg",
                 "children": [
-                  { "type": "gradient", "gradientColors": [{"color": "#007AFF", "location": 0}], "styleId": "box" },
+                  { "type": "gradient", "gradientColors": [{"color": "#007AFF", "location": 0}], "styleId": "boxBig" },
                   { "type": "gradient", "gradientColors": [{"color": "#34C759", "location": 0}], "styleId": "boxSmall" }
                 ]
               }
@@ -243,7 +244,7 @@ public let alignmentJSON = """
                 "alignment": "trailing",
                 "styleId": "containerBg",
                 "children": [
-                  { "type": "gradient", "gradientColors": [{"color": "#007AFF", "location": 0}], "styleId": "box" },
+                  { "type": "gradient", "gradientColors": [{"color": "#007AFF", "location": 0}], "styleId": "boxBig" },
                   { "type": "gradient", "gradientColors": [{"color": "#34C759", "location": 0}], "styleId": "boxSmall" }
                 ]
               }
@@ -260,7 +261,7 @@ public let alignmentJSON = """
                 "alignment": "bottomLeading",
                 "styleId": "containerBg",
                 "children": [
-                  { "type": "gradient", "gradientColors": [{"color": "#007AFF", "location": 0}], "styleId": "box" },
+                  { "type": "gradient", "gradientColors": [{"color": "#007AFF", "location": 0}], "styleId": "boxBig" },
                   { "type": "gradient", "gradientColors": [{"color": "#34C759", "location": 0}], "styleId": "boxSmall" }
                 ]
               }
@@ -277,7 +278,7 @@ public let alignmentJSON = """
                 "alignment": "bottom",
                 "styleId": "containerBg",
                 "children": [
-                  { "type": "gradient", "gradientColors": [{"color": "#007AFF", "location": 0}], "styleId": "box" },
+                  { "type": "gradient", "gradientColors": [{"color": "#007AFF", "location": 0}], "styleId": "boxBig" },
                   { "type": "gradient", "gradientColors": [{"color": "#34C759", "location": 0}], "styleId": "boxSmall" }
                 ]
               }
@@ -294,7 +295,7 @@ public let alignmentJSON = """
                 "alignment": "bottomTrailing",
                 "styleId": "containerBg",
                 "children": [
-                  { "type": "gradient", "gradientColors": [{"color": "#007AFF", "location": 0}], "styleId": "box" },
+                  { "type": "gradient", "gradientColors": [{"color": "#007AFF", "location": 0}], "styleId": "boxBig" },
                   { "type": "gradient", "gradientColors": [{"color": "#34C759", "location": 0}], "styleId": "boxSmall" }
                 ]
               }

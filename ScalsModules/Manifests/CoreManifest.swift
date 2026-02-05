@@ -89,6 +89,16 @@ public struct CoreManifest: ScalsManifest {
             handler: ShowAlertHandler()
         ),
         ActionBundleDefinition(
+            kind: .openURL,
+            resolver: OpenURLResolver(),
+            handler: OpenURLHandler()
+        ),
+        ActionBundleDefinition(
+            kind: .request,
+            resolver: RequestResolver(),
+            handler: RequestHandler()
+        ),
+        ActionBundleDefinition(
             kind: .sequence,
             resolverFactory: { registry in SequenceResolver(registry: registry) },
             handler: SequenceHandler()

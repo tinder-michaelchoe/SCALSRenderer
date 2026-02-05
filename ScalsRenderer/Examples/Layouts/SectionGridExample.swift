@@ -6,13 +6,13 @@ public let sectionGridJSON = """
   "version": "1.0",
   "styles": {
     "header": { "fontSize": 22, "fontWeight": "bold", "textColor": "#000000" },
-    "gridItem": { "height": 100, "backgroundColor": "#F2F2F7", "cornerRadius": 12 },
+    "gridItem": { "height": 100, "backgroundColor": "#F2F2F7", "cornerRadius": 12, "padding": { "all": 16 } },
     "itemIcon": { "width": 32, "height": 32, "tintColor": "#007AFF" },
     "itemLabel": { "fontSize": 12, "fontWeight": "medium", "textColor": "#333333" }
   },
   "root": {
     "backgroundColor": "#FFFFFF",
-    "edgeInsets": { "top": 36 },
+    "edgeInsets": { "top": 36, "bottom": 22 },
     "children": [{
       "type": "sectionLayout",
       "sections": [{

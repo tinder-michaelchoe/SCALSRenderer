@@ -67,22 +67,6 @@ public final class ObservableActionContext: ObservableObject {
         set { context.actionDelegate = newValue }
     }
 
-    // Presenters for view operations
-    public var dismissPresenter: DismissPresenting? {
-        get { context.dismissPresenter }
-        set { context.dismissPresenter = newValue }
-    }
-
-    public var alertPresenter: AlertPresenting? {
-        get { context.alertPresenter }
-        set { context.alertPresenter = newValue }
-    }
-
-    public var navigationPresenter: NavigationPresenting? {
-        get { context.navigationPresenter }
-        set { context.navigationPresenter = newValue }
-    }
-    
     // MARK: - Action Execution
     
     /// Execute an action by its ID
@@ -99,22 +83,7 @@ public final class ObservableActionContext: ObservableObject {
     public func executeAction(type actionType: String, parameters: ActionParameters) async {
         await context.executeAction(type: actionType, parameters: parameters)
     }
-    
-    /// Dismiss the current view
-    public func dismiss() {
-        context.dismiss()
-    }
-    
-    /// Present an alert
-    public func presentAlert(_ config: AlertConfiguration) {
-        context.presentAlert(config)
-    }
-    
-    /// Navigate to another view
-    public func navigate(to destination: String, presentation: Document.NavigationPresentation?) {
-        context.navigate(to: destination, presentation: presentation)
-    }
-    
+
     /// Execute an action binding (either reference or inline)
     public func execute(_ binding: Document.Component.ActionBinding) {
         context.execute(binding)

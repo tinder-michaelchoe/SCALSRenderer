@@ -21,11 +21,8 @@ public final class ActionContext: ActionExecutionContext {
     private let actionResolver: ActionResolver
     private let document: Document.Definition
 
-    /// Presenters for platform-specific view operations (injectable for testing)
-    /// These can be set after initialization for SwiftUI @Environment dependencies
-    public var dismissPresenter: DismissPresenting?
-    public var navigationPresenter: NavigationPresenting?
-    public var alertPresenter: AlertPresenting?
+    /// Generic presenter storage (type-erased)
+    private var presenters: [String: Any] = [:]
 
     /// Delegate for handling custom actions
     public weak var actionDelegate: ScalsActionDelegate?
@@ -37,10 +34,7 @@ public final class ActionContext: ActionExecutionContext {
         actionResolver: ActionResolver,
         document: Document.Definition,
         documentId: String = UUID().uuidString,
-        actionDelegate: ScalsActionDelegate? = nil,
-        dismissPresenter: DismissPresenting? = nil,
-        navigationPresenter: NavigationPresenting? = nil,
-        alertPresenter: AlertPresenting? = nil
+        actionDelegate: ScalsActionDelegate? = nil
     ) {
         self.stateStore = stateStore
         self.actionDefinitions = actionDefinitions
@@ -49,10 +43,22 @@ public final class ActionContext: ActionExecutionContext {
         self.document = document
         self.documentId = documentId
         self.actionDelegate = actionDelegate
-        // Presenters can be set after initialization for SwiftUI @Environment dependencies
-        self.dismissPresenter = dismissPresenter
-        self.navigationPresenter = navigationPresenter
-        self.alertPresenter = alertPresenter
+    }
+
+    // MARK: - Presenter Storage
+
+    /// Get a presenter by key
+    public func presenter<T>(for key: String) -> T? {
+        presenters[key] as? T
+    }
+
+    /// Set a presenter (internal - only ScalsModules should call this)
+    public func setPresenter<T>(_ presenter: T?, for key: String) {
+        if let presenter = presenter {
+            presenters[key] = presenter
+        } else {
+            presenters.removeValue(forKey: key)
+        }
     }
 
     // MARK: - ActionExecutionContext
@@ -178,21 +184,6 @@ public final class ActionContext: ActionExecutionContext {
         }
     }
 
-    /// Dismiss the current view
-    public func dismiss() {
-        dismissPresenter?.dismiss()
-    }
-
-    /// Present an alert using the injected alert presenter
-    public func presentAlert(_ config: AlertConfiguration) {
-        alertPresenter?.present(config)
-    }
-
-    /// Navigate to another view
-    public func navigate(to destination: String, presentation: Document.NavigationPresentation?) {
-        navigationPresenter?.navigate(to: destination, presentation: presentation)
-    }
-
     // MARK: - Convenience Execution
 
     /// Execute an action binding (either reference or inline)
@@ -213,101 +204,4 @@ public final class ActionContext: ActionExecutionContext {
             await executeAction(id: actionId)
         }
     }
-}
-
-/// Configuration for presenting an alert
-public struct AlertConfiguration {
-    public let title: String
-    public let message: String?
-    public let buttons: [Button]
-    public let onButtonTap: ((String?) -> Void)?
-
-    public struct Button {
-        public let label: String
-        public let style: Document.AlertButtonStyle
-        public let action: String?
-
-        public init(label: String, style: Document.AlertButtonStyle, action: String?) {
-            self.label = label
-            self.style = style
-            self.action = action
-        }
-    }
-
-    public init(
-        title: String,
-        message: String?,
-        buttons: [Button],
-        onButtonTap: ((String?) -> Void)? = nil
-    ) {
-        self.title = title
-        self.message = message
-        self.buttons = buttons
-        self.onButtonTap = onButtonTap
-    }
-}
-
-// MARK: - Alert Presenting Protocol
-
-/// Protocol for presenting alerts, enabling dependency injection for testing.
-///
-/// **Platform-Agnostic**: This protocol does not depend on UIKit or SwiftUI.
-/// Platform-specific implementations (like `UIKitAlertPresenter`) are in the renderer layer.
-///
-/// Example test usage:
-/// ```swift
-/// class MockAlertPresenter: AlertPresenting {
-///     var presentedAlerts: [AlertConfiguration] = []
-///     func present(_ config: AlertConfiguration) {
-///         presentedAlerts.append(config)
-///     }
-/// }
-///
-/// let mockPresenter = MockAlertPresenter()
-/// let context = ActionContext(stateStore: store, alertPresenter: mockPresenter, ...)
-/// // ... trigger action ...
-/// XCTAssertEqual(mockPresenter.presentedAlerts.count, 1)
-/// ```
-public protocol AlertPresenting: AnyObject {
-    func present(_ config: AlertConfiguration)
-}
-
-// MARK: - Dismiss Presenting Protocol
-
-/// Protocol for dismissing views, enabling dependency injection for testing.
-///
-/// **Platform-Agnostic**: This protocol does not depend on UIKit or SwiftUI.
-/// Platform-specific implementations are in the renderer layer.
-///
-/// Example test usage:
-/// ```swift
-/// class MockDismissPresenter: DismissPresenting {
-///     var dismissCalled = false
-///     func dismiss() {
-///         dismissCalled = true
-///     }
-/// }
-/// ```
-public protocol DismissPresenting: AnyObject {
-    func dismiss()
-}
-
-// MARK: - Navigation Presenting Protocol
-
-/// Protocol for navigation, enabling dependency injection for testing.
-///
-/// **Platform-Agnostic**: This protocol does not depend on UIKit or SwiftUI.
-/// Platform-specific implementations are in the renderer layer.
-///
-/// Example test usage:
-/// ```swift
-/// class MockNavigationPresenter: NavigationPresenting {
-///     var navigatedDestination: String?
-///     func navigate(to destination: String, presentation: Document.NavigationPresentation?) {
-///         navigatedDestination = destination
-///     }
-/// }
-/// ```
-public protocol NavigationPresenting: AnyObject {
-    func navigate(to destination: String, presentation: Document.NavigationPresentation?)
 }

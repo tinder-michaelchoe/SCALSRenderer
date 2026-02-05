@@ -745,14 +745,16 @@ enum Example: String, CaseIterable, Identifiable {
     var presentation: PresentationStyle {
         switch self {
         // Most basic examples work well with medium detent
-        case .labels, .buttons, .textFields, .toggles, .sliders, .gradients:
+        case .buttons:
+            return .autoSize
+        case .textFields, .toggles, .sliders, .gradients, .labels:
             return .detent(.medium)
         case .shapes:
             return .fullSize
         case .images:
             return .detent(.large)
         case .sectionLayoutGrid:
-            return .detent(.fraction(0.3))
+            return .detent(.fraction(0.5))
         case .vstackHstack, .zstack:
             return .detent(.medium)
         case .nested:

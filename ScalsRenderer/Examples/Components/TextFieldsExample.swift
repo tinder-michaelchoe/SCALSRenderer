@@ -31,7 +31,8 @@ public let textFieldsJSON = """
         { "type": "label", "text": "Email", "styleId": "label" },
         { "type": "textfield", "placeholder": "Enter your email", "styleId": "field", "bind": "email" },
         { "type": "label", "dataSourceId": "namePreview", "styleId": "preview" },
-        { "type": "label", "dataSourceId": "emailPreview", "styleId": "preview" }
+        { "type": "label", "dataSourceId": "emailPreview", "styleId": "preview" },
+        { "type": "spacer" }
       ]
     }]
   }

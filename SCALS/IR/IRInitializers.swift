@@ -16,12 +16,16 @@ import Foundation
 
 extension IR.EdgeInsets {
 
-    /// Create EdgeInsets from Document.Padding, merging with style padding values.
+    /// Create EdgeInsets from Document.Padding, with fallback to style padding values.
     ///
-    /// This initializer performs the full resolution:
-    /// 1. Converts Document.Padding to IR.EdgeInsets (resolves horizontal/vertical)
-    /// 2. Merges with individual style padding values
+    /// This initializer performs the full resolution with **override behavior**:
+    /// 1. If a specific edge is set in the component padding (via top/bottom/leading/trailing/horizontal/vertical/all), use it
+    /// 2. Otherwise, fall back to the style padding value for that edge
     /// 3. Returns fully resolved EdgeInsets
+    ///
+    /// Override Priority:
+    /// - Component padding overrides style padding
+    /// - Within component: specific (top) > axis (vertical) > all > style > 0
     ///
     /// - Parameters:
     ///   - padding: Optional node-level padding from Document
@@ -36,13 +40,30 @@ extension IR.EdgeInsets {
         mergingLeading: CGFloat = 0,
         mergingTrailing: CGFloat = 0
     ) {
-        let base = padding?.toIR() ?? .zero
-        self.init(
-            top: base.top + mergingTop,
-            leading: base.leading + mergingLeading,
-            bottom: base.bottom + mergingBottom,
-            trailing: base.trailing + mergingTrailing
-        )
+        // Check if component has any padding specified
+        if let padding = padding {
+            // For each edge: if component has it set (via specific/axis/all), use component value
+            // Otherwise, use style value
+            let hasTop = padding.top != nil || padding.vertical != nil || padding.all != nil
+            let hasBottom = padding.bottom != nil || padding.vertical != nil || padding.all != nil
+            let hasLeading = padding.leading != nil || padding.horizontal != nil || padding.all != nil
+            let hasTrailing = padding.trailing != nil || padding.horizontal != nil || padding.all != nil
+
+            self.init(
+                top: hasTop ? padding.resolvedTop : mergingTop,
+                leading: hasLeading ? padding.resolvedLeading : mergingLeading,
+                bottom: hasBottom ? padding.resolvedBottom : mergingBottom,
+                trailing: hasTrailing ? padding.resolvedTrailing : mergingTrailing
+            )
+        } else {
+            // No component padding, use style padding
+            self.init(
+                top: mergingTop,
+                leading: mergingLeading,
+                bottom: mergingBottom,
+                trailing: mergingTrailing
+            )
+        }
     }
 
     /// Create EdgeInsets from Document.Padding (simple conversion, no merging).

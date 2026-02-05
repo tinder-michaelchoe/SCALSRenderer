@@ -286,13 +286,22 @@ public final class ScalsUIKitView: UIView {
     }
 
     private func setupActionHandlers() {
-        // Create presenters that delegate to ScalsRendererDelegate
-        actionContext.dismissPresenter = UIKitDismissDelegatePresenter(view: self)
-        actionContext.alertPresenter = UIKitAlertDelegatePresenter(view: self)
-        actionContext.navigationPresenter = UIKitNavigationPresenter { [weak self] destination, presentation in
+        // Create unified presentation handler that delegates to individual presenters
+        let dismissPresenter = UIKitDismissDelegatePresenter(view: self)
+        let alertPresenter = UIKitAlertDelegatePresenter(view: self)
+        let navigationPresenter = UIKitNavigationPresenter { [weak self] destination, presentation in
             guard let self = self else { return }
             self.delegate?.scalsRenderer(self, didRequestNavigation: destination, presentation: presentation ?? .push)
         }
+
+        // Create wrapper handler that delegates to the individual presenters
+        let handler = UIKitDelegatePresentationHandler(
+            dismissPresenter: dismissPresenter,
+            alertPresenter: alertPresenter,
+            navigationPresenter: navigationPresenter
+        )
+
+        actionContext.setPresenter(handler, for: PresenterKey.presentation)
     }
 
     // MARK: - Efficient Updates

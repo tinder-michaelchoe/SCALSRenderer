@@ -56,7 +56,8 @@ public let showAlertJSON = """
         { "type": "label", "text": "Tap buttons to show different alerts", "styleId": "subtitle" },
         { "type": "button", "text": "Simple Alert", "styleId": "button", "actions": { "onTap": "simpleAlert" } },
         { "type": "button", "text": "Confirmation Alert", "styleId": "button", "actions": { "onTap": "confirmAlert" } },
-        { "type": "button", "text": "Destructive Alert", "styleId": "destructiveButton", "actions": { "onTap": "destructiveAlert" } }
+        { "type": "button", "text": "Destructive Alert", "styleId": "destructiveButton", "actions": { "onTap": "destructiveAlert" } },
+        { "type": "spacer" }
       ]
     }]
   }

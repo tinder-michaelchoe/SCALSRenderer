@@ -138,7 +138,8 @@ public struct ResolvedStyle: Sendable {
             // Check if this is an explicit padding clear (all properties nil)
             let isExplicitClear = padding.top == nil && padding.bottom == nil &&
                                  padding.leading == nil && padding.trailing == nil &&
-                                 padding.horizontal == nil && padding.vertical == nil
+                                 padding.horizontal == nil && padding.vertical == nil &&
+                                 padding.all == nil
 
             if isExplicitClear {
                 // Clear inherited padding properties
@@ -148,16 +149,17 @@ public struct ResolvedStyle: Sendable {
                 paddingTrailing = nil
             } else {
                 // Merge padding properties
-                if padding.top != nil || padding.vertical != nil {
+                // Priority: specific (top/bottom/leading/trailing) > axis (vertical/horizontal) > all
+                if padding.top != nil || padding.vertical != nil || padding.all != nil {
                     paddingTop = padding.resolvedTop
                 }
-                if padding.bottom != nil || padding.vertical != nil {
+                if padding.bottom != nil || padding.vertical != nil || padding.all != nil {
                     paddingBottom = padding.resolvedBottom
                 }
-                if padding.leading != nil || padding.horizontal != nil {
+                if padding.leading != nil || padding.horizontal != nil || padding.all != nil {
                     paddingLeading = padding.resolvedLeading
                 }
-                if padding.trailing != nil || padding.horizontal != nil {
+                if padding.trailing != nil || padding.horizontal != nil || padding.all != nil {
                     paddingTrailing = padding.resolvedTrailing
                 }
             }
