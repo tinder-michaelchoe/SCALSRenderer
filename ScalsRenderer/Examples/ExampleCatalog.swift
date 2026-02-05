@@ -829,8 +829,7 @@ enum Example: String, CaseIterable, Identifiable {
     }
 
     static var complexExamples: [Example] {
-        [.componentShowcase, /*.dadJokes,*/ .taskManager, .shoppingCart, .musicPlayer, .metMuseum, .weatherDashboard, .plantCareTracker]
-        // Dad Jokes example requires custom action resolvers/handlers - commented out until implemented
+        [.componentShowcase, .dadJokes, .taskManager, .shoppingCart, .musicPlayer, .metMuseum, .weatherDashboard, .plantCareTracker]
     }
 
     static var tinderExamples: [Example] {
@@ -867,7 +866,8 @@ struct ExampleSheetView: View {
     private func createView(from json: String) -> ParseResult {
         do {
             let document = try Document.Definition(jsonString: json)
-            return .success(ScalsRendererView(document: document, debugMode: true))
+            let config = SwiftUIRendererConfiguration(debugMode: true)
+            return .success(ScalsRendererView(document: document, configuration: config))
         } catch {
             let errorDescription = DocumentParseError.detailedDescription(error: error, jsonString: json)
             return .failure(errorDescription)

@@ -34,8 +34,7 @@ public struct TaskManagerExampleView: View {
 
     public var body: some View {
         if let document = try? Document.Definition(jsonString: buildTaskManagerJSON()) {
-            ScalsRendererView(
-                document: document,
+            let config = SwiftUIRendererConfiguration(
                 customActions: [
                     "close": { [dismiss] _, _ in
                         dismiss()
@@ -72,6 +71,7 @@ public struct TaskManagerExampleView: View {
                     }
                 ]
             )
+            ScalsRendererView(document: document, configuration: config)
         } else {
             VStack(spacing: 16) {
                 Image(systemName: "exclamationmark.triangle")

@@ -42,16 +42,26 @@ public class SwiftUIPresentationHandler: PresentationHandler {
     /// Navigation handler callback (optional, for custom navigation)
     private let navigationHandler: ((String, Document.NavigationPresentation?) -> Void)?
 
+    /// Optional callback invoked before dismiss (for external observation)
+    private let dismissCallback: (() -> Void)?
+
+    /// Optional callback invoked before alert (for external observation)
+    private let alertCallback: ((AlertConfiguration) -> Void)?
+
     public init(
         dismissAction: DismissAction,
         alertPresenter: SwiftUIAlertPresenter,
         extractedViewController: UIViewController? = nil,
-        navigationHandler: ((String, Document.NavigationPresentation?) -> Void)? = nil
+        navigationHandler: ((String, Document.NavigationPresentation?) -> Void)? = nil,
+        dismissCallback: (() -> Void)? = nil,
+        alertCallback: ((AlertConfiguration) -> Void)? = nil
     ) {
         self.dismissAction = dismissAction
         self.alertPresenter = alertPresenter
         self.extractedViewController = extractedViewController
         self.navigationHandler = navigationHandler
+        self.dismissCallback = dismissCallback
+        self.alertCallback = alertCallback
     }
 
     /// Update the extracted view controller (called when ViewControllerExtractor provides one)
@@ -62,10 +72,12 @@ public class SwiftUIPresentationHandler: PresentationHandler {
     // MARK: - PresentationHandler
 
     public func dismiss() {
+        dismissCallback?()
         dismissAction()
     }
 
     public func presentAlert(_ config: AlertConfiguration) {
+        alertCallback?(config)
         alertPresenter.present(config)
     }
 

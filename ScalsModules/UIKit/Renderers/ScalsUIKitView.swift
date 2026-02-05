@@ -82,7 +82,7 @@ public final class ScalsUIKitView: UIView {
 
     // MARK: - Initialization
 
-    /// Initialize with a document and optional custom action handlers.
+    /// Initialize with a document and registries.
     ///
     /// - Parameters:
     ///   - document: The document definition to render
@@ -91,13 +91,17 @@ public final class ScalsUIKitView: UIView {
     ///   - componentRegistry: The component resolver registry
     ///   - rendererRegistry: The UIKit node renderer registry
     ///   - actionDelegate: Delegate for handling custom actions
+    ///   - designSystemProvider: Optional design system provider for style resolution
+    ///   - debugMode: Enable debug output
     public init(
         document: Document.Definition,
         actionRegistry: ActionRegistry,
         actionResolverRegistry: ActionResolverRegistry,
         componentRegistry: ComponentResolverRegistry,
         rendererRegistry: UIKitNodeRendererRegistry,
-        actionDelegate: ScalsActionDelegate? = nil
+        actionDelegate: ScalsActionDelegate? = nil,
+        designSystemProvider: (any DesignSystemProvider)? = nil,
+        debugMode: Bool = false
     ) {
         self.document = document
         self.rendererRegistry = rendererRegistry
@@ -110,7 +114,8 @@ public final class ScalsUIKitView: UIView {
             componentRegistry: componentRegistry,
             actionResolverRegistry: actionResolverRegistry,
             layoutResolver: layoutResolver,
-            sectionLayoutResolver: sectionLayoutResolver
+            sectionLayoutResolver: sectionLayoutResolver,
+            designSystemProvider: designSystemProvider
         )
         do {
             let result = try resolver.resolveWithTracking()
@@ -124,6 +129,24 @@ public final class ScalsUIKitView: UIView {
             self.stateStore = StateStore()
             self.treeUpdater = nil
             self.viewTreeRoot = nil
+        }
+
+        // Print debug output if enabled
+        if debugMode {
+            print("----------------------------------------")
+            print("SCALS Version Info (UIKit)")
+            print("----------------------------------------")
+            if let docVersion = document.version {
+                print("   Document: v\(docVersion)")
+            } else {
+                print("   Document: [!] No version specified")
+            }
+            print("   Renderer: v\(DocumentVersion.current.string)")
+            print("   IR:       v\(renderTree.irVersion.string)")
+            print("----------------------------------------")
+
+            let debugRenderer = DebugRenderer()
+            print(debugRenderer.render(renderTree))
         }
 
         // Create ActionResolver for runtime action resolution
@@ -152,7 +175,9 @@ public final class ScalsUIKitView: UIView {
         actionResolverRegistry: ActionResolverRegistry,
         componentRegistry: ComponentResolverRegistry,
         rendererRegistry: UIKitNodeRendererRegistry,
-        actionDelegate: ScalsActionDelegate? = nil
+        actionDelegate: ScalsActionDelegate? = nil,
+        designSystemProvider: (any DesignSystemProvider)? = nil,
+        debugMode: Bool = false
     ) {
         guard let document = try? Document.Definition(jsonString: jsonString) else {
             return nil
@@ -163,7 +188,9 @@ public final class ScalsUIKitView: UIView {
             actionResolverRegistry: actionResolverRegistry,
             componentRegistry: componentRegistry,
             rendererRegistry: rendererRegistry,
-            actionDelegate: actionDelegate
+            actionDelegate: actionDelegate,
+            designSystemProvider: designSystemProvider,
+            debugMode: debugMode
         )
     }
 
@@ -954,89 +981,3 @@ private final class DelegateActionButton: UIButton {
     }
 }
 
-// MARK: - View Controller Convenience
-
-/// A view controller that wraps ScalsUIKitView
-open class ScalsViewController: UIViewController, ScalsRendererDelegate {
-
-    /// The underlying ScalsUIKitView
-    public private(set) var cladsView: ScalsUIKitView!
-
-    /// Access to the current state snapshot
-    public var stateSnapshot: [String: Any] {
-        return cladsView.stateSnapshot
-    }
-
-    public init(
-        document: Document.Definition,
-        actionRegistry: ActionRegistry,
-        actionResolverRegistry: ActionResolverRegistry,
-        componentRegistry: ComponentResolverRegistry,
-        rendererRegistry: UIKitNodeRendererRegistry
-    ) {
-        super.init(nibName: nil, bundle: nil)
-        cladsView = ScalsUIKitView(
-            document: document,
-            actionRegistry: actionRegistry,
-            actionResolverRegistry: actionResolverRegistry,
-            componentRegistry: componentRegistry,
-            rendererRegistry: rendererRegistry
-        )
-        cladsView.delegate = self
-    }
-
-    public convenience init?(
-        jsonString: String,
-        actionRegistry: ActionRegistry,
-        actionResolverRegistry: ActionResolverRegistry,
-        componentRegistry: ComponentResolverRegistry,
-        rendererRegistry: UIKitNodeRendererRegistry
-    ) {
-        guard let document = try? Document.Definition(jsonString: jsonString) else {
-            return nil
-        }
-        self.init(document: document, actionRegistry: actionRegistry, actionResolverRegistry: actionResolverRegistry, componentRegistry: componentRegistry, rendererRegistry: rendererRegistry)
-    }
-
-    required public init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    open override func viewDidLoad() {
-        super.viewDidLoad()
-        view.addSubview(cladsView)
-        cladsView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            cladsView.topAnchor.constraint(equalTo: view.topAnchor),
-            cladsView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            cladsView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            cladsView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
-        ])
-    }
-
-    // MARK: - ScalsRendererDelegate (Override in subclass)
-
-    open func scalsRenderer(_ view: ScalsUIKitView, didChangeState path: String, from oldValue: Any?, to newValue: Any?) {
-        // Override in subclass
-    }
-
-    open func scalsRenderer(_ view: ScalsUIKitView, willExecuteAction actionId: String) {
-        // Override in subclass
-    }
-
-    open func scalsRenderer(_ view: ScalsUIKitView, didExecuteAction actionId: String) {
-        // Override in subclass
-    }
-
-    open func scalsRendererDidRequestDismiss(_ view: ScalsUIKitView) {
-        dismiss(animated: true)
-    }
-
-    open func scalsRenderer(_ view: ScalsUIKitView, didRequestNavigation destination: String, presentation: Document.NavigationPresentation) {
-        // Override in subclass for navigation
-    }
-
-    open func scalsRenderer(_ view: ScalsUIKitView, didRequestAlert config: AlertConfiguration) {
-        AlertPresenter.present(config)
-    }
-}

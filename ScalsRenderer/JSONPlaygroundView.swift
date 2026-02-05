@@ -322,7 +322,8 @@ struct RenderedJSONSheet: View {
 
     var body: some View {
         Group {
-            if let view = ScalsRendererView(jsonString: jsonString, debugMode: true) {
+            let config = SwiftUIRendererConfiguration(debugMode: true)
+            if let view = ScalsRendererView(jsonString: jsonString, configuration: config) {
                 if let detentOption = PlaygroundDetentOption(rawValue: selectedDetent),
                    detentOption == .dynamic {
                     view

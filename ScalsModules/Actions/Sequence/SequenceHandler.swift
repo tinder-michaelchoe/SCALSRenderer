@@ -16,17 +16,32 @@ public struct SequenceHandler: ActionHandler {
 
     @MainActor
     public func execute(definition: IR.ActionDefinition, context: ActionExecutionContext) async {
-        do {
-            // Extract steps array
-            let steps: [IR.ActionDefinition] = try definition.requiredParameter("steps")
+        // Extract steps array - handle both direct array and Any-wrapped array
+        guard let stepsWrapper = definition.executionData["steps"] else {
+            print("SequenceHandler error: Missing 'steps' parameter")
+            return
+        }
 
-            // Execute each step sequentially
-            for step in steps {
-                await context.executeActionDefinition(step)
+        let steps: [IR.ActionDefinition]
+
+        // Try direct cast first
+        if let directSteps = stepsWrapper.value as? [IR.ActionDefinition] {
+            steps = directSteps
+        }
+        // If that fails, try casting each element individually (handles [Any] case)
+        else if let anyArray = stepsWrapper.value as? [Any] {
+            steps = anyArray.compactMap { $0 as? IR.ActionDefinition }
+            if steps.count != anyArray.count {
+                print("SequenceHandler warning: Some steps could not be cast to ActionDefinition")
             }
+        } else {
+            print("SequenceHandler error: 'steps' is not an array")
+            return
+        }
 
-        } catch {
-            print("SequenceHandler error: \(error)")
+        // Execute each step sequentially
+        for step in steps {
+            await context.executeActionDefinition(step)
         }
     }
 }

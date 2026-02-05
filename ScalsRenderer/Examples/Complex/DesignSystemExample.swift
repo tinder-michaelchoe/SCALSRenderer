@@ -361,10 +361,13 @@ public struct DesignSystemExampleView: View {
     public init() {}
 
     public var body: some View {
-        if let rendererView = ScalsRendererView(
-            jsonString: designSystemExampleJSON,
+        let config = SwiftUIRendererConfiguration(
             //designSystemProvider: LightspeedProvider(),
             debugMode: true
+        )
+        if let rendererView = ScalsRendererView(
+            jsonString: designSystemExampleJSON,
+            configuration: config
         ) {
             rendererView
         } else {

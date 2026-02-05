@@ -259,11 +259,14 @@ public struct FeedbackSurveyExampleView: View {
     public init() {}
 
     public var body: some View {
-        if let rendererView = ScalsRendererView(
-            jsonString: FeedbackSurveyJSON.bottomSheet,
+        let config = SwiftUIRendererConfiguration(
             customComponents: [
                 CloseButtonComponent.self
             ]
+        )
+        if let rendererView = ScalsRendererView(
+            jsonString: FeedbackSurveyJSON.bottomSheet,
+            configuration: config
         ) {
             rendererView
         } else {

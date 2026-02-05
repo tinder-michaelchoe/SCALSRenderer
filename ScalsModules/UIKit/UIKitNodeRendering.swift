@@ -12,6 +12,7 @@ import UIKit
 
 /// Context for UIKit node rendering, providing shared dependencies
 public final class UIKitRenderContext: @unchecked Sendable {
+    public let tree: RenderTree
     public let actionContext: ActionContext
     public let stateStore: StateStore
     public let colorScheme: IR.ColorScheme
@@ -19,15 +20,34 @@ public final class UIKitRenderContext: @unchecked Sendable {
     private let registry: UIKitNodeRendererRegistry
 
     public init(
+        tree: RenderTree,
         actionContext: ActionContext,
         stateStore: StateStore,
         colorScheme: IR.ColorScheme,
         registry: UIKitNodeRendererRegistry
     ) {
+        self.tree = tree
         self.actionContext = actionContext
         self.stateStore = stateStore
         self.colorScheme = colorScheme
         self.registry = registry
+    }
+
+    /// Convenience initializer without tree (creates empty tree)
+    public convenience init(
+        actionContext: ActionContext,
+        stateStore: StateStore,
+        colorScheme: IR.ColorScheme,
+        registry: UIKitNodeRendererRegistry
+    ) {
+        let emptyTree = RenderTree(root: RootNode(), stateStore: stateStore, actions: [:])
+        self.init(
+            tree: emptyTree,
+            actionContext: actionContext,
+            stateStore: stateStore,
+            colorScheme: colorScheme,
+            registry: registry
+        )
     }
 
     /// Render a child node (for recursive rendering)
@@ -59,9 +79,6 @@ public final class UIKitRenderContext: @unchecked Sendable {
 public protocol UIKitNodeRendering {
     /// The RenderNodeKind this renderer handles
     static var nodeKind: RenderNodeKind { get }
-
-    /// Initialize the renderer
-    init()
 
     /// Render the node to a UIView
     /// - Parameters:

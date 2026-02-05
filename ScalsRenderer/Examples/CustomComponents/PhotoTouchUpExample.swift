@@ -175,12 +175,15 @@ public struct PhotoTouchUpExampleView: View {
     public init() {}
 
     public var body: some View {
-        if let rendererView = ScalsRendererView(
-            jsonString: PhotoTouchUpJSON.bottomSheet,
+        let config = SwiftUIRendererConfiguration(
             customComponents: [
                 PhotoComparisonComponent.self,
                 CloseButtonComponent.self
             ]
+        )
+        if let rendererView = ScalsRendererView(
+            jsonString: PhotoTouchUpJSON.bottomSheet,
+            configuration: config
         ) {
             rendererView
         } else {

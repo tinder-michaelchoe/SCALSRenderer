@@ -192,8 +192,7 @@ public struct DadJokesExampleView: View {
 
     public var body: some View {
         if let document = try? Document.Definition(jsonString: dadJokesJSON) {
-            ScalsRendererView(
-                document: document,
+            let config = SwiftUIRendererConfiguration(
                 customActions: [
                     // Dismiss action
                     "dismiss": { params, context in
@@ -202,50 +201,51 @@ public struct DadJokesExampleView: View {
 
                     // Custom action that fetches a joke from the API
                     "fetchJoke": { params, context in
-                            // Set loading state
-                            context.stateStore.set("isLoading", value: true)
-                            context.stateStore.set("setup", value: "Loading...")
-                            context.stateStore.set("punchline", value: "")
+                        // Set loading state
+                        context.stateStore.set("isLoading", value: true)
+                        context.stateStore.set("setup", value: "Loading...")
+                        context.stateStore.set("punchline", value: "")
+                        context.stateStore.set("hiddenPunchline", value: "")
+
+                        do {
+                            // Fetch from icanhazdadjoke API
+                            var request = URLRequest(url: URL(string: "https://icanhazdadjoke.com/")!)
+                            request.setValue("application/json", forHTTPHeaderField: "Accept")
+                            
+                            let (data, _) = try await URLSession.shared.data(for: request)
+
+                            // Parse response
+                            if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                               let joke = json["joke"] as? String {
+                                // Split the joke into setup and punchline
+                                let parts = splitJoke(joke)
+                                context.stateStore.set("setup", value: parts.setup)
+                                // Store punchline hidden
+                                context.stateStore.set("hiddenPunchline", value: parts.punchline)
+                                context.stateStore.set("punchline", value: "")
+                                context.stateStore.set("hasJoke", value: true)
+                            }
+                        } catch {
+                            context.stateStore.set("setup", value: "Couldn't fetch a joke.")
+                            context.stateStore.set("punchline", value: "Check your connection and try again.")
                             context.stateStore.set("hiddenPunchline", value: "")
-
-                            do {
-                                // Fetch from icanhazdadjoke API
-                                var request = URLRequest(url: URL(string: "https://icanhazdadjoke.com/")!)
-                                request.setValue("application/json", forHTTPHeaderField: "Accept")
-
-                                let (data, _) = try await URLSession.shared.data(for: request)
-
-                                // Parse response
-                                if let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
-                                   let joke = json["joke"] as? String {
-                                    // Split the joke into setup and punchline
-                                    let parts = splitJoke(joke)
-                                    context.stateStore.set("setup", value: parts.setup)
-                                    // Store punchline hidden
-                                    context.stateStore.set("hiddenPunchline", value: parts.punchline)
-                                    context.stateStore.set("punchline", value: "")
-                                    context.stateStore.set("hasJoke", value: true)
-                                }
-                            } catch {
-                                context.stateStore.set("setup", value: "Couldn't fetch a joke.")
-                                context.stateStore.set("punchline", value: "Check your connection and try again.")
-                                context.stateStore.set("hiddenPunchline", value: "")
-                                context.stateStore.set("hasJoke", value: false)
-                            }
-
-                            context.stateStore.set("isLoading", value: false)
-                        },
-
-                        // Reveal the punchline by copying from hidden state
-                        "revealPunchline": { params, context in
-                            if let hidden = context.stateStore.get("hiddenPunchline") as? String,
-                               !hidden.isEmpty {
-                                context.stateStore.set("punchline", value: hidden)
-                                context.stateStore.set("hiddenPunchline", value: "")
-                            }
+                            context.stateStore.set("hasJoke", value: false)
                         }
-                    ]
-                )
+
+                        context.stateStore.set("isLoading", value: false)
+                    },
+
+                    // Reveal the punchline by copying from hidden state
+                    "revealPunchline": { params, context in
+                        if let hidden = context.stateStore.get("hiddenPunchline") as? String,
+                           !hidden.isEmpty {
+                            context.stateStore.set("punchline", value: hidden)
+                            context.stateStore.set("hiddenPunchline", value: "")
+                        }
+                    }
+                ]
+            )
+            ScalsRendererView(document: document, configuration: config)
         } else {
             Text("Failed to parse JSON")
                 .foregroundStyle(.red)

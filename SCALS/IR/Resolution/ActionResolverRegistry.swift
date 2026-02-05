@@ -76,7 +76,7 @@ public final class ActionResolverRegistry: @unchecked Sendable {
     ///   - action: The document action to resolve
     ///   - context: Resolution context providing state store and document access
     /// - Returns: The resolved IR action definition
-    /// - Throws: ActionResolutionError if no resolver is found or resolution fails
+    /// - Throws: ActionResolutionError if resolution fails (but NOT if no resolver is found - creates pass-through instead)
     public func resolve(
         _ action: Document.Action,
         context: ResolutionContext
@@ -91,8 +91,14 @@ public final class ActionResolverRegistry: @unchecked Sendable {
         }
         #endif
 
+        // If no resolver found, create a pass-through IR.ActionDefinition
+        // This allows custom actions (registered only as handlers) to work in sequences
         guard let resolver = resolver else {
-            throw ActionResolutionError.noResolverFound(action.type)
+            var executionData: [String: AnySendable] = [:]
+            for (key, value) in action.parameters {
+                executionData[key] = AnySendable(StateValueConverter.unwrap(value))
+            }
+            return IR.ActionDefinition(kind: action.type, executionData: executionData)
         }
 
         do {
