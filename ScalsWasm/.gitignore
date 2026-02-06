@@ -6,11 +6,11 @@
 node_modules/
 package-lock.json
 
-# Build outputs
-dist/*.wasm
-dist/*.js
-dist/*.d.ts
-dist/*.map
+# Build outputs (commented out to track dist folder)
+# dist/*.wasm
+# dist/*.js
+# dist/*.d.ts
+# dist/*.map
 
 # IDE
 .DS_Store
