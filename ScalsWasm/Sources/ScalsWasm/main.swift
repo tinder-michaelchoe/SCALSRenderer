@@ -28,19 +28,19 @@ public func cladsInit() {
 
     // Register all component resolvers
     let compRegistry = ComponentResolverRegistry()
-    compRegistry.register(TextComponentResolver())
-    compRegistry.register(ButtonComponentResolver())
-    compRegistry.register(ImageComponentResolver())
-    compRegistry.register(ToggleComponentResolver())
-    compRegistry.register(SliderComponentResolver())
-    compRegistry.register(TextFieldComponentResolver())
-    compRegistry.register(GradientComponentResolver())
-    compRegistry.register(DividerComponentResolver())
-    compRegistry.register(ShapeComponentResolver())
+    compRegistry.register(TextResolver())
+    compRegistry.register(ButtonResolver())
+    compRegistry.register(ImageResolver())
+    compRegistry.register(ToggleResolver())
+    compRegistry.register(SliderResolver())
+    compRegistry.register(TextFieldResolver())
+    compRegistry.register(GradientResolver())
+    compRegistry.register(DividerResolver())
+    compRegistry.register(ShapeResolver())
     // PageIndicator not yet in IR - excluding from WASM build
     componentRegistry = compRegistry
 
-    // Register all section layout resolvers
+    // Register all section layout config resolvers
     let sectionRegistry = SectionLayoutConfigResolverRegistry()
     sectionRegistry.register(HorizontalLayoutConfigResolver())
     sectionRegistry.register(ListLayoutConfigResolver())
@@ -89,12 +89,24 @@ private func _cladsRenderImpl(jsonPtr: UnsafePointer<CChar>, jsonLen: Int32) -> 
         // Parse the document
         let document = try JSONDecoder().decode(Document.Definition.self, from: jsonData)
 
+        // Create layout and section layout resolvers
+        let layoutResolver = LayoutResolver(componentRegistry: registry)
+        let sectionLayoutResolver = SectionLayoutResolver(
+            componentRegistry: registry,
+            layoutConfigRegistry: sectionLayoutRegistry
+        )
+
+        // Create action resolver registry (empty for WASM - no interactivity)
+        let actionRegistry = ActionResolverRegistry()
+
         // Create resolver and resolve to render tree
         // Note: In Wasm, we run synchronously since it's single-threaded.
         let resolver = Resolver(
             document: document,
             componentRegistry: registry,
-            actionResolverRegistry: ActionResolverRegistry.default
+            actionResolverRegistry: actionRegistry,
+            layoutResolver: layoutResolver,
+            sectionLayoutResolver: sectionLayoutResolver
         )
         let renderTree = try resolver.resolve()
 
